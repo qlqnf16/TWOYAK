@@ -1,26 +1,26 @@
-import Home from './containers/Home';
-import Login from './containers/Login';
-import Medicine from './containers/medicine';
+import Home from "./containers/Home";
+import Login from "./containers/Login";
+import Medicine from "./containers/medicine";
 
 const routes = [
   {
-    path: '/home',
-    name: '홈',
+    path: "/",
+    name: "홈",
     component: Home,
-    exact: true,
+    exact: true
   },
   {
-    path: '/login',
-    name: '로그인',
+    path: "/login",
+    name: "로그인",
     component: Login,
-    exact: true,
+    exact: true
   },
   {
-    path: '/medicine',
-    name: '의약품 검색',
+    path: "/medicine",
+    name: "의약품 검색",
     component: Medicine,
-    exact: true,
-  },
-]
+    exact: true
+  }
+];
 
 export default routes;
