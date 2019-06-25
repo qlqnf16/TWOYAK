@@ -1,6 +1,6 @@
 import Home from "./containers/Home";
 import Login from "./containers/Login";
-import Medicine from "./containers/medicine";
+import Medicine from "./containers/Medicine";
 
 const routes = [
   {
@@ -18,6 +18,12 @@ const routes = [
   {
     path: "/medicine",
     name: "의약품 검색",
+    component: Medicine,
+    exact: true
+  },
+  {
+    path: "/medicine/:id",
+    name: "의약품 검색결과",
     component: Medicine,
     exact: true
   }
