@@ -4,6 +4,7 @@ import SearchInput from "../components/Medicine/SearchInput";
 import styled from "styled-components";
 import SearchResult from "../components/Medicine/SearchResult";
 import ItemList from "../components/Medicine/ItemList";
+import { tsPropertySignature } from "@babel/types";
 
 const Container = styled.div`
   display: flex;
@@ -15,34 +16,24 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 
-function Medicine({ match }) {
+function Medicine({ match, history }) {
   // const [searchArr, setSearchArr] = useState(null);
+  let initialparam = !match.params.id ? 0 : match.params.id;
+  const [paramId, setParamId] = useState(initialparam);
   const [term, setTerm] = useState();
   const [drug, setDrug] = useState(null);
   const [drugList, setDrugList] = useState(null);
 
-  // useEffect(() => {
-  //   console.log(drugList);
-  //   setDrug(null);
-  //   setDrugList(null);
-  //   // loadAuto();
-
-  //   // drug id로 접근했을 때
-  //   if (match.params.id) {
-  //     searchById(match.params.id);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (match.params.id) {
+      setParamId(match.params.id);
+    }
+  }, [match.params.id]);
 
   useEffect(() => {
-    console.log("update");
     setDrugList(null);
-    // loadAuto();
-
-    // drug id로 접근했을 때
-    if (match.params.id) {
-      searchById(match.params.id);
-    }
-  }, match.params.id);
+    if (paramId) searchById(match.params.id);
+  }, [paramId]);
 
   // const loadAuto = async () => {
   //   try {
@@ -57,10 +48,8 @@ function Medicine({ match }) {
 
   const searchById = async id => {
     setDrug(null);
-    setDrugList(null);
     try {
       let { data } = await axios.get(`drugs/${id}`);
-      console.log(data);
       setDrug(data);
     } catch (error) {
       console.log(error);
@@ -71,15 +60,17 @@ function Medicine({ match }) {
     event.preventDefault();
     setDrug(null);
     setDrugList(null);
-
     try {
       let { data } = await axios.get("searchSingle", {
         params: { search_term: term }
       });
-      console.log(data);
-      data.drug_imprint
-        ? setDrug(data.drug_imprint)
-        : setDrugList(data.item_name);
+      if (data.item_name) setDrugList(data.item_name);
+      else {
+        setDrug(data);
+        history.push({
+          pathname: `medicine/${data.id}`
+        });
+      }
     } catch (error) {
       console.log(error);
     }
