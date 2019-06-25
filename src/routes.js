@@ -4,7 +4,7 @@ import Medicine from './containers/medicine';
 
 const routes = [
   {
-    path: '/home',
+    path: '/',
     name: '홈',
     component: Home,
     exact: true,
