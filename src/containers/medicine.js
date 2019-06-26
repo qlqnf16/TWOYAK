@@ -22,6 +22,7 @@ function Medicine({ match, history }) {
   const [term, setTerm] = useState();
   const [drug, setDrug] = useState(null);
   const [drugList, setDrugList] = useState(null);
+  const [errorMessage, setErrorMessage] = useState();
 
   useEffect(() => {
     if (match.params.id) {
@@ -31,7 +32,7 @@ function Medicine({ match, history }) {
 
   useEffect(() => {
     // setDrugList(null);
-    if (paramId) searchById(match.params.id);
+    if (paramId) searchById(paramId);
   }, [paramId]);
 
   // const loadAuto = async () => {
@@ -47,6 +48,7 @@ function Medicine({ match, history }) {
 
   const searchById = async id => {
     setDrug(null);
+    setDrugList(null);
     try {
       let { data } = await axios.get(`drugs/${id}`);
       setDrug(data);
@@ -72,6 +74,7 @@ function Medicine({ match, history }) {
       }
     } catch (error) {
       console.log(error);
+      setErrorMessage("문제가 생겼습니다. 다시 시도하세요!");
     }
   };
 
@@ -84,6 +87,7 @@ function Medicine({ match, history }) {
       <SearchInput searchTerms={searchByTerms} inputChange={inputChange} />
       {drug && <SearchResult drug={drug} />}
       {drugList && <ItemList drug_list={drugList} />}
+      {errorMessage && <div>{errorMessage}</div>}
     </Container>
   );
 }

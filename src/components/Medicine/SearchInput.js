@@ -27,7 +27,7 @@ const Button = styled.button`
 `;
 
 const SearchInput = props => {
-  return (
+  const myInput = (
     <FlexForm onSubmit={props.searchTerms}>
       <Input
         type="text"
@@ -37,6 +37,7 @@ const SearchInput = props => {
       <Button type="submit">검색</Button>
     </FlexForm>
   );
+  return myInput;
 };
 
 export default SearchInput;

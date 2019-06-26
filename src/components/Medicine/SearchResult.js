@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -16,21 +16,25 @@ const ItemName = styled.div`
   font-size: 1.6rem;
 `;
 
-const SearchResult = props => {
+const SearchResult = React.memo(props => {
   const drug = props.drug;
-  const drugDetail = drug.package_insert.DRB_ITEM;
+  const drugDetail = drug.package_insert ? drug.package_insert.DRB_ITEM : null;
   console.log(drug);
 
   return (
     <Container>
       <InfoContainer>
         <ItemName>{drug.name}</ItemName>
-        <div>{drugDetail.CHART}</div>
-        <div>{drugDetail.CLASS_NO}</div>
+        {drugDetail && (
+          <>
+            <div>{drugDetail.CHART}</div>
+            <div>{drugDetail.CLASS_NO}</div>
+          </>
+        )}
       </InfoContainer>
       <img src={drug.pics[0]} width="150px" />
     </Container>
   );
-};
+});
 
 export default SearchResult;
