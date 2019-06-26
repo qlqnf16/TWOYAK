@@ -4,6 +4,7 @@ import SearchInput from "../components/Medicine/SearchInput";
 import styled from "styled-components";
 import SearchResult from "../components/Medicine/SearchResult";
 import ItemList from "../components/Medicine/ItemList";
+import { DrugContext } from "../contexts/DrugStore";
 
 const Container = styled.div`
   display: flex;
@@ -15,13 +16,16 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 
-function Medicine({ match, history }) {
+function Medicine({ match }) {
   let initialparam = !match.params.id ? 0 : match.params.id;
   const [paramId, setParamId] = useState(initialparam);
   const [term, setTerm] = useState();
   const [drug, setDrug] = useState(null);
+  const [drugimg, setDrugimg] = useState("");
   const [drugList, setDrugList] = useState(null);
   const [errorMessage, setErrorMessage] = useState();
+
+  const { drugs } = useContext(DrugContext);
 
   // url에서 drug id param이 변하면 paramId 수정
   useEffect(() => {
@@ -33,12 +37,11 @@ function Medicine({ match, history }) {
   // paramId 가 변하면 id로 약물 검색
   useEffect(() => {
     if (paramId) searchById(paramId);
+    return setDrugList(null);
   }, [paramId]);
 
   // id로 약물검색
   const searchById = async id => {
-    setDrug(null);
-    setDrugList(null);
     try {
       let { data } = await axios.get(`drugs/${id}`);
       setDrug(data);
@@ -51,7 +54,7 @@ function Medicine({ match, history }) {
   const searchByTerms = async event => {
     event.preventDefault();
     setDrug(null);
-    setDrugList(null);
+
     try {
       let { data } = await axios.get("searchSingle", {
         params: { search_term: term }
@@ -72,7 +75,9 @@ function Medicine({ match, history }) {
 
   return (
     <Container>
-      <SearchInput searchTerms={searchByTerms} inputChange={inputChange} />
+      {drugs && (
+        <SearchInput searchTerms={searchByTerms} inputChange={inputChange} />
+      )}
       {drug && <SearchResult drug={drug} />}
       {drugList && <ItemList drug_list={drugList} />}
       {errorMessage && <div>{errorMessage}</div>}
