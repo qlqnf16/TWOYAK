@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "../apis";
 import SearchInput from "../components/Medicine/SearchInput";
 import styled from "styled-components";
@@ -16,7 +16,6 @@ const Container = styled.div`
 `;
 
 function Medicine({ match, history }) {
-  // const [searchArr, setSearchArr] = useState(null);
   let initialparam = !match.params.id ? 0 : match.params.id;
   const [paramId, setParamId] = useState(initialparam);
   const [term, setTerm] = useState();
@@ -24,28 +23,19 @@ function Medicine({ match, history }) {
   const [drugList, setDrugList] = useState(null);
   const [errorMessage, setErrorMessage] = useState();
 
+  // url에서 drug id param이 변하면 paramId 수정
   useEffect(() => {
     if (match.params.id) {
       setParamId(match.params.id);
     }
   }, [match.params.id]);
 
+  // paramId 가 변하면 id로 약물 검색
   useEffect(() => {
-    // setDrugList(null);
     if (paramId) searchById(paramId);
   }, [paramId]);
 
-  // const loadAuto = async () => {
-  //   try {
-  //     let result = await axios.get("autocomplete/drug");
-  //     setSearchArr(result);
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
+  // id로 약물검색
   const searchById = async id => {
     setDrug(null);
     setDrugList(null);
@@ -57,6 +47,7 @@ function Medicine({ match, history }) {
     }
   };
 
+  // 검색어로 약물검색
   const searchByTerms = async event => {
     event.preventDefault();
     setDrug(null);
@@ -68,9 +59,6 @@ function Medicine({ match, history }) {
       if (data.item_name) setDrugList(data.item_name);
       else {
         setDrug(data);
-        history.push({
-          pathname: `medicine/${data.id}`
-        });
       }
     } catch (error) {
       console.log(error);

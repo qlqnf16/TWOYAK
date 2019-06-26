@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -32,7 +32,7 @@ const SearchResult = React.memo(props => {
           </>
         )}
       </InfoContainer>
-      <img src={drug.pics[0]} width="150px" />
+      <img src={drug.pics[0]} width="150px" alt={drug.name} />
     </Container>
   );
 });
