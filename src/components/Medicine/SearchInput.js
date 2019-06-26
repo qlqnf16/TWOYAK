@@ -8,7 +8,7 @@ const FlexForm = styled.form`
 `;
 
 const Input = styled.input`
-  width: 400px;
+  width: 490px;
   height: 30px;
   border-width: 0;
   border-bottom: 1px solid #dbdbdb;

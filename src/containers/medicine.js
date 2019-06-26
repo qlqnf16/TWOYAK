@@ -4,7 +4,6 @@ import SearchInput from "../components/Medicine/SearchInput";
 import styled from "styled-components";
 import SearchResult from "../components/Medicine/SearchResult";
 import ItemList from "../components/Medicine/ItemList";
-import { tsPropertySignature } from "@babel/types";
 
 const Container = styled.div`
   display: flex;
@@ -31,7 +30,7 @@ function Medicine({ match, history }) {
   }, [match.params.id]);
 
   useEffect(() => {
-    setDrugList(null);
+    // setDrugList(null);
     if (paramId) searchById(match.params.id);
   }, [paramId]);
 
@@ -83,7 +82,7 @@ function Medicine({ match, history }) {
   return (
     <Container>
       <SearchInput searchTerms={searchByTerms} inputChange={inputChange} />
-      {drug && <SearchResult drug_imprint={drug} />}
+      {drug && <SearchResult drug={drug} />}
       {drugList && <ItemList drug_list={drugList} />}
     </Container>
   );
