@@ -4,7 +4,7 @@ import DrugSuggest from "./DrugSuggest";
 
 const FlexForm = styled.form`
   display: flex;
-  align-items: center;
+  align-items: start;
   margin: 1rem;
 `;
 
@@ -18,10 +18,10 @@ const Button = styled.button`
   color: white;
 `;
 
-const SearchInput = props => {
+const SearchInput = ({ searchTerms, inputChange }) => {
   const myInput = (
-    <FlexForm onSubmit={props.searchTerms}>
-      <DrugSuggest />
+    <FlexForm onSubmit={searchTerms}>
+      <DrugSuggest inputChange={inputChange} />
       <Button type="submit">검색</Button>
     </FlexForm>
   );

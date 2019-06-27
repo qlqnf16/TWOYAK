@@ -12,11 +12,10 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   width: 80%;
-  height: 100vh;
-  margin: 0 auto;
+  margin: 40vh auto;
 `;
 
-function Medicine({ match }) {
+function Medicine({ match, history }) {
   let initialparam = !match.params.id ? 0 : match.params.id;
   const [paramId, setParamId] = useState(initialparam);
   const [term, setTerm] = useState();
@@ -36,7 +35,14 @@ function Medicine({ match }) {
 
   // paramId 가 변하면 id로 약물 검색
   useEffect(() => {
-    if (paramId) searchById(paramId);
+    setDrug(null);
+    setDrugList(null);
+    setDrugimg(null);
+
+    if (paramId) {
+      searchById(paramId);
+      getDrugImg(paramId);
+    }
     return setDrugList(null);
   }, [paramId]);
 
@@ -61,7 +67,8 @@ function Medicine({ match }) {
       });
       if (data.item_name) setDrugList(data.item_name);
       else {
-        setDrug(data);
+        setParamId(data.id);
+        history.push(`/medicine/${data.id}`);
       }
     } catch (error) {
       console.log(error);
@@ -69,8 +76,18 @@ function Medicine({ match }) {
     }
   };
 
-  const inputChange = event => {
-    setTerm(event.target.value);
+  // id로 이미지 url 가져오기
+  const getDrugImg = async id => {
+    try {
+      const { data } = await axios.get(`drugs/${id}/pics`);
+      setDrugimg(data.pics[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const inputChange = value => {
+    setTerm(value);
   };
 
   return (
@@ -78,7 +95,7 @@ function Medicine({ match }) {
       {drugs && (
         <SearchInput searchTerms={searchByTerms} inputChange={inputChange} />
       )}
-      {drug && <SearchResult drug={drug} />}
+      {drug && <SearchResult drug={drug} drugImg={drugimg} />}
       {drugList && <ItemList drug_list={drugList} />}
       {errorMessage && <div>{errorMessage}</div>}
     </Container>

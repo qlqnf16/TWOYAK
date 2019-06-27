@@ -16,14 +16,8 @@ const routes = [
     exact: true
   },
   {
-    path: "/medicine",
+    path: "/medicine/:id?",
     name: "의약품 검색",
-    component: Medicine,
-    exact: true
-  },
-  {
-    path: "/medicine/:id",
-    name: "의약품 검색결과",
     component: Medicine,
     exact: true
   }

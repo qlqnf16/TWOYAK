@@ -4,6 +4,7 @@ import styled from "styled-components";
 const Container = styled.div`
   display: flex;
   align-items: start;
+  width: 570px;
 `;
 
 const InfoContainer = styled.div`
@@ -16,8 +17,7 @@ const ItemName = styled.div`
   font-size: 1.6rem;
 `;
 
-const SearchResult = React.memo(props => {
-  const drug = props.drug;
+const SearchResult = React.memo(({ drug, drugImg }) => {
   const drugDetail = drug.package_insert ? drug.package_insert.DRB_ITEM : null;
   console.log(drug);
 
@@ -32,7 +32,7 @@ const SearchResult = React.memo(props => {
           </>
         )}
       </InfoContainer>
-      {/* <img src={drug.pics[0]} width="150px" alt={drug.name} /> */}
+      {drugImg && <img src={drugImg} width="150px" alt={drug.name} />}
     </Container>
   );
 });
