@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -17,7 +17,7 @@ const ItemName = styled.div`
   font-size: 1.6rem;
 `;
 
-const SearchResult = React.memo(({ drug, drugImg }) => {
+const SearchResult = React.memo(({ drug, drugImg, modalOn }) => {
   const drugDetail = drug.package_insert ? drug.package_insert.DRB_ITEM : null;
   console.log(drug);
 
@@ -29,6 +29,7 @@ const SearchResult = React.memo(({ drug, drugImg }) => {
           <>
             <div>{drugDetail.CHART}</div>
             <div>{drugDetail.CLASS_NO}</div>
+            <div onClick={modalOn}>설명서 보기</div>
           </>
         )}
       </InfoContainer>

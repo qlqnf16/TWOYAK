@@ -5,6 +5,7 @@ import styled from "styled-components";
 import SearchResult from "../components/Medicine/SearchResult";
 import ItemList from "../components/Medicine/ItemList";
 import { DrugContext } from "../contexts/DrugStore";
+import DetailModal from "../components/Medicine/DetailModal";
 
 const Container = styled.div`
   display: flex;
@@ -23,6 +24,7 @@ function Medicine({ match, history }) {
   const [drugimg, setDrugimg] = useState("");
   const [drugList, setDrugList] = useState(null);
   const [errorMessage, setErrorMessage] = useState();
+  const [modal, setModal] = useState(false);
 
   const { drugs } = useContext(DrugContext);
 
@@ -90,15 +92,29 @@ function Medicine({ match, history }) {
     setTerm(value);
   };
 
+  // searchResult 상세정보 modal toggle
+  const modalOn = () => {
+    setModal(true);
+  };
+
+  const modalOff = () => {
+    setModal(false);
+  };
+
   return (
-    <Container>
-      {drugs && (
-        <SearchInput searchTerms={searchByTerms} inputChange={inputChange} />
-      )}
-      {drug && <SearchResult drug={drug} drugImg={drugimg} />}
-      {drugList && <ItemList drug_list={drugList} />}
-      {errorMessage && <div>{errorMessage}</div>}
-    </Container>
+    <>
+      <Container>
+        {drugs && (
+          <SearchInput searchTerms={searchByTerms} inputChange={inputChange} />
+        )}
+        {drug && (
+          <SearchResult drug={drug} drugImg={drugimg} modalOn={modalOn} />
+        )}
+        {drugList && <ItemList drug_list={drugList} />}
+        {errorMessage && <div>{errorMessage}</div>}
+      </Container>
+      {modal && <DetailModal item_seq={drug.item_seq} modalOff={modalOff} />}
+    </>
   );
 }
 
