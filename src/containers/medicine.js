@@ -6,14 +6,15 @@ import SearchResult from "../components/Medicine/SearchResult";
 import ItemList from "../components/Medicine/ItemList";
 import { DrugContext } from "../contexts/DrugStore";
 import DetailModal from "../components/Medicine/DetailModal";
+import DrugReview from "../components/Medicine/DrugReview.js";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 80%;
-  margin: 40vh auto;
+  width: 50%;
+  margin: 25vh auto;
 `;
 
 function Medicine({ match, history }) {
@@ -25,6 +26,7 @@ function Medicine({ match, history }) {
   const [drugList, setDrugList] = useState(null);
   const [errorMessage, setErrorMessage] = useState();
   const [modal, setModal] = useState(false);
+  const [drugReview, setDrugReview] = useState(null);
 
   const { drugs } = useContext(DrugContext);
 
@@ -50,9 +52,17 @@ function Medicine({ match, history }) {
 
   // id로 약물검색
   const searchById = async id => {
+    const getDrugData = axios.get(`drugs/${id}`);
+    const getDrugReviews = axios.get(`drugs/${id}/drug_reviews`);
+
     try {
-      let { data } = await axios.get(`drugs/${id}`);
-      setDrug(data);
+      let [{ data: drugData }, { data: drugReviews }] = await Promise.all([
+        getDrugData,
+        getDrugReviews
+      ]);
+      console.log(drugData, drugReviews);
+      setDrug(drugData);
+      setDrugReview(drugReviews);
     } catch (error) {
       console.log(error);
     }
@@ -67,8 +77,9 @@ function Medicine({ match, history }) {
       let { data } = await axios.get("searchSingle", {
         params: { search_term: term }
       });
-      if (data.item_name) setDrugList(data.item_name);
-      else {
+      if (data.item_name) {
+        setDrugList(data.item_name);
+      } else {
         setParamId(data.id);
         history.push(`/medicine/${data.id}`);
       }
@@ -93,10 +104,6 @@ function Medicine({ match, history }) {
   };
 
   // searchResult 상세정보 modal toggle
-  // const modalOn = () => {
-  //   setModal(true);
-  // };
-
   const modalOn = useCallback(() => {
     setModal(true);
   }, []);
@@ -116,6 +123,10 @@ function Medicine({ match, history }) {
         )}
         {drugList && <ItemList drug_list={drugList} />}
         {errorMessage && <div>{errorMessage}</div>}
+        {drugReview &&
+          drugReview.map(review => (
+            <DrugReview review={review} key={review.id} />
+          ))}
       </Container>
       {modal && <DetailModal item_seq={drug.item_seq} modalOff={modalOff} />}
     </>

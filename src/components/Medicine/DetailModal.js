@@ -18,8 +18,11 @@ const ModalContainer = styled.div`
 const DetailModal = ({ item_seq, modalOff }) => {
   return (
     <ModalContainer>
-      <Close onClick={modalOff} />
+      <div>
+        <Close onClick={modalOff} />
+      </div>
       <iframe
+        title="medicineInfo"
         style={{ width: "100%", minwidht: "100%", height: "100%" }}
         src={`https://nedrug.mfds.go.kr/pbp/CCBBB01/getItemDetail?itemSeq=${item_seq}`}
         frameBorder="0"

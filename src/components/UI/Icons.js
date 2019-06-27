@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Close = styled.div`
 	position: absolute;
-	right: 32px;
+	left: 32px;
 	top: 32px
 	width: 32px;
 	heihgt: 32px;
