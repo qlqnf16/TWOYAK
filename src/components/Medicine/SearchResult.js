@@ -32,7 +32,7 @@ const SearchResult = React.memo(props => {
           </>
         )}
       </InfoContainer>
-      <img src={drug.pics[0]} width="150px" alt={drug.name} />
+      {/* <img src={drug.pics[0]} width="150px" alt={drug.name} /> */}
     </Container>
   );
 });
