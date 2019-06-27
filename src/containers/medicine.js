@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import axios from "../apis";
 import SearchInput from "../components/Medicine/SearchInput";
 import styled from "styled-components";
@@ -93,9 +93,13 @@ function Medicine({ match, history }) {
   };
 
   // searchResult 상세정보 modal toggle
-  const modalOn = () => {
+  // const modalOn = () => {
+  //   setModal(true);
+  // };
+
+  const modalOn = useCallback(() => {
     setModal(true);
-  };
+  }, []);
 
   const modalOff = () => {
     setModal(false);

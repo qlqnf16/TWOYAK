@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -17,9 +17,14 @@ const ItemName = styled.div`
   font-size: 1.6rem;
 `;
 
-const SearchResult = React.memo(({ drug, drugImg, modalOn }) => {
+const SearchResult = React.memo(props => {
+  const drug = props.drug;
   const drugDetail = drug.package_insert ? drug.package_insert.DRB_ITEM : null;
-  console.log(drug);
+  console.log(props);
+
+  // useEffect(() => {
+  //   console.log(drug.name);
+  // }, [drugImg]);
 
   return (
     <Container>
@@ -29,13 +34,15 @@ const SearchResult = React.memo(({ drug, drugImg, modalOn }) => {
           <>
             <div>{drugDetail.CHART}</div>
             <div>{drugDetail.CLASS_NO}</div>
-            <div onClick={modalOn}>설명서 보기</div>
+            <div onClick={props.modalOn}>설명서 보기</div>
           </>
         )}
       </InfoContainer>
-      {drugImg && <img src={drugImg} width="150px" alt={drug.name} />}
+      {props.drugImg && (
+        <img src={props.drugImg} width="150px" alt={drug.name} />
+      )}
     </Container>
   );
 });
 
-export default SearchResult;
+export default React.memo(SearchResult);
