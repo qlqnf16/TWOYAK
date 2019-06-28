@@ -47,18 +47,21 @@ const AutoSuggestion = ({
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
-  const { drugs } = useContext(DrugContext);
+  const { state } = useContext(DrugContext);
+  const { drugs, adverse_effects } = state;
 
   let suggestList;
   switch (search) {
     case "drug":
       suggestList = drugs;
       break;
+    case "adverse_effect":
+      suggestList = adverse_effects;
+      break;
     default:
       break;
   }
 
-  // Teach Autosuggest how to calculate suggestions for any given input value.
   const getSuggestions = value => {
     const inputValue = deburr(value.trim()).toLowerCase();
     const inputLength = inputValue.length;
@@ -79,14 +82,14 @@ const AutoSuggestion = ({
         });
   };
 
-  // When suggestion is clicked, Autosuggest needs to populate the input
-  // based on the clicked suggestion. Teach Autosuggest how to calculate the
-  // input value for every given suggestion.
   const getSuggestionValue = suggestion => {
     return suggestion[searchKey];
   };
 
-  // Use your imagination to render suggestions.
+  const onSuggestionSelected = (event, { suggestion }) => {
+    if (search === "adverse_effect") inputChange(suggestion);
+  };
+
   const renderSuggestion = (suggestion, { query, isHighlited }) => {
     const matches = match(suggestion[searchKey], query);
     const parts = parse(suggestion[searchKey], matches);
@@ -107,11 +110,11 @@ const AutoSuggestion = ({
 
   const onChange = (event, { newValue }) => {
     setValue(newValue);
-    inputChange(newValue);
+    if (search === "drug") {
+      inputChange(newValue);
+    }
   };
 
-  // Autosuggest will call this function every time you need to update suggestions.
-  // You already implemented this logic above, so just use it.
   const onSuggestionsFetchRequested = ({ value }) => {
     setSuggestions(getSuggestions(value));
   };
@@ -136,6 +139,7 @@ const AutoSuggestion = ({
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
         highlightFirstSuggestion={true}
+        onSuggestionSelected={onSuggestionSelected}
       />
     </StyleWrapper>
   );

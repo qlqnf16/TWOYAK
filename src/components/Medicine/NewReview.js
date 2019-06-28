@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Slider from "react-input-slider";
 import styled from "styled-components";
+import AutoSuggestion from "../Util/AutoSuggestion";
 
-const Container = styled.form`
+const Container = styled.div`
   width: 100%;
   margin: 10px 0;
   border: 1px solid #dbdbdb
@@ -22,6 +23,22 @@ const CustomTextarea = styled.textarea`
 
 const NewReview = () => {
   const [efficacy, setEfficacy] = useState(3);
+  const [tempArr, setTempArr] = useState([]);
+  const [adverseEffects, setAdverseEffects] = useState([]);
+
+  useEffect(() => {
+    console.log(adverseEffects);
+  }, [adverseEffects]);
+
+  const inputChange = value => {
+    tempArr.push(value);
+  };
+
+  const formSubmit = e => {
+    e.preventDefault();
+    setAdverseEffects(tempArr);
+    console.log(adverseEffects);
+  };
 
   return (
     <Container>
@@ -36,6 +53,17 @@ const NewReview = () => {
         onChange={({ x }) => setEfficacy(x)}
       />
       <div>복용 후 이상반응이 있었나요?</div>
+      <form onSubmit={formSubmit}>
+        <AutoSuggestion
+          search="adverse_effect"
+          searchKey="symptom_name"
+          placeholderProp="느끼신 증상을 입력하세요"
+          inputChange={inputChange}
+        />
+        <button type="submit">추가</button>
+      </form>
+      {adverseEffects.length > 0 &&
+        adverseEffects.map(effect => <div>{effect.symptom_name}</div>)}
       <CustomTextarea placeholder="많은 사람들이 참고할 만한 의약품 리뷰를 남겨주세요" />
     </Container>
   );

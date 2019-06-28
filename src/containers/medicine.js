@@ -28,9 +28,12 @@ function Medicine({ match, history }) {
   const [errorMessage, setErrorMessage] = useState();
   const [modal, setModal] = useState(false);
   const [drugReview, setDrugReview] = useState(null);
+  const [reviewState, setReviewState] = useState({
+    adverse_effect: null
+  });
 
-  const { drugs } = useContext(DrugContext);
-
+  const { state } = useContext(DrugContext);
+  const { drugs } = state;
   // url에서 drug id param이 변하면 paramId 수정
   useEffect(() => {
     if (match.params.id) {
@@ -101,7 +104,8 @@ function Medicine({ match, history }) {
     }
   };
 
-  const inputChange = value => {
+  // inputChangeHandler
+  const searchTermChange = value => {
     setTerm(value);
   };
 
@@ -118,7 +122,10 @@ function Medicine({ match, history }) {
     <>
       <Container>
         {drugs && (
-          <SearchInput searchTerms={searchByTerms} inputChange={inputChange} />
+          <SearchInput
+            searchTerms={searchByTerms}
+            inputChange={searchTermChange}
+          />
         )}
         {drug && (
           <>

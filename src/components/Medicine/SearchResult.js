@@ -19,7 +19,6 @@ const ItemName = styled.div`
 
 const SearchResult = React.memo(({ drug, drugImg, modalOn }) => {
   const drugDetail = drug.package_insert ? drug.package_insert.DRB_ITEM : null;
-  console.log(drug);
 
   return (
     <Container>

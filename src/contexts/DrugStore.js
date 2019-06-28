@@ -5,12 +5,17 @@ import axios from "../apis";
 export const DrugContext = React.createContext();
 
 const DrugStore = props => {
-  const [drugs, dispatch] = useReducer(drugReducer, null);
+  const [state, dispatch] = useReducer(drugReducer, {
+    drugs: null,
+    adverse_effects: null
+  });
 
-  const fetchInitialData = () => {
-    axios.get("autocomplete/drug").then(response => {
-      dispatch({ type: "SET_INIT_DATA", payload: response.data });
-    });
+  const fetchInitialData = async () => {
+    const payload = await Promise.all([
+      axios.get("autocomplete/drug"),
+      axios.get("autocomplete/adverse_effect")
+    ]);
+    dispatch({ type: "SET_INIT_DATA", payload: payload });
   };
 
   useEffect(() => {
@@ -18,7 +23,7 @@ const DrugStore = props => {
   }, []);
 
   return (
-    <DrugContext.Provider value={{ drugs, dispatch }}>
+    <DrugContext.Provider value={{ state, dispatch }}>
       {props.children}
     </DrugContext.Provider>
   );
