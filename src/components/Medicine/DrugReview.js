@@ -24,24 +24,25 @@ const SpaceSpan = styled.span`
 const DrugReview = ({ review }) => {
   return (
     <Container>
-      {/* <div>{review.user_email}</div>
-      <div>{review.age}</div>
-      <div>평점: {review.efficacy}</div>
-      <div>{review.disease}</div>
-      <div>{review.adverse_effects}</div>
-      <div>{review.body}</div> */}
       <Flex>
         <div>{review.user_email}</div>
         <SpaceSpan>|</SpaceSpan>
         <div>{review.age}</div>
+        {review.sex && (
+          <>
+            <SpaceSpan>|</SpaceSpan>{" "}
+            <div>{review.sex === true ? "남" : "여"}</div>
+          </>
+        )}
       </Flex>
       <Flex>
         <div>평점: {review.efficacy}점</div>
-        <SpaceSpan>|</SpaceSpan>
-        <div>
-          이상반응:{" "}
-          {review.adverse_effects.length > 0 ? review.adverse_effects : "없음"}
-        </div>
+        {review.adverse_effects.length > 0 && (
+          <>
+            <SpaceSpan>|</SpaceSpan>
+            <div>이상반응: {review.adverse_effects}</div>
+          </>
+        )}
       </Flex>
       <div>{review.body}</div>
     </Container>

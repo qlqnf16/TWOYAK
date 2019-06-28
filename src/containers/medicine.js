@@ -7,6 +7,7 @@ import ItemList from "../components/Medicine/ItemList";
 import { DrugContext } from "../contexts/DrugStore";
 import DetailModal from "../components/Medicine/DetailModal";
 import DrugReview from "../components/Medicine/DrugReview.js";
+import NewReview from "../components/Medicine/NewReview";
 
 const Container = styled.div`
   display: flex;
@@ -72,6 +73,7 @@ function Medicine({ match, history }) {
   const searchByTerms = async event => {
     event.preventDefault();
     setDrug(null);
+    setDrugReview(null);
 
     try {
       let { data } = await axios.get("searchSingle", {
@@ -119,7 +121,10 @@ function Medicine({ match, history }) {
           <SearchInput searchTerms={searchByTerms} inputChange={inputChange} />
         )}
         {drug && (
-          <SearchResult drug={drug} drugImg={drugimg} modalOn={modalOn} />
+          <>
+            <SearchResult drug={drug} drugImg={drugimg} modalOn={modalOn} />
+            <NewReview />
+          </>
         )}
         {drugList && <ItemList drug_list={drugList} />}
         {errorMessage && <div>{errorMessage}</div>}
