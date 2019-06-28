@@ -38,11 +38,25 @@ const StyleWrapper = styled.div`
   }
 `;
 
-const DrugSuggest = ({ inputChange }) => {
+const AutoSuggestion = ({
+  search,
+  searchKey,
+  placeholderProp,
+  inputChange
+}) => {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
   const { drugs } = useContext(DrugContext);
+
+  let suggestList;
+  switch (search) {
+    case "drug":
+      suggestList = drugs;
+      break;
+    default:
+      break;
+  }
 
   // Teach Autosuggest how to calculate suggestions for any given input value.
   const getSuggestions = value => {
@@ -52,9 +66,10 @@ const DrugSuggest = ({ inputChange }) => {
 
     return inputLength === 0
       ? []
-      : drugs.filter(drug => {
+      : suggestList.filter(suggestion => {
           const keep =
-            count < 7 && drug.item_name.toLowerCase().includes(inputValue);
+            count < 7 &&
+            suggestion[searchKey].toLowerCase().includes(inputValue);
 
           if (keep) {
             count += 1;
@@ -68,13 +83,13 @@ const DrugSuggest = ({ inputChange }) => {
   // based on the clicked suggestion. Teach Autosuggest how to calculate the
   // input value for every given suggestion.
   const getSuggestionValue = suggestion => {
-    return suggestion.item_name;
+    return suggestion[searchKey];
   };
 
   // Use your imagination to render suggestions.
   const renderSuggestion = (suggestion, { query, isHighlited }) => {
-    const matches = match(suggestion["item_name"], query);
-    const parts = parse(suggestion["item_name"], matches);
+    const matches = match(suggestion[searchKey], query);
+    const parts = parse(suggestion[searchKey], matches);
     return (
       <div>
         {parts.map((part, index) =>
@@ -106,7 +121,7 @@ const DrugSuggest = ({ inputChange }) => {
   };
 
   const inputProps = {
-    placeholder: "약품명 또는 성분명을 입력해주세요",
+    placeholder: placeholderProp,
     value,
     onChange: onChange
   };
@@ -126,4 +141,4 @@ const DrugSuggest = ({ inputChange }) => {
   );
 };
 
-export default DrugSuggest;
+export default AutoSuggestion;

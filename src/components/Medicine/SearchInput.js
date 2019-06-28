@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import DrugSuggest from "./DrugSuggest";
+import AutoSuggestion from "../Util/AutoSuggestion";
 
 const FlexForm = styled.form`
   display: flex;
@@ -21,7 +21,12 @@ const Button = styled.button`
 const SearchInput = ({ searchTerms, inputChange }) => {
   const myInput = (
     <FlexForm onSubmit={searchTerms}>
-      <DrugSuggest inputChange={inputChange} />
+      <AutoSuggestion
+        search="drug"
+        placeholderProp="약품명 또는 성분명을 입력해주세요"
+        searchKey="item_name"
+        inputChange={inputChange}
+      />
       <Button type="submit">검색</Button>
     </FlexForm>
   );
