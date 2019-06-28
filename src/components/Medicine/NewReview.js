@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Slider from "react-input-slider";
 import styled from "styled-components";
 import AutoSuggestion from "../Util/AutoSuggestion";
+import SymptomButton from "../UI/RemovableButton";
+import RemovableButton from "../UI/RemovableButton";
 
 const Container = styled.div`
   width: 100%;
@@ -23,21 +25,19 @@ const CustomTextarea = styled.textarea`
 
 const NewReview = () => {
   const [efficacy, setEfficacy] = useState(3);
-  const [tempArr, setTempArr] = useState([]);
   const [adverseEffects, setAdverseEffects] = useState([]);
 
-  useEffect(() => {
-    console.log(adverseEffects);
-  }, [adverseEffects]);
-
   const inputChange = value => {
-    tempArr.push(value);
+    if (adverseEffects.indexOf(value) === -1)
+      setAdverseEffects(adverseEffects.concat(value));
   };
 
   const formSubmit = e => {
     e.preventDefault();
-    setAdverseEffects(tempArr);
-    console.log(adverseEffects);
+  };
+
+  const deleteEffect = content => {
+    setAdverseEffects(adverseEffects.filter(effect => effect.id !== content));
   };
 
   return (
@@ -63,7 +63,14 @@ const NewReview = () => {
         <button type="submit">추가</button>
       </form>
       {adverseEffects.length > 0 &&
-        adverseEffects.map(effect => <div>{effect.symptom_name}</div>)}
+        adverseEffects.map(effect => (
+          <RemovableButton
+            key={effect.id}
+            effect={effect}
+            deleteEffect={deleteEffect}
+          />
+        ))}
+
       <CustomTextarea placeholder="많은 사람들이 참고할 만한 의약품 리뷰를 남겨주세요" />
     </Container>
   );
