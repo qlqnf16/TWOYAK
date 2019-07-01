@@ -8,6 +8,7 @@ import { DrugContext } from "../contexts/DrugStore";
 import DetailModal from "../components/Medicine/DetailModal";
 import DrugReview from "../components/Medicine/DrugReview.js";
 import NewReview from "../components/Medicine/NewReview";
+import DrugReviews from "../components/Medicine/DrugReviews";
 
 const Container = styled.div`
   display: flex;
@@ -28,9 +29,7 @@ function Medicine({ match, history }) {
   const [errorMessage, setErrorMessage] = useState();
   const [modal, setModal] = useState(false);
   const [drugReview, setDrugReview] = useState(null);
-  const [reviewState, setReviewState] = useState({
-    adverse_effect: null
-  });
+  const [reviewState, setReviewState] = useState(false);
 
   const { state } = useContext(DrugContext);
   const { drugs } = state;
@@ -41,8 +40,6 @@ function Medicine({ match, history }) {
       setParamId(match.params.id);
     }
   }, [match.params.id]);
-
-  useEffect(() => {}, [reviewState]);
 
   // paramId 가 변하면 id로 약물 검색
   useEffect(() => {
@@ -70,7 +67,6 @@ function Medicine({ match, history }) {
       console.log(drugData, drugReviews);
       setDrug(drugData);
       setDrugReview(drugReviews);
-      setReviewState(true);
     } catch (error) {
       console.log(error);
     }
@@ -124,7 +120,6 @@ function Medicine({ match, history }) {
 
   // review upload handler
   const submitReview = (efficacy, adverse_effect, detail) => {
-    setReviewState(false);
     const data = {
       user_id: 1, // 일단 dummy, login 과 연동 후 수정 필요
       drug_id: paramId,
@@ -141,7 +136,7 @@ function Medicine({ match, history }) {
       .then(response => {
         console.log(data);
         console.log(response);
-        setReviewState(true);
+        searchById(paramId);
       })
       .catch(error => {
         console.log(data);
@@ -157,7 +152,10 @@ function Medicine({ match, history }) {
           Authorization: `bearer ${process.env.REACT_APP_TEMP_TOKEN}`
         }
       })
-      .then(res => console.log(res))
+      .then(res => {
+        console.log(res);
+        searchById(paramId);
+      })
       .catch(err => console.log(err));
   };
 
@@ -178,15 +176,13 @@ function Medicine({ match, history }) {
         )}
         {drugList && <ItemList drug_list={drugList} />}
         {errorMessage && <div>{errorMessage}</div>}
-        {drugReview &&
-          reviewState &&
-          drugReview.map(review => (
-            <DrugReview
-              review={review}
-              key={review.id}
-              deleteReview={deleteReview}
-            />
-          ))}
+        {drugReview && (
+          <DrugReviews
+            reviews={drugReview}
+            deleteReview={deleteReview}
+            reviewState={reviewState}
+          />
+        )}
       </Container>
       {modal && <DetailModal item_seq={drug.item_seq} modalOff={modalOff} />}
     </>

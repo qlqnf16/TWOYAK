@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -22,9 +22,6 @@ const SpaceSpan = styled.span`
 `;
 
 const DrugReview = ({ review, deleteReview }) => {
-  useEffect(() => {
-    console.log("Drug Review Mounted");
-  }, [review]);
   return (
     <Container>
       <Flex>
