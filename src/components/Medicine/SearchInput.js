@@ -1,26 +1,21 @@
 import React from "react";
 import styled from "styled-components";
 import AutoSuggestion from "../Util/AutoSuggestion";
+import { BasicButton, FlexForm } from "../UI/SharedStyles";
 
-const FlexForm = styled.form`
-  display: flex;
-  align-items: start;
+const Form = styled(FlexForm)`
   margin: 1rem;
 `;
 
-const Button = styled.button`
+const Button = styled(BasicButton)`
   height: 35px;
   width: 70px;
-  border-width: 0;
   border-radius: 3px;
-  background-color: #2779a9;
-  font-size: 16px;
-  color: white;
 `;
 
 const SearchInput = ({ searchTerms, inputChange }) => {
   const myInput = (
-    <FlexForm onSubmit={searchTerms}>
+    <Form onSubmit={searchTerms}>
       <AutoSuggestion
         search="drug"
         placeholderProp="약품명 또는 성분명을 입력해주세요"
@@ -28,7 +23,7 @@ const SearchInput = ({ searchTerms, inputChange }) => {
         inputChange={inputChange}
       />
       <Button type="submit">검색</Button>
-    </FlexForm>
+    </Form>
   );
   return myInput;
 };

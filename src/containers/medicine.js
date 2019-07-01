@@ -28,12 +28,11 @@ function Medicine({ match, history }) {
   const [errorMessage, setErrorMessage] = useState();
   const [modal, setModal] = useState(false);
   const [drugReview, setDrugReview] = useState(null);
-  const [reviewState, setReviewState] = useState({
-    adverse_effect: null
-  });
+  const [updateTarget, setUpdateTarget] = useState();
 
   const { state } = useContext(DrugContext);
   const { drugs } = state;
+
   // url에서 drug id param이 변하면 paramId 수정
   useEffect(() => {
     if (match.params.id) {
@@ -46,6 +45,7 @@ function Medicine({ match, history }) {
     setDrug(null);
     setDrugList(null);
     setDrugimg(null);
+    setUpdateTarget(null);
 
     if (paramId) {
       searchById(paramId);
@@ -104,7 +104,7 @@ function Medicine({ match, history }) {
     }
   };
 
-  // inputChangeHandler
+  // 검색 inputChangeHandler
   const searchTermChange = value => {
     setTerm(value);
   };
@@ -116,6 +116,85 @@ function Medicine({ match, history }) {
 
   const modalOff = () => {
     setModal(false);
+  };
+
+  const reviewSubmitHandler = (
+    method,
+    efficacy,
+    adverse_effect,
+    detail,
+    reviewId
+  ) => {
+    const data = {
+      user_id: 1, // 일단 dummy, login 과 연동 후 수정 필요
+      drug_id: paramId,
+      efficacy: efficacy,
+      body: detail,
+      adverse_effect_ids: adverse_effect
+    };
+
+    if (method === "post") postReview(data);
+    else if (method === "put") updateReview(data, reviewId);
+  };
+
+  // review upload handler
+  const postReview = data => {
+    axios
+      .post(
+        `drugs/${paramId}/drug_reviews`,
+        { drug_review: data },
+        {
+          headers: {
+            Authorization: `bearer ${process.env.REACT_APP_TEMP_TOKEN}`
+          }
+        }
+      )
+      .then(response => {
+        searchById(paramId);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  // review update handler
+  const updateReview = (data, reviewId) => {
+    axios
+      .put(
+        `drugs/${paramId}/drug_reviews/${reviewId}`,
+        { drug_review: data },
+        {
+          headers: {
+            Authorization: `bearer ${process.env.REACT_APP_TEMP_TOKEN}`
+          }
+        }
+      )
+      .then(response => {
+        searchById(paramId);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  // review delete handler
+  const deleteReview = reviewId => {
+    axios
+      .delete(`drugs/${paramId}/drug_reviews/${reviewId}`, {
+        headers: {
+          Authorization: `bearer ${process.env.REACT_APP_TEMP_TOKEN}`
+        }
+      })
+      .then(res => {
+        searchById(paramId);
+      })
+      .catch(err => console.log(err));
+  };
+
+  let newReviewComponent = <NewReview reviewSubmit={reviewSubmitHandler} />;
+  const updateButton = review => {
+    setUpdateTarget(review);
+    console.log(updateTarget);
   };
 
   return (
@@ -130,15 +209,23 @@ function Medicine({ match, history }) {
         {drug && (
           <>
             <SearchResult drug={drug} drugImg={drugimg} modalOn={modalOn} />
-            <NewReview />
           </>
         )}
         {drugList && <ItemList drug_list={drugList} />}
         {errorMessage && <div>{errorMessage}</div>}
         {drugReview &&
           drugReview.map(review => (
-            <DrugReview review={review} key={review.id} />
+            <DrugReview
+              review={review}
+              key={review.id}
+              deleteReview={deleteReview}
+              updateButton={updateButton}
+            />
           ))}
+        {drug && (
+          <NewReview reviewSubmit={reviewSubmitHandler} review={updateTarget} />
+        )}
+        {/* {updateTarget ? newReviewComponent : drug && newReviewComponent} */}
       </Container>
       {modal && <DetailModal item_seq={drug.item_seq} modalOff={modalOff} />}
     </>
