@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { BasicButton } from "../UI/SharedStyles";
 
 const Container = styled.div`
   width: 100%;
@@ -21,7 +22,12 @@ const SpaceSpan = styled.span`
   color: #9c9c9c;
 `;
 
-const DrugReview = ({ review, deleteReview }) => {
+const Button = styled(BasicButton)`
+  font-size: 0.9rem;
+  margin-right: 0.5rem;
+`;
+
+const DrugReview = ({ review, deleteReview, updateButton }) => {
   return (
     <Container>
       <Flex>
@@ -45,7 +51,8 @@ const DrugReview = ({ review, deleteReview }) => {
         )}
       </Flex>
       <div>{review.body}</div>
-      <button onClick={() => deleteReview(review.id)}>삭제하기</button>
+      <Button onClick={() => deleteReview(review.id)}>삭제하기</Button>
+      <Button onClick={() => updateButton(review)}>수정하기</Button>
     </Container>
   );
 };

@@ -28,6 +28,7 @@ function Medicine({ match, history }) {
   const [errorMessage, setErrorMessage] = useState();
   const [modal, setModal] = useState(false);
   const [drugReview, setDrugReview] = useState(null);
+  const [updateTarget, setUpdateTarget] = useState();
 
   const { state } = useContext(DrugContext);
   const { drugs } = state;
@@ -44,6 +45,7 @@ function Medicine({ match, history }) {
     setDrug(null);
     setDrugList(null);
     setDrugimg(null);
+    setUpdateTarget(null);
 
     if (paramId) {
       searchById(paramId);
@@ -116,7 +118,13 @@ function Medicine({ match, history }) {
     setModal(false);
   };
 
-  const reviewSubmitHandler = (method, efficacy, adverse_effect, detail) => {
+  const reviewSubmitHandler = (
+    method,
+    efficacy,
+    adverse_effect,
+    detail,
+    reviewId
+  ) => {
     const data = {
       user_id: 1, // 일단 dummy, login 과 연동 후 수정 필요
       drug_id: paramId,
@@ -126,6 +134,7 @@ function Medicine({ match, history }) {
     };
 
     if (method === "post") postReview(data);
+    else if (method === "put") updateReview(data, reviewId);
   };
 
   // review upload handler
@@ -141,21 +150,18 @@ function Medicine({ match, history }) {
         }
       )
       .then(response => {
-        console.log(data);
-        console.log(response);
         searchById(paramId);
       })
       .catch(error => {
-        console.log(data);
         console.log(error);
       });
   };
 
   // review update handler
-  const updateReview = data => {
+  const updateReview = (data, reviewId) => {
     axios
-      .post(
-        `drugs/${paramId}/drug_reviews`,
+      .put(
+        `drugs/${paramId}/drug_reviews/${reviewId}`,
         { drug_review: data },
         {
           headers: {
@@ -164,12 +170,9 @@ function Medicine({ match, history }) {
         }
       )
       .then(response => {
-        console.log(data);
-        console.log(response);
         searchById(paramId);
       })
       .catch(error => {
-        console.log(data);
         console.log(error);
       });
   };
@@ -186,6 +189,12 @@ function Medicine({ match, history }) {
         searchById(paramId);
       })
       .catch(err => console.log(err));
+  };
+
+  let newReviewComponent = <NewReview reviewSubmit={reviewSubmitHandler} />;
+  const updateButton = review => {
+    setUpdateTarget(review);
+    console.log(updateTarget);
   };
 
   return (
@@ -210,9 +219,13 @@ function Medicine({ match, history }) {
               review={review}
               key={review.id}
               deleteReview={deleteReview}
+              updateButton={updateButton}
             />
           ))}
-        {drug && <NewReview reviewSubmit={reviewSubmitHandler} />}
+        {drug && (
+          <NewReview reviewSubmit={reviewSubmitHandler} review={updateTarget} />
+        )}
+        {/* {updateTarget ? newReviewComponent : drug && newReviewComponent} */}
       </Container>
       {modal && <DetailModal item_seq={drug.item_seq} modalOff={modalOff} />}
     </>

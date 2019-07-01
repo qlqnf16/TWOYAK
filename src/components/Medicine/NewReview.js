@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Slider from "react-input-slider";
 import styled from "styled-components";
 import AutoSuggestion from "../Util/AutoSuggestion";
@@ -46,32 +46,44 @@ const SubmitButton = styled(BasicButton)`
   margin-top: 1rem;
 `;
 
-const NewReview = ({ reviewSubmit }) => {
+const NewReview = React.memo(({ reviewSubmit, review }) => {
   const [efficacy, setEfficacy] = useState(3);
   const [adverseEffects, setAdverseEffects] = useState([]);
   const [detail, setDetail] = useState();
+
+  useEffect(() => {
+    if (review) {
+      setEfficacy(review.efficacy);
+      setDetail(review.body);
+    }
+  }, [review]);
 
   const effectInputChange = value => {
     if (adverseEffects.indexOf(value) === -1)
       setAdverseEffects(adverseEffects.concat(value));
   };
 
-  const effectFormSubmit = e => {
-    e.preventDefault();
+  const effectFormSubmit = event => {
+    event.preventDefault();
   };
 
   const deleteEffect = content => {
     setAdverseEffects(adverseEffects.filter(effect => effect.id !== content));
   };
 
-  const detailInputChange = e => {
-    setDetail(e.target.value);
+  const detailInputChange = event => {
+    setDetail(event.target.value);
   };
 
-  const finalSubmit = e => {
-    e.preventDefault();
+  const finalSubmit = event => {
+    event.preventDefault();
     const adverseEffectIds = adverseEffects.map(effect => effect.id);
-    reviewSubmit("post", efficacy, adverseEffectIds, detail);
+    if (review)
+      reviewSubmit("put", efficacy, adverseEffectIds, detail, review.id);
+    else reviewSubmit("post", efficacy, adverseEffectIds, detail, null);
+    setEfficacy(3);
+    setAdverseEffects([]);
+    setDetail();
   };
 
   return (
@@ -110,10 +122,13 @@ const NewReview = ({ reviewSubmit }) => {
       <CustomTextarea
         onChange={detailInputChange}
         placeholder="많은 사람들이 참고할 만한 의약품 리뷰를 남겨주세요"
+        value={detail}
       />
-      <SubmitButton onClick={finalSubmit}>리뷰 등록하기</SubmitButton>
+      <SubmitButton onClick={finalSubmit}>
+        {review ? "수정하기" : "리뷰 등록하기"}
+      </SubmitButton>
     </Container>
   );
-};
+});
 
 export default NewReview;

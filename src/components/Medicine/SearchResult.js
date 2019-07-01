@@ -5,6 +5,7 @@ const Container = styled.div`
   display: flex;
   align-items: start;
   width: 570px;
+  margin-bottom: 1rem;
 `;
 
 const InfoContainer = styled.div`
