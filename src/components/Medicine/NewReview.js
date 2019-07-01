@@ -55,10 +55,12 @@ const NewReview = React.memo(({ reviewSubmit, review }) => {
     if (review) {
       setEfficacy(review.efficacy);
       setDetail(review.body);
+      setAdverseEffects(review.adverse_effects);
     }
   }, [review]);
 
   const effectInputChange = value => {
+    console.log(adverseEffects);
     if (adverseEffects.indexOf(value) === -1)
       setAdverseEffects(adverseEffects.concat(value));
   };

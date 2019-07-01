@@ -46,7 +46,12 @@ const DrugReview = ({ review, deleteReview, updateButton }) => {
         {review.adverse_effects.length > 0 && (
           <>
             <SpaceSpan>|</SpaceSpan>
-            <div>이상반응: {review.adverse_effects}</div>
+            <div>
+              이상반응:{" "}
+              {review.adverse_effects
+                .map(effect => effect.symptom_name)
+                .join(", ")}
+            </div>
           </>
         )}
       </Flex>
