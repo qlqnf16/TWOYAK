@@ -1,12 +1,13 @@
-import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
-import routes from './routes';
+import React from "react";
+import { Switch, Route, Redirect } from "react-router-dom";
+import routes from "./routes";
+import DrugStore from "./contexts/DrugStore";
+import Navbar from "./components/Navbars/Navbar";
 
 function App() {
   const switchRoutes = (
     <Switch>
-    {
-      routes.map((prop, key) => {
+      {routes.map((prop, key) => {
         return (
           <Route
             path={prop.path}
@@ -14,16 +15,16 @@ function App() {
             exact={prop.exact}
             key={key}
           />
-        )
-      })
-    }
+        );
+      })}
     </Switch>
-  )
+  );
 
   return (
-    <div>
+    <DrugStore>
+      <Navbar />
       {switchRoutes}
-    </div>
+    </DrugStore>
   );
 }
 
