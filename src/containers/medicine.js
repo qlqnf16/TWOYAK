@@ -8,7 +8,6 @@ import { DrugContext } from "../contexts/DrugStore";
 import DetailModal from "../components/Medicine/DetailModal";
 import DrugReview from "../components/Medicine/DrugReview.js";
 import NewReview from "../components/Medicine/NewReview";
-import DrugReviews from "../components/Medicine/DrugReviews";
 
 const Container = styled.div`
   display: flex;
@@ -29,7 +28,6 @@ function Medicine({ match, history }) {
   const [errorMessage, setErrorMessage] = useState();
   const [modal, setModal] = useState(false);
   const [drugReview, setDrugReview] = useState(null);
-  const [reviewState, setReviewState] = useState(false);
 
   const { state } = useContext(DrugContext);
   const { drugs } = state;
@@ -118,21 +116,53 @@ function Medicine({ match, history }) {
     setModal(false);
   };
 
-  // review upload handler
-  const submitReview = (efficacy, adverse_effect, detail) => {
+  const reviewSubmitHandler = (method, efficacy, adverse_effect, detail) => {
     const data = {
       user_id: 1, // 일단 dummy, login 과 연동 후 수정 필요
       drug_id: paramId,
       efficacy: efficacy,
       body: detail,
-      adverse_effect_ids: [adverse_effect]
+      adverse_effect_ids: adverse_effect
     };
+
+    if (method === "post") postReview(data);
+  };
+
+  // review upload handler
+  const postReview = data => {
     axios
-      .post(`drugs/${paramId}/drug_reviews`, data, {
-        headers: {
-          Authorization: `bearer ${process.env.REACT_APP_TEMP_TOKEN}`
+      .post(
+        `drugs/${paramId}/drug_reviews`,
+        { drug_review: data },
+        {
+          headers: {
+            Authorization: `bearer ${process.env.REACT_APP_TEMP_TOKEN}`
+          }
         }
+      )
+      .then(response => {
+        console.log(data);
+        console.log(response);
+        searchById(paramId);
       })
+      .catch(error => {
+        console.log(data);
+        console.log(error);
+      });
+  };
+
+  // review update handler
+  const updateReview = data => {
+    axios
+      .post(
+        `drugs/${paramId}/drug_reviews`,
+        { drug_review: data },
+        {
+          headers: {
+            Authorization: `bearer ${process.env.REACT_APP_TEMP_TOKEN}`
+          }
+        }
+      )
       .then(response => {
         console.log(data);
         console.log(response);
@@ -153,7 +183,6 @@ function Medicine({ match, history }) {
         }
       })
       .then(res => {
-        console.log(res);
         searchById(paramId);
       })
       .catch(err => console.log(err));
@@ -171,18 +200,19 @@ function Medicine({ match, history }) {
         {drug && (
           <>
             <SearchResult drug={drug} drugImg={drugimg} modalOn={modalOn} />
-            <NewReview reviewSubmit={submitReview} />
           </>
         )}
         {drugList && <ItemList drug_list={drugList} />}
         {errorMessage && <div>{errorMessage}</div>}
-        {drugReview && (
-          <DrugReviews
-            reviews={drugReview}
-            deleteReview={deleteReview}
-            reviewState={reviewState}
-          />
-        )}
+        {drugReview &&
+          drugReview.map(review => (
+            <DrugReview
+              review={review}
+              key={review.id}
+              deleteReview={deleteReview}
+            />
+          ))}
+        {drug && <NewReview reviewSubmit={reviewSubmitHandler} />}
       </Container>
       {modal && <DetailModal item_seq={drug.item_seq} modalOff={modalOff} />}
     </>

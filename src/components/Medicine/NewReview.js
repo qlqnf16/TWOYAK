@@ -71,7 +71,7 @@ const NewReview = ({ reviewSubmit }) => {
   const finalSubmit = e => {
     e.preventDefault();
     const adverseEffectIds = adverseEffects.map(effect => effect.id);
-    reviewSubmit(efficacy, adverseEffectIds, detail);
+    reviewSubmit("post", efficacy, adverseEffectIds, detail);
   };
 
   return (
