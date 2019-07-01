@@ -2,14 +2,31 @@ import React, { useState, useEffect } from "react";
 import Slider from "react-input-slider";
 import styled from "styled-components";
 import AutoSuggestion from "../Util/AutoSuggestion";
-import SymptomButton from "../UI/RemovableButton";
 import RemovableButton from "../UI/RemovableButton";
+import { BasicButton, FlexForm } from "../UI/SharedStyles";
 
 const Container = styled.div`
   width: 100%;
   margin: 10px 0;
   border: 1px solid #dbdbdb
   padding: 10px;
+`;
+
+const Suggestion = styled.div`
+  & .react-autosuggest__input {
+    width: 200px;
+    font-size: 0.9rem;
+    height: 20px;
+  }
+`;
+
+const Button = styled(BasicButton)`
+  font-size: 0.9rem;
+  background-color: #a0a0a0;
+`;
+
+const Form = styled(FlexForm)`
+  margin: 0.3rem 0;
 `;
 
 const CustomTextarea = styled.textarea`
@@ -53,15 +70,17 @@ const NewReview = () => {
         onChange={({ x }) => setEfficacy(x)}
       />
       <div>복용 후 이상반응이 있었나요?</div>
-      <form onSubmit={formSubmit}>
-        <AutoSuggestion
-          search="adverse_effect"
-          searchKey="symptom_name"
-          placeholderProp="느끼신 증상을 입력하세요"
-          inputChange={inputChange}
-        />
-        <button type="submit">추가</button>
-      </form>
+      <Form onSubmit={formSubmit}>
+        <Suggestion>
+          <AutoSuggestion
+            search="adverse_effect"
+            searchKey="symptom_name"
+            placeholderProp="느끼신 증상을 입력하세요"
+            inputChange={inputChange}
+          />
+        </Suggestion>
+        <Button type="submit">추가</Button>
+      </Form>
       {adverseEffects.length > 0 &&
         adverseEffects.map(effect => (
           <RemovableButton

@@ -1,27 +1,24 @@
 import React from "react";
 import styled from "styled-components";
+import { BasicButton } from "./SharedStyles";
 
-const Button = styled.div`
-  display: inline;
+const Button = styled(BasicButton)`
   margin-right: 9px;
-  padding: 2px 6px;
-  border-radius: 5px;
   font-size: 0.9rem;
-  background-color: #2779a9;
-  color: white;
 `;
 
-const CloseButton = styled.div`
+const CloseIcon = styled.div`
   display: inline;
   margin-left: 6px;
   color: #9fc3d8;
+  cursor: pointer;
 `;
 
 const RemovableButton = ({ effect, deleteEffect }) => {
   return (
     <Button>
       {effect.symptom_name}
-      <CloseButton onClick={() => deleteEffect(effect.id)}>x</CloseButton>
+      <CloseIcon onClick={() => deleteEffect(effect.id)}>x</CloseIcon>
     </Button>
   );
 };
