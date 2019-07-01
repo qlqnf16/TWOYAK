@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -21,7 +21,10 @@ const SpaceSpan = styled.span`
   color: #9c9c9c;
 `;
 
-const DrugReview = ({ review }) => {
+const DrugReview = ({ review, deleteReview }) => {
+  useEffect(() => {
+    console.log("Drug Review Mounted");
+  }, [review]);
   return (
     <Container>
       <Flex>
@@ -45,6 +48,7 @@ const DrugReview = ({ review }) => {
         )}
       </Flex>
       <div>{review.body}</div>
+      <button onClick={() => deleteReview(review.id)}>삭제하기</button>
     </Container>
   );
 };

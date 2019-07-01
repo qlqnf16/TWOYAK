@@ -5,6 +5,7 @@ import { BasicButton } from "./SharedStyles";
 const Button = styled(BasicButton)`
   margin-right: 9px;
   font-size: 0.9rem;
+  cursor: auto;
 `;
 
 const CloseIcon = styled.div`

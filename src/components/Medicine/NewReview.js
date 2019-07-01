@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Slider from "react-input-slider";
 import styled from "styled-components";
 import AutoSuggestion from "../Util/AutoSuggestion";
@@ -20,7 +20,7 @@ const Suggestion = styled.div`
   }
 `;
 
-const Button = styled(BasicButton)`
+const AddButton = styled(BasicButton)`
   font-size: 0.9rem;
   background-color: #a0a0a0;
 `;
@@ -40,21 +40,38 @@ const CustomTextarea = styled.textarea`
   padding: 7px;
 `;
 
-const NewReview = () => {
+const SubmitButton = styled(BasicButton)`
+  font-size: 1.2rem;
+  padding: 0.4rem 1rem;
+  margin-top: 1rem;
+`;
+
+const NewReview = ({ reviewSubmit }) => {
   const [efficacy, setEfficacy] = useState(3);
   const [adverseEffects, setAdverseEffects] = useState([]);
+  const [detail, setDetail] = useState();
 
-  const inputChange = value => {
+  const effectInputChange = value => {
     if (adverseEffects.indexOf(value) === -1)
       setAdverseEffects(adverseEffects.concat(value));
   };
 
-  const formSubmit = e => {
+  const effectFormSubmit = e => {
     e.preventDefault();
   };
 
   const deleteEffect = content => {
     setAdverseEffects(adverseEffects.filter(effect => effect.id !== content));
+  };
+
+  const detailInputChange = e => {
+    setDetail(e.target.value);
+  };
+
+  const finalSubmit = e => {
+    e.preventDefault();
+    const adverseEffectIds = adverseEffects.map(effect => effect.id);
+    reviewSubmit(efficacy, adverseEffectIds, detail);
   };
 
   return (
@@ -70,16 +87,16 @@ const NewReview = () => {
         onChange={({ x }) => setEfficacy(x)}
       />
       <div>복용 후 이상반응이 있었나요?</div>
-      <Form onSubmit={formSubmit}>
+      <Form onSubmit={effectFormSubmit}>
         <Suggestion>
           <AutoSuggestion
             search="adverse_effect"
             searchKey="symptom_name"
             placeholderProp="느끼신 증상을 입력하세요"
-            inputChange={inputChange}
+            inputChange={effectInputChange}
           />
         </Suggestion>
-        <Button type="submit">추가</Button>
+        <AddButton type="submit">추가</AddButton>
       </Form>
       {adverseEffects.length > 0 &&
         adverseEffects.map(effect => (
@@ -90,7 +107,11 @@ const NewReview = () => {
           />
         ))}
 
-      <CustomTextarea placeholder="많은 사람들이 참고할 만한 의약품 리뷰를 남겨주세요" />
+      <CustomTextarea
+        onChange={detailInputChange}
+        placeholder="많은 사람들이 참고할 만한 의약품 리뷰를 남겨주세요"
+      />
+      <SubmitButton onClick={finalSubmit}>리뷰 등록하기</SubmitButton>
     </Container>
   );
 };

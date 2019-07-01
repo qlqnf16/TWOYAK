@@ -34,12 +34,15 @@ function Medicine({ match, history }) {
 
   const { state } = useContext(DrugContext);
   const { drugs } = state;
+
   // url에서 drug id param이 변하면 paramId 수정
   useEffect(() => {
     if (match.params.id) {
       setParamId(match.params.id);
     }
   }, [match.params.id]);
+
+  useEffect(() => {}, [reviewState]);
 
   // paramId 가 변하면 id로 약물 검색
   useEffect(() => {
@@ -67,6 +70,7 @@ function Medicine({ match, history }) {
       console.log(drugData, drugReviews);
       setDrug(drugData);
       setDrugReview(drugReviews);
+      setReviewState(true);
     } catch (error) {
       console.log(error);
     }
@@ -104,7 +108,7 @@ function Medicine({ match, history }) {
     }
   };
 
-  // inputChangeHandler
+  // 검색 inputChangeHandler
   const searchTermChange = value => {
     setTerm(value);
   };
@@ -116,6 +120,45 @@ function Medicine({ match, history }) {
 
   const modalOff = () => {
     setModal(false);
+  };
+
+  // review upload handler
+  const submitReview = (efficacy, adverse_effect, detail) => {
+    setReviewState(false);
+    const data = {
+      user_id: 1, // 일단 dummy, login 과 연동 후 수정 필요
+      drug_id: paramId,
+      efficacy: efficacy,
+      body: detail,
+      adverse_effect_ids: [adverse_effect]
+    };
+    axios
+      .post(`drugs/${paramId}/drug_reviews`, data, {
+        headers: {
+          Authorization: `bearer ${process.env.REACT_APP_TEMP_TOKEN}`
+        }
+      })
+      .then(response => {
+        console.log(data);
+        console.log(response);
+        setReviewState(true);
+      })
+      .catch(error => {
+        console.log(data);
+        console.log(error);
+      });
+  };
+
+  // review delete handler
+  const deleteReview = reviewId => {
+    axios
+      .delete(`drugs/${paramId}/drug_reviews/${reviewId}`, {
+        headers: {
+          Authorization: `bearer ${process.env.REACT_APP_TEMP_TOKEN}`
+        }
+      })
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
   };
 
   return (
@@ -130,14 +173,19 @@ function Medicine({ match, history }) {
         {drug && (
           <>
             <SearchResult drug={drug} drugImg={drugimg} modalOn={modalOn} />
-            <NewReview />
+            <NewReview reviewSubmit={submitReview} />
           </>
         )}
         {drugList && <ItemList drug_list={drugList} />}
         {errorMessage && <div>{errorMessage}</div>}
         {drugReview &&
+          reviewState &&
           drugReview.map(review => (
-            <DrugReview review={review} key={review.id} />
+            <DrugReview
+              review={review}
+              key={review.id}
+              deleteReview={deleteReview}
+            />
           ))}
       </Container>
       {modal && <DetailModal item_seq={drug.item_seq} modalOff={modalOff} />}
