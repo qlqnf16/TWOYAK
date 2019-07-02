@@ -1,6 +1,7 @@
 import Home from "./containers/Home";
 import Login from "./containers/Login";
 import Medicine from "./containers/Medicine";
+// import Medicine from "./containers/temp.js/index.js";
 
 const routes = [
   {

@@ -29,12 +29,13 @@ function Medicine({ match, history }) {
   const [modal, setModal] = useState(false);
   const [drugReview, setDrugReview] = useState(null);
   const [updateTarget, setUpdateTarget] = useState();
+  const [showNewReview, setShowNewReview] = useState(true);
 
   const { state } = useContext(DrugContext);
   const { drugs } = state;
 
   // user info
-  const currentUserId = localStorage.getItem("id");
+  const currentUserId = parseInt(localStorage.getItem("id"));
   const currentUserToken = localStorage.getItem("token");
 
   // url에서 drug id param이 변하면 paramId 수정
@@ -58,6 +59,13 @@ function Medicine({ match, history }) {
     return setDrugList(null);
   }, [paramId]);
 
+  useEffect(() => {
+    if (drugReview) {
+      const reviewUserIds = drugReview.map(review => review.u_id);
+      if (reviewUserIds.indexOf(currentUserId) !== -1) setShowNewReview(false);
+    }
+  }, [drugReview]);
+
   // id로 약물검색
   const searchById = async id => {
     const getDrugData = axios.get(`drugs/${id}`);
@@ -69,6 +77,7 @@ function Medicine({ match, history }) {
         getDrugReviews
       ]);
       console.log(drugData, drugReviews);
+
       setDrug(drugData);
       setDrugReview(drugReviews);
     } catch (error) {
@@ -183,6 +192,7 @@ function Medicine({ match, history }) {
 
   // review delete handler
   const deleteReview = reviewId => {
+    setShowNewReview(true);
     axios
       .delete(`drugs/${paramId}/drug_reviews/${reviewId}`, {
         headers: {
@@ -195,8 +205,8 @@ function Medicine({ match, history }) {
       .catch(err => console.log(err));
   };
 
-  let newReviewComponent = <NewReview reviewSubmit={reviewSubmitHandler} />;
   const updateButton = review => {
+    setShowNewReview(true);
     setUpdateTarget(review);
     console.log(updateTarget);
   };
@@ -227,7 +237,7 @@ function Medicine({ match, history }) {
               updateButton={updateButton}
             />
           ))}
-        {drug && (
+        {drug && showNewReview && (
           <NewReview reviewSubmit={reviewSubmitHandler} review={updateTarget} />
         )}
         {/* {updateTarget ? newReviewComponent : drug && newReviewComponent} */}
