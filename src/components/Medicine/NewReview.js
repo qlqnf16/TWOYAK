@@ -2,14 +2,31 @@ import React, { useState, useEffect } from "react";
 import Slider from "react-input-slider";
 import styled from "styled-components";
 import AutoSuggestion from "../Util/AutoSuggestion";
-import SymptomButton from "../UI/RemovableButton";
 import RemovableButton from "../UI/RemovableButton";
+import { BasicButton, FlexForm } from "../UI/SharedStyles";
 
 const Container = styled.div`
   width: 100%;
   margin: 10px 0;
   border: 1px solid #dbdbdb
   padding: 10px;
+`;
+
+const Suggestion = styled.div`
+  & .react-autosuggest__input {
+    width: 200px;
+    font-size: 0.9rem;
+    height: 20px;
+  }
+`;
+
+const AddButton = styled(BasicButton)`
+  font-size: 0.9rem;
+  background-color: #a0a0a0;
+`;
+
+const Form = styled(FlexForm)`
+  margin: 0.3rem 0;
 `;
 
 const CustomTextarea = styled.textarea`
@@ -23,21 +40,50 @@ const CustomTextarea = styled.textarea`
   padding: 7px;
 `;
 
-const NewReview = () => {
+const SubmitButton = styled(BasicButton)`
+  font-size: 1.2rem;
+  padding: 0.4rem 1rem;
+  margin-top: 1rem;
+`;
+
+const NewReview = React.memo(({ reviewSubmit, review }) => {
   const [efficacy, setEfficacy] = useState(3);
   const [adverseEffects, setAdverseEffects] = useState([]);
+  const [detail, setDetail] = useState();
 
-  const inputChange = value => {
+  useEffect(() => {
+    if (review) {
+      setEfficacy(review.efficacy);
+      setDetail(review.body);
+    }
+  }, [review]);
+
+  const effectInputChange = value => {
     if (adverseEffects.indexOf(value) === -1)
       setAdverseEffects(adverseEffects.concat(value));
   };
 
-  const formSubmit = e => {
-    e.preventDefault();
+  const effectFormSubmit = event => {
+    event.preventDefault();
   };
 
   const deleteEffect = content => {
     setAdverseEffects(adverseEffects.filter(effect => effect.id !== content));
+  };
+
+  const detailInputChange = event => {
+    setDetail(event.target.value);
+  };
+
+  const finalSubmit = event => {
+    event.preventDefault();
+    const adverseEffectIds = adverseEffects.map(effect => effect.id);
+    if (review)
+      reviewSubmit("put", efficacy, adverseEffectIds, detail, review.id);
+    else reviewSubmit("post", efficacy, adverseEffectIds, detail, null);
+    setEfficacy(3);
+    setAdverseEffects([]);
+    setDetail();
   };
 
   return (
@@ -53,15 +99,17 @@ const NewReview = () => {
         onChange={({ x }) => setEfficacy(x)}
       />
       <div>복용 후 이상반응이 있었나요?</div>
-      <form onSubmit={formSubmit}>
-        <AutoSuggestion
-          search="adverse_effect"
-          searchKey="symptom_name"
-          placeholderProp="느끼신 증상을 입력하세요"
-          inputChange={inputChange}
-        />
-        <button type="submit">추가</button>
-      </form>
+      <Form onSubmit={effectFormSubmit}>
+        <Suggestion>
+          <AutoSuggestion
+            search="adverse_effect"
+            searchKey="symptom_name"
+            placeholderProp="느끼신 증상을 입력하세요"
+            inputChange={effectInputChange}
+          />
+        </Suggestion>
+        <AddButton type="submit">추가</AddButton>
+      </Form>
       {adverseEffects.length > 0 &&
         adverseEffects.map(effect => (
           <RemovableButton
@@ -71,9 +119,16 @@ const NewReview = () => {
           />
         ))}
 
-      <CustomTextarea placeholder="많은 사람들이 참고할 만한 의약품 리뷰를 남겨주세요" />
+      <CustomTextarea
+        onChange={detailInputChange}
+        placeholder="많은 사람들이 참고할 만한 의약품 리뷰를 남겨주세요"
+        value={detail}
+      />
+      <SubmitButton onClick={finalSubmit}>
+        {review ? "수정하기" : "리뷰 등록하기"}
+      </SubmitButton>
     </Container>
   );
-};
+});
 
 export default NewReview;
