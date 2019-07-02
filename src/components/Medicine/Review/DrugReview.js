@@ -9,6 +9,7 @@ const Container = styled.div`
   border-radius: 5px;
   font-size: 0.9rem;
   margin: 5px 0;
+  box-sizing: border-box;
 `;
 
 const Flex = styled.div`

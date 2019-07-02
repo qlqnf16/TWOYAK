@@ -10,14 +10,7 @@ import DetailModal from "../components/Medicine/Drugs/DetailModal";
 import DrugReview from "../components/Medicine/Review/DrugReview";
 import NewReview from "../components/Medicine/Review/NewReview";
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 50%;
-  margin: 25vh auto;
-`;
+import { Container } from "../components/UI/SharedStyles";
 
 function Medicine({ match, history }) {
   let initialparam = !match.params.id ? 0 : match.params.id;
