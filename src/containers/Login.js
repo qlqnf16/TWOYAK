@@ -16,12 +16,12 @@ function Login(props) {
       localStorage.setItem('email', jwt_decode(localStorage.getItem('token')).user.email)
       localStorage.setItem('user_name', jwt_decode(localStorage.getItem('token')).user.user_name)
       localStorage.setItem('user_info_id', jwt_decode(localStorage.getItem('token')).user.user_info_id)
-      // props.history.push('/')
+      props.history.push('/medicine')
     }
   }, [props.history, props.location.search]);
 
   const socialLogin = ( supplier ) => {
-    window.open(`http://api.twoyak.com/api/users/auth/${supplier}`, '_self')
+    window.open(`https://api.twoyak.com/api/users/auth/${supplier}`, '_self')
   };
 
   const signinDataHandler = (key, event) => {
@@ -36,15 +36,19 @@ function Login(props) {
   //   dispatch( email, password );
   // }
 
+  const signout = () => {
+    localStorage.clear()
+  }
+
   return (
     <div>
-      {localStorage.getItem('user_name') ? <div>{localStorage.getItem('user_name')}</div> : null}
       {/* <input onChange={(event) => signinDataHandler('email', event)} />
       <input onChange={(event) => signinDataHandler('password', event)} />
       <button onClick={() => signinHandler()} /> */}
       <button onClick={() => socialLogin('google_oauth2')}>구글 로그인</button>
-      <button onClick={() => socialLogin('facebook')}>페이스북 로그인</button>
-      <button onClick={() => socialLogin('naver')}>네이버 로그인</button>
+      {/* <button onClick={() => socialLogin('facebook')}>페이스북 로그인</button>
+      <button onClick={() => socialLogin('naver')}>네이버 로그인</button> */}
+      <button onClick={() => signout()}>로그아웃</button>
     </div>
   )
 };
