@@ -33,6 +33,10 @@ function Medicine({ match, history }) {
   const { state } = useContext(DrugContext);
   const { drugs } = state;
 
+  // user info
+  const currentUserId = localStorage.getItem("id");
+  const currentUserToken = localStorage.getItem("token");
+
   // url에서 drug id param이 변하면 paramId 수정
   useEffect(() => {
     if (match.params.id) {
@@ -145,7 +149,7 @@ function Medicine({ match, history }) {
         { drug_review: data },
         {
           headers: {
-            Authorization: `bearer ${process.env.REACT_APP_TEMP_TOKEN}`
+            Authorization: `bearer ${currentUserToken}`
           }
         }
       )
@@ -165,7 +169,7 @@ function Medicine({ match, history }) {
         { drug_review: data },
         {
           headers: {
-            Authorization: `bearer ${process.env.REACT_APP_TEMP_TOKEN}`
+            Authorization: `bearer ${currentUserToken}`
           }
         }
       )
@@ -182,7 +186,7 @@ function Medicine({ match, history }) {
     axios
       .delete(`drugs/${paramId}/drug_reviews/${reviewId}`, {
         headers: {
-          Authorization: `bearer ${process.env.REACT_APP_TEMP_TOKEN}`
+          Authorization: `bearer ${currentUserToken}`
         }
       })
       .then(res => {
@@ -217,6 +221,7 @@ function Medicine({ match, history }) {
           drugReview.map(review => (
             <DrugReview
               review={review}
+              currentUserId={currentUserId}
               key={review.id}
               deleteReview={deleteReview}
               updateButton={updateButton}

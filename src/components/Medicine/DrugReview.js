@@ -27,7 +27,7 @@ const Button = styled(BasicButton)`
   margin-right: 0.5rem;
 `;
 
-const DrugReview = ({ review, deleteReview, updateButton }) => {
+const DrugReview = ({ review, currentUserId, deleteReview, updateButton }) => {
   return (
     <Container>
       <Flex>
@@ -56,8 +56,12 @@ const DrugReview = ({ review, deleteReview, updateButton }) => {
         )}
       </Flex>
       <div>{review.body}</div>
-      <Button onClick={() => deleteReview(review.id)}>삭제하기</Button>
-      <Button onClick={() => updateButton(review)}>수정하기</Button>
+      {currentUserId == review.u_id && (
+        <>
+          <Button onClick={() => deleteReview(review.id)}>삭제하기</Button>
+          <Button onClick={() => updateButton(review)}>수정하기</Button>
+        </>
+      )}
     </Container>
   );
 };
