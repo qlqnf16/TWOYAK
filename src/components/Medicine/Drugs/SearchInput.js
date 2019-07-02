@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import AutoSuggestion from "../Util/AutoSuggestion";
-import { BasicButton, FlexForm } from "../UI/SharedStyles";
+import AutoSuggestion from "../../Util/AutoSuggestion";
+import { BasicButton, FlexForm } from "../../UI/SharedStyles";
 
 const Form = styled(FlexForm)`
   margin: 1rem;

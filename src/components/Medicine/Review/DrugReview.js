@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { BasicButton } from "../UI/SharedStyles";
+import { BasicButton } from "../../UI/SharedStyles";
 
 const Container = styled.div`
   width: 100%;
@@ -56,7 +56,7 @@ const DrugReview = ({ review, currentUserId, deleteReview, updateButton }) => {
         )}
       </Flex>
       <div>{review.body}</div>
-      {currentUserId == review.u_id && (
+      {currentUserId === review.u_id && (
         <>
           <Button onClick={() => deleteReview(review.id)}>삭제하기</Button>
           <Button onClick={() => updateButton(review)}>수정하기</Button>

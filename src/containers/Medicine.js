@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import axios from "../apis";
-import SearchInput from "../components/Medicine/SearchInput";
 import styled from "styled-components";
-import SearchResult from "../components/Medicine/SearchResult";
-import ItemList from "../components/Medicine/ItemList";
 import { DrugContext } from "../contexts/DrugStore";
-import DetailModal from "../components/Medicine/DetailModal";
-import DrugReview from "../components/Medicine/DrugReview.js";
-import NewReview from "../components/Medicine/NewReview";
+
+import SearchInput from "../components/Medicine/Drugs/SearchInput";
+import SearchResult from "../components/Medicine/Drugs/SearchResult";
+import ItemList from "../components/Medicine/Drugs/ItemList";
+import DetailModal from "../components/Medicine/Drugs/DetailModal";
+import DrugReview from "../components/Medicine/Review/DrugReview";
+import NewReview from "../components/Medicine/Review/NewReview";
 
 const Container = styled.div`
   display: flex;
@@ -22,19 +23,22 @@ function Medicine({ match, history }) {
   let initialparam = !match.params.id ? 0 : match.params.id;
   const [paramId, setParamId] = useState(initialparam);
   const [term, setTerm] = useState();
+
+  // fetch 결과 states
   const [drug, setDrug] = useState(null);
   const [drugimg, setDrugimg] = useState("");
   const [drugList, setDrugList] = useState(null);
-  const [errorMessage, setErrorMessage] = useState();
-  const [modal, setModal] = useState(false);
   const [drugReview, setDrugReview] = useState(null);
-  const [updateTarget, setUpdateTarget] = useState();
-  const [showNewReview, setShowNewReview] = useState(true);
+  const [updateTarget, setUpdateTarget] = useState(); // drug review update
+
+  const [modal, setModal] = useState(false); // 의약품 상세정보 모달
+  const [showNewReview, setShowNewReview] = useState(true); // 리뷰 등록창 on off
+  const [errorMessage, setErrorMessage] = useState();
 
   const { state } = useContext(DrugContext);
-  const { drugs } = state;
+  const { drugs } = state; // 전체 의약품 목록
 
-  // user info
+  // user informations
   const currentUserId = parseInt(localStorage.getItem("id"));
   const currentUserToken = localStorage.getItem("token");
 
@@ -47,10 +51,12 @@ function Medicine({ match, history }) {
 
   // paramId 가 변하면 id로 약물 검색
   useEffect(() => {
+    // state 초기화
     setDrug(null);
     setDrugList(null);
     setDrugimg(null);
     setUpdateTarget(null);
+    setShowNewReview(true);
 
     if (paramId) {
       searchById(paramId);
@@ -58,13 +64,6 @@ function Medicine({ match, history }) {
     }
     return setDrugList(null);
   }, [paramId]);
-
-  useEffect(() => {
-    if (drugReview) {
-      const reviewUserIds = drugReview.map(review => review.u_id);
-      if (reviewUserIds.indexOf(currentUserId) !== -1) setShowNewReview(false);
-    }
-  }, [drugReview]);
 
   // id로 약물검색
   const searchById = async id => {
@@ -117,7 +116,7 @@ function Medicine({ match, history }) {
     }
   };
 
-  // 검색 inputChangeHandler
+  // 검색어 inputChangeHandler
   const searchTermChange = value => {
     setTerm(value);
   };
@@ -126,11 +125,11 @@ function Medicine({ match, history }) {
   const modalOn = useCallback(() => {
     setModal(true);
   }, []);
-
   const modalOff = () => {
     setModal(false);
   };
 
+  // NewReview.js 리뷰 등록하기 버튼
   const reviewSubmitHandler = (
     method,
     efficacy,
@@ -139,7 +138,7 @@ function Medicine({ match, history }) {
     reviewId
   ) => {
     const data = {
-      user_id: 1, // 일단 dummy, login 과 연동 후 수정 필요
+      user_id: currentUserId,
       drug_id: paramId,
       efficacy: efficacy,
       body: detail,
@@ -150,7 +149,7 @@ function Medicine({ match, history }) {
     else if (method === "put") updateReview(data, reviewId);
   };
 
-  // review upload handler
+  // review upload
   const postReview = data => {
     axios
       .post(
@@ -170,7 +169,7 @@ function Medicine({ match, history }) {
       });
   };
 
-  // review update handler
+  // review update
   const updateReview = (data, reviewId) => {
     axios
       .put(
@@ -190,7 +189,7 @@ function Medicine({ match, history }) {
       });
   };
 
-  // review delete handler
+  // review delete
   const deleteReview = reviewId => {
     setShowNewReview(true);
     axios
@@ -205,11 +204,19 @@ function Medicine({ match, history }) {
       .catch(err => console.log(err));
   };
 
+  // DrugReview.js 리뷰 수정하기 버튼
   const updateButton = review => {
     setShowNewReview(true);
     setUpdateTarget(review);
-    console.log(updateTarget);
   };
+
+  // 리뷰 등록창 on off
+  useEffect(() => {
+    if (drugReview) {
+      const reviewUserIds = drugReview.map(review => review.u_id);
+      if (reviewUserIds.indexOf(currentUserId) !== -1) setShowNewReview(false);
+    }
+  }, [drugReview]);
 
   return (
     <>
@@ -240,7 +247,6 @@ function Medicine({ match, history }) {
         {drug && showNewReview && (
           <NewReview reviewSubmit={reviewSubmitHandler} review={updateTarget} />
         )}
-        {/* {updateTarget ? newReviewComponent : drug && newReviewComponent} */}
       </Container>
       {modal && <DetailModal item_seq={drug.item_seq} modalOff={modalOff} />}
     </>

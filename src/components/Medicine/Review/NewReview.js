@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Slider from "react-input-slider";
 import styled from "styled-components";
-import AutoSuggestion from "../Util/AutoSuggestion";
-import RemovableButton from "../UI/RemovableButton";
-import { BasicButton, FlexForm } from "../UI/SharedStyles";
+import AutoSuggestion from "../../Util/AutoSuggestion";
+import RemovableButton from "../../UI/RemovableButton";
+import { BasicButton, FlexForm } from "../../UI/SharedStyles";
 
 const Container = styled.div`
   width: 100%;
@@ -51,6 +51,7 @@ const NewReview = React.memo(({ reviewSubmit, review }) => {
   const [adverseEffects, setAdverseEffects] = useState([]);
   const [detail, setDetail] = useState();
 
+  // 리뷰 수정 시
   useEffect(() => {
     if (review) {
       setEfficacy(review.efficacy);
@@ -59,17 +60,17 @@ const NewReview = React.memo(({ reviewSubmit, review }) => {
     }
   }, [review]);
 
-  const effectInputChange = value => {
+  const adverseEffectInputChange = value => {
     console.log(adverseEffects);
     if (adverseEffects.indexOf(value) === -1)
       setAdverseEffects(adverseEffects.concat(value));
   };
 
-  const effectFormSubmit = event => {
+  const adverseEffectSubmit = event => {
     event.preventDefault();
   };
 
-  const deleteEffect = content => {
+  const deleteAdverseEffect = content => {
     setAdverseEffects(adverseEffects.filter(effect => effect.id !== content));
   };
 
@@ -77,12 +78,14 @@ const NewReview = React.memo(({ reviewSubmit, review }) => {
     setDetail(event.target.value);
   };
 
-  const finalSubmit = event => {
+  const finalReviewSubmit = event => {
     event.preventDefault();
     const adverseEffectIds = adverseEffects.map(effect => effect.id);
     if (review)
       reviewSubmit("put", efficacy, adverseEffectIds, detail, review.id);
     else reviewSubmit("post", efficacy, adverseEffectIds, detail, null);
+
+    // clear
     setEfficacy(3);
     setAdverseEffects([]);
     setDetail();
@@ -101,13 +104,13 @@ const NewReview = React.memo(({ reviewSubmit, review }) => {
         onChange={({ x }) => setEfficacy(x)}
       />
       <div>복용 후 이상반응이 있었나요?</div>
-      <Form onSubmit={effectFormSubmit}>
+      <Form onSubmit={adverseEffectSubmit}>
         <Suggestion>
           <AutoSuggestion
             search="adverse_effect"
             searchKey="symptom_name"
             placeholderProp="느끼신 증상을 입력하세요"
-            inputChange={effectInputChange}
+            inputChange={adverseEffectInputChange}
           />
         </Suggestion>
         <AddButton type="submit">추가</AddButton>
@@ -117,7 +120,7 @@ const NewReview = React.memo(({ reviewSubmit, review }) => {
           <RemovableButton
             key={effect.id}
             effect={effect}
-            deleteEffect={deleteEffect}
+            deleteAdverseEffect={deleteAdverseEffect}
           />
         ))}
 
@@ -126,7 +129,7 @@ const NewReview = React.memo(({ reviewSubmit, review }) => {
         placeholder="많은 사람들이 참고할 만한 의약품 리뷰를 남겨주세요"
         value={detail}
       />
-      <SubmitButton onClick={finalSubmit}>
+      <SubmitButton onClick={finalReviewSubmit}>
         {review ? "수정하기" : "리뷰 등록하기"}
       </SubmitButton>
     </Container>
