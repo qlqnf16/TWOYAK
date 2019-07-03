@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Rating from "react-rating";
-
 import styled from "styled-components";
 import AutoSuggestion from "../../Util/AutoSuggestion";
 import RemovableButton from "../../UI/RemovableButton";
 import { BasicButton, FlexForm } from "../../UI/SharedStyles";
+import "@fortawesome/fontawesome-free/css/all.css";
 
 const Container = styled.div`
   width: 100%;
@@ -100,7 +100,13 @@ const NewReview = React.memo(({ reviewSubmit, review }) => {
     <Container>
       <div>리뷰를 남겨주세요</div>
       <div>효과는 어땠나요?</div>
-      <Rating fractions={2} onChange={setEfficacy} initialRating={efficacy} />
+      <Rating
+        emptySymbol="fa fa-star-o fa-2x"
+        fullSymbol="fa fa-star fa-2x"
+        fractions={2}
+        onChange={setEfficacy}
+        initialRating={efficacy}
+      />
       <div>복용 후 이상반응이 있었나요?</div>
       <Form onSubmit={adverseEffectSubmit}>
         <Suggestion>
