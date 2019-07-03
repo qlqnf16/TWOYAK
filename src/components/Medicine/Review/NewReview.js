@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Slider from "react-input-slider";
+import Rating from "react-rating";
+
 import styled from "styled-components";
 import AutoSuggestion from "../../Util/AutoSuggestion";
 import RemovableButton from "../../UI/RemovableButton";
@@ -8,15 +9,19 @@ import { BasicButton, FlexForm } from "../../UI/SharedStyles";
 const Container = styled.div`
   width: 100%;
   margin: 10px 0;
-  border: 1px solid #dbdbdb
+  border: 1px solid #dbdbdb;
   padding: 10px;
 `;
 
 const Suggestion = styled.div`
   & .react-autosuggest__input {
-    width: 200px;
     font-size: 0.9rem;
-    height: 20px;
+    height: 26px;
+  }
+
+  & .react-autosuggest__suggestions-container--open {
+    width: 100%;
+    top: 25px;
   }
 `;
 
@@ -38,6 +43,7 @@ const CustomTextarea = styled.textarea`
   color: #333;
   box-sizing: border-box;
   padding: 7px;
+  border: 1px solid #c1c1c1;
 `;
 
 const SubmitButton = styled(BasicButton)`
@@ -47,7 +53,7 @@ const SubmitButton = styled(BasicButton)`
 `;
 
 const NewReview = React.memo(({ reviewSubmit, review }) => {
-  const [efficacy, setEfficacy] = useState(3);
+  const [efficacy, setEfficacy] = useState(0);
   const [adverseEffects, setAdverseEffects] = useState([]);
   const [detail, setDetail] = useState();
 
@@ -61,7 +67,6 @@ const NewReview = React.memo(({ reviewSubmit, review }) => {
   }, [review]);
 
   const adverseEffectInputChange = value => {
-    console.log(adverseEffects);
     if (adverseEffects.indexOf(value) === -1)
       setAdverseEffects(adverseEffects.concat(value));
   };
@@ -86,7 +91,7 @@ const NewReview = React.memo(({ reviewSubmit, review }) => {
     else reviewSubmit("post", efficacy, adverseEffectIds, detail, null);
 
     // clear
-    setEfficacy(3);
+    setEfficacy(0);
     setAdverseEffects([]);
     setDetail();
   };
@@ -94,15 +99,8 @@ const NewReview = React.memo(({ reviewSubmit, review }) => {
   return (
     <Container>
       <div>리뷰를 남겨주세요</div>
-      <div>효과는 어땠나요? {efficacy}</div>
-      <Slider
-        axis="x"
-        xstep={0.5}
-        xmin={1}
-        xmax={5}
-        x={efficacy}
-        onChange={({ x }) => setEfficacy(x)}
-      />
+      <div>효과는 어땠나요?</div>
+      <Rating fractions={2} onChange={setEfficacy} initialRating={efficacy} />
       <div>복용 후 이상반응이 있었나요?</div>
       <Form onSubmit={adverseEffectSubmit}>
         <Suggestion>
@@ -127,7 +125,7 @@ const NewReview = React.memo(({ reviewSubmit, review }) => {
       <CustomTextarea
         onChange={detailInputChange}
         placeholder="많은 사람들이 참고할 만한 의약품 리뷰를 남겨주세요"
-        value={detail}
+        value={detail ? detail : ""}
       />
       <SubmitButton onClick={finalReviewSubmit}>
         {review ? "수정하기" : "리뷰 등록하기"}

@@ -25,9 +25,6 @@ const StyleWrapper = styled.div`
     @media (max-width: ${breakpoints}) {
       width: 100%;
     }
-    &:focus {
-      outline: none;
-    }
   }
 
   & .react-autosuggest__suggestions-container--open {
