@@ -34,6 +34,11 @@ const Form = styled(FlexForm)`
   margin: 0.3rem 0;
 `;
 
+const StyledRating = styled(Rating)`
+  color: #ffd800;
+  margin: 10px 0;
+`;
+
 const CustomTextarea = styled.textarea`
   width: 100%;
   height: 60px;
@@ -100,9 +105,9 @@ const NewReview = React.memo(({ reviewSubmit, review }) => {
     <Container>
       <div>리뷰를 남겨주세요</div>
       <div>효과는 어땠나요?</div>
-      <Rating
-        emptySymbol="fa fa-star-o fa-2x"
-        fullSymbol="fa fa-star fa-2x"
+      <StyledRating
+        emptySymbol="far fa-star fa-2x empty"
+        fullSymbol="fas fa-star fa-2x full"
         fractions={2}
         onChange={setEfficacy}
         initialRating={efficacy}
