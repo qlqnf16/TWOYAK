@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import routes from "./routes";
 import DrugStore from "./contexts/DrugStore";
 import Navbar from "./components/Navbars/Navbar";
@@ -22,8 +22,10 @@ function App() {
 
   return (
     <DrugStore>
-      <Navbar />
-      {switchRoutes}
+      <>
+        <Navbar />
+        {switchRoutes}
+      </>
     </DrugStore>
   );
 }

@@ -4,7 +4,7 @@ import Medicine from "./containers/Medicine";
 import AddUserInfo from "./containers/AddUserInfo";
 import LoginError from "./containers/LoginError";
 import HealthRecord from "./containers/HealthRecord";
-import Mypage from "./containers/MyPage";
+import Mypage from "./containers/Mypage";
 
 const routes = [
   {
@@ -13,12 +13,7 @@ const routes = [
     component: Home,
     exact: true
   },
-  {
-    path: "/login",
-    name: "로그인",
-    component: Login,
-    exact: true
-  },
+
   {
     path: "/login-error",
     name: "로그인 에러",
@@ -44,6 +39,12 @@ const routes = [
     path: "/mypage",
     name: "마이페이지",
     component: Mypage
+  },
+  {
+    path: "/login",
+    name: "로그인",
+    component: Login,
+    exact: true
   }
 ];
 
