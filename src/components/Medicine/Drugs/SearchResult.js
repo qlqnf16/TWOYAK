@@ -15,7 +15,7 @@ const Container = styled.div`
 `;
 
 const InfoContainer = styled.div`
-  width: 400px;
+  width: 100%;
   margin-right: 1rem;
 `;
 
