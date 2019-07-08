@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useCallback } from "react";
 import axios from "../apis";
 import styled from "styled-components";
 import { DrugContext } from "../contexts/DrugStore";
+import { AuthContext } from "../contexts/AuthStore";
 
 import SearchInput from "../components/Medicine/Drugs/SearchInput";
 import SearchResult from "../components/Medicine/Drugs/SearchResult";
@@ -32,8 +33,7 @@ function Medicine({ match, history }) {
   const { drugs } = state; // 전체 의약품 목록
 
   // user informations
-  const currentUserId = parseInt(localStorage.getItem("id"));
-  const currentUserToken = localStorage.getItem("token");
+  const { state: authState } = useContext(AuthContext);
 
   // url에서 drug id param이 변하면 paramId 수정
   useEffect(() => {
@@ -131,7 +131,7 @@ function Medicine({ match, history }) {
     reviewId
   ) => {
     const data = {
-      user_id: currentUserId,
+      user_id: authState.userId,
       drug_id: paramId,
       efficacy: efficacy,
       body: detail,
@@ -150,7 +150,7 @@ function Medicine({ match, history }) {
         { drug_review: data },
         {
           headers: {
-            Authorization: `bearer ${currentUserToken}`
+            Authorization: `bearer ${authState.token}`
           }
         }
       )
@@ -170,7 +170,7 @@ function Medicine({ match, history }) {
         { drug_review: data },
         {
           headers: {
-            Authorization: `bearer ${currentUserToken}`
+            Authorization: `bearer ${authState.token}`
           }
         }
       )
@@ -188,7 +188,7 @@ function Medicine({ match, history }) {
     axios
       .delete(`drugs/${paramId}/drug_reviews/${reviewId}`, {
         headers: {
-          Authorization: `bearer ${currentUserToken}`
+          Authorization: `bearer ${authState.token}`
         }
       })
       .then(res => {
@@ -207,7 +207,8 @@ function Medicine({ match, history }) {
   useEffect(() => {
     if (drugReview) {
       const reviewUserIds = drugReview.map(review => review.u_id);
-      if (reviewUserIds.indexOf(currentUserId) !== -1) setShowNewReview(false);
+      if (reviewUserIds.indexOf(authState.userId) !== -1)
+        setShowNewReview(false);
     }
   }, [drugReview]);
 
@@ -231,7 +232,6 @@ function Medicine({ match, history }) {
           drugReview.map(review => (
             <DrugReview
               review={review}
-              currentUserId={currentUserId}
               key={review.id}
               deleteReview={deleteReview}
               updateButton={updateButton}
