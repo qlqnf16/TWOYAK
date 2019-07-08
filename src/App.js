@@ -2,6 +2,8 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 import routes from "./routes";
 import DrugStore from "./contexts/DrugStore";
+import AuthStore from "./contexts/AuthStore";
+import WatchStore from "./components/Util/WatchStore";
 import Navbar from "./components/Navbars/Navbar";
 
 function App() {
@@ -21,12 +23,14 @@ function App() {
   );
 
   return (
-    <DrugStore>
-      <>
-        <Navbar />
-        {switchRoutes}
-      </>
-    </DrugStore>
+    <AuthStore>
+      <DrugStore>
+        <WatchStore>
+          <Navbar />
+          {switchRoutes}
+        </WatchStore>
+      </DrugStore>
+    </AuthStore>
   );
 }
 
