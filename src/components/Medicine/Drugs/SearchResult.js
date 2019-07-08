@@ -1,15 +1,21 @@
 import React from "react";
 import styled from "styled-components";
+import { breakpoints } from "../../UI/SharedStyles";
 
 const Container = styled.div`
   display: flex;
-  align-items: start;
-  width: 570px;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
   margin-bottom: 1rem;
+
+  @media (max-width: ${breakpoints.medium}) {
+    display: block;
+  }
 `;
 
 const InfoContainer = styled.div`
-  width: 400px;
+  width: 100%;
   margin-right: 1rem;
 `;
 

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Close } from "../UI/Icons";
+import { Close } from "../../UI/Icons";
 
 const ModalContainer = styled.div`
   width: 70%;

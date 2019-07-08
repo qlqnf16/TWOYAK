@@ -5,20 +5,35 @@ import parse from "autosuggest-highlight/parse";
 import { DrugContext } from "../../contexts/DrugStore";
 import deburr from "lodash/deburr";
 import styled from "styled-components";
+import { breakpoints } from "../UI/SharedStyles";
 
 const StyleWrapper = styled.div`
+  flex-grow: 1;
+  flex-shrink: 1;
+  position: relative;
+
+  @media (max-width: ${breakpoints}) {
+    width: 100%;
+  }
   & .react-autosuggest__input {
-    width: 490px;
+    box-sizing: border-box;
+    width: 100%;
     height: 30px;
     border-width: 0;
     border-bottom: 1px solid #dbdbdb;
-    margin-right: 0.3rem;
     font-size: 1rem;
+    @media (max-width: ${breakpoints}) {
+      width: 100%;
+    }
   }
 
   & .react-autosuggest__suggestions-container--open {
-    width: 490px;
     margin: 0;
+    position: absolute;
+    left: 0;
+    top: 29px;
+    background-color: white;
+    border: 1px solid #dbdbdb;
   }
 
   & .react-autosuggest__suggestions-list {

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { BasicButton } from "../UI/SharedStyles";
+import { BasicButton } from "../../UI/SharedStyles";
 
 const Container = styled.div`
   width: 100%;
@@ -9,6 +9,7 @@ const Container = styled.div`
   border-radius: 5px;
   font-size: 0.9rem;
   margin: 5px 0;
+  box-sizing: border-box;
 `;
 
 const Flex = styled.div`
@@ -27,7 +28,7 @@ const Button = styled(BasicButton)`
   margin-right: 0.5rem;
 `;
 
-const DrugReview = ({ review, deleteReview, updateButton }) => {
+const DrugReview = ({ review, currentUserId, deleteReview, updateButton }) => {
   return (
     <Container>
       <Flex>
@@ -46,13 +47,22 @@ const DrugReview = ({ review, deleteReview, updateButton }) => {
         {review.adverse_effects.length > 0 && (
           <>
             <SpaceSpan>|</SpaceSpan>
-            <div>이상반응: {review.adverse_effects}</div>
+            <div>
+              이상반응:{" "}
+              {review.adverse_effects
+                .map(effect => effect.symptom_name)
+                .join(", ")}
+            </div>
           </>
         )}
       </Flex>
       <div>{review.body}</div>
-      <Button onClick={() => deleteReview(review.id)}>삭제하기</Button>
-      <Button onClick={() => updateButton(review)}>수정하기</Button>
+      {currentUserId === review.u_id && (
+        <>
+          <Button onClick={() => deleteReview(review.id)}>삭제하기</Button>
+          <Button onClick={() => updateButton(review)}>수정하기</Button>
+        </>
+      )}
     </Container>
   );
 };
