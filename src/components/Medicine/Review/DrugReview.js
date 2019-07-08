@@ -35,8 +35,12 @@ const DrugReview = ({ review, deleteReview, updateButton }) => {
   return (
     <Container>
       <Flex>
-        <div>{review.user_email}</div>
-        <SpaceSpan>|</SpaceSpan>
+        {review.user_email && (
+          <>
+            <div>{review.user_email}</div>
+            <SpaceSpan>|</SpaceSpan>
+          </>
+        )}
         <div>{review.age}</div>
         {review.sex && (
           <>
@@ -47,7 +51,7 @@ const DrugReview = ({ review, deleteReview, updateButton }) => {
       </Flex>
       <Flex>
         <div>평점: {review.efficacy}점</div>
-        {review.adverse_effects.length > 0 && (
+        {review.adverse_effects && review.adverse_effects.length > 0 && (
           <>
             <SpaceSpan>|</SpaceSpan>
             <div>
@@ -60,12 +64,8 @@ const DrugReview = ({ review, deleteReview, updateButton }) => {
         )}
       </Flex>
       <div>{review.body}</div>
-      {state.userId === review.u_id && (
-        <>
-          <Button onClick={() => deleteReview(review.id)}>삭제하기</Button>
-          <Button onClick={() => updateButton(review)}>수정하기</Button>
-        </>
-      )}
+      <Button onClick={() => deleteReview(review.id)}>삭제하기</Button>
+      <Button onClick={() => updateButton(review)}>수정하기</Button>
     </Container>
   );
 };

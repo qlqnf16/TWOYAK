@@ -4,13 +4,13 @@ import styled from "styled-components";
 const Box = styled.div`
   width: 100%;
   height: 400px;
-  background-color: blue;
-  margin: 1rem;
+  background-color: var(--twoyak-blue);
+  margin: 1rem 0;
 `;
 
 function Home() {
   return (
-    <div>
+    <>
       <Box />
       <Box />
       <Box />
@@ -19,7 +19,7 @@ function Home() {
       <Box />
       <Box />
       <Box />
-    </div>
+    </>
   );
 }
 

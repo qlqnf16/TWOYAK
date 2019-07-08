@@ -5,11 +5,11 @@ import { breakpoints } from "../UI/SharedStyles";
 
 const NavContainer = styled.div`
   width: 100%;
-  padding: 1rem;
+  padding: 1.37rem;
   display: flex;
   justify-content: start;
   align-items: center;
-  background-color: #03aeff;
+  background-image: linear-gradient(121deg, #00cfff, #00a2ff);
   @media (max-width: ${breakpoints.medium}) {
     position: fixed;
     bottom: 0;
@@ -65,7 +65,7 @@ const Navbar = () => {
         <StyledNavLink exact to="/">
           홈
         </StyledNavLink>
-        <StyledNavLink to="/login">로그인</StyledNavLink>
+        <StyledNavLink to="/health-record">복용내역</StyledNavLink>
         <StyledNavLink to="/medicine">검색</StyledNavLink>
       </NavContainer>
     </NavTransition>
