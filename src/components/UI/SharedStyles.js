@@ -92,11 +92,27 @@ export const StyledRating = styled(Rating)`
   }
 `;
 
-export const RatingText = styled.p`
+export const BasicText = styled.p`
   display: inline;
   font-size: 0.875rem;
   color: #474747;
   opacity: 0.6;
   font-weight: bold;
   margin-left: 1rem;
+`;
+
+export const RatingText = styled(BasicText)`
+  margin-left: 1rem;
+`;
+
+export const BulletText = styled.li`
+  color: var(--twoyak-blue);
+  margin-left: 1.68rem;
+  & p {
+    display: inline;
+    color: var(--twoyak-black);
+    margin-left: -5px;
+    font-size: 0.8rem;
+    font-weight: 800;
+  }
 `;

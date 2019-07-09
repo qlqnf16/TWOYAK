@@ -1,9 +1,20 @@
 import React from "react";
-import { Card, Line } from "../UI/SharedStyles";
+import { Card, Line, BulletText, FlexDiv, BasicText } from "../UI/SharedStyles";
 import styled from "styled-components";
+
+const Flex = styled(FlexDiv)`
+  justify-content: space-between;
+  margin: 1rem 0;
+`;
 
 const PastCard = styled(Card)`
   padding: 1rem;
+`;
+
+const Text = styled(BasicText)`
+  opacity: 1;
+  font-size: 0.69rem;
+  font-weight: normal;
 `;
 
 const DateContainer = styled.div`
@@ -22,6 +33,12 @@ const Year = styled.div`
   margin-right: 0.3rem;
 `;
 
+const Bullet = styled(BulletText)`
+  & p {
+    font-size: 0.875rem;
+  }
+`;
+
 const PastDrug = ({ dateArray, monthCategory }) => {
   return (
     <PastCard>
@@ -32,7 +49,22 @@ const PastDrug = ({ dateArray, monthCategory }) => {
       <Line />
       <div>
         {monthCategory.map(drug => (
-          <div key={drug.name}>{drug.name}</div>
+          <Flex key={drug.name}>
+            <Bullet>
+              <p>{drug.name}</p>
+            </Bullet>
+            <Text>
+              {drug.from
+                .slice(5)
+                .split("-")
+                .join("/")}
+              {` ~ `}
+              {drug.to
+                .slice(5)
+                .split("-")
+                .join("/")}
+            </Text>
+          </Flex>
         ))}
       </div>
     </PastCard>

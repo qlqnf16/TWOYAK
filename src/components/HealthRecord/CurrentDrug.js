@@ -11,7 +11,8 @@ import {
   BasicButton,
   StyledRating,
   RatingText,
-  FlexDiv
+  FlexDiv,
+  BulletText
 } from "../UI/SharedStyles";
 import medIcon from "../../assets/images/med-icon.svg";
 
@@ -30,18 +31,6 @@ const Title = styled.div`
 const Text = styled.div`
   color: var(--twoyak-black);
   font-size: 0.7rem;
-`;
-
-const SubTitle = styled.li`
-  color: var(--twoyak-blue);
-  margin-left: 1.68rem;
-  & p {
-    display: inline;
-    color: var(--twoyak-black);
-    margin-left: -5px;
-    font-size: 0.8rem;
-    font-weight: 800;
-  }
 `;
 
 const Content = styled.div`
@@ -241,9 +230,9 @@ const CurrentDrug = ({
       )}
       {drug.dur_info && (
         <>
-          <SubTitle>
+          <BulletText>
             <p>안전정보</p>
-          </SubTitle>
+          </BulletText>
           <Content>
             {message.map(m => (
               <div key={m}>{m}</div>
@@ -254,17 +243,17 @@ const CurrentDrug = ({
 
       {drug.memo && (
         <>
-          <SubTitle>
+          <BulletText>
             <p>메모</p>
-          </SubTitle>
+          </BulletText>
           <Content>{drug.memo}</Content>
         </>
       )}
       {review ? (
         <>
-          <SubTitle>
+          <BulletText>
             <p>내 리뷰</p>
-          </SubTitle>
+          </BulletText>
           <DrugReview
             review={review}
             deleteReview={deleteReview}

@@ -109,6 +109,7 @@ function HealthRecord() {
         }
       );
       getUserInfo();
+      setShowCurrent(false);
     } catch (error) {
       console.log(error);
     }

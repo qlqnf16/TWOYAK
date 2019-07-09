@@ -12,18 +12,18 @@ const PastDrugList = ({ drugs }) => {
     const difference = to.diff(from, "months");
     const addingData = { name: drug.drug_name, from: drug.from, to: drug.to };
 
-    monthCategory[from.format("YYYY-MM")]
-      ? monthCategory[from.format("YYYY-MM")].push(addingData)
-      : (monthCategory[from.format("YYYY-MM")] = [addingData]);
+    !monthCategory[from.format("YYYY-MM")]
+      ? (monthCategory[from.format("YYYY-MM")] = [addingData])
+      : monthCategory[from.format("YYYY-MM")].push(addingData);
+
     if (difference > 0) {
-      for (let i = 1; i < difference + 1; i++) {
-        monthCategory[from.add(i, "month").format("YYYY-MM")]
-          ? monthCategory[from.add(i, "month").format("YYYY-MM")].push(
-              addingData
-            )
-          : (monthCategory[from.add(i, "month").format("YYYY-MM")] = [
-              addingData
-            ]);
+      for (let i = 1; i <= difference + 1; i++) {
+        let tempMonth = from.add(1, "M").format("YYYY-MM");
+        if (monthCategory[tempMonth] === undefined)
+          monthCategory[tempMonth] = [addingData];
+        else {
+          monthCategory[tempMonth].push(addingData);
+        }
       }
     }
   });
