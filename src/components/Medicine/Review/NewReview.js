@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
-import Rating from "react-rating";
 import styled from "styled-components";
 import AutoSuggestion from "../../Util/AutoSuggestion";
 import RemovableButton from "../../UI/RemovableButton";
-import { BasicButton, FlexForm, FlexDiv } from "../../UI/SharedStyles";
+import {
+  BasicButton,
+  FlexForm,
+  FlexDiv,
+  StyledRating,
+  RatingText
+} from "../../UI/SharedStyles";
 import medIcon from "../../../assets/images/(white)med-icon.svg";
 import "@fortawesome/fontawesome-free/css/all.css";
 import Modal from "../../UI/Modal";
@@ -14,26 +19,6 @@ const Titles = styled.div`
   color: #474747;
   margin-top: 1.82rem;
   margin-bottom: 0.625rem;
-`;
-
-const EfficacyText = styled.p`
-  display: inline;
-  font-size: 0.875rem;
-  color: #474747;
-  opacity: 0.6;
-  font-weight: bold;
-  margin-left: 1rem;
-`;
-
-const StyledRating = styled(Rating)`
-  color: #d8d8d8;
-  margin: 0 -6px;
-  .custom {
-    margin: 0 6px;
-  }
-  .full {
-    color: var(--twoyak-blue);
-  }
 `;
 
 const Suggestion = styled.div`
@@ -135,7 +120,7 @@ const NewReview = React.memo(({ reviewSubmit, review, modalOff }) => {
               onChange={setEfficacy}
               initialRating={efficacy}
             />
-            <EfficacyText>{efficacy}</EfficacyText>
+            <RatingText>{efficacy}</RatingText>
           </FlexDiv>
           <Titles>복용 후 이상반응이 있었나요?</Titles>
           <Form onSubmit={adverseEffectSubmit}>
@@ -149,7 +134,7 @@ const NewReview = React.memo(({ reviewSubmit, review, modalOff }) => {
             </Suggestion>
             <AddButton type="submit">추가</AddButton>
           </Form>
-          {adverseEffects.length > 0 &&
+          {adverseEffects &&
             adverseEffects.map(effect => (
               <RemovableButton
                 key={effect.id}
@@ -168,16 +153,6 @@ const NewReview = React.memo(({ reviewSubmit, review, modalOff }) => {
         </>
       }
     />
-
-    // <PopupContainer>
-    //   <PopupHeader>
-    //     <img src={logo} alt="logo" />
-    //     리뷰 작성
-    //   </PopupHeader>
-    //   <PopupContent>
-
-    //   </PopupContent>
-    // </PopupContainer>
   );
 });
 

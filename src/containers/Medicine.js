@@ -82,13 +82,15 @@ function Medicine({ match, history }) {
     event.preventDefault();
     setDrug(null);
     setDrugReview(null);
+    console.log("검색");
 
     try {
       let { data } = await axios.get("searchSingle", {
         params: { search_term: term }
       });
+      console.log(data);
       if (data.item_name) {
-        setDrugList(data.item_name);
+        setDrugList(data.name);
       } else {
         setParamId(data.id);
         history.push(`/medicine/${data.id}`);
@@ -237,9 +239,6 @@ function Medicine({ match, history }) {
               updateButton={updateButton}
             />
           ))}
-        {drug && showNewReview && (
-          <NewReview reviewSubmit={reviewSubmitHandler} review={updateTarget} />
-        )}
       </Container>
       {modal && <DetailModal item_seq={drug.item_seq} modalOff={modalOff} />}
     </>

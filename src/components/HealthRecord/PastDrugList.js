@@ -1,7 +1,7 @@
 import React from "react";
 
 const PastDrugList = ({ drugs }) => {
-  console.log(drugs[0].to);
+  console.log(drugs);
 
   // drugs.forEach(drug => {
   //     condrug.from

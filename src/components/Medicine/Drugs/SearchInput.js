@@ -27,7 +27,7 @@ const SearchInput = ({ searchTerms, inputChange }) => {
       <AutoSuggestion
         search="drug"
         placeholderProp="약품명 또는 성분명을 입력해주세요"
-        searchKey="item_name"
+        searchKey="name"
         inputChange={inputChange}
       />
       <Button type="submit">검색</Button>

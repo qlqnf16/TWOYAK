@@ -48,11 +48,11 @@ const Notice = styled.div`
 function HealthRecord() {
   const [currentDrugs, setCurrentDrugs] = useState(null);
   const [pastDrugs, setPastDrugs] = useState(null);
-  const [reviews, setReviews] = useState(null);
+  const [durInfo, setDurInfo] = useState(null);
   const [showCurrent, setShowCurrent] = useState(true);
   const { state: authState } = useContext(AuthContext);
 
-  useEffect(() => {}, [reviews]);
+  useEffect(() => {}, [currentDrugs]);
 
   useEffect(() => {
     if (authState.token) {
@@ -61,12 +61,12 @@ function HealthRecord() {
   }, [authState]);
 
   const loadingHandler = async () => {
-    const { data } = await getInfos(`mypage`);
-    setReviews(data.drug_reviews);
+    const { data } = await getInfos(`${authState.userId}/current_drugs`);
+    setCurrentDrugs(data);
   };
 
   const getInfos = url =>
-    axios.get(`user/${url}`, {
+    axios.get(`user/${authState.userId}/${url}`, {
       headers: {
         Authorization: `bearer ${authState.token}`
       }
@@ -75,19 +75,20 @@ function HealthRecord() {
   const getUserInfo = async () => {
     try {
       const [
-        // { data: myPast },
+        { data: myPast },
         { data: myCurrent },
-        { data: myReviews }
+        { data: myDur }
       ] = await Promise.all([
-        // getInfos(`${authState.userId}/past_drugs`),
-        getInfos(`${authState.userId}/current_drugs`),
-        getInfos("mypage")
+        getInfos("past_drugs"),
+        getInfos("current_drugs"),
+        getInfos("analysis/get")
       ]);
       console.log(myCurrent);
-      // console.log(myPast);
+      console.log(myPast);
+      console.log(myDur);
       setCurrentDrugs(myCurrent);
-      // setPastDrugs(myPast);
-      setReviews(myReviews.drug_reviews);
+      setPastDrugs(myPast);
+      setDurInfo(myDur);
     } catch (error) {
       console.log(error);
     }
@@ -116,15 +117,13 @@ function HealthRecord() {
           책임도 지지 않습니다.
         </Notice>
         {showCurrent
-          ? currentDrugs &&
-            reviews && (
+          ? currentDrugs && (
               <CurrentDrugList
                 currentDrugs={currentDrugs}
-                reviews={reviews}
                 loadingHandler={loadingHandler}
               />
             )
-          : pastDrugs && <PastDrugList />}
+          : pastDrugs && <PastDrugList drugs={pastDrugs} />}
       </Container>
     </>
   );

@@ -13,7 +13,12 @@ const Item = styled.div`
   color: var(--twoyak-black);
   font-size: 0.875rem;
   font-weight: 800;
-  padding: 1rem;
+  line-height: 1.5rem;
+`;
+
+const Duration = styled(Item)`
+  opacity: 0.6;
+  font-size: 0.75rem;
 `;
 
 const ContentContainer = styled.div`
@@ -21,7 +26,7 @@ const ContentContainer = styled.div`
   overflow: scroll;
 `;
 
-const CurrentDrugList = ({ currentDrugs, reviews, loadingHandler }) => {
+const CurrentDrugList = ({ currentDrugs, loadingHandler }) => {
   const [show, setShow] = useState(false);
 
   const toggleModal = () => {
@@ -42,7 +47,11 @@ const CurrentDrugList = ({ currentDrugs, reviews, loadingHandler }) => {
               {currentDrugs.map(drug => {
                 return (
                   <div key={drug.id}>
-                    <Item>{drug.name}</Item>
+                    <Item>{drug.drug_name}</Item>
+                    <Duration>
+                      {drug.from}
+                      {drug.to && ` ~ ${drug.to}`}
+                    </Duration>
                     <Line />
                   </div>
                 );
@@ -52,12 +61,11 @@ const CurrentDrugList = ({ currentDrugs, reviews, loadingHandler }) => {
         />
       )}
       {currentDrugs.map(drug => {
-        const review = reviews.find(review => review.drug_id === drug.id);
         return (
           <CurrentDrug
             drug={drug}
             key={drug.id}
-            review={review}
+            review={drug.my_review}
             loadingHandler={loadingHandler}
           />
         );
