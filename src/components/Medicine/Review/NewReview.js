@@ -74,7 +74,7 @@ const SubmitButton = styled(BasicButton)`
   margin: 3.25rem auto 2.43rem auto;
 `;
 
-const NewReview = React.memo(({ reviewSubmit, review }) => {
+const NewReview = React.memo(({ reviewSubmit, review, modalOff }) => {
   const [efficacy, setEfficacy] = useState(0);
   const [adverseEffects, setAdverseEffects] = useState([]);
   const [detail, setDetail] = useState();
@@ -120,6 +120,7 @@ const NewReview = React.memo(({ reviewSubmit, review }) => {
 
   return (
     <Modal
+      modalOff={modalOff}
       img={medIcon}
       imgalt="med-icon"
       title="리뷰 작성"

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import close from "../../assets/images/(white)close.svg";
 
 const Backdrop = styled.div`
   width: 100%;
@@ -36,15 +37,25 @@ const Header = styled.div`
   font-weight: 800;
   font-size: 1rem;
 `;
+
+const CloseIcon = styled.img`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 1rem;
+  height: 1rem;
+`;
+
 const Content = styled.div`
   width: 86%;
   margin: 0 auto;
 `;
 
-const Modal = ({ img, imgalt, title, content }) => (
+const Modal = ({ img, imgalt, title, content, modalOff }) => (
   <>
     <Container>
       <Header>
+        <CloseIcon src={close} alt="close" onClick={modalOff} />
         <img src={img} alt={imgalt} />
         {title}
       </Header>

@@ -107,6 +107,7 @@ const CurrentDrug = ({ drug, review, reviewSubmit, loadingHandler }) => {
           reviewSubmit={reviewSubmitHandler}
           drugId={drug.id}
           review={updateTarget}
+          modalOff={newReviewToggle}
         />
       )}
       {review ? (
