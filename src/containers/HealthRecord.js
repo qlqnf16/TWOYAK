@@ -3,14 +3,20 @@ import { AuthContext } from "../contexts/AuthStore";
 import styled from "styled-components";
 import axios from "../apis";
 import CurrentDrugList from "../components/HealthRecord/CurrentDrugList";
+import PastDrugList from "../components/HealthRecord/PastDrugList";
+
+const Background = styled.div`
+  width: 100%;
+  height: 100vh;
+  background-color: #f0f9ff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+`;
 
 const Container = styled.div`
   padding-top: 83px;
-  width: 100%;
-  background-color: #f0f9ff;
-  position: absolute;
-  top: 0;
-  left: 0;
 `;
 
 const NavContainer = styled.div`
@@ -41,6 +47,7 @@ const Notice = styled.div`
 
 function HealthRecord() {
   const [currentDrugs, setCurrentDrugs] = useState(null);
+  const [pastDrugs, setPastDrugs] = useState(null);
   const [reviews, setReviews] = useState(null);
   const [showCurrent, setShowCurrent] = useState(true);
   const { state: authState } = useContext(AuthContext);
@@ -79,6 +86,7 @@ function HealthRecord() {
       console.log(myCurrent);
       console.log(myPast);
       setCurrentDrugs(myCurrent);
+      setPastDrugs(myPast);
       setReviews(myReviews.drug_reviews);
     } catch (error) {
       console.log(error);
@@ -90,29 +98,35 @@ function HealthRecord() {
   };
 
   return (
-    <Container>
-      <NavContainer>
-        <Nav onClick={CurrentPastToggle} active={showCurrent}>
-          현재 복용
-        </Nav>
-        <Nav onClick={CurrentPastToggle} active={!showCurrent}>
-          과거 복용
-        </Nav>
-      </NavContainer>
-      <Notice>
-        투약은 식약처 공공데이터를 이용하여 의약품 안정정보 등을 제공하고
-        있으며,
-        <br /> 이러한 정보는 단순 참조용으로 서비스 제공자는 어떠한 법적 책임도
-        지지 않습니다.
-      </Notice>
-      {showCurrent && currentDrugs && reviews && (
-        <CurrentDrugList
-          currentDrugs={currentDrugs}
-          reviews={reviews}
-          loadingHandler={loadingHandler}
-        />
-      )}
-    </Container>
+    <>
+      <Background />
+      <Container>
+        <NavContainer>
+          <Nav onClick={CurrentPastToggle} active={showCurrent}>
+            현재 복용
+          </Nav>
+          <Nav onClick={CurrentPastToggle} active={!showCurrent}>
+            과거 복용
+          </Nav>
+        </NavContainer>
+        <Notice>
+          투약은 식약처 공공데이터를 이용하여 의약품 안정정보 등을 제공하고
+          있으며,
+          <br /> 이러한 정보는 단순 참조용으로 서비스 제공자는 어떠한 법적
+          책임도 지지 않습니다.
+        </Notice>
+        {showCurrent
+          ? currentDrugs &&
+            reviews && (
+              <CurrentDrugList
+                currentDrugs={currentDrugs}
+                reviews={reviews}
+                loadingHandler={loadingHandler}
+              />
+            )
+          : pastDrugs && <PastDrugList />}
+      </Container>
+    </>
   );
 }
 

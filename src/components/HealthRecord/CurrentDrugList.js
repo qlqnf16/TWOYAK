@@ -22,7 +22,7 @@ const ContentContainer = styled.div`
 `;
 
 const CurrentDrugList = ({ currentDrugs, reviews, loadingHandler }) => {
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
 
   const toggleModal = () => {
     setShow(!show);
