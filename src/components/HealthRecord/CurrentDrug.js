@@ -73,7 +73,13 @@ const ButtonContainer = styled(FlexDiv)`
   margin: 1rem 1.7rem 0 1.7rem;
 `;
 
-const CurrentDrug = ({ drug, review, reviewSubmit, loadingHandler }) => {
+const CurrentDrug = ({
+  drug,
+  review,
+  reviewSubmit,
+  loadingHandler,
+  drugToPast
+}) => {
   const [show, setShow] = useState(false);
   const [updateTarget, setUpdateTarget] = useState();
   const [message, setMessage] = useState([]);
@@ -264,12 +270,24 @@ const CurrentDrug = ({ drug, review, reviewSubmit, loadingHandler }) => {
             deleteReview={deleteReview}
             updateButton={updateButton}
           />
-          <OpacityButton>복용 종료</OpacityButton>
+          <OpacityButton
+            onClick={() => {
+              drugToPast(drug.id);
+            }}
+          >
+            복용 종료
+          </OpacityButton>
         </>
       ) : (
         <ButtonContainer>
           <BasicButton onClick={newReviewToggle}>리뷰 등록</BasicButton>
-          <OpacityButton>복용 종료</OpacityButton>
+          <OpacityButton
+            onClick={() => {
+              drugToPast(drug.id);
+            }}
+          >
+            복용 종료
+          </OpacityButton>
         </ButtonContainer>
       )}
     </Card>

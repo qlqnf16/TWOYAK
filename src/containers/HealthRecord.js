@@ -94,8 +94,24 @@ function HealthRecord() {
     }
   };
 
-  const CurrentPastToggle = () => {
+  const currentPastToggle = () => {
     setShowCurrent(!showCurrent);
+  };
+
+  const drugToPast = async id => {
+    try {
+      await axios.delete(
+        `user/${authState.userId}/current_drugs/${id}/to_past`,
+        {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        }
+      );
+      getUserInfo();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -103,10 +119,10 @@ function HealthRecord() {
       <Background />
       <Container>
         <NavContainer>
-          <Nav onClick={CurrentPastToggle} active={showCurrent}>
+          <Nav onClick={currentPastToggle} active={showCurrent}>
             현재 복용
           </Nav>
-          <Nav onClick={CurrentPastToggle} active={!showCurrent}>
+          <Nav onClick={currentPastToggle} active={!showCurrent}>
             과거 복용
           </Nav>
         </NavContainer>
@@ -121,6 +137,7 @@ function HealthRecord() {
               <CurrentDrugList
                 currentDrugs={currentDrugs}
                 loadingHandler={loadingHandler}
+                drugToPast={drugToPast}
               />
             )
           : pastDrugs && <PastDrugList drugs={pastDrugs} />}

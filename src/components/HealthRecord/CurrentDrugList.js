@@ -26,7 +26,7 @@ const ContentContainer = styled.div`
   overflow: scroll;
 `;
 
-const CurrentDrugList = ({ currentDrugs, loadingHandler }) => {
+const CurrentDrugList = ({ currentDrugs, loadingHandler, drugToPast }) => {
   const [show, setShow] = useState(false);
 
   const toggleModal = () => {
@@ -67,6 +67,7 @@ const CurrentDrugList = ({ currentDrugs, loadingHandler }) => {
             key={drug.id}
             review={drug.my_review}
             loadingHandler={loadingHandler}
+            drugToPast={drugToPast}
           />
         );
       })}
