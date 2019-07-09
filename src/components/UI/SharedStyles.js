@@ -41,7 +41,7 @@ export const FlexForm = styled.form`
 
 export const Card = styled.div`
   width: 88%;
-  margin: 2rem auto;
+  margin: 0 auto 2rem auto;
   background-color: white;
   border-radius: 13px;
   box-shadow: 1px 2px 7px 1px rgba(212, 212, 212, 0.5);
@@ -62,6 +62,15 @@ export const BasicButton = styled.button`
   font-size: 0.93rem;
   border: none;
   margin: 0 auto;
+`;
+
+export const WhiteButton = styled(BasicButton)`
+  color: var(--twoyak-blue);
+  background-color: white;
+  box-shadow: 1px 2px 7px 1px rgba(212, 212, 212, 0.5);
+  display: block;
+  font-weight: 1rem;
+  margin: 1rem auto 1.25rem auto;
 `;
 
 export const Line = styled.div`

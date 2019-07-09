@@ -6,6 +6,11 @@ import CurrentDrugList from "../components/HealthRecord/CurrentDrugList";
 
 const Container = styled.div`
   padding-top: 83px;
+  width: 100%;
+  background-color: #f0f9ff;
+  position: absolute;
+  top: 0;
+  left: 0;
 `;
 
 const NavContainer = styled.div`

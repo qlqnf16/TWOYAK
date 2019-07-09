@@ -4,7 +4,7 @@ import styled from "styled-components";
 import AutoSuggestion from "../../Util/AutoSuggestion";
 import RemovableButton from "../../UI/RemovableButton";
 import { BasicButton, FlexForm, FlexDiv } from "../../UI/SharedStyles";
-import medIcon from "../../../assets/images/med-icon.svg";
+import medIcon from "../../../assets/images/(white)med-icon.svg";
 import "@fortawesome/fontawesome-free/css/all.css";
 import Modal from "../../UI/Modal";
 

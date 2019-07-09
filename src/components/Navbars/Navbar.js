@@ -15,6 +15,7 @@ const NavContainer = styled.div`
     bottom: 0;
     justify-content: space-between;
     height: 3rem;
+    z-index: 100;
   }
 `;
 

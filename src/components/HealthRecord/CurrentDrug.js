@@ -97,6 +97,36 @@ const CurrentDrug = ({ drug, review, reviewSubmit, loadingHandler }) => {
     setUpdateTarget(review);
     console.log(review);
   };
+  const message = [];
+
+  useEffect(() => {
+    if (drug.dur_info) {
+      Object.keys(drug.dur_info).forEach(info => {
+        switch (info) {
+          case "age":
+            message.push(`안 돼요!`);
+            break;
+          case "pregnancy":
+            message.push(`임산부 안 돼요!`);
+            break;
+          case "stop_usage":
+            message.push(`사용 중지된 약품입니다!`);
+            break;
+          case "dosage":
+            message.push(`하루 ~ 이상 안 돼요!`);
+            break;
+          case "period":
+            message.push(`이상 복용하시면 안 돼요!`);
+            break;
+          case "elder":
+            message.push(`65세 이상 고령자는 복용 시 주의하세요!`);
+            break;
+          default:
+            break;
+        }
+      });
+    }
+  }, [drug]);
 
   return (
     <Card>
@@ -110,6 +140,8 @@ const CurrentDrug = ({ drug, review, reviewSubmit, loadingHandler }) => {
           modalOff={newReviewToggle}
         />
       )}
+      {drug.dur_info && message.map(m => <div>{m}</div>)}
+
       {review ? (
         <DrugReview
           review={review}

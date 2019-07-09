@@ -46,6 +46,10 @@ const CloseIcon = styled.img`
   height: 1rem;
 `;
 
+const HeaderIcon = styled.img`
+  margin-right: 6px;
+`;
+
 const Content = styled.div`
   width: 86%;
   margin: 0 auto;
@@ -56,7 +60,7 @@ const Modal = ({ img, imgalt, title, content, modalOff }) => (
     <Container>
       <Header>
         <CloseIcon src={close} alt="close" onClick={modalOff} />
-        <img src={img} alt={imgalt} />
+        <HeaderIcon src={img} alt={imgalt} />
         {title}
       </Header>
       <Content>{content}</Content>

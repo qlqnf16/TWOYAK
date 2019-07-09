@@ -1,5 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import search from "../../assets/images/(white)search-icon.svg";
+import user from "../../assets/images/(white)user-icon.svg";
 
 import styled from "styled-components";
 
@@ -25,9 +27,13 @@ const StyledNavLink = styled(NavLink)`
 const Header = () => {
   return (
     <HeaderContainer>
-      <StyledNavLink to="/medicine">검색</StyledNavLink>
+      <NavLink to="/medicine">
+        <img src={search} alt="search-icon" />
+      </NavLink>
       <StyledNavLink to="/">투약</StyledNavLink>
-      <StyledNavLink to="/mypage">마이페이지</StyledNavLink>
+      <StyledNavLink to="/mypage">
+        <img src={user} alt="user-icon" />
+      </StyledNavLink>
     </HeaderContainer>
   );
 };
