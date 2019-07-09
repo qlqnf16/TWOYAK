@@ -28,6 +28,11 @@ export const Container = styled.div`
   }
 `;
 
+export const FlexDiv = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 export const FlexForm = styled.form`
   display: flex;
   align-items: start;
@@ -51,10 +56,10 @@ export const BasicButton = styled.button`
   flex-grow: 0;
   border-radius: 1.5rem;
   background-color: #00a2ff;
-  padding: 0.875rem 1.3rem;
+  padding: 0.5rem 1.3rem;
   color: white;
   font-weight: 800;
-  font-size: 0.875rem;
+  font-size: 0.93rem;
   border: none;
   margin: 0 auto;
 `;
