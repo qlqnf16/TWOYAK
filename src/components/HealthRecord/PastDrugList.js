@@ -1,5 +1,6 @@
 import React from "react";
 import moment from "moment";
+import PastDrug from "./PastDrug";
 
 const PastDrugList = ({ drugs }) => {
   const monthCategory = {};
@@ -35,14 +36,11 @@ const PastDrugList = ({ drugs }) => {
     <div>
       {months.length > 0 &&
         months.map(month => (
-          <div key={month}>
-            <div>{month}</div>
-            <div>
-              {monthCategory[month].map(drug => (
-                <div key={drug.name}>{drug.name}</div>
-              ))}
-            </div>
-          </div>
+          <PastDrug
+            key={month}
+            dateArray={month.split("-")}
+            monthCategory={monthCategory[month]}
+          />
         ))}
     </div>
   );
