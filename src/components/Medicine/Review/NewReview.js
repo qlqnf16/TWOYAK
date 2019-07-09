@@ -3,14 +3,37 @@ import Rating from "react-rating";
 import styled from "styled-components";
 import AutoSuggestion from "../../Util/AutoSuggestion";
 import RemovableButton from "../../UI/RemovableButton";
-import { BasicButton, FlexForm } from "../../UI/SharedStyles";
+import { BasicButton, FlexForm, FlexDiv } from "../../UI/SharedStyles";
+import medIcon from "../../../assets/images/(white)med-icon.svg";
 import "@fortawesome/fontawesome-free/css/all.css";
+import Modal from "../../UI/Modal";
 
-const Container = styled.div`
-  width: 100%;
-  margin: 10px 0;
-  border: 1px solid #dbdbdb;
-  padding: 10px;
+const Titles = styled.div`
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: #474747;
+  margin-top: 1.82rem;
+  margin-bottom: 0.625rem;
+`;
+
+const EfficacyText = styled.p`
+  display: inline;
+  font-size: 0.875rem;
+  color: #474747;
+  opacity: 0.6;
+  font-weight: bold;
+  margin-left: 1rem;
+`;
+
+const StyledRating = styled(Rating)`
+  color: #d8d8d8;
+  margin: 0 -6px;
+  .custom {
+    margin: 0 6px;
+  }
+  .full {
+    color: var(--twoyak-blue);
+  }
 `;
 
 const Suggestion = styled.div`
@@ -34,30 +57,24 @@ const Form = styled(FlexForm)`
   margin: 0.3rem 0;
 `;
 
-const StyledRating = styled(Rating)`
-  color: #ffd800;
-  margin: 10px 0;
-`;
-
 const CustomTextarea = styled.textarea`
   width: 100%;
-  height: 60px;
+  height: 4.825rem;
   resize: none;
-  margin-top: 1rem;
-  font-size: 1rem;
-  color: #333;
-  box-sizing: border-box;
-  padding: 7px;
-  border: 1px solid #c1c1c1;
+  font-size: 0.7rem;
+  color: var(--twoyak-black);
+  opacity: 0.7;
+  padding: 1.25rem;
+  border-radius: 1.5rem;
+  border: solid 1px #00a2ff;
 `;
 
 const SubmitButton = styled(BasicButton)`
-  font-size: 1.2rem;
-  padding: 0.4rem 1rem;
-  margin-top: 1rem;
+  display: block;
+  margin: 3.25rem auto 2.43rem auto;
 `;
 
-const NewReview = React.memo(({ reviewSubmit, review }) => {
+const NewReview = React.memo(({ reviewSubmit, review, modalOff }) => {
   const [efficacy, setEfficacy] = useState(0);
   const [adverseEffects, setAdverseEffects] = useState([]);
   const [detail, setDetail] = useState();
@@ -102,46 +119,65 @@ const NewReview = React.memo(({ reviewSubmit, review }) => {
   };
 
   return (
-    <Container>
-      <div>리뷰를 남겨주세요</div>
-      <div>효과는 어땠나요?</div>
-      <StyledRating
-        emptySymbol="far fa-star fa-2x empty"
-        fullSymbol="fas fa-star fa-2x full"
-        fractions={2}
-        onChange={setEfficacy}
-        initialRating={efficacy}
-      />
-      <div>복용 후 이상반응이 있었나요?</div>
-      <Form onSubmit={adverseEffectSubmit}>
-        <Suggestion>
-          <AutoSuggestion
-            search="adverse_effect"
-            searchKey="symptom_name"
-            placeholderProp="느끼신 증상을 입력하세요"
-            inputChange={adverseEffectInputChange}
-          />
-        </Suggestion>
-        <AddButton type="submit">추가</AddButton>
-      </Form>
-      {adverseEffects.length > 0 &&
-        adverseEffects.map(effect => (
-          <RemovableButton
-            key={effect.id}
-            effect={effect}
-            deleteAdverseEffect={deleteAdverseEffect}
-          />
-        ))}
+    <Modal
+      modalOff={modalOff}
+      img={medIcon}
+      imgalt="med-icon"
+      title="리뷰 작성"
+      content={
+        <>
+          <Titles>평점</Titles>
+          <FlexDiv>
+            <StyledRating
+              emptySymbol="fas fa-circle fa-2x custom"
+              fullSymbol="fas fa-circle fa-2x custom full"
+              fractions={2}
+              onChange={setEfficacy}
+              initialRating={efficacy}
+            />
+            <EfficacyText>{efficacy}</EfficacyText>
+          </FlexDiv>
+          <Titles>복용 후 이상반응이 있었나요?</Titles>
+          <Form onSubmit={adverseEffectSubmit}>
+            <Suggestion>
+              <AutoSuggestion
+                search="adverse_effect"
+                searchKey="symptom_name"
+                placeholderProp="느끼신 증상을 입력하세요"
+                inputChange={adverseEffectInputChange}
+              />
+            </Suggestion>
+            <AddButton type="submit">추가</AddButton>
+          </Form>
+          {adverseEffects.length > 0 &&
+            adverseEffects.map(effect => (
+              <RemovableButton
+                key={effect.id}
+                effect={effect}
+                deleteAdverseEffect={deleteAdverseEffect}
+              />
+            ))}
+          <Titles>리뷰 내용</Titles>
 
-      <CustomTextarea
-        onChange={detailInputChange}
-        placeholder="많은 사람들이 참고할 만한 의약품 리뷰를 남겨주세요"
-        value={detail ? detail : ""}
-      />
-      <SubmitButton onClick={finalReviewSubmit}>
-        {review ? "수정하기" : "리뷰 등록하기"}
-      </SubmitButton>
-    </Container>
+          <CustomTextarea
+            onChange={detailInputChange}
+            placeholder="많은 사람들이 참고할 만한 의약품 리뷰를 남겨주세요"
+            value={detail ? detail : ""}
+          />
+          <SubmitButton onClick={finalReviewSubmit}>완료</SubmitButton>
+        </>
+      }
+    />
+
+    // <PopupContainer>
+    //   <PopupHeader>
+    //     <img src={logo} alt="logo" />
+    //     리뷰 작성
+    //   </PopupHeader>
+    //   <PopupContent>
+
+    //   </PopupContent>
+    // </PopupContainer>
   );
 });
 

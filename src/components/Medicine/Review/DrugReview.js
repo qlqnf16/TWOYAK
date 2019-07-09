@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { BasicButton } from "../../UI/SharedStyles";
+import { AuthContext } from "../../../contexts/AuthStore";
 
 const Container = styled.div`
   width: 100%;
@@ -28,12 +29,18 @@ const Button = styled(BasicButton)`
   margin-right: 0.5rem;
 `;
 
-const DrugReview = ({ review, currentUserId, deleteReview, updateButton }) => {
+const DrugReview = ({ review, deleteReview, updateButton }) => {
+  const { state } = useContext(AuthContext);
+
   return (
     <Container>
       <Flex>
-        <div>{review.user_email}</div>
-        <SpaceSpan>|</SpaceSpan>
+        {review.user_email && (
+          <>
+            <div>{review.user_email}</div>
+            <SpaceSpan>|</SpaceSpan>
+          </>
+        )}
         <div>{review.age}</div>
         {review.sex && (
           <>
@@ -44,7 +51,7 @@ const DrugReview = ({ review, currentUserId, deleteReview, updateButton }) => {
       </Flex>
       <Flex>
         <div>평점: {review.efficacy}점</div>
-        {review.adverse_effects.length > 0 && (
+        {review.adverse_effects && review.adverse_effects.length > 0 && (
           <>
             <SpaceSpan>|</SpaceSpan>
             <div>
@@ -57,12 +64,8 @@ const DrugReview = ({ review, currentUserId, deleteReview, updateButton }) => {
         )}
       </Flex>
       <div>{review.body}</div>
-      {currentUserId === review.u_id && (
-        <>
-          <Button onClick={() => deleteReview(review.id)}>삭제하기</Button>
-          <Button onClick={() => updateButton(review)}>수정하기</Button>
-        </>
-      )}
+      <Button onClick={() => deleteReview(review.id)}>삭제하기</Button>
+      <Button onClick={() => updateButton(review)}>수정하기</Button>
     </Container>
   );
 };

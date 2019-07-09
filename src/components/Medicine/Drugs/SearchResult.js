@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { breakpoints } from "../../UI/SharedStyles";
+import { AuthContext } from "../../../contexts/AuthStore";
+import axios from "../../../apis";
 
 const Container = styled.div`
   display: flex;
@@ -26,6 +28,20 @@ const ItemName = styled.div`
 
 const SearchResult = React.memo(({ drug, drugImg, modalOn }) => {
   const drugDetail = drug.package_insert ? drug.package_insert.DRB_ITEM : null;
+  const { state: authState } = useContext(AuthContext);
+
+  const addCurrentDrug = async () => {
+    try {
+      await axios.post(`user/${authState.userId}/current_drugs/${drug.id}`, {
+        headers: {
+          Authorization: `bearer ${authState.token}`
+        }
+      });
+      alert("추가됐습니다");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Container>
@@ -40,6 +56,7 @@ const SearchResult = React.memo(({ drug, drugImg, modalOn }) => {
         )}
       </InfoContainer>
       {drugImg && <img src={drugImg} width="150px" alt={drug.name} />}
+      <div onClick={addCurrentDrug}>복용목록에 추가하기</div>
     </Container>
   );
 });
