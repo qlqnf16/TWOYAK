@@ -75,18 +75,18 @@ function HealthRecord() {
   const getUserInfo = async () => {
     try {
       const [
-        { data: myPast },
+        // { data: myPast },
         { data: myCurrent },
         { data: myReviews }
       ] = await Promise.all([
-        getInfos(`${authState.userId}/past_drugs`),
+        // getInfos(`${authState.userId}/past_drugs`),
         getInfos(`${authState.userId}/current_drugs`),
         getInfos("mypage")
       ]);
       console.log(myCurrent);
-      console.log(myPast);
+      // console.log(myPast);
       setCurrentDrugs(myCurrent);
-      setPastDrugs(myPast);
+      // setPastDrugs(myPast);
       setReviews(myReviews.drug_reviews);
     } catch (error) {
       console.log(error);

@@ -10,9 +10,28 @@ const Title = styled.div`
   font-weight: 800;
 `;
 
+const SubTitle = styled.li`
+  color: var(--twoyak-blue);
+  margin-left: 1.68rem;
+  & p {
+    display: inline;
+    color: var(--twoyak-black);
+    margin-left: -5px;
+    font-size: 0.8rem;
+    font-weight: 800;
+  }
+`;
+
+const Content = styled.div`
+  margin: 1rem 1.68rem;
+  font-size: 0.8rem;
+  opacity: 0.8;
+`;
+
 const CurrentDrug = ({ drug, review, reviewSubmit, loadingHandler }) => {
   const [show, setShow] = useState(false);
   const [updateTarget, setUpdateTarget] = useState();
+  const [message, setMessage] = useState([]);
   const { state: authState } = useContext(AuthContext);
 
   const newReviewToggle = () => {
@@ -97,29 +116,31 @@ const CurrentDrug = ({ drug, review, reviewSubmit, loadingHandler }) => {
     setUpdateTarget(review);
     console.log(review);
   };
-  const message = [];
 
   useEffect(() => {
     if (drug.dur_info) {
+      console.log(Object.keys(drug.dur_info));
       Object.keys(drug.dur_info).forEach(info => {
         switch (info) {
           case "age":
-            message.push(`안 돼요!`);
+            setMessage(message.concat(`안 돼요!`));
             break;
           case "pregnancy":
-            message.push(`임산부 안 돼요!`);
+            setMessage(message.concat(`임산부 안 돼요!`));
             break;
           case "stop_usage":
-            message.push(`사용 중지된 약품입니다!`);
+            setMessage(message.concat(`사용 중지된 약품입니다!`));
             break;
           case "dosage":
-            message.push(`하루 ~ 이상 안 돼요!`);
+            setMessage(message.concat(`하루 ~ 이상 안 돼요!`));
             break;
           case "period":
-            message.push(`이상 복용하시면 안 돼요!`);
+            setMessage(message.concat(`이상 복용하시면 안 돼요!`));
             break;
           case "elder":
-            message.push(`65세 이상 고령자는 복용 시 주의하세요!`);
+            setMessage(
+              message.concat(`65세 이상 고령자는 복용 시 주의하세요!`)
+            );
             break;
           default:
             break;
@@ -130,7 +151,7 @@ const CurrentDrug = ({ drug, review, reviewSubmit, loadingHandler }) => {
 
   return (
     <Card>
-      <Title>{drug.name}</Title>
+      <Title>{drug.drug_name}</Title>
       <Line />
       {show && (
         <NewReview
@@ -140,7 +161,18 @@ const CurrentDrug = ({ drug, review, reviewSubmit, loadingHandler }) => {
           modalOff={newReviewToggle}
         />
       )}
-      {drug.dur_info && message.map(m => <div>{m}</div>)}
+      {drug.dur_info && (
+        <>
+          <SubTitle>
+            <p>안전정보</p>
+          </SubTitle>
+          <Content>
+            {message.map(m => (
+              <div key={m}>{m}</div>
+            ))}
+          </Content>
+        </>
+      )}
 
       {review ? (
         <DrugReview
