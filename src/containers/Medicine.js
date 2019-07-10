@@ -82,13 +82,15 @@ function Medicine({ match, history }) {
     event.preventDefault();
     setDrug(null);
     setDrugReview(null);
+    console.log("검색");
 
     try {
       let { data } = await axios.get("searchSingle", {
         params: { search_term: term }
       });
+      console.log(data);
       if (data.item_name) {
-        setDrugList(data.item_name);
+        setDrugList(data.name);
       } else {
         setParamId(data.id);
         history.push(`/medicine/${data.id}`);
@@ -122,96 +124,6 @@ function Medicine({ match, history }) {
     setModal(false);
   };
 
-  // NewReview.js 리뷰 등록하기 버튼
-  const reviewSubmitHandler = (
-    method,
-    efficacy,
-    adverse_effect,
-    detail,
-    reviewId
-  ) => {
-    const data = {
-      user_id: authState.userId,
-      drug_id: paramId,
-      efficacy: efficacy,
-      body: detail,
-      adverse_effect_ids: adverse_effect
-    };
-
-    if (method === "post") postReview(data);
-    else if (method === "put") updateReview(data, reviewId);
-  };
-
-  // review upload
-  const postReview = data => {
-    axios
-      .post(
-        `drugs/${paramId}/drug_reviews`,
-        { drug_review: data },
-        {
-          headers: {
-            Authorization: `bearer ${authState.token}`
-          }
-        }
-      )
-      .then(response => {
-        searchById(paramId);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
-
-  // review update
-  const updateReview = (data, reviewId) => {
-    axios
-      .put(
-        `drugs/${paramId}/drug_reviews/${reviewId}`,
-        { drug_review: data },
-        {
-          headers: {
-            Authorization: `bearer ${authState.token}`
-          }
-        }
-      )
-      .then(response => {
-        searchById(paramId);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
-
-  // review delete
-  const deleteReview = reviewId => {
-    setShowNewReview(true);
-    axios
-      .delete(`drugs/${paramId}/drug_reviews/${reviewId}`, {
-        headers: {
-          Authorization: `bearer ${authState.token}`
-        }
-      })
-      .then(res => {
-        searchById(paramId);
-      })
-      .catch(err => console.log(err));
-  };
-
-  // DrugReview.js 리뷰 수정하기 버튼
-  const updateButton = review => {
-    setShowNewReview(true);
-    setUpdateTarget(review);
-  };
-
-  // 리뷰 등록창 on off
-  useEffect(() => {
-    if (drugReview) {
-      const reviewUserIds = drugReview.map(review => review.u_id);
-      if (reviewUserIds.indexOf(authState.userId) !== -1)
-        setShowNewReview(false);
-    }
-  }, [drugReview]);
-
   return (
     <>
       <Container>
@@ -230,16 +142,8 @@ function Medicine({ match, history }) {
         {errorMessage && <div>{errorMessage}</div>}
         {drugReview &&
           drugReview.map(review => (
-            <DrugReview
-              review={review}
-              key={review.id}
-              deleteReview={deleteReview}
-              updateButton={updateButton}
-            />
+            <DrugReview review={review} key={review.id} />
           ))}
-        {drug && showNewReview && (
-          <NewReview reviewSubmit={reviewSubmitHandler} review={updateTarget} />
-        )}
       </Container>
       {modal && <DetailModal item_seq={drug.item_seq} modalOff={modalOff} />}
     </>

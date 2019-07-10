@@ -61,42 +61,46 @@ const SocialLoginArea = styled.div`
 `
 
 function Login(props) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const { state, dispatch } = useContext(AuthContext);
 
   useEffect(() => {
-    if ( props.location.search !== "" && props.location.search.includes('?token=') ) {
-      storeUserDataForAutoLogin('token', props.location.search.split('=')[1])
+    if (
+      props.location.search !== "" &&
+      props.location.search.includes("?token=")
+    ) {
+      storeUserDataForAutoLogin("token", props.location.search.split("=")[1]);
       dispatch({
         type: "SET_AUTH_REDIRECT_PATH",
-        path: "/medicine"})
+        path: "/medicine"
+      });
     }
   }, [props.history, props.location.search, dispatch]);
 
   const storeUserDataForAutoLogin = (key, value) => {
     localStorage.setItem(key, value);
-  }
-
+  };
+  
   const signinBySocialAccount = ( supplier ) => {
     window.open(`http://52.79.228.195/api/users/auth/${supplier}`, '_self')
   };
 
   const signinDataHandler = (key, event) => {
     if (key === "email") {
-      setEmail(event.target.value)
+      setEmail(event.target.value);
     } else if (key === "password") {
-      setPassword(event.target.value)
+      setPassword(event.target.value);
     }
   };
 
   const signinActionHandler = () => {
-    dispatch({type: "SIGNIN_START"})
+    dispatch({ type: "SIGNIN_START" });
     const signinData = {
       email: email,
-      password: password,
-    }
+      password: password
+    };
     axios
       .post("api/users/login", signinData)
       .then(response => {
@@ -114,11 +118,13 @@ function Login(props) {
           // path: "/medicine",
         })
       })
-      .catch( error => dispatch({
-        type: "SIGNIN_FAIL",
-        error: error.response.data.errors
-      }))
-  }
+      .catch(error =>
+        dispatch({
+          type: "SIGNIN_FAIL",
+          error: error.response.data.errors
+        })
+      );
+  };
 
   const signout = () => {
     dispatch({

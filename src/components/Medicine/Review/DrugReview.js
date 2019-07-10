@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { BasicButton } from "../../UI/SharedStyles";
-import { AuthContext } from "../../../contexts/AuthStore";
 
 const Container = styled.div`
   width: 100%;
@@ -30,8 +29,6 @@ const Button = styled(BasicButton)`
 `;
 
 const DrugReview = ({ review, deleteReview, updateButton }) => {
-  const { state } = useContext(AuthContext);
-
   return (
     <Container>
       <Flex>

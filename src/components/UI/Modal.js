@@ -65,7 +65,7 @@ const Modal = ({ img, imgalt, title, content, modalOff }) => (
       </Header>
       <Content>{content}</Content>
     </Container>
-    <Backdrop />
+    <Backdrop onClick={modalOff} />
   </>
 );
 
