@@ -15,7 +15,7 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 5vh auto;
+  margin: 70px auto;
 
   @media (min-width: ${breakpoints.medium}) {
     margin: 25vh auto;
@@ -51,6 +51,14 @@ export const Card = styled.div`
   flex-direction: column;
   justify-content: center;
   font-size: 0.875rem;
+`;
+
+export const EmptyCard = styled(Card)`
+  background-color: transparent;
+  border: 2px #c4c9cc dashed;
+  align-items: center;
+  box-shadow: none;
+  padding: 4.875rem 2.5rem;
 `;
 
 export const BasicButton = styled.button`

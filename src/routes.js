@@ -33,7 +33,7 @@ const routes = [
   },
   {
     path: "/medicine/:id?",
-    name: "의약품 검색",
+    name: "의약품 검색결과",
     component: Medicine,
     exact: true
   },

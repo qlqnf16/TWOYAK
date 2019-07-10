@@ -6,6 +6,12 @@ import { DrugContext } from "../../contexts/DrugStore";
 import deburr from "lodash/deburr";
 import styled from "styled-components";
 import { breakpoints } from "../UI/SharedStyles";
+import { ReactComponent as Erase } from "../../assets/images/erase.svg";
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
 const StyleWrapper = styled.div`
   flex-grow: 1;
@@ -15,49 +21,14 @@ const StyleWrapper = styled.div`
   @media (max-width: ${breakpoints}) {
     width: 100%;
   }
-  & .react-autosuggest__input {
-    box-sizing: border-box;
-    width: 100%;
-    height: 30px;
-    border-width: 0;
-    border-bottom: 1px solid #dbdbdb;
-    font-size: 1rem;
-    @media (max-width: ${breakpoints}) {
-      width: 100%;
-    }
-  }
-
-  & .react-autosuggest__suggestions-container--open {
-    margin: 0;
-    position: absolute;
-    left: 0;
-    top: 29px;
-    background-color: white;
-    border: 1px solid #dbdbdb;
-  }
-
-  & .react-autosuggest__suggestions-list {
-    width: 100%;
-    margin: 10px 0;
-    padding: 0;
-  }
-
-  & .react-autosuggest__suggestion {
-    list-style-type: none;
-    font-size: 0.9rem;
-    cursor: pointer;
-  }
-
-  & .react-autosuggest__suggestion--highlighted {
-    background-color: aliceblue;
-  }
 `;
 
 const AutoSuggestion = ({
   search,
   searchKey,
   placeholderProp,
-  inputChange
+  inputChange,
+  submit
 }) => {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -76,7 +47,6 @@ const AutoSuggestion = ({
     default:
       break;
   }
-
   const getSuggestions = value => {
     const inputValue = deburr(value.trim()).toLowerCase();
     const inputLength = inputValue.length;
@@ -86,7 +56,7 @@ const AutoSuggestion = ({
       ? []
       : suggestList.filter(suggestion => {
           const keep =
-            count < 7 &&
+            count < 20 &&
             suggestion[searchKey].toLowerCase().includes(inputValue);
 
           if (keep) {
@@ -103,22 +73,32 @@ const AutoSuggestion = ({
 
   const onSuggestionSelected = (event, { suggestion }) => {
     if (search === "adverse_effect") inputChange(suggestion);
+    if (search === "drug") submit(suggestion.id);
   };
 
   const renderSuggestion = (suggestion, { query, isHighlited }) => {
     const matches = match(suggestion[searchKey], query);
     const parts = parse(suggestion[searchKey], matches);
     return (
-      <div>
-        {parts.map((part, index) =>
-          part.highlight ? (
-            <b key={index} style={{ color: "red" }}>
-              {part.text}
-            </b>
-          ) : (
-            <span key={index}>{part.text}</span>
-          )
-        )}
+      <div style={{ display: "flex" }}>
+        <div
+          onClick={() => {
+            console.log(suggestion.id);
+          }}
+        >
+          {suggestion.id}
+        </div>
+        <div>
+          {parts.map((part, index) =>
+            part.highlight ? (
+              <b key={index} style={{ color: "red" }}>
+                {part.text}
+              </b>
+            ) : (
+              <span key={index}>{part.text}</span>
+            )
+          )}
+        </div>
       </div>
     );
   };
@@ -145,18 +125,27 @@ const AutoSuggestion = ({
   };
 
   return (
-    <StyleWrapper>
-      <Autosuggest
-        suggestions={suggestions}
-        onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={onSuggestionsClearRequested}
-        getSuggestionValue={getSuggestionValue}
-        renderSuggestion={renderSuggestion}
-        inputProps={inputProps}
-        highlightFirstSuggestion={true}
-        onSuggestionSelected={onSuggestionSelected}
-      />
-    </StyleWrapper>
+    <Container>
+      <StyleWrapper>
+        <Autosuggest
+          suggestions={suggestions}
+          onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+          onSuggestionsClearRequested={onSuggestionsClearRequested}
+          getSuggestionValue={getSuggestionValue}
+          renderSuggestion={renderSuggestion}
+          inputProps={inputProps}
+          highlightFirstSuggestion={true}
+          onSuggestionSelected={onSuggestionSelected}
+        />
+      </StyleWrapper>
+      {value && (
+        <Erase
+          onClick={() => {
+            setValue("");
+          }}
+        />
+      )}
+    </Container>
   );
 };
 
