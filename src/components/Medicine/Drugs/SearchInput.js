@@ -4,7 +4,6 @@ import AutoSuggestion from "../../Util/AutoSuggestion";
 import { breakpoints, BasicButton, FlexForm } from "../../UI/SharedStyles";
 
 import "@fortawesome/fontawesome-free/css/all.css";
-import { ReactComponent as Search } from "../../../assets/images/search-icon.svg";
 
 const Form = styled(FlexForm)`
   align-items: center;
@@ -40,7 +39,7 @@ const StyleWrapper = styled.div`
   }
 
   & .react-autosuggest__suggestions-container--open {
-    width: calc(100% + 80px);
+    width: calc(100% + 50px);
     height: 50vh;
     overflow: scroll;
     margin: 0;
@@ -87,7 +86,7 @@ const Button = styled(BasicButton)`
   }
 `;
 
-const SearchInput = ({ searchTerms, inputChange, goBack }) => {
+const SearchInput = ({ searchTerms, searchById, inputChange, goBack }) => {
   const myInput = (
     <Form onSubmit={searchTerms}>
       <ArrowIcon className="fas fa-arrow-left" onClick={goBack} />
@@ -97,10 +96,9 @@ const SearchInput = ({ searchTerms, inputChange, goBack }) => {
           placeholderProp={"약품명 또는 성분명을 입력해주세요"}
           searchKey="name"
           inputChange={inputChange}
-          submit={searchTerms}
+          submit={searchById}
         />
       </StyleWrapper>
-      <Search onClick={searchTerms} />
       {/* <Button type="submit">검색</Button> */}
     </Form>
   );

@@ -141,6 +141,11 @@ function Medicine({ match, history, location }) {
     history.goBack();
   };
 
+  // 검색하는 아이디로 이동
+  const moveById = id => {
+    history.push(`/medicine/${id}`);
+  };
+
   if (match.params.id) {
     return (
       <>
@@ -175,6 +180,7 @@ function Medicine({ match, history, location }) {
             term={term}
             searchTerms={searchByTerms}
             inputChange={searchTermChange}
+            searchById={moveById}
           />
         )}
       </SearchContainer>

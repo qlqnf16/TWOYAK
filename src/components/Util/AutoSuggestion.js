@@ -8,10 +8,6 @@ import styled from "styled-components";
 import { breakpoints } from "../UI/SharedStyles";
 import { ReactComponent as Erase } from "../../assets/images/erase.svg";
 
-const EraseIcon = styled(Erase)`
-  margin-right: 10px;
-`;
-
 const Container = styled.div`
   display: flex;
   align-items: center;
@@ -77,23 +73,32 @@ const AutoSuggestion = ({
 
   const onSuggestionSelected = (event, { suggestion }) => {
     if (search === "adverse_effect") inputChange(suggestion);
-    if (search === "drug") submit();
+    if (search === "drug") submit(suggestion.id);
   };
 
   const renderSuggestion = (suggestion, { query, isHighlited }) => {
     const matches = match(suggestion[searchKey], query);
     const parts = parse(suggestion[searchKey], matches);
     return (
-      <div>
-        {parts.map((part, index) =>
-          part.highlight ? (
-            <b key={index} style={{ color: "red" }}>
-              {part.text}
-            </b>
-          ) : (
-            <span key={index}>{part.text}</span>
-          )
-        )}
+      <div style={{ display: "flex" }}>
+        <div
+          onClick={() => {
+            console.log(suggestion.id);
+          }}
+        >
+          {suggestion.id}
+        </div>
+        <div>
+          {parts.map((part, index) =>
+            part.highlight ? (
+              <b key={index} style={{ color: "red" }}>
+                {part.text}
+              </b>
+            ) : (
+              <span key={index}>{part.text}</span>
+            )
+          )}
+        </div>
       </div>
     );
   };
@@ -134,7 +139,7 @@ const AutoSuggestion = ({
         />
       </StyleWrapper>
       {value && (
-        <EraseIcon
+        <Erase
           onClick={() => {
             setValue("");
           }}
