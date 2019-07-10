@@ -10,7 +10,9 @@ function WatchStore(props) {
       dispatch({
         type: "SIGNIN_SUCCESS",
         token: localStorage.getItem("token"),
-        userId: jwt_decode(localStorage.getItem("token")).user.id
+        userId: jwt_decode(localStorage.getItem("token")).user.id,
+        userName: jwt_decode(localStorage.getItem("token")).user.user_name,
+        userInfoId: jwt_decode(localStorage.getItem("token")).user.user_info_id,
       });
       dispatch({
         type: "SET_AUTH_REDIRECT_PATH",
