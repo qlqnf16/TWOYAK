@@ -6,6 +6,8 @@ export const AuthContext = React.createContext();
 const AuthStore = props => {
   const [state, dispatch] = useReducer(authReducer, {
     token: null,
+    userName: null,
+    userInfoId: null,
     userId: null,
     error: null,
     loading: false,

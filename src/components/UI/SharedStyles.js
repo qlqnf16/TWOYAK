@@ -79,3 +79,13 @@ export const Line = styled.div`
   opacity: 0.3;
   background-color: #00a2ff;
 `;
+
+
+export const BasicInput = styled.input`
+  width: 20.1875rem;
+  height: 3rem;
+  border-radius: 1.5rem;
+  border: solid 1px var(--twoyak-blue);
+  padding-left: 1.0937rem; 
+  padding-right: 1.0937rem;
+`
