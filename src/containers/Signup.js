@@ -105,7 +105,9 @@ function Signup(props) {
           token: payload,
           userId: jwt_decode(payload).user.id,
           userName: jwt_decode(payload).user.user_name,
+          userInfoId: jwt_decode(payload).user.user_info_id,
         })
+        console.log(jwt_decode(payload))
         storeUserDataForAutoLogin('token', payload)
         dispatch({
           type: "SET_AUTH_REDIRECT_PATH",

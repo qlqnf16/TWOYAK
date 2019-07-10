@@ -1,6 +1,7 @@
 import React, { useEffect, usetState, useContext, useState } from 'react';
 import { AuthContext } from '../contexts/AuthStore';
 import axios from '../apis';
+import jwt_decode from 'jwt-decode';
 import styled from 'styled-components';
 
 import { Container } from '../components/UI/SharedStyles';
@@ -81,16 +82,17 @@ const SkipButton = styled(SubmitButton)`
 `
 
 function AddInfo(props) {
-  const [userName, setUserName] = useState('째키');
+  const [userName, setUserName] = useState('재키');
   const [birthDate, setBirthDate] = useState(null);
   const [drink, setDrink] = useState(null);
   const [smoke, setSmoke] = useState(null);
   const [caffeine, setCaffeine] = useState(null);
   const [sex, setSex] = useState(null);
 
-  const { state } = useContext(AuthContext);
+  const { state, dispatch } = useContext(AuthContext);
   
   const addInfoHandler = () => {
+    console.log(state)
     axios({
       method: 'PATCH',
       url: `/user/user_infos/${state.userInfoId}`,
@@ -107,7 +109,18 @@ function AddInfo(props) {
         sex: sex,
       }
     })
-    .then(response => console.log(response.data))
+    .then(response => {
+      const payload = response.data.auth_token;
+      dispatch({
+        type: "SIGNUP_SUCCESS",
+        token: payload,
+        userId: jwt_decode(payload).user.id,
+        userName: jwt_decode(payload).user.user_name,
+        userInfoId: jwt_decode(payload).user.user_info_id,
+      })
+      localStorage.setItem('token', payload)
+    }
+    )
   };
 
   const toggleHandler = (key, value) => {
