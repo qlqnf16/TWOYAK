@@ -53,6 +53,14 @@ export const Card = styled.div`
   font-size: 0.875rem;
 `;
 
+export const EmptyCard = styled(Card)`
+  background-color: transparent;
+  border: 2px #c4c9cc dashed;
+  align-items: center;
+  box-shadow: none;
+  padding: 4.875rem 2.5rem;
+`;
+
 export const BasicButton = styled.button`
   flex-grow: 0;
   border-radius: 1.5rem;

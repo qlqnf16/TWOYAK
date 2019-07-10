@@ -1,6 +1,7 @@
 import React from "react";
 import moment from "moment";
 import PastDrug from "./PastDrug";
+import AddCard from "./AddCard";
 
 const PastDrugList = ({ drugs }) => {
   const monthCategory = {};
@@ -42,6 +43,7 @@ const PastDrugList = ({ drugs }) => {
             monthCategory={monthCategory[month]}
           />
         ))}
+      <AddCard text={["복용이 끝나신 약을", <br />, "추가해보세요!"]} />
     </div>
   );
 };
