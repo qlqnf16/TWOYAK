@@ -13,7 +13,18 @@ import NewReview from "../components/Medicine/Review/NewReview";
 
 import { Container } from "../components/UI/SharedStyles";
 
-function Medicine({ match, history }) {
+const SearchContainer = styled.div`
+  width: 100%;
+  padding: 20px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  background-color: white;
+`;
+
+function Medicine({ match, history, location }) {
   let initialparam = !match.params.id ? 0 : match.params.id;
   const [paramId, setParamId] = useState(initialparam);
   const [term, setTerm] = useState();
@@ -34,6 +45,10 @@ function Medicine({ match, history }) {
 
   // user informations
   const { state: authState } = useContext(AuthContext);
+
+  // useEffect(() => {
+  //   searchByTerms();
+  // }, [location.state.term]);
 
   // url에서 drug id param이 변하면 paramId 수정
   useEffect(() => {
@@ -79,20 +94,17 @@ function Medicine({ match, history }) {
 
   // 검색어로 약물검색
   const searchByTerms = async event => {
-    event.preventDefault();
+    event && event.preventDefault();
     setDrug(null);
     setDrugReview(null);
-    console.log("검색");
 
     try {
       let { data } = await axios.get("searchSingle", {
-        params: { search_term: term }
+        params: { search_term: term ? term : location.state.term }
       });
-      console.log(data);
       if (data.item_name) {
         setDrugList(data.name);
       } else {
-        setParamId(data.id);
         history.push(`/medicine/${data.id}`);
       }
     } catch (error) {
@@ -124,30 +136,50 @@ function Medicine({ match, history }) {
     setModal(false);
   };
 
-  return (
-    <>
-      <Container>
+  // 뒤로가기
+  const goBack = () => {
+    history.goBack();
+  };
+
+  if (match.params.id) {
+    return (
+      <>
+        <Container>
+          {window.innerWidth >= 960 && drugs && (
+            <SearchInput
+              searchTerms={searchByTerms}
+              inputChange={searchTermChange}
+            />
+          )}
+          {drug && (
+            <>
+              <SearchResult drug={drug} drugImg={drugimg} modalOn={modalOn} />
+            </>
+          )}
+          {drugList && <ItemList drug_list={drugList} />}
+          {errorMessage && <div>{errorMessage}</div>}
+          {drugReview &&
+            drugReview.map(review => (
+              <DrugReview review={review} key={review.id} />
+            ))}
+        </Container>
+        {modal && <DetailModal item_seq={drug.item_seq} modalOff={modalOff} />}
+      </>
+    );
+  } else {
+    return (
+      <SearchContainer>
         {drugs && (
           <SearchInput
+            goBack={goBack}
+            term={term}
             searchTerms={searchByTerms}
             inputChange={searchTermChange}
           />
         )}
-        {drug && (
-          <>
-            <SearchResult drug={drug} drugImg={drugimg} modalOn={modalOn} />
-          </>
-        )}
-        {drugList && <ItemList drug_list={drugList} />}
-        {errorMessage && <div>{errorMessage}</div>}
-        {drugReview &&
-          drugReview.map(review => (
-            <DrugReview review={review} key={review.id} />
-          ))}
-      </Container>
-      {modal && <DetailModal item_seq={drug.item_seq} modalOff={modalOff} />}
-    </>
-  );
+      </SearchContainer>
+    );
+  }
 }
 
 export default Medicine;
