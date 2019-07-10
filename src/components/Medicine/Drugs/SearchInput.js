@@ -40,28 +40,39 @@ const StyleWrapper = styled.div`
   }
 
   & .react-autosuggest__suggestions-container--open {
+    width: calc(100% + 80px);
+    height: 50vh;
+    overflow: scroll;
     margin: 0;
     position: absolute;
-    left: 0;
-    top: 29px;
+    left: -30px;
+    top: 50px;
     background-color: white;
-    border: 1px solid #dbdbdb;
+    border: 1px solid white;
   }
 
   & .react-autosuggest__suggestions-list {
     width: 100%;
-    margin: 10px 0;
+    margin: 0;
     padding: 0;
   }
 
   & .react-autosuggest__suggestion {
     list-style-type: none;
-    font-size: 0.9rem;
+    font-size: 0.94rem;
+    margin-bottom: -1px;
+    color: var(--twoyak-black);
     cursor: pointer;
+    padding: 0.75rem 0;
+    font-weight: bold;
+    border-bottom: 1px #e6f6ff solid;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   & .react-autosuggest__suggestion--highlighted {
-    background-color: aliceblue;
+    /* background-color: aliceblue; */
   }
 `;
 

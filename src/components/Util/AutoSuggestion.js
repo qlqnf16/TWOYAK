@@ -60,7 +60,7 @@ const AutoSuggestion = ({
       ? []
       : suggestList.filter(suggestion => {
           const keep =
-            count < 7 &&
+            count < 20 &&
             suggestion[searchKey].toLowerCase().includes(inputValue);
 
           if (keep) {
