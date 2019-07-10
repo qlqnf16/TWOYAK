@@ -100,7 +100,7 @@ function Medicine({ match, history, location }) {
 
     try {
       let { data } = await axios.get("searchSingle", {
-        params: { search_term: term ? term : location.state.term }
+        params: { search_term: term }
       });
       if (data.item_name) {
         setDrugList(data.name);
