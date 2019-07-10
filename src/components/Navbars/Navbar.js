@@ -67,7 +67,7 @@ const Navbar = () => {
           홈
         </StyledNavLink>
         <StyledNavLink to="/health-record">복용내역</StyledNavLink>
-        <StyledNavLink to="/medicine">검색</StyledNavLink>
+        <StyledNavLink to="/">리뷰 모아보기</StyledNavLink>
       </NavContainer>
     </NavTransition>
   );

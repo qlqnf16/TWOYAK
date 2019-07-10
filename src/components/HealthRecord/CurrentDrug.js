@@ -4,6 +4,7 @@ import styled from "styled-components";
 import NewReview from "../Medicine/Review/NewReview";
 import { AuthContext } from "../../contexts/AuthStore";
 import DrugReview from "../Medicine/Review/DrugReview";
+import { Link } from "react-router-dom";
 
 import {
   Card,
@@ -24,8 +25,10 @@ const TitleContainer = styled(FlexDiv)`
   align-items: flex-start;
 `;
 
-const Title = styled.div`
+const Title = styled(Link)`
+  text-decoration: none;
   font-weight: 800;
+  color: var(--twoyak-black);
 `;
 
 const Text = styled.div`
@@ -197,7 +200,9 @@ const CurrentDrug = ({
             style={{ marginRight: "6px", marginTop: "5px" }}
           />
           <div>
-            <Title>{drug.drug_name}</Title>
+            <Title to={`/medicine/${drug.current_drug_id}`}>
+              {drug.drug_name}
+            </Title>
             <Text>복용 시작일: {drug.from}</Text>
           </div>
         </TitleContainer>
