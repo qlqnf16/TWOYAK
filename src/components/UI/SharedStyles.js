@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Rating from "react-rating";
 
 export const breakpoints = {
   // Material design 기준
@@ -78,4 +79,40 @@ export const Line = styled.div`
   height: 1px;
   opacity: 0.3;
   background-color: #00a2ff;
+`;
+
+export const StyledRating = styled(Rating)`
+  color: #d8d8d8;
+  margin: 0 -6px;
+  .custom {
+    margin: 0 6px;
+  }
+  .full {
+    color: var(--twoyak-blue);
+  }
+`;
+
+export const BasicText = styled.p`
+  display: inline;
+  font-size: 0.875rem;
+  color: #474747;
+  opacity: 0.6;
+  font-weight: bold;
+  margin-left: 1rem;
+`;
+
+export const RatingText = styled(BasicText)`
+  margin-left: 1rem;
+`;
+
+export const BulletText = styled.li`
+  color: var(--twoyak-blue);
+  margin-left: 1.68rem;
+  & p {
+    display: inline;
+    color: var(--twoyak-black);
+    margin-left: -5px;
+    font-size: 0.8rem;
+    font-weight: 800;
+  }
 `;
