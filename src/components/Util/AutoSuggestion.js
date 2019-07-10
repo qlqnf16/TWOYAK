@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import Autosuggest from "react-autosuggest";
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
@@ -6,14 +6,33 @@ import { DrugContext } from "../../contexts/DrugStore";
 import deburr from "lodash/deburr";
 import styled from "styled-components";
 import { breakpoints } from "../UI/SharedStyles";
+import { ReactComponent as Erase } from "../../assets/images/erase.svg";
+
+const EraseIcon = styled(Erase)`
+  margin-right: 10px;
+`;
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const StyleWrapper = styled.div`
+  flex-grow: 1;
+  flex-shrink: 1;
+  position: relative;
+
+  @media (max-width: ${breakpoints}) {
+    width: 100%;
+  }
+`;
 
 const AutoSuggestion = ({
   search,
   searchKey,
   placeholderProp,
   inputChange,
-  submit,
-  clear
+  submit
 }) => {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -32,11 +51,6 @@ const AutoSuggestion = ({
     default:
       break;
   }
-
-  useEffect(() => {
-    setValue("");
-  }, [clear]);
-
   const getSuggestions = value => {
     const inputValue = deburr(value.trim()).toLowerCase();
     const inputLength = inputValue.length;
@@ -106,16 +120,27 @@ const AutoSuggestion = ({
   };
 
   return (
-    <Autosuggest
-      suggestions={suggestions}
-      onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-      onSuggestionsClearRequested={onSuggestionsClearRequested}
-      getSuggestionValue={getSuggestionValue}
-      renderSuggestion={renderSuggestion}
-      inputProps={inputProps}
-      highlightFirstSuggestion={true}
-      onSuggestionSelected={onSuggestionSelected}
-    />
+    <Container>
+      <StyleWrapper>
+        <Autosuggest
+          suggestions={suggestions}
+          onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+          onSuggestionsClearRequested={onSuggestionsClearRequested}
+          getSuggestionValue={getSuggestionValue}
+          renderSuggestion={renderSuggestion}
+          inputProps={inputProps}
+          highlightFirstSuggestion={true}
+          onSuggestionSelected={onSuggestionSelected}
+        />
+      </StyleWrapper>
+      {value && (
+        <EraseIcon
+          onClick={() => {
+            setValue("");
+          }}
+        />
+      )}
+    </Container>
   );
 };
 

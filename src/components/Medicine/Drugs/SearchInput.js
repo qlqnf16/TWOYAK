@@ -1,21 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import AutoSuggestion from "../../Util/AutoSuggestion";
 import { breakpoints, BasicButton, FlexForm } from "../../UI/SharedStyles";
 
 import "@fortawesome/fontawesome-free/css/all.css";
 import { ReactComponent as Search } from "../../../assets/images/search-icon.svg";
-import { ReactComponent as Erase } from "../../../assets/images/erase.svg";
 
 const Form = styled(FlexForm)`
   align-items: center;
   @media (min-width: ${breakpoints.medium}) {
     margin: 1rem;
   }
-`;
-
-const EraseIcon = styled(Erase)`
-  margin-right: 10px;
 `;
 
 const ArrowIcon = styled.i`
@@ -81,13 +76,7 @@ const Button = styled(BasicButton)`
   }
 `;
 
-const SearchInput = ({ term, searchTerms, inputChange, goBack }) => {
-  const [clear, setClear] = useState(true);
-
-  const clearTerms = () => {
-    setClear(!clear);
-  };
-
+const SearchInput = ({ searchTerms, inputChange, goBack }) => {
   const myInput = (
     <Form onSubmit={searchTerms}>
       <ArrowIcon className="fas fa-arrow-left" onClick={goBack} />
@@ -98,10 +87,8 @@ const SearchInput = ({ term, searchTerms, inputChange, goBack }) => {
           searchKey="name"
           inputChange={inputChange}
           submit={searchTerms}
-          clear={clear}
         />
       </StyleWrapper>
-      {term && <EraseIcon onClick={clearTerms} />}
       <Search onClick={searchTerms} />
       {/* <Button type="submit">검색</Button> */}
     </Form>
