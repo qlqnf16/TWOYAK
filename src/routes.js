@@ -45,18 +45,18 @@ const routes = [
   {
     path: "/login",
     name: "로그인",
-    component: Login,
+    component: Login
   },
   {
     path: "/sign-up",
     name: "회원가입",
-    component: Signup,
+    component: Signup
   },
   {
     path: "/add-info",
     name: "추가정보입력",
-    component: AddInfo,
-  },
+    component: AddInfo
+  }
 ];
 
 export default routes;
