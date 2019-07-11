@@ -11,10 +11,15 @@ const PastCard = styled(Card)`
   padding: 1rem;
 `;
 
+const DrugsContainer = styled.div`
+  margin-top: -1rem;
+`;
+
 const Text = styled(BasicText)`
   opacity: 1;
   font-size: 0.69rem;
   font-weight: normal;
+  margin-left: 0.8rem;
 `;
 
 const DateContainer = styled.div`
@@ -34,7 +39,13 @@ const Year = styled.div`
 `;
 
 const Bullet = styled(BulletText)`
+  width: 60%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 0.68rem;
   & p {
+    color: var(--twoyak-black);
     font-size: 0.875rem;
   }
 `;
@@ -47,7 +58,7 @@ const PastDrug = ({ dateArray, monthCategory }) => {
         <div>{parseInt(dateArray[1])}월</div>
       </DateContainer>
       <Line />
-      <div>
+      <DrugsContainer>
         {monthCategory.map(drug => (
           <Flex key={drug.name}>
             <Bullet>
@@ -66,7 +77,7 @@ const PastDrug = ({ dateArray, monthCategory }) => {
             </Text>
           </Flex>
         ))}
-      </div>
+      </DrugsContainer>
     </PastCard>
   );
 };

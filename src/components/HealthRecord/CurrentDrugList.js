@@ -23,7 +23,7 @@ const Duration = styled(Item)`
 `;
 
 const ContentContainer = styled.div`
-  height: 65vh;
+  max-height: 65vh;
   overflow: scroll;
 `;
 
@@ -47,7 +47,7 @@ const CurrentDrugList = ({ currentDrugs, loadingHandler, drugToPast }) => {
             <ContentContainer>
               {currentDrugs.map(drug => {
                 return (
-                  <div key={drug.id}>
+                  <div style={{ marginTop: "1.5rem" }} key={drug.id}>
                     <Item>{drug.drug_name}</Item>
                     <Duration>
                       {drug.from}
