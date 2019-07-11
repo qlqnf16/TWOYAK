@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 import { EmptyCard } from "../UI/SharedStyles";
 import { ReactComponent as AddButton } from "../../assets/images/add-dash.svg";
 import styled from "styled-components";
@@ -16,7 +18,9 @@ const AddCard = ({ text }) => {
   return (
     <EmptyCard>
       <Text>{text}</Text>
-      <AddButton />
+      <Link to="/medicine">
+        <AddButton />
+      </Link>
     </EmptyCard>
   );
 };

@@ -35,6 +35,7 @@ const Nav = styled.div.attrs(props => props.active)`
   pointer-events: ${props => props.active && "none"};
   padding: 0.7rem;
   font-weight: 800;
+  cursor: ${props => (props.active ? "none" : "pointer")};
 `;
 
 const Notice = styled.div`
@@ -61,7 +62,7 @@ function HealthRecord() {
   }, [authState]);
 
   const loadingHandler = async () => {
-    const { data } = await getInfos(`${authState.userId}/current_drugs`);
+    const { data } = await getInfos(`/current_drugs`);
     setCurrentDrugs(data);
   };
 

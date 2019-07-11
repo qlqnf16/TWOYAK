@@ -71,6 +71,7 @@ export const BasicButton = styled.button`
   font-size: 0.93rem;
   border: none;
   margin: 0 auto;
+  cursor: pointer;
 `;
 
 export const WhiteButton = styled(BasicButton)`
@@ -94,9 +95,9 @@ export const BasicInput = styled.input`
   height: 3rem;
   border-radius: 1.5rem;
   border: solid 1px var(--twoyak-blue);
-  padding-left: 1.0937rem; 
+  padding-left: 1.0937rem;
   padding-right: 1.0937rem;
-`
+`;
 
 export const StyledRating = styled(Rating)`
   color: #d8d8d8;

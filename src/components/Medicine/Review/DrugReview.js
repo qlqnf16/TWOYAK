@@ -1,37 +1,58 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { BasicButton } from "../../UI/SharedStyles";
+import { BasicButton, StyledRating, RatingText } from "../../UI/SharedStyles";
+import { ReactComponent as Close } from "../../../assets/images/close.svg";
+import "@fortawesome/fontawesome-free/css/all.css";
 
 const Container = styled.div`
-  width: 100%;
+  width: 85%;
+  font-size: 0.8rem;
   padding: 10px;
-  background-color: #f3f6f9;
-  border-radius: 5px;
-  font-size: 0.9rem;
-  margin: 5px 0;
-  box-sizing: border-box;
+  margin: 5px auto;
+  color: var(--twoyak-black);
 `;
 
 const Flex = styled.div`
   display: flex;
-  justify-content: start;
+  justify-content: space-between;
   align-items: center;
+  margin-bottom: 0.8rem;
 `;
 
-const SpaceSpan = styled.span`
-  margin: 0 0.5rem;
-  color: #9c9c9c;
+const FlexStart = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: start;
 `;
 
-const Button = styled(BasicButton)`
-  font-size: 0.9rem;
-  margin-right: 0.5rem;
+const Rating = styled(StyledRating)`
+  margin: 0 -2px;
+  font-size: 0.5rem;
+  .custom {
+    margin: 0 2px;
+  }
+`;
+
+const CustomRatingText = styled(RatingText)`
+  font-size: 0.5rem;
+  margin-left: 0.4rem;
+  font-weight: normal;
+`;
+
+const Bold = styled.div`
+  font-weight: bold;
+  margin-bottom: 0.65rem;
+`;
+
+const EditIcon = styled.i`
+  margin-right: 10px;
+  color: var(--twoyak-black);
 `;
 
 const DrugReview = ({ review, deleteReview, updateButton }) => {
   return (
     <Container>
-      <Flex>
+      {/* <Flex>
         {review.user_email && (
           <>
             <div>{review.user_email}</div>
@@ -45,24 +66,32 @@ const DrugReview = ({ review, deleteReview, updateButton }) => {
             <div>{review.sex === true ? "남" : "여"}</div>
           </>
         )}
-      </Flex>
+      </Flex> */}
       <Flex>
-        <div>평점: {review.efficacy}점</div>
-        {review.adverse_effects && review.adverse_effects.length > 0 && (
-          <>
-            <SpaceSpan>|</SpaceSpan>
-            <div>
-              이상반응:{" "}
-              {review.adverse_effects
-                .map(effect => effect.symptom_name)
-                .join(", ")}
-            </div>
-          </>
-        )}
+        <FlexStart>
+          <Rating
+            emptySymbol="fas fa-circle  custom"
+            fullSymbol="fas fa-circle  custom full"
+            initialRating={review.efficacy}
+            readonly
+          />
+          <CustomRatingText>{review.efficacy.toFixed(1)}</CustomRatingText>
+        </FlexStart>
+        <FlexStart>
+          <EditIcon
+            className="fas fa-pencil-alt"
+            onClick={() => updateButton(review)}
+          />
+          <Close onClick={() => deleteReview(review.id)} />
+        </FlexStart>
       </Flex>
+      <Bold>
+        이상반응:{" "}
+        {review.adverse_effects && review.adverse_effects.length > 0
+          ? review.adverse_effects.map(effect => effect.symptom_name).join(", ")
+          : "없음"}
+      </Bold>
       <div>{review.body}</div>
-      <Button onClick={() => deleteReview(review.id)}>삭제하기</Button>
-      <Button onClick={() => updateButton(review)}>수정하기</Button>
     </Container>
   );
 };
