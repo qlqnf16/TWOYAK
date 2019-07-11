@@ -159,39 +159,39 @@ const CurrentDrug = ({
     setUpdateTarget(review);
   };
 
-  useEffect(() => {
-    const loadMessage = () => {
-      if (drug.dur_info) {
-        Object.keys(drug.dur_info).forEach(info => {
-          switch (info) {
-            case "age":
-              setMessage(message.concat(`안 돼요!`));
-              break;
-            case "pregnancy":
-              setMessage(message.concat(`임산부 안 돼요!`));
-              break;
-            case "stop_usage":
-              setMessage(message.concat(`사용 중지된 약품입니다!`));
-              break;
-            case "dosage":
-              setMessage(message.concat(`하루 ~ 이상 안 돼요!`));
-              break;
-            case "period":
-              setMessage(message.concat(`이상 복용하시면 안 돼요!`));
-              break;
-            case "elder":
-              setMessage(
-                message.concat(`65세 이상 고령자는 복용 시 주의하세요!`)
-              );
-              break;
-            default:
-              break;
-          }
-        });
-      }
-    };
-    loadMessage();
-  }, [drug.dur_info, message]);
+  // useEffect(() => {
+  //   const loadMessage = () => {
+  //     if (drug.dur_info) {
+  //       Object.keys(drug.dur_info).forEach(info => {
+  //         switch (info) {
+  //           case "age":
+  //             setMessage(message.concat(`안 돼요!`));
+  //             break;
+  //           case "pregnancy":
+  //             setMessage(message.concat(`임산부 안 돼요!`));
+  //             break;
+  //           case "stop_usage":
+  //             setMessage(message.concat(`사용 중지된 약품입니다!`));
+  //             break;
+  //           case "dosage":
+  //             setMessage(message.concat(`하루 ~ 이상 안 돼요!`));
+  //             break;
+  //           case "period":
+  //             setMessage(message.concat(`이상 복용하시면 안 돼요!`));
+  //             break;
+  //           case "elder":
+  //             setMessage(
+  //               message.concat(`65세 이상 고령자는 복용 시 주의하세요!`)
+  //             );
+  //             break;
+  //           default:
+  //             break;
+  //         }
+  //       });
+  //     }
+  //   };
+  //   loadMessage();
+  // }, [drug.dur_info, message]);
 
   return (
     <Card>

@@ -55,11 +55,16 @@ const Button = styled(BasicButton)`
   margin-top: 1rem;
 `;
 
+const AddButton = styled(BasicButton)`
+  position: fixed;
+  bottom: 70px;
+`;
+
 const TextContainer = styled.div`
   font-size: 0.75rem;
   width: 86%;
-  border-bottom: 1px solid #8bd2ff;
-  margin: 1rem 0;
+  border-bottom: 1px solid #00a2ff40;
+  margin-bottom: 1rem 0;
 `;
 
 const Text = styled.div`
@@ -70,7 +75,7 @@ const Text = styled.div`
 
 const Benefit = styled.div`
   max-height: ${props => !props.more && "3.6em"};
-  white-space: nowrap;
+  white-space: ${props => (props.more ? "pre-wrap" : "nowrap")};
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;
@@ -103,7 +108,7 @@ const SearchResult = React.memo(
         );
         alert("추가됐습니다");
       } catch (error) {
-        console.log(error);
+        console.log(error.response);
       }
     };
 
@@ -150,10 +155,9 @@ const SearchResult = React.memo(
     };
 
     const benefitInfo = findInfoDetail(drug);
-    console.log(benefitInfo.benefitParagraph[0]);
     const benefitText = !benefitInfo.benefitParagraph.length
-      ? benefitInfo.benefitTitle.join(`\n`)
-      : benefitInfo.benefitParagraph.join(`\n`);
+      ? benefitInfo.benefitTitle.join("\n")
+      : benefitInfo.benefitParagraph.join("\n");
     const benefitTextShortend = !benefitInfo.benefitParagraph.length
       ? benefitInfo.benefitTitle[0]
       : benefitInfo.benefitParagraph[0];
@@ -189,11 +193,19 @@ const SearchResult = React.memo(
                   </>
                 )}
               </TextContainer>
+              <TextContainer>
+                <Text bold>주요 성분</Text>
+                <Text>
+                  {drug.ingr_kor_name}
+                  {drug.ingr_eng_name &&
+                    ` (${drug.ingr_eng_name.slice(1, -1)})`}
+                </Text>
+              </TextContainer>
               <div>{drugDetail.CLASS_NO}</div>
             </>
           )}
         </InfoContainer>
-        <div onClick={addCurrentDrug}>복용목록에 추가하기</div>
+        <AddButton onClick={addCurrentDrug}>복용목록에 추가하기</AddButton>
       </Container>
     );
   }
