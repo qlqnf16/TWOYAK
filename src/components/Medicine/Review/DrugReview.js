@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
-import { BasicButton, StyledRating, RatingText } from "../../UI/SharedStyles";
+import { StyledRating, RatingText } from "../../UI/SharedStyles";
 import { ReactComponent as Close } from "../../../assets/images/close.svg";
 import "@fortawesome/fontawesome-free/css/all.css";
 

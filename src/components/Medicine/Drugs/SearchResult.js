@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { breakpoints } from "../../UI/SharedStyles";
 import { AuthContext } from "../../../contexts/AuthStore";
 import axios from "../../../apis";
+import Warning from "../../UI/Warning";
 
 const Container = styled.div`
   display: flex;
@@ -19,6 +20,9 @@ const Container = styled.div`
 const InfoContainer = styled.div`
   width: 100%;
   margin-right: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 const ItemName = styled.div`
@@ -32,11 +36,14 @@ const SearchResult = React.memo(({ drug, drugImg, modalOn }) => {
 
   const addCurrentDrug = async () => {
     try {
-      await axios.post(`user/${authState.userId}/current_drugs/${drug.id}`, {
-        headers: {
-          Authorization: `bearer ${authState.token}`
+      await axios.post(
+        `user/${authState.subUsers[0].id}/current_drugs/${drug.id}`,
+        {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
         }
-      });
+      );
       alert("추가됐습니다");
     } catch (error) {
       console.log(error);
@@ -45,6 +52,7 @@ const SearchResult = React.memo(({ drug, drugImg, modalOn }) => {
 
   return (
     <Container>
+      <Warning />
       <InfoContainer>
         <ItemName>{drug.name}</ItemName>
         {drugDetail && (

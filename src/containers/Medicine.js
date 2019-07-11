@@ -9,7 +9,6 @@ import SearchResult from "../components/Medicine/Drugs/SearchResult";
 import ItemList from "../components/Medicine/Drugs/ItemList";
 import DetailModal from "../components/Medicine/Drugs/DetailModal";
 import DrugReview from "../components/Medicine/Review/DrugReview";
-import NewReview from "../components/Medicine/Review/NewReview";
 
 import { Container } from "../components/UI/SharedStyles";
 
@@ -34,10 +33,8 @@ function Medicine({ match, history, location }) {
   const [drugimg, setDrugimg] = useState("");
   const [drugList, setDrugList] = useState(null);
   const [drugReview, setDrugReview] = useState(null);
-  const [updateTarget, setUpdateTarget] = useState(); // drug review update
 
   const [modal, setModal] = useState(false); // 의약품 상세정보 모달
-  const [showNewReview, setShowNewReview] = useState(true); // 리뷰 등록창 on off
   const [errorMessage, setErrorMessage] = useState();
 
   const { state } = useContext(DrugContext);
@@ -63,8 +60,6 @@ function Medicine({ match, history, location }) {
     setDrug(null);
     setDrugList(null);
     setDrugimg(null);
-    setUpdateTarget(null);
-    setShowNewReview(true);
 
     if (paramId) {
       searchById(paramId);
