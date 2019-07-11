@@ -104,13 +104,11 @@ function Login(props) {
     axios
       .post("api/users/login", signinData)
       .then(response => {
+        console.log(jwt_decode(response.data.auth_token))
         const payload = response.data.auth_token;
         dispatch({
           type: "SIGNIN_SUCCESS", 
-          token: payload, 
-          userId: jwt_decode(payload).user.id,
-          userName: jwt_decode(payload).user.user_name,
-          userInfoId: jwt_decode(payload).user.user_info_id,
+          token: payload,
         })
         storeUserDataForAutoLogin('token', payload)
         dispatch({

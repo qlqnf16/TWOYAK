@@ -1,4 +1,5 @@
 import { updateObject } from './utility';
+import jwt_decode from 'jwt-decode';
 
 export const drugReducer = (drugs, { type, payload }) => {
   switch (type) {
@@ -20,9 +21,9 @@ export const authReducer = (state, action) => {
   const signinSuccess = (state, action) => {
     return updateObject(state, {
       token: action.token,
-      userId: action.userId,
-      userName: action.userName,
-      userInfoId: action.userInfoId,
+      userId: jwt_decode(action.token).user.id,
+      userName: jwt_decode(action.token).user.sub_users[0].user_name,
+      subUsers: jwt_decode(action.token).user.sub_users,
       error: null,
       loading: false,
     })
@@ -45,9 +46,9 @@ export const authReducer = (state, action) => {
   const signupSuccess = (state, action) => {
     return updateObject(state, {
       token: action.token,
-      userId: action.userId,
-      userName: action.userName,
-      userInfoId: action.userInfoId,
+      userId: jwt_decode(action.token).user.id,
+      userName: jwt_decode(action.token).user.user_name[0].user_name,
+      subUsers: jwt_decode(action.token).user.sub_users,
       error: null,
       loading: false,
     })
@@ -65,7 +66,7 @@ export const authReducer = (state, action) => {
       token: null,
       userId: null,
       userName: null,
-      userInfoId: null,
+      subUsers: null,
     })
   };
   

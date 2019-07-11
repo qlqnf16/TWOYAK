@@ -30,6 +30,7 @@ const GoLoginMark = styled.div`
   margin-bottom: 1.3125rem;
 `
 
+
 function Signup(props) {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
@@ -37,6 +38,8 @@ function Signup(props) {
   const [userName, setUserName] = useState(null);
 
   const { state, dispatch } = useContext(AuthContext);
+
+  console.log(state)
 
   const goLoginPage = () => {
     props.history.push('/login')
@@ -103,9 +106,8 @@ function Signup(props) {
         dispatch({
           type: "SIGNUP_SUCCESS",
           token: payload,
-          userId: jwt_decode(payload).user.id,
-          userName: jwt_decode(payload).user.user_name,
         })
+        console.log(jwt_decode(payload))
         storeUserDataForAutoLogin('token', payload)
         dispatch({
           type: "SET_AUTH_REDIRECT_PATH",

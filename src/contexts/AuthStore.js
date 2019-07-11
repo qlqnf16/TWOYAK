@@ -7,7 +7,7 @@ const AuthStore = props => {
   const [state, dispatch] = useReducer(authReducer, {
     token: null,
     userName: null,
-    userInfoId: null,
+    subUsers: null,
     userId: null,
     error: null,
     loading: false,

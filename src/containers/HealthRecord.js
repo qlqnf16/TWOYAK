@@ -66,6 +66,8 @@ function HealthRecord() {
     setCurrentDrugs(data);
   };
 
+  console.log(authState)
+
   const getInfos = url =>
     axios.get(`user/${authState.userId}/${url}`, {
       headers: {
