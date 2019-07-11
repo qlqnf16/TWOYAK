@@ -35,6 +35,7 @@ function Medicine({ match, history, location }) {
   const [drugReview, setDrugReview] = useState(null);
 
   const [modal, setModal] = useState(false); // 의약품 상세정보 모달
+  const [showMore, setShowMore] = useState(false); // 더보기 버튼
   const [errorMessage, setErrorMessage] = useState();
 
   const { state } = useContext(DrugContext);
@@ -141,6 +142,11 @@ function Medicine({ match, history, location }) {
     history.push(`/medicine/${id}`);
   };
 
+  // 더보기 토글
+  const toggleShowMore = () => {
+    setShowMore(!showMore);
+  };
+
   if (match.params.id) {
     return (
       <>
@@ -153,7 +159,13 @@ function Medicine({ match, history, location }) {
           )}
           {drug && (
             <>
-              <SearchResult drug={drug} drugImg={drugimg} modalOn={modalOn} />
+              <SearchResult
+                drug={drug}
+                drugImg={drugimg}
+                modalOn={modalOn}
+                showMore={showMore}
+                toggleShowMore={toggleShowMore}
+              />
             </>
           )}
           {drugList && <ItemList drug_list={drugList} />}

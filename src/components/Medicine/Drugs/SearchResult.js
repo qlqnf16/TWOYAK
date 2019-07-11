@@ -52,113 +52,151 @@ const Img = styled.img`
 const Button = styled(BasicButton)`
   font-size: 0.75rem;
   opacity: 0.5;
+  margin-top: 1rem;
 `;
 
 const TextContainer = styled.div`
   font-size: 0.75rem;
   width: 86%;
-  padding: 1.25rem 0;
   border-bottom: 1px solid #8bd2ff;
+  margin: 1rem 0;
 `;
 
 const Text = styled.div`
   font-weight: ${props => (props.bold ? "bold" : "regular")};
   font-size: ${props => (props.big ? "0.875rem" : "0.75rem")};
+  margin: 1rem 0;
 `;
 
-const SearchResult = React.memo(({ drug, drugImg, modalOn }) => {
-  const drugDetail = drug.package_insert ? drug.package_insert.DRB_ITEM : null;
-  const { state: authState } = useContext(AuthContext);
+const Benefit = styled.div`
+  max-height: ${props => !props.more && "3.6em"};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 1.2;
+`;
 
-  const addCurrentDrug = async () => {
-    try {
-      await axios.post(
-        `user/${authState.subUsers[0].id}/current_drugs/${drug.id}`,
-        {
-          headers: {
-            Authorization: `bearer ${authState.token}`
+const ShowMoreButton = styled.div`
+  font-weight: bold;
+  text-align: right;
+  margin-bottom: 1rem;
+  color: var(--twoyak-blue);
+`;
+
+const SearchResult = React.memo(
+  ({ drug, drugImg, modalOn, showMore, toggleShowMore }) => {
+    const drugDetail = drug.package_insert
+      ? drug.package_insert.DRB_ITEM
+      : null;
+    const { state: authState } = useContext(AuthContext);
+
+    const addCurrentDrug = async () => {
+      try {
+        await axios.post(
+          `user/${authState.subUsers[0].id}/current_drugs/${drug.id}`,
+          {
+            headers: {
+              Authorization: `bearer ${authState.token}`
+            }
           }
-        }
-      );
-      alert("추가됐습니다");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const pushValidItem = (array, item) => {
-    if (item !== undefined && item !== null && item !== "") {
-      array.push(item);
-    }
-  };
-
-  const findInfoDetail = drug => {
-    // 효능, 효과
-    const SECTION =
-      drugDetail.EE_DOC_DATA && drugDetail.EE_DOC_DATA.DOC.SECTION;
-    const title = [];
-    const PARAGRAPH = [];
-
-    if (!SECTION.length) {
-      if (!SECTION.ARTICLE.length) {
-        pushValidItem(title, SECTION.ARTICLE.title);
-        pushValidItem(PARAGRAPH, SECTION.ARTICLE.PARAGRAPH);
-      } else {
-        for (let i = 0; i < SECTION.ARTICLE.length; i++) {
-          pushValidItem(title, SECTION.ARTICLE[i].title);
-          pushValidItem(PARAGRAPH, SECTION.ARTICLE[i].PARAGRAPH);
-        }
+        );
+        alert("추가됐습니다");
+      } catch (error) {
+        console.log(error);
       }
-    } else {
-      for (let i = 0; i < SECTION.length; i++) {
-        if (!SECTION[i].ARTICLE.length) {
-          pushValidItem(title, SECTION[i].ARTICLE.title);
-          pushValidItem(PARAGRAPH, SECTION[i].ARTICLE.PARAGRAPH);
-        } else {
-          for (let j = 0; j < SECTION[i].ARTICLE.length; j++) {
-            pushValidItem(title, SECTION[i].ARTICLE[j].title);
-            pushValidItem(PARAGRAPH, SECTION[i].ARTICLE[j].PARAGRAPH);
-          }
-        }
-      }
-    }
-    return {
-      benefitTitle: title,
-      benefitParagraph: PARAGRAPH
     };
-  };
 
-  const benefitInfo = findInfoDetail(drug);
+    const pushValidItem = (array, item) => {
+      if (item !== undefined && item !== null && item !== "") {
+        array.push(item);
+      }
+    };
 
-  return (
-    <Container>
-      <Warning />
-      <InfoContainer>
-        <ItemName>{drug.name.split("(")[0]}</ItemName>
-        {drugImg && (
-          <ImgContainer>
-            <Img src={drugImg} alt={drug.name} />
-          </ImgContainer>
-        )}
-        {drugDetail && (
-          <>
-            <Button onClick={modalOn}>설명서 보기</Button>
-            <TextContainer>
-              <Text bold>어떤 약인가요?</Text>
-              <Text style={{ fontSize: "0.7rem" }}>
-                주효능:{" "}
-                {!benefitInfo.benefitParagraph.length
-                  ? benefitInfo.benefitTitle
-                  : benefitInfo.benefitParagraph}
-              </Text>
-            </TextContainer>
-            <div>{drugDetail.CLASS_NO}</div>
-          </>
-        )}
-      </InfoContainer>
-      <div onClick={addCurrentDrug}>복용목록에 추가하기</div>
-    </Container>
-  );
-});
+    const findInfoDetail = drug => {
+      // 효능, 효과
+      const SECTION =
+        drugDetail.EE_DOC_DATA && drugDetail.EE_DOC_DATA.DOC.SECTION;
+      const title = [];
+      const PARAGRAPH = [];
+
+      if (!SECTION.length) {
+        if (!SECTION.ARTICLE.length) {
+          pushValidItem(title, SECTION.ARTICLE.title);
+          pushValidItem(PARAGRAPH, SECTION.ARTICLE.PARAGRAPH);
+        } else {
+          for (let i = 0; i < SECTION.ARTICLE.length; i++) {
+            pushValidItem(title, SECTION.ARTICLE[i].title);
+            pushValidItem(PARAGRAPH, SECTION.ARTICLE[i].PARAGRAPH);
+          }
+        }
+      } else {
+        for (let i = 0; i < SECTION.length; i++) {
+          if (!SECTION[i].ARTICLE.length) {
+            pushValidItem(title, SECTION[i].ARTICLE.title);
+            pushValidItem(PARAGRAPH, SECTION[i].ARTICLE.PARAGRAPH);
+          } else {
+            for (let j = 0; j < SECTION[i].ARTICLE.length; j++) {
+              pushValidItem(title, SECTION[i].ARTICLE[j].title);
+              pushValidItem(PARAGRAPH, SECTION[i].ARTICLE[j].PARAGRAPH);
+            }
+          }
+        }
+      }
+      return {
+        benefitTitle: title,
+        benefitParagraph: PARAGRAPH
+      };
+    };
+
+    const benefitInfo = findInfoDetail(drug);
+    console.log(benefitInfo.benefitParagraph[0]);
+    const benefitText = !benefitInfo.benefitParagraph.length
+      ? benefitInfo.benefitTitle.join(`\n`)
+      : benefitInfo.benefitParagraph.join(`\n`);
+    const benefitTextShortend = !benefitInfo.benefitParagraph.length
+      ? benefitInfo.benefitTitle[0]
+      : benefitInfo.benefitParagraph[0];
+
+    return (
+      <Container>
+        <Warning />
+        <InfoContainer>
+          <ItemName>{drug.name.split("(")[0]}</ItemName>
+          {drugImg && (
+            <ImgContainer>
+              <Img src={drugImg} alt={drug.name} />
+            </ImgContainer>
+          )}
+          {drugDetail && (
+            <>
+              <Button onClick={modalOn}>설명서 보기</Button>
+              <TextContainer>
+                <Text bold>어떤 약인가요?</Text>
+                {showMore ? (
+                  <>
+                    <Benefit more>주효능: {benefitText}</Benefit>
+                    <ShowMoreButton onClick={toggleShowMore}>
+                      접기
+                    </ShowMoreButton>
+                  </>
+                ) : (
+                  <>
+                    <Benefit>주효능: {benefitTextShortend}</Benefit>
+                    <ShowMoreButton onClick={toggleShowMore}>
+                      더보기
+                    </ShowMoreButton>
+                  </>
+                )}
+              </TextContainer>
+              <div>{drugDetail.CLASS_NO}</div>
+            </>
+          )}
+        </InfoContainer>
+        <div onClick={addCurrentDrug}>복용목록에 추가하기</div>
+      </Container>
+    );
+  }
+);
 
 export default React.memo(SearchResult);
