@@ -128,7 +128,6 @@ export const BulletText = styled.li`
   margin-left: 1.68rem;
   & p {
     display: inline;
-    color: var(--twoyak-black);
     margin-left: -5px;
     font-size: 0.8rem;
     font-weight: 800;
