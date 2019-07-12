@@ -121,29 +121,34 @@ const SearchResult = React.memo(
     const findInfoDetail = drug => {
       // 효능, 효과
       const SECTION =
-        drugDetail.EE_DOC_DATA && drugDetail.EE_DOC_DATA.DOC.SECTION;
+        drugDetail &&
+        drugDetail.EE_DOC_DATA &&
+        drugDetail.EE_DOC_DATA.DOC.SECTION;
+
       const title = [];
       const PARAGRAPH = [];
 
-      if (!SECTION.length) {
-        if (!SECTION.ARTICLE.length) {
-          pushValidItem(title, SECTION.ARTICLE.title);
-          pushValidItem(PARAGRAPH, SECTION.ARTICLE.PARAGRAPH);
-        } else {
-          for (let i = 0; i < SECTION.ARTICLE.length; i++) {
-            pushValidItem(title, SECTION.ARTICLE[i].title);
-            pushValidItem(PARAGRAPH, SECTION.ARTICLE[i].PARAGRAPH);
-          }
-        }
-      } else {
-        for (let i = 0; i < SECTION.length; i++) {
-          if (!SECTION[i].ARTICLE.length) {
-            pushValidItem(title, SECTION[i].ARTICLE.title);
-            pushValidItem(PARAGRAPH, SECTION[i].ARTICLE.PARAGRAPH);
+      if (SECTION !== null) {
+        if (!SECTION.length) {
+          if (!SECTION.ARTICLE.length) {
+            pushValidItem(title, SECTION.ARTICLE.title);
+            pushValidItem(PARAGRAPH, SECTION.ARTICLE.PARAGRAPH);
           } else {
-            for (let j = 0; j < SECTION[i].ARTICLE.length; j++) {
-              pushValidItem(title, SECTION[i].ARTICLE[j].title);
-              pushValidItem(PARAGRAPH, SECTION[i].ARTICLE[j].PARAGRAPH);
+            for (let i = 0; i < SECTION.ARTICLE.length; i++) {
+              pushValidItem(title, SECTION.ARTICLE[i].title);
+              pushValidItem(PARAGRAPH, SECTION.ARTICLE[i].PARAGRAPH);
+            }
+          }
+        } else {
+          for (let i = 0; i < SECTION.length; i++) {
+            if (!SECTION[i].ARTICLE.length) {
+              pushValidItem(title, SECTION[i].ARTICLE.title);
+              pushValidItem(PARAGRAPH, SECTION[i].ARTICLE.PARAGRAPH);
+            } else {
+              for (let j = 0; j < SECTION[i].ARTICLE.length; j++) {
+                pushValidItem(title, SECTION[i].ARTICLE[j].title);
+                pushValidItem(PARAGRAPH, SECTION[i].ARTICLE[j].PARAGRAPH);
+              }
             }
           }
         }
@@ -196,12 +201,11 @@ const SearchResult = React.memo(
               <TextContainer>
                 <Text bold>주요 성분</Text>
                 <Text>
-                  {drug.ingr_kor_name}
+                  {drug.ingr_kor_name.join(", ")}
                   {drug.ingr_eng_name &&
                     ` (${drug.ingr_eng_name.slice(1, -1)})`}
                 </Text>
               </TextContainer>
-              <div>{drugDetail.CLASS_NO}</div>
             </>
           )}
         </InfoContainer>
