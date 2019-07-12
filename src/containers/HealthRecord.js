@@ -113,6 +113,22 @@ function HealthRecord() {
     }
   };
 
+  const deleteDrug = async id => {
+    try {
+      await axios.delete(
+        `user/${authState.subUsers[0].id}/current_drugs/${id}`,
+        {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        }
+      );
+      loadingHandler();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Background />
@@ -132,6 +148,7 @@ function HealthRecord() {
                 currentDrugs={currentDrugs}
                 loadingHandler={loadingHandler}
                 drugToPast={drugToPast}
+                deleteDrug={deleteDrug}
                 durInfo={durInfo}
               />
             )

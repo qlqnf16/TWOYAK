@@ -33,6 +33,7 @@ export const FlexDiv = styled.div`
   display: flex;
   align-items: ${props => (props.align ? props.align : "center")};
   justify-content: ${props => (props.justify ? props.justify : "flex-start")};
+  flex-shrink: ${props => (props.shrink ? props.shrink : 1)};
 `;
 
 export const FlexForm = styled.form`
@@ -82,6 +83,7 @@ export const WhiteButton = styled(BasicButton)`
   display: block;
   font-weight: 1rem;
   margin: 1rem auto 1.25rem auto;
+  opacity: ${props => props.opacity && props.opacity};
 `;
 
 export const Line = styled.div`

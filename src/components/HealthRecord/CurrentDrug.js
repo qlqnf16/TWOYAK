@@ -5,6 +5,7 @@ import NewReview from "../Medicine/Review/NewReview";
 import { AuthContext } from "../../contexts/AuthStore";
 import DrugReview from "../Medicine/Review/DrugReview";
 import { Link } from "react-router-dom";
+import { ReactComponent as Close } from "../../assets/images/close.svg";
 
 import {
   Card,
@@ -17,16 +18,13 @@ import {
 } from "../UI/SharedStyles";
 import medIcon from "../../assets/images/med-icon.svg";
 
-const Flex = styled(FlexDiv)`
-  justify-content: space-between;
-`;
-
-const FlexStart = styled(FlexDiv)`
-  flex-shrink: 0;
-`;
-
-const TitleContainer = styled(FlexDiv)`
-  align-items: flex-start;
+const CloseIcon = styled(Close)`
+  width: 1rem;
+  height: 1rem;
+  align-self: flex-end;
+  margin-top: -0.8rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
 `;
 
 const Title = styled(Link)`
@@ -60,16 +58,18 @@ const CustomRatingText = styled(RatingText)`
   font-weight: normal;
 `;
 
-const OpacityButton = styled(BasicButton)`
-  opacity: 0.6;
-`;
-
 const ButtonContainer = styled(FlexDiv)`
   justify-content: space-around;
   margin: 1rem 1.7rem 0 1.7rem;
 `;
 
-const CurrentDrug = ({ drug, review, loadingHandler, drugToPast }) => {
+const CurrentDrug = ({
+  drug,
+  review,
+  loadingHandler,
+  drugToPast,
+  deleteDrug
+}) => {
   const [show, setShow] = useState(false);
   const [updateTarget, setUpdateTarget] = useState();
   const [message, setMessage] = useState([]);
@@ -196,8 +196,13 @@ const CurrentDrug = ({ drug, review, loadingHandler, drugToPast }) => {
 
   return (
     <Card>
-      <Flex>
-        <TitleContainer>
+      <CloseIcon
+        onClick={() => {
+          deleteDrug(drug.id);
+        }}
+      />
+      <FlexDiv justify="space-between">
+        <FlexDiv align="flex-start">
           <img
             src={medIcon}
             alt="med-icon"
@@ -209,8 +214,8 @@ const CurrentDrug = ({ drug, review, loadingHandler, drugToPast }) => {
             </Title>
             <Text>복용 시작일: {drug.from}</Text>
           </div>
-        </TitleContainer>
-        <FlexStart>
+        </FlexDiv>
+        <FlexDiv shrink="0">
           {typeof drug.drug_rating === "number" ? (
             <>
               <Rating
@@ -226,8 +231,8 @@ const CurrentDrug = ({ drug, review, loadingHandler, drugToPast }) => {
           ) : (
             ""
           )}
-        </FlexStart>
-      </Flex>
+        </FlexDiv>
+      </FlexDiv>
       {(drug.dur_info || drug.memo || review) && <Line />}
       {show && (
         <NewReview
@@ -268,24 +273,26 @@ const CurrentDrug = ({ drug, review, loadingHandler, drugToPast }) => {
             deleteReview={deleteReview}
             updateButton={updateButton}
           />
-          <OpacityButton
+          <BasicButton
+            opacity="0.6"
             onClick={() => {
               drugToPast(drug.id);
             }}
           >
             복용 종료
-          </OpacityButton>
+          </BasicButton>
         </>
       ) : (
         <ButtonContainer>
           <BasicButton onClick={newReviewToggle}>리뷰 등록</BasicButton>
-          <OpacityButton
+          <BasicButton
+            opacity="0.6"
             onClick={() => {
               drugToPast(drug.id);
             }}
           >
             복용 종료
-          </OpacityButton>
+          </BasicButton>
         </ButtonContainer>
       )}
     </Card>

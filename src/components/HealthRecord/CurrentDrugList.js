@@ -32,7 +32,8 @@ const CurrentDrugList = ({
   currentDrugs,
   durInfo,
   loadingHandler,
-  drugToPast
+  drugToPast,
+  deleteDrug
 }) => {
   const [show, setShow] = useState(false);
 
@@ -102,6 +103,7 @@ const CurrentDrugList = ({
             review={drug.my_review}
             loadingHandler={loadingHandler}
             drugToPast={drugToPast}
+            deleteDrug={deleteDrug}
           />
         );
       })}
