@@ -31,7 +31,8 @@ export const Container = styled.div`
 
 export const FlexDiv = styled.div`
   display: flex;
-  align-items: center;
+  align-items: ${props => (props.align ? props.align : "center")};
+  justify-content: ${props => (props.justify ? props.justify : "flex-start")};
 `;
 
 export const FlexForm = styled.form`
@@ -110,13 +111,12 @@ export const StyledRating = styled(Rating)`
   }
 `;
 
-export const BasicText = styled.p`
+export const BasicText = styled.div`
   display: inline;
-  font-size: 0.875rem;
+  font-size: ${props => (props.size ? props.size : "0.875rem")};
   color: #474747;
-  opacity: 0.6;
+  opacity: ${props => props.opacity};
   font-weight: bold;
-  margin-left: 1rem;
 `;
 
 export const RatingText = styled(BasicText)`

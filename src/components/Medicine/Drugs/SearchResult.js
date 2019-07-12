@@ -98,14 +98,13 @@ const SearchResult = React.memo(
 
     const addCurrentDrug = async () => {
       try {
-        await axios.post(
-          `user/${authState.subUsers[0].id}/current_drugs/${drug.id}`,
-          {
-            headers: {
-              Authorization: `bearer ${authState.token}`
-            }
+        await axios({
+          method: "POST",
+          url: `user/${authState.subUsers[0].id}/current_drugs/${drug.id}`,
+          headers: {
+            Authorization: `bearer ${authState.token}`
           }
-        );
+        });
         alert("추가됐습니다");
       } catch (error) {
         console.log(error.response);

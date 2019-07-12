@@ -77,12 +77,16 @@ function HealthRecord() {
         getInfos("current_drugs"),
         getInfos("analysis/get")
       ]);
-      console.log(myCurrent);
-      console.log(myPast);
+      // console.log(myCurrent);
+      // console.log(myPast);
       console.log(myDur);
       setCurrentDrugs(myCurrent);
       setPastDrugs(myPast);
-      setDurInfo(myDur);
+      setDurInfo({
+        duplicate: myDur.duplicate,
+        interactions: myDur.interactions,
+        same_ingr: myDur.same_ingr
+      });
     } catch (error) {
       console.log(error);
     }
@@ -128,6 +132,7 @@ function HealthRecord() {
                 currentDrugs={currentDrugs}
                 loadingHandler={loadingHandler}
                 drugToPast={drugToPast}
+                durInfo={durInfo}
               />
             )
           : pastDrugs && <PastDrugList drugs={pastDrugs} />}

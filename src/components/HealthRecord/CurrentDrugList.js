@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import CurrentDrug from "./CurrentDrug";
 import AddCard from "./AddCard";
-import { WhiteButton, Line } from "../UI/SharedStyles";
+import { WhiteButton, Line, Card } from "../UI/SharedStyles";
 import medIcon from "../../assets/images/(white)med-icon.svg";
 import Modal from "../UI/Modal";
 import styled from "styled-components";
+import InteractionNotice from "./InteractionNotice";
 
 const Item = styled.div`
   width: 100%;
@@ -27,7 +28,12 @@ const ContentContainer = styled.div`
   overflow: scroll;
 `;
 
-const CurrentDrugList = ({ currentDrugs, loadingHandler, drugToPast }) => {
+const CurrentDrugList = ({
+  currentDrugs,
+  durInfo,
+  loadingHandler,
+  drugToPast
+}) => {
   const [show, setShow] = useState(false);
 
   const toggleModal = () => {
@@ -61,6 +67,33 @@ const CurrentDrugList = ({ currentDrugs, loadingHandler, drugToPast }) => {
           }
         />
       )}
+      <Card>
+        {durInfo && durInfo.interactions && (
+          <InteractionNotice
+            durName="interactions"
+            durText="다음 약물을 함께 드시면 안 돼요!"
+            durDetail={durInfo.interactions}
+          />
+        )}
+        {durInfo && durInfo.same_ingr && (
+          <InteractionNotice
+            durText="다음 약물은 같은 성분의 약이에요!"
+            durDetail={durInfo.same_ingr}
+          />
+        )}
+        {durInfo && durInfo.duplicate && (
+          <InteractionNotice
+            durText={[
+              "다음 약물은 효능이 같은 약물로,",
+              <br />,
+              "부작용이 발생할 수 있어요",
+              <br />,
+              "주의하세요!"
+            ]}
+            durDetail={durInfo.duplicate}
+          />
+        )}
+      </Card>
       {currentDrugs.map(drug => {
         return (
           <CurrentDrug
