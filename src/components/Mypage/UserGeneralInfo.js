@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { AuthContext } from '../../contexts/AuthStore';
+import { Redirect } from "react-router-dom";
 import styled from "styled-components";
 
 const UserGeneralInfoContainer = styled.div`
@@ -11,6 +12,9 @@ const SayHello = styled.div`
   font-weight: 800;
   color: #474747;
   margin-bottom: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `
 
 const GeneralInfo = styled.div`
@@ -33,6 +37,13 @@ const Count = styled.div`
 
 const InfoIndex = styled.div`
   width: auto;
+  font-size: 0.6875rem;
+  color: #474747;
+`
+
+const SignoutButton = styled.div`
+  width: auto;
+  opacity: 0.6;
   font-size: 0.6875rem;
   color: #474747;
 `
@@ -61,7 +72,7 @@ function UserGeneralInfo({
   ]
 
   let generalInfo = null;
-  if ( currentDrugs, drugReviews, myConversation ) {
+  if ( currentDrugs && drugReviews && myConversation ) {
     generalInfo = (
       <GeneralInfo>
         {infoIndex.map((i, k) => (
@@ -82,8 +93,22 @@ function UserGeneralInfo({
     <UserGeneralInfoContainer>
       <SayHello>
         {authState.userName} 님, 안녕하세요
+        <SignoutButton
+          onClick={() => {
+            dispatch({
+              type: 'SIGNOUT'
+            })
+            dispatch({
+              type: 'SET_AUTH_REDIRECT_PATH',
+              path: '/login'
+            })
+          }}
+        >
+          로그아웃
+        </SignoutButton>
       </SayHello>
       {generalInfo}
+      {authState.authRedirectPath ? <Redirect to={authState.authRedirectPath} /> : null}
     </UserGeneralInfoContainer>
   )
 };

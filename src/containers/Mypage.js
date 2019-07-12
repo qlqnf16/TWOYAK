@@ -5,6 +5,8 @@ import axios from "../apis";
 
 import Topbar from "../components/Mypage/Topbar";
 import UserGeneralInfo from "../components/Mypage/UserGeneralInfo";
+import DiseasesAndExtra from "../components/Mypage/DiseasesAndExtra";
+import WatchDrugs from "../components/Mypage/WatchDrugs";
 
 const MyPageContainer = styled.div`
   width: 100%;
@@ -17,7 +19,14 @@ const MyPageContainer = styled.div`
   background-color: white;
 `
 
-function Mypage() {
+const Divider = styled.div`
+  width: 100%;
+  height: 1px;
+  opacity: 0.1;
+  background-color: var(--twoyak-blue);
+`
+
+function Mypage(props) {
   const [currentDrugs, setCurrentDrugs] = useState([]);
   const [drugReviews, setDrugReviews] = useState([]);
   const [myConversation, setMyConversation] = useState([]);
@@ -52,11 +61,21 @@ function Mypage() {
 
   return (
     <MyPageContainer>
-      <Topbar />
+      <Topbar
+        history={props.history}
+      />
       <UserGeneralInfo
         currentDrugs={currentDrugs}
         drugReviews={drugReviews}
         myConversation={myConversation}
+      />
+      <Divider />
+      <DiseasesAndExtra
+        currentDiseases={currentDiseases}
+      />
+      <Divider />
+      <WatchDrugs
+        watchDrugs={watchDrugs}
       />
     </MyPageContainer>
   );

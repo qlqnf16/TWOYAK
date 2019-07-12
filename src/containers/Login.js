@@ -71,20 +71,19 @@ function Login(props) {
       props.location.search !== "" &&
       props.location.search.includes("?token=")
     ) {
-      storeUserDataForAutoLogin("token", props.location.search.split("=")[1]);
+      dispatch({
+        type: "SIGNIN_SUCCESS",
+        token: props.location.search.split("=")[1],
+      })
       dispatch({
         type: "SET_AUTH_REDIRECT_PATH",
-        path: "/medicine"
+        path: "/"
       });
     }
   }, [props.history, props.location.search, dispatch]);
 
-  const storeUserDataForAutoLogin = (key, value) => {
-    localStorage.setItem(key, value);
-  };
-
-  const signinBySocialAccount = supplier => {
-    window.open(`http://52.79.228.195/api/users/auth/${supplier}`, "_self");
+  const signinBySocialAccount = ( supplier ) => {
+    window.open(`http://52.79.228.195/api/users/auth/${supplier}`, '_self')
   };
 
   const signinDataHandler = (key, event) => {
@@ -107,14 +106,13 @@ function Login(props) {
         console.log(jwt_decode(response.data.auth_token));
         const payload = response.data.auth_token;
         dispatch({
-          type: "SIGNIN_SUCCESS",
-          token: payload
-        });
-        storeUserDataForAutoLogin("token", payload);
+          type: "SIGNIN_SUCCESS", 
+          token: payload,
+        })
         dispatch({
-          type: "SET_AUTH_REDIRECT_PATH"
-          // path: "/medicine",
-        });
+          type: "SET_AUTH_REDIRECT_PATH",
+          path: "/medicine",
+        })
       })
       .catch(error =>
         dispatch({

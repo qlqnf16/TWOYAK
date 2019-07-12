@@ -19,11 +19,12 @@ export const authReducer = (state, action) => {
   };
   
   const signinSuccess = (state, action) => {
+    localStorage.setItem('token', action.token)
     return updateObject(state, {
       token: action.token,
-      userId: jwt_decode(action.token).user.id,
       userName: jwt_decode(action.token).user.sub_users[0].user_name,
       subUsers: jwt_decode(action.token).user.sub_users,
+      subUserId: jwt_decode(action.token).user.sub_users[0].id,
       error: null,
       loading: false,
     })
@@ -44,11 +45,12 @@ export const authReducer = (state, action) => {
   };
 
   const signupSuccess = (state, action) => {
+    localStorage.setItem('token', action.token)
     return updateObject(state, {
       token: action.token,
-      userId: jwt_decode(action.token).user.id,
-      userName: jwt_decode(action.token).user.user_name[0].user_name,
+      userName: jwt_decode(action.token).user.sub_users[0].user_name,
       subUsers: jwt_decode(action.token).user.sub_users,
+      subUserId: jwt_decode(action.token).user.sub_users[0].id,
       error: null,
       loading: false,
     })
@@ -62,11 +64,13 @@ export const authReducer = (state, action) => {
   };
   
   const signout = (state, action) => {
+    localStorage.clear();
     return updateObject(state, {
       token: null,
       userId: null,
       userName: null,
       subUsers: null,
+      subUserId: null,
     })
   };
   
