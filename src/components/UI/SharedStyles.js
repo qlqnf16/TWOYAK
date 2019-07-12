@@ -118,7 +118,7 @@ export const BasicText = styled.div`
   font-size: ${props => (props.size ? props.size : "0.875rem")};
   color: #474747;
   opacity: ${props => props.opacity};
-  font-weight: bold;
+  font-weight: ${props => (props.bold ? props.bold : "bold")};
 `;
 
 export const RatingText = styled(BasicText)`
@@ -129,6 +129,7 @@ export const BulletText = styled.li`
   color: var(--twoyak-blue);
   margin-left: 1.68rem;
   & p {
+    color: var(--twoyak-black);
     display: inline;
     margin-left: -5px;
     font-size: 0.8rem;

@@ -77,9 +77,9 @@ function HealthRecord() {
         getInfos("current_drugs"),
         getInfos("analysis/get")
       ]);
-      // console.log(myCurrent);
-      // console.log(myPast);
-      console.log(myDur);
+      console.log(myCurrent);
+      console.log(myPast);
+      // console.log(myDur);
       setCurrentDrugs(myCurrent);
       setPastDrugs(myPast);
       setDurInfo({

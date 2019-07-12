@@ -208,7 +208,9 @@ const SearchResult = React.memo(
             </>
           )}
         </InfoContainer>
-        <AddButton onClick={addCurrentDrug}>복용목록에 추가하기</AddButton>
+        <AddButton onClick={!drug.taking ? addCurrentDrug : null}>
+          {!drug.taking ? "복용목록에 추가하기" : "복용중인 약품입니다"}
+        </AddButton>
       </Container>
     );
   }

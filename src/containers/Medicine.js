@@ -10,7 +10,12 @@ import ItemList from "../components/Medicine/Drugs/ItemList";
 import DetailModal from "../components/Medicine/Drugs/DetailModal";
 import DrugReview from "../components/Medicine/Review/DrugReview";
 
-import { Container } from "../components/UI/SharedStyles";
+import {
+  Container,
+  FlexDiv,
+  RatingText,
+  StyledRating
+} from "../components/UI/SharedStyles";
 
 const SearchContainer = styled.div`
   width: 100%;
@@ -172,7 +177,16 @@ function Medicine({ match, history, location }) {
           {errorMessage && <div>{errorMessage}</div>}
           {drugReview && (
             <>
-              <div>사용후기</div>
+              <FlexDiv>
+                <div>사용후기</div>
+                <StyledRating
+                  emptySymbol="fas fa-circle custom"
+                  fullSymbol="fas fa-circle custom full"
+                  fractions={2}
+                  // initialRating={drug.rating}
+                  readonly
+                />
+              </FlexDiv>
               {drugReview.map(review => (
                 <DrugReview review={review} key={review.id} />
               ))}

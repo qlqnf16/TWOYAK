@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { StyledRating, RatingText } from "../../UI/SharedStyles";
+import { StyledRating, RatingText, BasicText } from "../../UI/SharedStyles";
 import { ReactComponent as Close } from "../../../assets/images/close.svg";
 import "@fortawesome/fontawesome-free/css/all.css";
 
@@ -35,7 +35,7 @@ const Rating = styled(StyledRating)`
 
 const CustomRatingText = styled(RatingText)`
   font-size: 0.5rem;
-  margin-left: 0.4rem;
+  margin: 0 0.4rem;
   font-weight: normal;
 `;
 
@@ -49,24 +49,9 @@ const EditIcon = styled.i`
   color: var(--twoyak-black);
 `;
 
-const DrugReview = ({ review, deleteReview, updateButton }) => {
+const DrugReview = ({ my, review, deleteReview, updateButton }) => {
   return (
     <Container>
-      {/* <Flex>
-        {review.user_email && (
-          <>
-            <div>{review.user_email}</div>
-            <SpaceSpan>|</SpaceSpan>
-          </>
-        )}
-        <div>{review.age}</div>
-        {review.sex && (
-          <>
-            <SpaceSpan>|</SpaceSpan>{" "}
-            <div>{review.sex === true ? "남" : "여"}</div>
-          </>
-        )}
-      </Flex> */}
       <Flex>
         <FlexStart>
           <Rating
@@ -76,14 +61,21 @@ const DrugReview = ({ review, deleteReview, updateButton }) => {
             readonly
           />
           <CustomRatingText>{review.efficacy.toFixed(1)}</CustomRatingText>
+          {!my && (
+            <BasicText size="0.7rem" bold="normal">
+              {review.age} {review.sex === true ? "남" : "여"}
+            </BasicText>
+          )}
         </FlexStart>
-        <FlexStart>
-          <EditIcon
-            className="fas fa-pencil-alt"
-            onClick={() => updateButton(review)}
-          />
-          <Close onClick={() => deleteReview(review.id)} />
-        </FlexStart>
+        {my && (
+          <FlexStart>
+            <EditIcon
+              className="fas fa-pencil-alt"
+              onClick={() => updateButton(review)}
+            />
+            <Close onClick={() => deleteReview(review.id)} />
+          </FlexStart>
+        )}
       </Flex>
       <Bold>
         이상반응:{" "}
