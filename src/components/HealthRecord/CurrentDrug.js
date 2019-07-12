@@ -21,6 +21,10 @@ const Flex = styled(FlexDiv)`
   justify-content: space-between;
 `;
 
+const FlexStart = styled(FlexDiv)`
+  flex-shrink: 0;
+`;
+
 const TitleContainer = styled(FlexDiv)`
   align-items: flex-start;
 `;
@@ -159,39 +163,47 @@ const CurrentDrug = ({
     setUpdateTarget(review);
   };
 
-  // useEffect(() => {
-  //   const loadMessage = () => {
-  //     if (drug.dur_info) {
-  //       Object.keys(drug.dur_info).forEach(info => {
-  //         switch (info) {
-  //           case "age":
-  //             setMessage(message.concat(`안 돼요!`));
-  //             break;
-  //           case "pregnancy":
-  //             setMessage(message.concat(`임산부 안 돼요!`));
-  //             break;
-  //           case "stop_usage":
-  //             setMessage(message.concat(`사용 중지된 약품입니다!`));
-  //             break;
-  //           case "dosage":
-  //             setMessage(message.concat(`하루 ~ 이상 안 돼요!`));
-  //             break;
-  //           case "period":
-  //             setMessage(message.concat(`이상 복용하시면 안 돼요!`));
-  //             break;
-  //           case "elder":
-  //             setMessage(
-  //               message.concat(`65세 이상 고령자는 복용 시 주의하세요!`)
-  //             );
-  //             break;
-  //           default:
-  //             break;
-  //         }
-  //       });
-  //     }
-  //   };
-  //   loadMessage();
-  // }, [drug.dur_info, message]);
+  useEffect(() => {
+    const loadMessage = () => {
+      if (drug.dur_info) {
+        const messageArray = [];
+        Object.keys(drug.dur_info).forEach(info => {
+          switch (info) {
+            case "age":
+              messageArray.push(
+                `${drug.dur_info[info][0].description
+                  .split(" ")
+                  .join("")} 안 돼요!`
+              );
+              break;
+            case "pregnancy":
+              messageArray.push("임산부 안돼요!");
+              break;
+            case "stop_usage":
+              messageArray.push("사용 중지된 약품입니다!");
+              break;
+            case "dosage":
+              messageArray.push(
+                `하루 ${
+                  drug.dur_info[info][0].description.split(" ")[4]
+                } 이상 안돼요!`
+              );
+              break;
+            case "period":
+              messageArray.push("~일 이상 복용하시면 안돼요!");
+              break;
+            case "elder":
+              messageArray.push("65세 이상 고령자는 복용 시 주의하세요!!");
+              break;
+            default:
+              break;
+          }
+        });
+        setMessage(messageArray);
+      }
+    };
+    loadMessage();
+  }, [drug.dur_info]);
 
   return (
     <Card>
@@ -202,14 +214,14 @@ const CurrentDrug = ({
             alt="med-icon"
             style={{ marginRight: "6px", marginTop: "5px" }}
           />
-          <div>
+          <div style={{ width: typeof drug.drug_rating === "number" && "87%" }}>
             <Title to={`/medicine/${drug.current_drug_id}`}>
-              {drug.drug_name}
+              {drug.drug_name.split("(")[0]}
             </Title>
             <Text>복용 시작일: {drug.from}</Text>
           </div>
         </TitleContainer>
-        <FlexDiv>
+        <FlexStart>
           {typeof drug.drug_rating === "number" ? (
             <>
               <Rating
@@ -225,7 +237,7 @@ const CurrentDrug = ({
           ) : (
             ""
           )}
-        </FlexDiv>
+        </FlexStart>
       </Flex>
       {(drug.dur_info || drug.memo || review) && <Line />}
       {show && (

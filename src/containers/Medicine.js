@@ -170,10 +170,14 @@ function Medicine({ match, history, location }) {
           )}
           {drugList && <ItemList drug_list={drugList} />}
           {errorMessage && <div>{errorMessage}</div>}
-          {drugReview &&
-            drugReview.map(review => (
-              <DrugReview review={review} key={review.id} />
-            ))}
+          {drugReview && (
+            <>
+              <div>사용후기</div>
+              {drugReview.map(review => (
+                <DrugReview review={review} key={review.id} />
+              ))}
+            </>
+          )}
         </Container>
         {modal && <DetailModal item_seq={drug.item_seq} modalOff={modalOff} />}
       </>
