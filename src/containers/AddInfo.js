@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState, useReducer } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { AuthContext } from '../contexts/AuthStore';
 import axios from '../apis';
 import styled from 'styled-components';
@@ -9,12 +9,7 @@ import { BasicButton } from '../components/UI/SharedStyles';
 import { BasicInput } from '../components/UI/SharedStyles';
 import Modal from '../components/UI/Modal';
 import medIcon from "../assets/images/(white)med-icon.svg";
-
-const AddInfoArea = styled(Container)`
-  padding-top: 24px;
-  padding-left: 1.4rem;
-  padding-right: 1.4rem;
-`
+import DatePicker from "../components/UI/DatePicker";
 
 const Divider = styled(Line)`
   width: 100%;
@@ -127,14 +122,23 @@ const ModalMessage = styled.div`
 function AddInfo(props) {
   const [diseaseArray, setDiseaseArray] = useState([]);
   const [userName, setUserName] = useState('재키');
-  const [birthDate, setBirthDate] = useState(null);
+  const [birthDate, setBirthDate] = useState('');
   const [drink, setDrink] = useState(null);
   const [smoke, setSmoke] = useState(null);
   const [caffeine, setCaffeine] = useState(null);
   const [sex, setSex] = useState(null);
+  const [birthDateModal, setBirthDateModal] = useState(false);
   const [skipAddInfo, setSkipAddInfo] = useState(false);
 
   const { state, dispatch } = useContext(AuthContext);
+
+  const AddInfoArea = styled(Container)`
+    padding-top: 24px;
+    padding-left: 1.4rem;
+    padding-right: 1.4rem;
+    position: ${birthDateModal ? 'fixed' : 'static'};
+    overflow: ${birthDateModal ? 'hidden' : 'visible'};
+  `
 
   useEffect(() => {
     axios({
@@ -149,14 +153,14 @@ function AddInfo(props) {
   const addInfoHandler = async () => {
     await axios({
       method: 'PATCH',
-      url: `/user/user_infos/${state.subUsers}`,
+      url: `/user/sub_users/${state.subUserId}`,
       headers: {
         'Authorization': `Bearer ${state.token}`
       },
       params: {
         user_name: userName,
         profile_image: null,
-        birth_date: birthDate,
+        birth_date: birthDate === '' ? null : birthDate,
         drink: drink,
         smoke: smoke,
         caffeine: caffeine,
@@ -164,6 +168,7 @@ function AddInfo(props) {
       }
     })
     .then(response => {
+      console.log(response.data)
       const payload = response.data.auth_token;
       dispatch({
         type: "SIGNUP_SUCCESS",
@@ -172,22 +177,6 @@ function AddInfo(props) {
       localStorage.setItem('token', payload)
     }
     )
-    // axios({
-    //   method: 'GET',
-    //   url: `/user/mypage`,
-    //   headers: {
-    //     'Authorization': `Bearer ${state.token}`
-    //   }
-    // })
-    // .then(response => console.log(response.data))
-    // axios({
-    //   method: 'GET',
-    //   url: `/user/${state.subUsers}/current_drugs`,
-    //   headers: {
-    //     'Authorization': `Bearer ${state.token}`
-    //   }
-    // })
-    // .then(response => console.log(response.data))
   };
 
   const toggleHandler = (key, value) => {
@@ -204,6 +193,14 @@ function AddInfo(props) {
 
   const toggleSkipAddInfoHandler = () => {
     setSkipAddInfo(!skipAddInfo)
+  }
+
+  const toggleBirthDateModalHandler = () => {
+    setBirthDateModal(!birthDateModal)
+  }
+
+  const changeBirthDateHandler = (date) => {
+    setBirthDate(date);
   }
 
   const modalContent = (
@@ -305,6 +302,16 @@ function AddInfo(props) {
         </SelectArea>
       </SelectHealthInfo>
       <DiseaseInfoCategory>
+        생년월일
+      </DiseaseInfoCategory>
+      <DiseaseInput
+        type='text'
+        placeholder='ex) 1985-06-15'
+        value={birthDate}
+        onClick={() => toggleBirthDateModalHandler()}
+        readOnly
+      />
+      <DiseaseInfoCategory>
         앓고 계신 질환이 있으시면 입력해주세요.
       </DiseaseInfoCategory>
       <DiseaseInput
@@ -329,6 +336,20 @@ function AddInfo(props) {
             content={modalContent}
           /> 
         : null}
+      {birthDateModal
+        ? <Modal
+            modalOff={() => toggleBirthDateModalHandler()}
+            img={medIcon}
+            title='생년월일 입력'
+            content={
+              <DatePicker
+                getDate={(date) => changeBirthDateHandler(date)}
+                modalOff={() => toggleBirthDateModalHandler()}
+              />
+            }
+          />
+        : null
+      }
     </AddInfoArea>
   )
 };
