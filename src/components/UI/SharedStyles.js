@@ -31,7 +31,9 @@ export const Container = styled.div`
 
 export const FlexDiv = styled.div`
   display: flex;
-  align-items: center;
+  align-items: ${props => (props.align ? props.align : "center")};
+  justify-content: ${props => (props.justify ? props.justify : "flex-start")};
+  flex-shrink: ${props => (props.shrink ? props.shrink : 1)};
 `;
 
 export const FlexForm = styled.form`
@@ -81,6 +83,7 @@ export const WhiteButton = styled(BasicButton)`
   display: block;
   font-weight: 1rem;
   margin: 1rem auto 1.25rem auto;
+  opacity: ${props => props.opacity && props.opacity};
 `;
 
 export const Line = styled.div`
@@ -111,13 +114,12 @@ export const StyledRating = styled(Rating)`
   }
 `;
 
-export const BasicText = styled.p`
+export const BasicText = styled.div`
   display: inline;
-  font-size: 0.875rem;
+  font-size: ${props => (props.size ? props.size : "0.875rem")};
   color: #474747;
-  opacity: 0.6;
-  font-weight: bold;
-  margin-left: 1rem;
+  opacity: ${props => props.opacity};
+  font-weight: ${props => (props.bold ? props.bold : "bold")};
 `;
 
 export const RatingText = styled(BasicText)`
@@ -128,8 +130,8 @@ export const BulletText = styled.li`
   color: var(--twoyak-blue);
   margin-left: 1.68rem;
   & p {
-    display: inline;
     color: var(--twoyak-black);
+    display: inline;
     margin-left: -5px;
     font-size: 0.8rem;
     font-weight: 800;

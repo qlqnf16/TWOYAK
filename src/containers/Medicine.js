@@ -9,9 +9,13 @@ import SearchResult from "../components/Medicine/Drugs/SearchResult";
 import ItemList from "../components/Medicine/Drugs/ItemList";
 import DetailModal from "../components/Medicine/Drugs/DetailModal";
 import DrugReview from "../components/Medicine/Review/DrugReview";
-import NewReview from "../components/Medicine/Review/NewReview";
 
-import { Container } from "../components/UI/SharedStyles";
+import {
+  Container,
+  FlexDiv,
+  RatingText,
+  StyledRating
+} from "../components/UI/SharedStyles";
 
 const SearchContainer = styled.div`
   width: 100%;
@@ -34,10 +38,9 @@ function Medicine({ match, history, location }) {
   const [drugimg, setDrugimg] = useState("");
   const [drugList, setDrugList] = useState(null);
   const [drugReview, setDrugReview] = useState(null);
-  const [updateTarget, setUpdateTarget] = useState(); // drug review update
 
   const [modal, setModal] = useState(false); // 의약품 상세정보 모달
-  const [showNewReview, setShowNewReview] = useState(true); // 리뷰 등록창 on off
+  const [showMore, setShowMore] = useState(false); // 더보기 버튼
   const [errorMessage, setErrorMessage] = useState();
 
   const { state } = useContext(DrugContext);
@@ -63,8 +66,6 @@ function Medicine({ match, history, location }) {
     setDrug(null);
     setDrugList(null);
     setDrugimg(null);
-    setUpdateTarget(null);
-    setShowNewReview(true);
 
     if (paramId) {
       searchById(paramId);
@@ -146,6 +147,11 @@ function Medicine({ match, history, location }) {
     history.push(`/medicine/${id}`);
   };
 
+  // 더보기 토글
+  const toggleShowMore = () => {
+    setShowMore(!showMore);
+  };
+
   if (match.params.id) {
     return (
       <>
@@ -158,15 +164,34 @@ function Medicine({ match, history, location }) {
           )}
           {drug && (
             <>
-              <SearchResult drug={drug} drugImg={drugimg} modalOn={modalOn} />
+              <SearchResult
+                drug={drug}
+                drugImg={drugimg}
+                modalOn={modalOn}
+                showMore={showMore}
+                toggleShowMore={toggleShowMore}
+              />
             </>
           )}
           {drugList && <ItemList drug_list={drugList} />}
           {errorMessage && <div>{errorMessage}</div>}
-          {drugReview &&
-            drugReview.map(review => (
-              <DrugReview review={review} key={review.id} />
-            ))}
+          {drugReview && (
+            <>
+              <FlexDiv>
+                <div>사용후기</div>
+                <StyledRating
+                  emptySymbol="fas fa-circle custom"
+                  fullSymbol="fas fa-circle custom full"
+                  fractions={2}
+                  // initialRating={drug.rating}
+                  readonly
+                />
+              </FlexDiv>
+              {drugReview.map(review => (
+                <DrugReview review={review} key={review.id} />
+              ))}
+            </>
+          )}
         </Container>
         {modal && <DetailModal item_seq={drug.item_seq} modalOff={modalOff} />}
       </>

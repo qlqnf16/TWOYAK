@@ -4,6 +4,7 @@ import styled from "styled-components";
 import axios from "../apis";
 import CurrentDrugList from "../components/HealthRecord/CurrentDrugList";
 import PastDrugList from "../components/HealthRecord/PastDrugList";
+import Warning from "../components/UI/Warning";
 
 const Background = styled.div`
   width: 100%;
@@ -38,14 +39,6 @@ const Nav = styled.div.attrs(props => props.active)`
   cursor: ${props => (props.active ? "none" : "pointer")};
 `;
 
-const Notice = styled.div`
-  opacity: 0.6;
-  font-size: 0.5rem;
-  color: #474747;
-  margin: 1rem auto;
-  text-align: center;
-`;
-
 function HealthRecord() {
   const [currentDrugs, setCurrentDrugs] = useState(null);
   const [pastDrugs, setPastDrugs] = useState(null);
@@ -66,10 +59,8 @@ function HealthRecord() {
     setCurrentDrugs(data);
   };
 
-  console.log(authState)
-
   const getInfos = url =>
-    axios.get(`user/${authState.userId}/${url}`, {
+    axios.get(`user/${authState.subUsers[0].id}/${url}`, {
       headers: {
         Authorization: `bearer ${authState.token}`
       }
@@ -88,10 +79,14 @@ function HealthRecord() {
       ]);
       console.log(myCurrent);
       console.log(myPast);
-      console.log(myDur);
+      // console.log(myDur);
       setCurrentDrugs(myCurrent);
       setPastDrugs(myPast);
-      setDurInfo(myDur);
+      setDurInfo({
+        duplicate: myDur.duplicate,
+        interactions: myDur.interactions,
+        same_ingr: myDur.same_ingr
+      });
     } catch (error) {
       console.log(error);
     }
@@ -104,7 +99,7 @@ function HealthRecord() {
   const drugToPast = async id => {
     try {
       await axios.delete(
-        `user/${authState.userId}/current_drugs/${id}/to_past`,
+        `user/${authState.subUsers[0].id}/current_drugs/${id}/to_past`,
         {
           headers: {
             Authorization: `bearer ${authState.token}`
@@ -113,6 +108,22 @@ function HealthRecord() {
       );
       getUserInfo();
       setShowCurrent(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteDrug = async id => {
+    try {
+      await axios.delete(
+        `user/${authState.subUsers[0].id}/current_drugs/${id}`,
+        {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        }
+      );
+      loadingHandler();
     } catch (error) {
       console.log(error);
     }
@@ -130,18 +141,15 @@ function HealthRecord() {
             과거 복용
           </Nav>
         </NavContainer>
-        <Notice>
-          투약은 식약처 공공데이터를 이용하여 의약품 안정정보 등을 제공하고
-          있으며,
-          <br /> 이러한 정보는 단순 참조용으로 서비스 제공자는 어떠한 법적
-          책임도 지지 않습니다.
-        </Notice>
+        <Warning />
         {showCurrent
           ? currentDrugs && (
               <CurrentDrugList
                 currentDrugs={currentDrugs}
                 loadingHandler={loadingHandler}
                 drugToPast={drugToPast}
+                deleteDrug={deleteDrug}
+                durInfo={durInfo}
               />
             )
           : pastDrugs && <PastDrugList drugs={pastDrugs} />}

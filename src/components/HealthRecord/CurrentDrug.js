@@ -5,6 +5,7 @@ import NewReview from "../Medicine/Review/NewReview";
 import { AuthContext } from "../../contexts/AuthStore";
 import DrugReview from "../Medicine/Review/DrugReview";
 import { Link } from "react-router-dom";
+import { ReactComponent as Close } from "../../assets/images/close.svg";
 
 import {
   Card,
@@ -17,12 +18,13 @@ import {
 } from "../UI/SharedStyles";
 import medIcon from "../../assets/images/med-icon.svg";
 
-const Flex = styled(FlexDiv)`
-  justify-content: space-between;
-`;
-
-const TitleContainer = styled(FlexDiv)`
-  align-items: flex-start;
+const CloseIcon = styled(Close)`
+  width: 1rem;
+  height: 1rem;
+  align-self: flex-end;
+  margin-top: -0.8rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
 `;
 
 const Title = styled(Link)`
@@ -56,10 +58,6 @@ const CustomRatingText = styled(RatingText)`
   font-weight: normal;
 `;
 
-const OpacityButton = styled(BasicButton)`
-  opacity: 0.6;
-`;
-
 const ButtonContainer = styled(FlexDiv)`
   justify-content: space-around;
   margin: 1rem 1.7rem 0 1.7rem;
@@ -68,14 +66,51 @@ const ButtonContainer = styled(FlexDiv)`
 const CurrentDrug = ({
   drug,
   review,
-  reviewSubmit,
   loadingHandler,
-  drugToPast
+  drugToPast,
+  deleteDrug
 }) => {
   const [show, setShow] = useState(false);
   const [updateTarget, setUpdateTarget] = useState();
   const [message, setMessage] = useState([]);
   const { state: authState } = useContext(AuthContext);
+
+  useEffect(() => {
+    const loadMessage = () => {
+      if (drug.dur_info) {
+        const messageArray = [];
+        Object.keys(drug.dur_info).forEach(info => {
+          let infoVariable =
+            drug.dur_info[info] &&
+            drug.dur_info[info][0].description.split(" ");
+          switch (info) {
+            case "age":
+              messageArray.push(`${infoVariable.join("")} 안 돼요!`);
+              break;
+            case "pregnancy":
+              messageArray.push("임산부 안돼요!");
+              break;
+            case "stop_usage":
+              messageArray.push("사용 중지된 약품입니다!");
+              break;
+            case "dosage":
+              messageArray.push(`하루 ${infoVariable[4]} 이상 안돼요!`);
+              break;
+            case "period":
+              messageArray.push(`${infoVariable[0]}일 이상 복용하시면 안돼요!`);
+              break;
+            case "elder":
+              messageArray.push("65세 이상 고령자는 복용 시 주의하세요!!");
+              break;
+            default:
+              break;
+          }
+        });
+        setMessage(messageArray);
+      }
+    };
+    loadMessage();
+  }, [drug.dur_info]);
 
   const newReviewToggle = () => {
     setShow(!show);
@@ -159,54 +194,28 @@ const CurrentDrug = ({
     setUpdateTarget(review);
   };
 
-  useEffect(() => {
-    if (drug.dur_info) {
-      Object.keys(drug.dur_info).forEach(info => {
-        switch (info) {
-          case "age":
-            setMessage(message.concat(`안 돼요!`));
-            break;
-          case "pregnancy":
-            setMessage(message.concat(`임산부 안 돼요!`));
-            break;
-          case "stop_usage":
-            setMessage(message.concat(`사용 중지된 약품입니다!`));
-            break;
-          case "dosage":
-            setMessage(message.concat(`하루 ~ 이상 안 돼요!`));
-            break;
-          case "period":
-            setMessage(message.concat(`이상 복용하시면 안 돼요!`));
-            break;
-          case "elder":
-            setMessage(
-              message.concat(`65세 이상 고령자는 복용 시 주의하세요!`)
-            );
-            break;
-          default:
-            break;
-        }
-      });
-    }
-  }, [drug]);
-
   return (
     <Card>
-      <Flex>
-        <TitleContainer>
+      <CloseIcon
+        onClick={() => {
+          deleteDrug(drug.id);
+        }}
+      />
+      <FlexDiv justify="space-between">
+        <FlexDiv align="flex-start">
           <img
             src={medIcon}
             alt="med-icon"
             style={{ marginRight: "6px", marginTop: "5px" }}
           />
-          <div>
+          <div style={{ width: typeof drug.drug_rating === "number" && "87%" }}>
             <Title to={`/medicine/${drug.current_drug_id}`}>
-              {drug.drug_name}
+              {drug.drug_name.split("(")[0]}
             </Title>
             <Text>복용 시작일: {drug.from}</Text>
           </div>
-        </TitleContainer>
-        <FlexDiv>
+        </FlexDiv>
+        <FlexDiv shrink="0">
           {typeof drug.drug_rating === "number" ? (
             <>
               <Rating
@@ -223,7 +232,7 @@ const CurrentDrug = ({
             ""
           )}
         </FlexDiv>
-      </Flex>
+      </FlexDiv>
       {(drug.dur_info || drug.memo || review) && <Line />}
       {show && (
         <NewReview
@@ -260,28 +269,31 @@ const CurrentDrug = ({
             <p>내 리뷰</p>
           </BulletText>
           <DrugReview
+            my={true}
             review={review}
             deleteReview={deleteReview}
             updateButton={updateButton}
           />
-          <OpacityButton
+          <BasicButton
+            opacity="0.6"
             onClick={() => {
               drugToPast(drug.id);
             }}
           >
             복용 종료
-          </OpacityButton>
+          </BasicButton>
         </>
       ) : (
         <ButtonContainer>
           <BasicButton onClick={newReviewToggle}>리뷰 등록</BasicButton>
-          <OpacityButton
+          <BasicButton
+            opacity="0.6"
             onClick={() => {
               drugToPast(drug.id);
             }}
           >
             복용 종료
-          </OpacityButton>
+          </BasicButton>
         </ButtonContainer>
       )}
     </Card>

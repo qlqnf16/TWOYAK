@@ -81,13 +81,13 @@ const AutoSuggestion = ({
     const parts = parse(suggestion[searchKey], matches);
     return (
       <div style={{ display: "flex" }}>
-        <div
+        {/* <div
           onClick={() => {
             console.log(suggestion.id);
           }}
         >
           {suggestion.id}
-        </div>
+        </div> */}
         <div>
           {parts.map((part, index) =>
             part.highlight ? (
