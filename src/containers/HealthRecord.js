@@ -23,7 +23,7 @@ const NavContainer = styled.div`
   display: flex;
   align-items: center;
   box-shadow: 1px 2px 7px 1px rgba(212, 212, 212, 0.5);
-`;
+`
 
 const Nav = styled.div.attrs(props => props.active)`
   width: 50%;

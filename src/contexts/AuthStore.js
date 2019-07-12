@@ -8,6 +8,7 @@ const AuthStore = props => {
     token: null,
     userName: null,
     subUsers: null,
+    subUserId: null,
     userId: null,
     error: null,
     loading: false,

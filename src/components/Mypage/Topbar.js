@@ -28,10 +28,19 @@ const ReviseUserInfoButton = styled.div`
   color: #474747;
 `
 
-function Topbar() {
+
+function Topbar(props) {
+  
+  const goback = () => {
+    props.history.goBack();
+  };
+
   return (
     <Bar>
-      <ArrowIcon className="fas fa-arrow-left" />
+      <ArrowIcon 
+        className="fas fa-arrow-left" 
+        onClick={() => goback()}
+      />
       <ReviseUserInfoButton>
         내 정보 수정하기
       </ReviseUserInfoButton>

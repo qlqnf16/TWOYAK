@@ -71,17 +71,16 @@ function Login(props) {
       props.location.search !== "" &&
       props.location.search.includes("?token=")
     ) {
-      storeUserDataForAutoLogin("token", props.location.search.split("=")[1]);
+      dispatch({
+        type: "SIGNIN_SUCCESS",
+        token: props.location.search.split("=")[1],
+      })
       dispatch({
         type: "SET_AUTH_REDIRECT_PATH",
-        path: "/medicine"
+        path: "/"
       });
     }
   }, [props.history, props.location.search, dispatch]);
-
-  const storeUserDataForAutoLogin = (key, value) => {
-    localStorage.setItem(key, value);
-  };
   
   const signinBySocialAccount = ( supplier ) => {
     window.open(`http://52.79.228.195/api/users/auth/${supplier}`, '_self')
@@ -110,10 +109,9 @@ function Login(props) {
           type: "SIGNIN_SUCCESS", 
           token: payload,
         })
-        storeUserDataForAutoLogin('token', payload)
         dispatch({
           type: "SET_AUTH_REDIRECT_PATH",
-          // path: "/medicine",
+          path: "/medicine",
         })
       })
       .catch(error =>
