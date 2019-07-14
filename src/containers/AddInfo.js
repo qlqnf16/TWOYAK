@@ -1,4 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthStore';
 import axios from '../apis';
 import styled from 'styled-components';
@@ -80,10 +81,12 @@ const InfoDescription = styled.div`
 const SubmitButton = styled(BasicButton)`
   width: 6.8125rem;
   height: 3rem;
+  text-align: center;
 `
 
 const SkipButton = styled(SubmitButton)`
   opacity: 0.3;
+  text-align: center;
 `
 
 const DiseaseInfoCategory = styled(InfoCategory)`
@@ -121,7 +124,7 @@ const ModalMessage = styled.div`
 
 function AddInfo(props) {
   const [diseaseArray, setDiseaseArray] = useState([]);
-  const [userName, setUserName] = useState('재키');
+  const [userName, setUserName] = useState(null);
   const [birthDate, setBirthDate] = useState('');
   const [drink, setDrink] = useState(null);
   const [smoke, setSmoke] = useState(null);
@@ -131,6 +134,7 @@ function AddInfo(props) {
   const [skipAddInfo, setSkipAddInfo] = useState(false);
 
   const { state, dispatch } = useContext(AuthContext);
+
 
   const AddInfoArea = styled(Container)`
     padding-top: 24px;
@@ -150,8 +154,8 @@ function AddInfo(props) {
     )
   }, [])
   
-  const addInfoHandler = async () => {
-    await axios({
+  const addInfoHandler = () => {
+    axios({
       method: 'PATCH',
       url: `/user/sub_users/${state.subUserId}`,
       headers: {
@@ -168,15 +172,18 @@ function AddInfo(props) {
       }
     })
     .then(response => {
-      console.log(response.data)
       const payload = response.data.auth_token;
       dispatch({
         type: "SIGNUP_SUCCESS",
         token: payload,
       })
+      dispatch({
+        type: "SET_AUTH_REDIRECT_PATH",
+        path: '/'
+      })
       localStorage.setItem('token', payload)
     }
-    )
+    );
   };
 
   const toggleHandler = (key, value) => {
@@ -231,7 +238,7 @@ function AddInfo(props) {
         </AddInfoHeader>
         <Divider />
         <AddInfoMessage>
-          해당 정보는 투약 맞춤화 추천 서비스를 이용하는데에만 사용됩니다. 해당 되시는 부분에 체크해주세요.
+          {state.userName} 님을 위한 투약 맞춤화 추천 서비스 받아보시겠어요? 아래 정보를 제출해주시면 맞춤화 건강 서비스를 제공받으실 수 있습니다.
         </AddInfoMessage>
       </div>
       <SelectSex>
@@ -350,6 +357,7 @@ function AddInfo(props) {
           />
         : null
       }
+      { state.authRedirectPath ? <Redirect to={state.authRedirectPath} /> : null }
     </AddInfoArea>
   )
 };

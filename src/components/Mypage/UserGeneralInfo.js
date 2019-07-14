@@ -99,8 +99,8 @@ function UserGeneralInfo({
               type: 'SIGNOUT'
             })
             dispatch({
-              type: 'SET_AUTH_REDIRECT_PATH',
-              path: '/login'
+              type: "SET_AUTH_REDIRECT_PATH",
+              path: "/login",
             })
           }}
         >
@@ -108,7 +108,7 @@ function UserGeneralInfo({
         </SignoutButton>
       </SayHello>
       {generalInfo}
-      {authState.authRedirectPath ? <Redirect to={authState.authRedirectPath} /> : null}
+      { authState.authRedirectPath ? <Redirect to={authState.authRedirectPath} /> : null}
     </UserGeneralInfoContainer>
   )
 };
