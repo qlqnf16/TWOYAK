@@ -4,6 +4,7 @@ import { AuthContext } from '../contexts/AuthStore';
 import axios from '../apis';
 import styled from 'styled-components';
 
+import AutoSuggestion from "../components/Util/AutoSuggestion";
 import { Container } from '../components/UI/SharedStyles';
 import { Line } from '../components/UI/SharedStyles';
 import { BasicButton } from '../components/UI/SharedStyles';
@@ -124,6 +125,8 @@ const ModalMessage = styled.div`
 
 function AddInfo(props) {
   const [diseaseArray, setDiseaseArray] = useState([]);
+  const [diseaseSelectedNameArray, setDiseasesNameSelectedArray] = useState([]);
+  const [diseasesSeletedIdArray, setDiseasesIdSelecetedArray] = useState([]);
   const [userName, setUserName] = useState(null);
   const [birthDate, setBirthDate] = useState('');
   const [drink, setDrink] = useState(null);
@@ -177,11 +180,8 @@ function AddInfo(props) {
         type: "SIGNUP_SUCCESS",
         token: payload,
       })
-      dispatch({
-        type: "SET_AUTH_REDIRECT_PATH",
-        path: '/'
-      })
       localStorage.setItem('token', payload)
+      props.history.push('/')
     }
     );
   };
@@ -208,6 +208,15 @@ function AddInfo(props) {
 
   const changeBirthDateHandler = (date) => {
     setBirthDate(date);
+  }
+
+  const appendDiseasesIdHandler = (id, name) => {
+    let id_array = diseasesSeletedIdArray;
+    let name_array = diseaseSelectedNameArray;
+    id_array.push(id);
+    name_array.push(name);
+    setDiseasesIdSelecetedArray(id_array);
+    setDiseasesNameSelectedArray(name_array);
   }
 
   const modalContent = (
@@ -319,11 +328,14 @@ function AddInfo(props) {
         readOnly
       />
       <DiseaseInfoCategory>
-        앓고 계신 질환이 있으시면 입력해주세요.
+        가족력이 있으시면 입력해주세요.
       </DiseaseInfoCategory>
-      <DiseaseInput
-        type='text'
-        placeholder='ex) 두통, 복통'
+      <AutoSuggestion
+        search="disease"
+        diseaseSearchTerms={diseaseArray}
+        placeholderProp={"ex) 두통, 복통"}
+        searchKey="name"
+        appendDiseasesId={(id, name) => appendDiseasesIdHandler(id, name)}
       />
       <ButtonArea>
         <SubmitButton 
@@ -357,7 +369,6 @@ function AddInfo(props) {
           />
         : null
       }
-      { state.authRedirectPath ? <Redirect to={state.authRedirectPath} /> : null }
     </AddInfoArea>
   )
 };

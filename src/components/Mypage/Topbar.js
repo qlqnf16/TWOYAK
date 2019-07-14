@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { Redirect } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthStore";
 import styled from 'styled-components';
 import { breakpoints } from '../UI/SharedStyles';
 
@@ -21,7 +23,13 @@ const ArrowIcon = styled.i`
   margin-right: 10px;
 `
 
-const ReviseUserInfoButton = styled.div`
+const TopButtonLeftArea = styled.div`
+  display: flex;
+  width: 10rem;
+  justify-content: space-between;
+`
+
+const ActionButton = styled.div`
   width: auto;
   opacity: 0.6;
   font-size: 0.6875rem;
@@ -30,6 +38,7 @@ const ReviseUserInfoButton = styled.div`
 
 
 function Topbar(props) {
+  const { state: authState, dispatch } = useContext(AuthContext);
   
   const goback = () => {
     props.history.goBack();
@@ -39,11 +48,28 @@ function Topbar(props) {
     <Bar>
       <ArrowIcon 
         className="fas fa-arrow-left" 
-        onClick={() => goback()}
+        onClick={() => 
+          goback()
+        }
       />
-      <ReviseUserInfoButton>
-        내 정보 수정하기
-      </ReviseUserInfoButton>
+      <TopButtonLeftArea>
+        <ActionButton
+          onClick={() => 
+            dispatch({
+              type: "SIGNOUT"
+            })
+          }
+        >
+          로그아웃하기
+        </ActionButton>
+        <ActionButton>
+          내 정보 수정하기
+        </ActionButton>
+      </TopButtonLeftArea>
+      { !authState.token ? 
+        <Redirect to="/login" /> :
+        null
+      }
     </Bar>
   )
 };

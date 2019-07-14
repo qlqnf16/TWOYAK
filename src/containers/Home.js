@@ -10,7 +10,7 @@ const Box = styled.div`
 `;
 
 function Home() {
-  const { state, dispatch } = useContext(AuthContext);
+  const { dispatch } = useContext(AuthContext);
 
   useEffect(() => {
     dispatch({

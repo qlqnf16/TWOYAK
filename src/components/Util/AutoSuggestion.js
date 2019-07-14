@@ -28,7 +28,9 @@ const AutoSuggestion = ({
   searchKey,
   placeholderProp,
   inputChange,
-  submit
+  submit,
+  diseaseSearchTerms,
+  appendDiseasesId,
 }) => {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -44,9 +46,13 @@ const AutoSuggestion = ({
     case "adverse_effect":
       suggestList = adverse_effects;
       break;
+    case "disease":
+      suggestList = diseaseSearchTerms;
+      break;
     default:
       break;
   }
+
   const getSuggestions = value => {
     const inputValue = deburr(value.trim()).toLowerCase();
     const inputLength = inputValue.length;
@@ -74,6 +80,7 @@ const AutoSuggestion = ({
   const onSuggestionSelected = (event, { suggestion }) => {
     if (search === "adverse_effect") inputChange(suggestion);
     if (search === "drug") submit(suggestion.id);
+    if (search === "disease") appendDiseasesId(suggestion.id, suggestion.name)
   };
 
   const renderSuggestion = (suggestion, { query, isHighlited }) => {
