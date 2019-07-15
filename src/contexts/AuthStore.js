@@ -9,6 +9,7 @@ const AuthStore = props => {
     userName: null,
     subUsers: null,
     subUserId: null,
+    userId: null,
     error: null,
     loading: false,
     authRedirectPath: null,
