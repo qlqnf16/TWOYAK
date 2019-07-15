@@ -289,7 +289,14 @@ function Medicine({ match, history, location }) {
               currentDrugs={currentDrugs}
               addCurrentDrug={addCurrentDrug}
             />{" "}
-            {drugList && <ItemList drug_list={drugList} term={term} />}
+            {drugList && (
+              <ItemList
+                drug_list={drugList}
+                term={term}
+                addCurrentDrug={addCurrentDrug}
+                currentDrugs={currentDrugs}
+              />
+            )}
           </>
         )}
       </SearchContainer>

@@ -1,7 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { BasicText } from "../../UI/SharedStyles";
+import { BasicText, FlexDiv } from "../../UI/SharedStyles";
+import { ReactComponent as Add } from "../../../assets/images/plus-in-search.svg";
+
+const Flex = styled(FlexDiv)`
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--twoyak-opacity-blue);
+  justify-content: space-between;
+  align-items: center;
+`;
 
 const Container = styled.div`
   margin-top: 2rem;
@@ -25,8 +33,6 @@ const BlockText = styled(Link)`
   font-size: 0.94rem;
   font-weight: bold;
   text-decoration: none;
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--twoyak-opacity-blue);
 `;
 
 const SmallText = styled(BasicText)`
@@ -43,18 +49,29 @@ const isEqual = (prevProps, nextProps) => {
   return prevProps.drug_list === nextProps.drug_list;
 };
 
-const ItemList = ({ drug_list, term }) => {
+const ItemList = ({ drug_list, term, addCurrentDrug, currentDrugs }) => {
   console.log(drug_list);
   const items = drug_list.map(item => (
-    <BlockText
-      to={`/medicine/${item.current_drug_id}`}
-      key={item.current_drug_id}
-    >
-      {item.name.split("(")[0]}
-      <SmallText>
-        {item.name.split("(")[1] && `(${item.name.split("(")[1]}`}
-      </SmallText>
-    </BlockText>
+    <Flex key={item.current_drug_id}>
+      <BlockText to={`/medicine/${item.current_drug_id}`}>
+        {item.name.split("(")[0]}
+        <SmallText>
+          {item.name.split("(")[1] && `(${item.name.split("(")[1]}`}
+        </SmallText>
+      </BlockText>
+      {currentDrugs.includes(item.current_drug_id) ? (
+        <BasicText size="0.7rem" opacity="0.7">
+          복용중
+        </BasicText>
+      ) : (
+        <Add
+          onClick={e => {
+            e.stopPropagation();
+            addCurrentDrug(item.current_drug_id);
+          }}
+        />
+      )}
+    </Flex>
   ));
 
   return (
