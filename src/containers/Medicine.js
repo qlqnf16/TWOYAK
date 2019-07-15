@@ -78,18 +78,15 @@ function Medicine({ match, history, location }) {
     }
   }, [match.params.id]);
 
-  // paramId 가 변하면 id로 약물 검색
+  // params 가 변하면 약물 검색
   useEffect(() => {
     // state 초기화
     setDrug(null);
     setDrugList(null);
     setDrugimg(null);
 
-    if (paramId) {
-      searchById(paramId);
-      getDrugImg(paramId);
-    }
-    console.log(`mounted ${currentDrugs}`);
+    searchById(paramId);
+    getDrugImg(paramId);
     if (authState.token) {
       getCurrentDrugs();
     }

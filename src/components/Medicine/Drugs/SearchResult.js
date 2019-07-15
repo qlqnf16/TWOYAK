@@ -1,8 +1,6 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { breakpoints, BasicButton } from "../../UI/SharedStyles";
-import { AuthContext } from "../../../contexts/AuthStore";
-import axios from "../../../apis";
 import Warning from "../../UI/Warning";
 
 const Container = styled.div`
@@ -98,10 +96,14 @@ const SearchResult = React.memo(
     const drugDetail = drug.package_insert
       ? drug.package_insert.DRB_ITEM
       : null;
-    const { state: authState } = useContext(AuthContext);
 
     const pushValidItem = (array, item) => {
-      if (item !== undefined && item !== null && item !== "") {
+      if (
+        item !== undefined &&
+        item !== null &&
+        item !== "" &&
+        !item.includes("nbsp")
+      ) {
         array.push(item);
       }
     };
@@ -155,6 +157,8 @@ const SearchResult = React.memo(
       ? benefitInfo.benefitTitle[0]
       : benefitInfo.benefitParagraph[0];
 
+    const ingrKo = new Set(drug.ingr_kor_name);
+
     return (
       <Container>
         <Warning />
@@ -191,7 +195,7 @@ const SearchResult = React.memo(
               <TextContainer>
                 <Text bold>주요 성분</Text>
                 <Benefit>
-                  {drug.ingr_kor_name.join(", ")}
+                  {Array.from(ingrKo).join(",")}
                   {drug.ingr_eng_name &&
                     ` (${drug.ingr_eng_name.slice(1, -1)})`}
                 </Benefit>
