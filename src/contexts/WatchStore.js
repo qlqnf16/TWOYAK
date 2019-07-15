@@ -2,18 +2,19 @@ import React, { useEffect, useContext } from "react";
 import { AuthContext } from "./AuthStore";
 
 function WatchStore(props) {
-  const { dispatch } = useContext(AuthContext);
+  const { state, dispatch } = useContext(AuthContext);
 
   useEffect(() => {
-    async function AutoLogin() {
+    function AutoLogin() {
       if (localStorage.getItem("token")) {
-        await dispatch({
+        dispatch({
           type: "SIGNIN_SUCCESS",
           token: localStorage.getItem("token")
         });
-        await dispatch({
+        dispatch({
           type: "SET_AUTH_REDIRECT_PATH",
-        });
+          path: "/"
+        })
       }
     }
     AutoLogin();

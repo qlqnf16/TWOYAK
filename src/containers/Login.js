@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthStore";
-import jwt_decode from "jwt-decode";
 import axios from "../apis";
 import styled from "styled-components";
+import jwt_decode from 'jwt-decode';
 
 import { Container } from "../components/UI/SharedStyles";
 import { BasicButton } from "../components/UI/SharedStyles";
@@ -12,7 +12,7 @@ import FacebookIcon from "../assets/images/facebook.svg";
 import NaverIcon from "../assets/images/naver.svg";
 
 const LoginArea = styled(Container)`
-  padding-top: 4.7rem;
+  padding-top: 42px;
   margin: auto;
 `;
 
@@ -67,6 +67,10 @@ function Login(props) {
   const { state, dispatch } = useContext(AuthContext);
 
   useEffect(() => {
+    dispatch({
+      type: "SET_AUTH_REDIRECT_PATH",
+      path: null,
+    })
     if (
       props.location.search !== "" &&
       props.location.search.includes("?token=")
@@ -103,15 +107,11 @@ function Login(props) {
     axios
       .post("api/users/login", signinData)
       .then(response => {
-        console.log(jwt_decode(response.data.auth_token));
         const payload = response.data.auth_token;
+        console.log(jwt_decode(payload))
         dispatch({
           type: "SIGNIN_SUCCESS", 
           token: payload,
-        })
-        dispatch({
-          type: "SET_AUTH_REDIRECT_PATH",
-          path: "/medicine",
         })
       })
       .catch(error =>
@@ -192,8 +192,8 @@ function Login(props) {
             onClick={() => signinBySocialAccount("google_oauth2")}
           />
         </SocialLoginArea>
-        {state.authRedirectPath ? (
-          <Redirect to={state.authRedirectPath} />
+        {state.token ? (
+          <Redirect to="/" />
         ) : null}
       </LoginArea>
     </Container>

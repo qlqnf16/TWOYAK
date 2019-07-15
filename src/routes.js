@@ -1,13 +1,12 @@
 import Home from "./containers/Home";
 import Login from "./containers/Login";
 import Medicine from "./containers/Medicine";
-import AddUserInfo from "./containers/AddUserInfo";
 import LoginError from "./containers/LoginError";
 import HealthRecord from "./containers/HealthRecord";
 import Mypage from "./containers/Mypage";
 import Signup from "./containers/Signup";
-import AddInfo from "./containers/AddInfo";
 import AllReviews from "./containers/AllReviews";
+import AddUserInfo from "./containers/AddUserInfo";
 
 const routes = [
   {
@@ -16,16 +15,10 @@ const routes = [
     component: Home,
     exact: true
   },
-
   {
     path: "/login-error",
     name: "로그인 에러",
     component: LoginError
-  },
-  {
-    path: "/add-user-info",
-    name: "회원 상세정보 추가",
-    component: AddUserInfo
   },
   {
     path: "/health-record",
@@ -56,7 +49,7 @@ const routes = [
   {
     path: "/add-info",
     name: "추가정보입력",
-    component: AddInfo
+    component: AddUserInfo
   },
   {
     path: "/all-reviews",

@@ -37,17 +37,16 @@ function Mypage(props) {
 
   useEffect(() => {
     if (state.token) {
-      getUserInfo()
+      getUserInfo();
     }
-  }, [state])
-
+  }, [state.token])
 
   const getUserInfo = () => {
     axios({
       method: 'GET',
       url: '/user/mypage',
       headers: {
-        'Authorization': `Bearer ${state.token}`
+        Authorization: `Bearer ${state.token}`
       }
     })
     .then(response => {

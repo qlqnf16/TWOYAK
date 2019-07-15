@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useContext} from "react";
 import styled from "styled-components";
+import { AuthContext } from '../contexts/AuthStore';
 
 const Box = styled.div`
   width: 100%;
@@ -9,6 +10,15 @@ const Box = styled.div`
 `;
 
 function Home() {
+  const { dispatch } = useContext(AuthContext);
+
+  useEffect(() => {
+    dispatch({
+      type: "SET_AUTH_REDIRECT_PATH",
+      path: null,
+    })
+  }, [])
+
   return (
     <>
       <Box />

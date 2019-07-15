@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useEffect ,useReducer } from 'react';
 import { authReducer } from './reducers';
 
 export const AuthContext = React.createContext();
@@ -14,6 +14,8 @@ const AuthStore = props => {
     loading: false,
     authRedirectPath: null,
   });
+
+  console.log(state)
 
   return (
     <AuthContext.Provider value={{state, dispatch}}>

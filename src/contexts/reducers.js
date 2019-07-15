@@ -25,6 +25,7 @@ export const authReducer = (state, action) => {
       userName: jwt_decode(action.token).user.sub_users[0].user_name,
       subUsers: jwt_decode(action.token).user.sub_users,
       subUserId: jwt_decode(action.token).user.sub_users[0].id,
+      userId: jwt_decode(action.token).user.id,
       error: null,
       loading: false,
     })
@@ -51,6 +52,7 @@ export const authReducer = (state, action) => {
       userName: jwt_decode(action.token).user.sub_users[0].user_name,
       subUsers: jwt_decode(action.token).user.sub_users,
       subUserId: jwt_decode(action.token).user.sub_users[0].id,
+      userId: jwt_decode(action.token).user.id,
       error: null,
       loading: false,
     })

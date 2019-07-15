@@ -100,7 +100,6 @@ export const BasicInput = styled.input`
   border: solid 1px var(--twoyak-blue);
   padding-left: 1.0937rem;
   padding-right: 1.0937rem;
-  text-align: center;
 `;
 
 export const StyledRating = styled(Rating)`
