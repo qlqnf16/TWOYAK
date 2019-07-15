@@ -13,6 +13,7 @@ import DrugReview from "../components/Medicine/Review/DrugReview";
 import {
   Container,
   FlexDiv,
+  BasicText,
   RatingText,
   StyledRating
 } from "../components/UI/SharedStyles";
@@ -26,6 +27,26 @@ const SearchContainer = styled.div`
   left: 0;
   z-index: 200;
   background-color: white;
+`;
+
+const ReviewContainer = styled.div`
+  position: relative;
+  width: fit-content;
+`;
+
+const RatingContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 70px;
+  width: 150px;
+`;
+
+const Rating = styled(StyledRating)`
+  margin: 0 -2px;
+  font-size: 10px;
+  .custom {
+    margin: 0 2px;
+  }
 `;
 
 function Medicine({ match, history, location }) {
@@ -178,14 +199,21 @@ function Medicine({ match, history, location }) {
           {drugReview && drugReview.length > 0 && (
             <>
               <FlexDiv>
-                <div>사용후기</div>
-                <StyledRating
-                  emptySymbol="fas fa-circle custom"
-                  fullSymbol="fas fa-circle custom full"
-                  fractions={2}
-                  // initialRating={drug.rating}
-                  readonly
-                />
+                <ReviewContainer>
+                  <BasicText>사용후기</BasicText>
+                  <RatingContainer>
+                    <Rating
+                      emptySymbol="fas fa-circle custom"
+                      fullSymbol="fas fa-circle custom full"
+                      fractions={2}
+                      initialRating={drug.rating}
+                      readonly
+                    />
+                    <RatingText opacity="0.5" size="0.7rem" bold>
+                      {drug.rating} / 5.0
+                    </RatingText>
+                  </RatingContainer>
+                </ReviewContainer>
               </FlexDiv>
               {drugReview.map(review => (
                 <DrugReview review={review} key={review.id} />

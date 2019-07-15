@@ -15,7 +15,7 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 70px auto;
+  margin: 70px auto 120px auto;
 
   @media (min-width: ${breakpoints.medium}) {
     margin: 25vh auto;
