@@ -49,6 +49,7 @@ function HealthRecord() {
   useEffect(() => {}, [currentDrugs]);
 
   useEffect(() => {
+    console.log(authState);
     if (authState.token) {
       getUserInfo();
     }

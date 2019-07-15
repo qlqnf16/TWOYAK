@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { breakpoints, BasicButton } from "../../UI/SharedStyles";
 import { AuthContext } from "../../../contexts/AuthStore";
@@ -35,7 +35,9 @@ const ItemName = styled.div`
 const ImgContainer = styled.div`
   width: 40%;
   height: 109px;
-  float: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
   border-radius: 10px;
   border: solid 1px #979797;
@@ -45,8 +47,10 @@ const ImgContainer = styled.div`
 
 const Img = styled.img`
   object-fit: cover;
-  width: auto;
+  width: 100%;
   height: 100%;
+  max-height: 109px;
+  max-width: 100%;
 `;
 
 const Button = styled(BasicButton)`
