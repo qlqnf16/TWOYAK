@@ -50,7 +50,7 @@ const Bullet = styled(BulletText)`
   }
 `;
 
-const PastDrug = ({ dateArray, monthCategory }) => {
+const PastDrug = ({ dateArray, monthCategory, modalOn }) => {
   return (
     <PastCard>
       <DateContainer>
@@ -62,7 +62,13 @@ const PastDrug = ({ dateArray, monthCategory }) => {
         {monthCategory.map(drug => (
           <Flex key={drug.name}>
             <Bullet>
-              <p>{drug.name}</p>
+              <p
+                onClick={() => {
+                  modalOn(drug.id);
+                }}
+              >
+                {drug.name}
+              </p>
             </Bullet>
             <Text>
               {drug.from

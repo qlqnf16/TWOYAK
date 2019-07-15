@@ -28,6 +28,10 @@ const ContentContainer = styled.div`
   overflow: scroll;
 `;
 
+const ModalContainer = styled.div`
+  text-align: center;
+`;
+
 const CurrentDrugList = ({
   currentDrugs,
   durInfo,
@@ -55,14 +59,14 @@ const CurrentDrugList = ({
             <ContentContainer>
               {currentDrugs.map(drug => {
                 return (
-                  <div style={{ marginTop: "1.5rem" }} key={drug.id}>
-                    <Item>{drug.drug_name}</Item>
+                  <ModalContainer key={drug.id}>
+                    <Item>{drug.drug_name.split("(")[0]}</Item>
                     <Duration>
                       {drug.from}
                       {drug.to && ` ~ ${drug.to}`}
                     </Duration>
                     <Line />
-                  </div>
+                  </ModalContainer>
                 );
               })}
             </ContentContainer>
