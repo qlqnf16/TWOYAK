@@ -59,6 +59,7 @@ function Medicine({ match, history, location }) {
   const [drugimg, setDrugimg] = useState("");
   const [drugList, setDrugList] = useState(null);
   const [drugReview, setDrugReview] = useState(null);
+  const [currentDrugs, setCurrentDrugs] = useState([]);
 
   const [modal, setModal] = useState(false); // 의약품 상세정보 모달
   const [showMore, setShowMore] = useState(false); // 더보기 버튼
@@ -84,9 +85,13 @@ function Medicine({ match, history, location }) {
     setDrugList(null);
     setDrugimg(null);
 
-    if (paramId && authState.token) {
+    if (paramId) {
       searchById(paramId);
       getDrugImg(paramId);
+    }
+    console.log(`mounted ${currentDrugs}`);
+    if (authState.token) {
+      getCurrentDrugs();
     }
     return setDrugList(null);
   }, [paramId, authState]);
@@ -154,6 +159,41 @@ function Medicine({ match, history, location }) {
     setTerm(value);
   };
 
+  // 현재 복용중인 약품
+  const getCurrentDrugs = async () => {
+    try {
+      const { data } = await axios.get(
+        `/user/${authState.subUserId}/current_drugs`,
+        {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        }
+      );
+      const idList = data.map(d => d.current_drug_id);
+      setCurrentDrugs(idList);
+      // console.log(idList);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // 현재 복용중 약품에 추가
+  const addCurrentDrug = async id => {
+    try {
+      await axios({
+        method: "POST",
+        url: `user/${authState.subUserId}/current_drugs/${id}`,
+        headers: {
+          Authorization: `bearer ${authState.token}`
+        }
+      });
+      alert("추가됐습니다");
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
   // searchResult 상세정보 modal toggle
   const modalOn = useCallback(() => {
     setModal(true);
@@ -185,6 +225,8 @@ function Medicine({ match, history, location }) {
             <SearchInput
               searchTerms={searchByTerms}
               inputChange={searchTermChange}
+              currentDrugs={currentDrugs}
+              addCurrentDrug={addCurrentDrug}
             />
           )}
           {drug && (
@@ -192,6 +234,7 @@ function Medicine({ match, history, location }) {
               <SearchResult
                 drug={drug}
                 drugImg={drugimg}
+                addCurrentDrug={addCurrentDrug}
                 modalOn={modalOn}
                 showMore={showMore}
                 toggleShowMore={toggleShowMore}
@@ -243,6 +286,8 @@ function Medicine({ match, history, location }) {
               searchTerms={searchByTerms}
               inputChange={searchTermChange}
               searchById={moveById}
+              currentDrugs={currentDrugs}
+              addCurrentDrug={addCurrentDrug}
             />{" "}
             {drugList && <ItemList drug_list={drugList} term={term} />}
           </>

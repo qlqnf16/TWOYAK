@@ -94,26 +94,11 @@ const ShowMoreButton = styled.div`
 `;
 
 const SearchResult = React.memo(
-  ({ drug, drugImg, modalOn, showMore, toggleShowMore }) => {
+  ({ drug, drugImg, addCurrentDrug, modalOn, showMore, toggleShowMore }) => {
     const drugDetail = drug.package_insert
       ? drug.package_insert.DRB_ITEM
       : null;
     const { state: authState } = useContext(AuthContext);
-
-    const addCurrentDrug = async () => {
-      try {
-        await axios({
-          method: "POST",
-          url: `user/${authState.subUsers[0].id}/current_drugs/${drug.id}`,
-          headers: {
-            Authorization: `bearer ${authState.token}`
-          }
-        });
-        alert("추가됐습니다");
-      } catch (error) {
-        console.log(error.response);
-      }
-    };
 
     const pushValidItem = (array, item) => {
       if (item !== undefined && item !== null && item !== "") {
@@ -214,7 +199,15 @@ const SearchResult = React.memo(
             </>
           )}
         </InfoContainer>
-        <AddButton onClick={drug.currently_taking ? null : addCurrentDrug}>
+        <AddButton
+          onClick={
+            drug.currently_taking
+              ? null
+              : () => {
+                  addCurrentDrug(drug.id);
+                }
+          }
+        >
           {drug.currently_taking
             ? "복용중인 약품입니다"
             : "복용목록에 추가하기"}

@@ -86,7 +86,14 @@ const Button = styled(BasicButton)`
   }
 `;
 
-const SearchInput = ({ searchTerms, searchById, inputChange, goBack }) => {
+const SearchInput = ({
+  searchTerms,
+  searchById,
+  currentDrugs,
+  addCurrentDrug,
+  inputChange,
+  goBack
+}) => {
   const myInput = (
     <Form onSubmit={searchTerms}>
       <ArrowIcon className="fas fa-arrow-left" onClick={goBack} />
@@ -95,6 +102,8 @@ const SearchInput = ({ searchTerms, searchById, inputChange, goBack }) => {
           search="drug"
           placeholderProp={"약품명 또는 성분명을 입력해주세요"}
           searchKey="name"
+          currentDrugs={currentDrugs}
+          addCurrentDrug={addCurrentDrug}
           inputChange={inputChange}
           submit={searchById}
         />
