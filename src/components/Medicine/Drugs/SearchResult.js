@@ -69,12 +69,13 @@ const TextContainer = styled.div`
   width: 86%;
   border-bottom: 1px solid #00a2ff40;
   margin-bottom: 1rem 0;
+  padding: 1rem 0;
 `;
 
 const Text = styled.div`
   font-weight: ${props => (props.bold ? "bold" : "regular")};
   font-size: ${props => (props.big ? "0.875rem" : "0.75rem")};
-  margin: 1rem 0;
+  margin-bottom: 1rem;
 `;
 
 const Benefit = styled.div`
@@ -89,7 +90,6 @@ const Benefit = styled.div`
 const ShowMoreButton = styled.div`
   font-weight: bold;
   text-align: right;
-  margin-bottom: 1rem;
   color: var(--twoyak-blue);
 `;
 
@@ -195,19 +195,21 @@ const SearchResult = React.memo(
                 ) : (
                   <>
                     <Benefit>주효능: {benefitTextShortend}</Benefit>
-                    <ShowMoreButton onClick={toggleShowMore}>
-                      더보기
-                    </ShowMoreButton>
+                    {benefitTextShortend !== benefitText && (
+                      <ShowMoreButton onClick={toggleShowMore}>
+                        더보기
+                      </ShowMoreButton>
+                    )}
                   </>
                 )}
               </TextContainer>
               <TextContainer>
                 <Text bold>주요 성분</Text>
-                <Text>
+                <Benefit>
                   {drug.ingr_kor_name.join(", ")}
                   {drug.ingr_eng_name &&
                     ` (${drug.ingr_eng_name.slice(1, -1)})`}
-                </Text>
+                </Benefit>
               </TextContainer>
             </>
           )}

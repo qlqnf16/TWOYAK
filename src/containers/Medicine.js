@@ -175,7 +175,7 @@ function Medicine({ match, history, location }) {
           )}
           {drugList && <ItemList drug_list={drugList} />}
           {errorMessage && <div>{errorMessage}</div>}
-          {drugReview && (
+          {drugReview && drugReview.length > 0 && (
             <>
               <FlexDiv>
                 <div>사용후기</div>

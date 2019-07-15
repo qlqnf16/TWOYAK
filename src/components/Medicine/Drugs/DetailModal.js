@@ -3,16 +3,13 @@ import styled from "styled-components";
 import { Close } from "../../UI/Icons";
 
 const ModalContainer = styled.div`
-  width: 70%;
-  position: absolute;
+  width: 100%;
+  position: fixed;
   z-index: 100;
-  height: 80%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) !important;
+  height: 100vh;
+  top: 0;
+  left: 0;
   background-color: white;
-  border: 1px solid #e4e4e4;
-  box-shadow: 3px 3px 20px -2px #dbdbdb;
 `;
 
 const DetailModal = ({ item_seq, modalOff }) => {
