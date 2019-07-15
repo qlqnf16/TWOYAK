@@ -5,6 +5,7 @@ import LoginError from "./containers/LoginError";
 import HealthRecord from "./containers/HealthRecord";
 import Mypage from "./containers/Mypage";
 import Signup from "./containers/Signup";
+import AllReviews from "./containers/AllReviews";
 import AddUserInfo from "./containers/AddUserInfo";
 
 const routes = [
@@ -14,7 +15,6 @@ const routes = [
     component: Home,
     exact: true
   },
-
   {
     path: "/login-error",
     name: "로그인 에러",
@@ -39,18 +39,23 @@ const routes = [
   {
     path: "/login",
     name: "로그인",
-    component: Login,
+    component: Login
   },
   {
     path: "/sign-up",
     name: "회원가입",
-    component: Signup,
+    component: Signup
   },
   {
     path: "/add-info",
     name: "추가정보입력",
-    component: AddUserInfo,
+    component: AddUserInfo
   },
+  {
+    path: "/all-reviews",
+    name: "리뷰 모아보기",
+    component: AllReviews
+  }
 ];
 
 export default routes;

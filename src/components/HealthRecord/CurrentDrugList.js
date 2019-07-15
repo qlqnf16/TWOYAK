@@ -41,6 +41,7 @@ const CurrentDrugList = ({
     setShow(!show);
   };
 
+  console.log(durInfo);
   return (
     <>
       <WhiteButton onClick={toggleModal}>약 이름 모아보기</WhiteButton>
@@ -68,33 +69,36 @@ const CurrentDrugList = ({
           }
         />
       )}
-      <Card>
-        {durInfo && durInfo.interactions && (
-          <InteractionNotice
-            durName="interactions"
-            durText="다음 약물을 함께 드시면 안 돼요!"
-            durDetail={durInfo.interactions}
-          />
-        )}
-        {durInfo && durInfo.same_ingr && (
-          <InteractionNotice
-            durText="다음 약물은 같은 성분의 약이에요!"
-            durDetail={durInfo.same_ingr}
-          />
-        )}
-        {durInfo && durInfo.duplicate && (
-          <InteractionNotice
-            durText={[
-              "다음 약물은 효능이 같은 약물로,",
-              <br />,
-              "함께 복용시 부작용이 발생할 수 있어요",
-              <br />,
-              "주의하세요!"
-            ]}
-            durDetail={durInfo.duplicate}
-          />
-        )}
-      </Card>
+      {durInfo && (
+        <Card>
+          {durInfo.interactions && (
+            <InteractionNotice
+              durName="interactions"
+              durText="다음 약물을 함께 드시면 안 돼요!"
+              durDetail={durInfo.interactions}
+            />
+          )}
+          {durInfo.same_ingr && (
+            <InteractionNotice
+              durText="다음 약물은 같은 성분의 약이에요!"
+              durDetail={durInfo.same_ingr}
+            />
+          )}
+          {durInfo.duplicate && (
+            <InteractionNotice
+              durText={[
+                "다음 약물은 효능이 같은 약물로,",
+                <br />,
+                "함께 복용시 부작용이 발생할 수 있어요",
+                <br />,
+                "주의하세요!"
+              ]}
+              durDetail={durInfo.duplicate}
+            />
+          )}
+        </Card>
+      )}
+
       {currentDrugs.map(drug => {
         return (
           <CurrentDrug

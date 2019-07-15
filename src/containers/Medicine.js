@@ -13,6 +13,7 @@ import DrugReview from "../components/Medicine/Review/DrugReview";
 import {
   Container,
   FlexDiv,
+  BasicText,
   RatingText,
   StyledRating
 } from "../components/UI/SharedStyles";
@@ -26,6 +27,26 @@ const SearchContainer = styled.div`
   left: 0;
   z-index: 200;
   background-color: white;
+`;
+
+const ReviewContainer = styled.div`
+  position: relative;
+  width: fit-content;
+`;
+
+const RatingContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 65px;
+  width: 150px;
+`;
+
+const Rating = styled(StyledRating)`
+  margin: 0 -2px;
+  font-size: 10px;
+  .custom {
+    margin: 0 2px;
+  }
 `;
 
 function Medicine({ match, history, location }) {
@@ -49,10 +70,6 @@ function Medicine({ match, history, location }) {
   // user informations
   const { state: authState } = useContext(AuthContext);
 
-  // useEffect(() => {
-  //   searchByTerms();
-  // }, [location.state.term]);
-
   // url에서 drug id param이 변하면 paramId 수정
   useEffect(() => {
     if (match.params.id) {
@@ -67,16 +84,21 @@ function Medicine({ match, history, location }) {
     setDrugList(null);
     setDrugimg(null);
 
-    if (paramId) {
+    if (paramId && authState.token) {
       searchById(paramId);
       getDrugImg(paramId);
     }
     return setDrugList(null);
-  }, [paramId]);
+  }, [paramId, authState]);
 
   // id로 약물검색
   const searchById = async id => {
-    const getDrugData = axios.get(`drugs/${id}`);
+    console.log(authState);
+    const getDrugData = axios.get(`drugs/${id}`, {
+      params: {
+        sub_user_id: authState.subUserId
+      }
+    });
     const getDrugReviews = axios.get(`drugs/${id}/drug_reviews`);
 
     try {
@@ -96,6 +118,7 @@ function Medicine({ match, history, location }) {
   // 검색어로 약물검색
   const searchByTerms = async event => {
     event && event.preventDefault();
+    console.log(term);
     setDrug(null);
     setDrugReview(null);
 
@@ -103,8 +126,10 @@ function Medicine({ match, history, location }) {
       let { data } = await axios.get("searchSingle", {
         params: { search_term: term }
       });
+      console.log(data);
       if (data.item_name) {
-        setDrugList(data.name);
+        history.push(`/medicine?search_term=${term}`);
+        setDrugList(data.item_name);
       } else {
         history.push(`/medicine/${data.id}`);
       }
@@ -173,19 +198,30 @@ function Medicine({ match, history, location }) {
               />
             </>
           )}
-          {drugList && <ItemList drug_list={drugList} />}
           {errorMessage && <div>{errorMessage}</div>}
-          {drugReview && (
+          {drugReview && drugReview.length > 0 && (
             <>
               <FlexDiv>
-                <div>사용후기</div>
-                <StyledRating
-                  emptySymbol="fas fa-circle custom"
-                  fullSymbol="fas fa-circle custom full"
-                  fractions={2}
-                  // initialRating={drug.rating}
-                  readonly
-                />
+                <ReviewContainer>
+                  <BasicText>사용후기</BasicText>
+                  <RatingContainer>
+                    <Rating
+                      emptySymbol="fas fa-circle custom"
+                      fullSymbol="fas fa-circle custom full"
+                      fractions={2}
+                      initialRating={drug.drug_rating}
+                      readonly
+                    />
+                    <RatingText
+                      margin="0.5rem"
+                      opacity="0.5"
+                      size="0.7rem"
+                      bold
+                    >
+                      {drug.drug_rating.toFixed(1)} / 5.0
+                    </RatingText>
+                  </RatingContainer>
+                </ReviewContainer>
               </FlexDiv>
               {drugReview.map(review => (
                 <DrugReview review={review} key={review.id} />
@@ -200,13 +236,16 @@ function Medicine({ match, history, location }) {
     return (
       <SearchContainer>
         {drugs && (
-          <SearchInput
-            goBack={goBack}
-            term={term}
-            searchTerms={searchByTerms}
-            inputChange={searchTermChange}
-            searchById={moveById}
-          />
+          <>
+            <SearchInput
+              goBack={goBack}
+              term={term}
+              searchTerms={searchByTerms}
+              inputChange={searchTermChange}
+              searchById={moveById}
+            />{" "}
+            {drugList && <ItemList drug_list={drugList} term={term} />}
+          </>
         )}
       </SearchContainer>
     );

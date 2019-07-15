@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { breakpoints, BasicButton } from "../../UI/SharedStyles";
 import { AuthContext } from "../../../contexts/AuthStore";
@@ -35,7 +35,9 @@ const ItemName = styled.div`
 const ImgContainer = styled.div`
   width: 40%;
   height: 109px;
-  float: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
   border-radius: 10px;
   border: solid 1px #979797;
@@ -45,8 +47,10 @@ const ImgContainer = styled.div`
 
 const Img = styled.img`
   object-fit: cover;
-  width: auto;
+  width: 100%;
   height: 100%;
+  max-height: 109px;
+  max-width: 100%;
 `;
 
 const Button = styled(BasicButton)`
@@ -65,12 +69,13 @@ const TextContainer = styled.div`
   width: 86%;
   border-bottom: 1px solid #00a2ff40;
   margin-bottom: 1rem 0;
+  padding: 1rem 0;
 `;
 
 const Text = styled.div`
   font-weight: ${props => (props.bold ? "bold" : "regular")};
   font-size: ${props => (props.big ? "0.875rem" : "0.75rem")};
-  margin: 1rem 0;
+  margin-bottom: 1rem;
 `;
 
 const Benefit = styled.div`
@@ -85,7 +90,6 @@ const Benefit = styled.div`
 const ShowMoreButton = styled.div`
   font-weight: bold;
   text-align: right;
-  margin-bottom: 1rem;
   color: var(--twoyak-blue);
 `;
 
@@ -191,25 +195,29 @@ const SearchResult = React.memo(
                 ) : (
                   <>
                     <Benefit>주효능: {benefitTextShortend}</Benefit>
-                    <ShowMoreButton onClick={toggleShowMore}>
-                      더보기
-                    </ShowMoreButton>
+                    {benefitTextShortend !== benefitText && (
+                      <ShowMoreButton onClick={toggleShowMore}>
+                        더보기
+                      </ShowMoreButton>
+                    )}
                   </>
                 )}
               </TextContainer>
               <TextContainer>
                 <Text bold>주요 성분</Text>
-                <Text>
+                <Benefit>
                   {drug.ingr_kor_name.join(", ")}
                   {drug.ingr_eng_name &&
                     ` (${drug.ingr_eng_name.slice(1, -1)})`}
-                </Text>
+                </Benefit>
               </TextContainer>
             </>
           )}
         </InfoContainer>
-        <AddButton onClick={!drug.taking ? addCurrentDrug : null}>
-          {!drug.taking ? "복용목록에 추가하기" : "복용중인 약품입니다"}
+        <AddButton onClick={drug.currently_taking ? null : addCurrentDrug}>
+          {drug.currently_taking
+            ? "복용중인 약품입니다"
+            : "복용목록에 추가하기"}
         </AddButton>
       </Container>
     );
