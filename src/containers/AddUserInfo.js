@@ -4,7 +4,8 @@ import { AuthContext } from '../contexts/AuthStore';
 import axios from '../apis';
 import styled from 'styled-components';
 
-import AutoSuggestion from "../components/Util/AutoSuggestion";
+import AppendDisease from "../components/AddUserInfo/FamilyMedHistory/AppendResult";
+
 import { Container } from '../components/UI/SharedStyles';
 import { Line } from '../components/UI/SharedStyles';
 import { BasicButton } from '../components/UI/SharedStyles';
@@ -210,13 +211,8 @@ function AddInfo(props) {
     setBirthDate(date);
   }
 
-  const appendDiseasesIdHandler = (id, name) => {
-    let id_array = diseasesSeletedIdArray;
-    let name_array = diseaseSelectedNameArray;
-    id_array.push(id);
-    name_array.push(name);
-    setDiseasesIdSelecetedArray(id_array);
-    setDiseasesNameSelectedArray(name_array);
+  const postDiseaseIdHandler = (suggestion) => {
+    console.log(suggestion);
   }
 
   const modalContent = (
@@ -250,6 +246,12 @@ function AddInfo(props) {
           {state.userName} 님을 위한 투약 맞춤화 추천 서비스 받아보시겠어요? 아래 정보를 제출해주시면 맞춤화 건강 서비스를 제공받으실 수 있습니다.
         </AddInfoMessage>
       </div>
+      <AppendDisease
+        diseaseArray={diseaseArray}
+        appendDiseaseId={(suggestion) => 
+          postDiseaseIdHandler(suggestion)
+        }
+      />
       <SelectSex>
         <InfoCategory>
           성별
@@ -326,16 +328,6 @@ function AddInfo(props) {
         value={birthDate}
         onClick={() => toggleBirthDateModalHandler()}
         readOnly
-      />
-      <DiseaseInfoCategory>
-        가족력이 있으시면 입력해주세요.
-      </DiseaseInfoCategory>
-      <AutoSuggestion
-        search="disease"
-        diseaseSearchTerms={diseaseArray}
-        placeholderProp={"ex) 두통, 복통"}
-        searchKey="name"
-        appendDiseasesId={(id, name) => appendDiseasesIdHandler(id, name)}
       />
       <ButtonArea>
         <SubmitButton 

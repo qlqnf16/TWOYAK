@@ -9,11 +9,12 @@ const AuthStore = props => {
     userName: null,
     subUsers: null,
     subUserId: null,
-    userId: null,
     error: null,
     loading: false,
     authRedirectPath: null,
   });
+
+  console.log(state)
 
   return (
     <AuthContext.Provider value={{state, dispatch}}>

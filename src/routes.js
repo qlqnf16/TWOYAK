@@ -5,7 +5,7 @@ import LoginError from "./containers/LoginError";
 import HealthRecord from "./containers/HealthRecord";
 import Mypage from "./containers/Mypage";
 import Signup from "./containers/Signup";
-import AddInfo from "./containers/AddInfo";
+import AddUserInfo from "./containers/AddUserInfo";
 
 const routes = [
   {
@@ -49,7 +49,7 @@ const routes = [
   {
     path: "/add-info",
     name: "추가정보입력",
-    component: AddInfo,
+    component: AddUserInfo,
   },
 ];
 

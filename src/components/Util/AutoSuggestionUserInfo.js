@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import Autosuggest from "react-autosuggest";
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
-import { DrugContext } from "../../contexts/DrugStore";
+import { AuthContext } from "../../contexts/AuthStore";
 import deburr from "lodash/deburr";
 import styled from "styled-components";
 import { breakpoints } from "../UI/SharedStyles";
@@ -27,22 +27,19 @@ const AutoSuggestion = ({
   search,
   searchKey,
   placeholderProp,
-  inputChange,
-  submit,
+  diseaseSearchTerms,
+  appendDiseaseId
 }) => {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
-  const { state } = useContext(DrugContext);
-  const { drugs, adverse_effects } = state;
+  const { state } = useContext(AuthContext);
+  const { token } = state;
 
   let suggestList;
   switch (search) {
-    case "drug":
-      suggestList = drugs;
-      break;
-    case "adverse_effect":
-      suggestList = adverse_effects;
+    case "disease":
+      suggestList = diseaseSearchTerms;
       break;
     default:
       break;
@@ -73,8 +70,7 @@ const AutoSuggestion = ({
   };
 
   const onSuggestionSelected = (event, { suggestion }) => {
-    if (search === "adverse_effect") inputChange(suggestion);
-    if (search === "drug") submit(suggestion.id);
+    if (search === "disease") appendDiseaseId(suggestion);
   };
 
   const renderSuggestion = (suggestion, { query, isHighlited }) => {
@@ -106,9 +102,6 @@ const AutoSuggestion = ({
 
   const onChange = (event, { newValue }) => {
     setValue(newValue);
-    if (search === "drug") {
-      inputChange(newValue);
-    }
   };
 
   const onSuggestionsFetchRequested = ({ value }) => {
