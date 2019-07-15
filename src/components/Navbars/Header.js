@@ -34,7 +34,7 @@ const Header = () => {
         <img src={search} alt="search-icon" />
       </NavLink>
       <StyledNavLink to="/">투약</StyledNavLink>
-      <StyledNavLink to={ authState.token ? '/mypage' : '/login' }>
+      <StyledNavLink to={authState.token ? "/mypage" : "/login"}>
         <img src={user} alt="user-icon" />
       </StyledNavLink>
     </HeaderContainer>

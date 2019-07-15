@@ -18,6 +18,7 @@ const CustomButton = styled(BasicButton)`
   width: 8.5rem;
   height: 3rem;
   margin-bottom: 1.3125rem;
+  text-align: center;
 `
 
 const SignupInput = styled(BasicInput)`
@@ -39,7 +40,6 @@ function Signup(props) {
 
   const { state, dispatch } = useContext(AuthContext);
 
-  console.log(state)
 
   const goLoginPage = () => {
     props.history.push('/login')
@@ -108,19 +108,14 @@ function Signup(props) {
           token: payload,
         })
         storeUserDataForAutoLogin('token', payload)
-        dispatch({
-          type: "SET_AUTH_REDIRECT_PATH",
-          path: "/add-info"
-        })
       })
       .catch(error => {
+        console.log(error.response)
         dispatch({
           type: "SIGNUP_FAIL",
           error: error.response.data.errors
         })
       })
-    console.log(state);
-    console.log(signupData)
   }
 
   const form = signupScheme.map((i, k) => (
@@ -136,7 +131,7 @@ function Signup(props) {
       <CustomButton onClick={() => signupActionHandler()}>
         회원가입
       </CustomButton>
-      {state.authRedirectPath ? <Redirect to={state.authRedirectPath} /> : null}
+      {state.token ? <Redirect to="/add-info" /> : null}
     </SignupArea>
   )
 };
