@@ -37,7 +37,7 @@ const ReviewContainer = styled.div`
 const RatingContainer = styled.div`
   position: absolute;
   top: 0;
-  left: 70px;
+  left: 65px;
   width: 150px;
 `;
 
@@ -209,11 +209,16 @@ function Medicine({ match, history, location }) {
                       emptySymbol="fas fa-circle custom"
                       fullSymbol="fas fa-circle custom full"
                       fractions={2}
-                      initialRating={drug.rating}
+                      initialRating={drug.drug_rating}
                       readonly
                     />
-                    <RatingText opacity="0.5" size="0.7rem" bold>
-                      {drug.rating} / 5.0
+                    <RatingText
+                      margin="0.5rem"
+                      opacity="0.5"
+                      size="0.7rem"
+                      bold
+                    >
+                      {drug.drug_rating.toFixed(1)} / 5.0
                     </RatingText>
                   </RatingContainer>
                 </ReviewContainer>

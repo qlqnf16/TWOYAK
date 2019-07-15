@@ -123,7 +123,7 @@ export const BasicText = styled.div`
 `;
 
 export const RatingText = styled(BasicText)`
-  margin-left: 1rem;
+  margin-left: ${props => (props.margin ? props.margin : "1rem")};
 `;
 
 export const BulletText = styled.li`
