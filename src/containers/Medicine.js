@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "../apis";
 import styled from "styled-components";
 import { DrugContext } from "../contexts/DrugStore";
@@ -17,6 +17,7 @@ import {
   RatingText,
   StyledRating
 } from "../components/UI/SharedStyles";
+import Modal from "../components/UI/Modal";
 
 const SearchContainer = styled.div`
   width: 100%;
@@ -60,7 +61,9 @@ function Medicine({ match, history, location }) {
   const [drugList, setDrugList] = useState(null);
   const [drugReview, setDrugReview] = useState(null);
   const [currentDrugs, setCurrentDrugs] = useState([]);
+  const [watching, setWatching] = useState(false);
 
+  const [smallModal, setSmallModal] = useState(false); // 약품 추가, 제거 모달
   const [modal, setModal] = useState(false); // 의약품 상세정보 모달
   const [showMore, setShowMore] = useState(false); // 더보기 버튼
   const [errorMessage, setErrorMessage] = useState();
@@ -84,9 +87,10 @@ function Medicine({ match, history, location }) {
     setDrug(null);
     setDrugList(null);
     setDrugimg(null);
-
-    searchById(paramId);
-    getDrugImg(paramId);
+    if (paramId) {
+      searchById(paramId);
+      getDrugImg(paramId);
+    }
     if (authState.token) {
       getCurrentDrugs();
     }
@@ -112,6 +116,7 @@ function Medicine({ match, history, location }) {
 
       setDrug(drugData);
       setDrugReview(drugReviews);
+      setWatching(drugData.watching);
     } catch (error) {
       console.log(error);
     }
@@ -130,7 +135,6 @@ function Medicine({ match, history, location }) {
       });
       console.log(data);
       if (data.item_name) {
-        history.push(`/medicine?search_term=${term}`);
         setDrugList(data.item_name);
       } else {
         history.push(`/medicine/${data.id}`);
@@ -191,6 +195,44 @@ function Medicine({ match, history, location }) {
     }
   };
 
+  // 과거 복용중으로 보내기
+  const toPastDrug = async () => {
+    try {
+      await axios.delete(
+        `user/${authState.subUserId}/current_drugs/${drug.id}/to_past`,
+        {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // 현재 복용중 약품에서 제거
+  const deleteCurrentDrug = async () => {
+    try {
+      await axios.delete(
+        `user/${authState.subUserId}/current_drugs/${drug.id}`,
+        {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        }
+      );
+    } catch (error) {
+      console.log(authState);
+      console.log(error);
+    }
+  };
+
+  // 약품 추가 / 제거 modal toggle
+  const additionalModalToggle = () => {
+    setSmallModal(!smallModal);
+  };
+
   // searchResult 상세정보 modal toggle
   const modalOn = () => {
     setModal(true);
@@ -214,6 +256,22 @@ function Medicine({ match, history, location }) {
     setShowMore(!showMore);
   };
 
+  // 관심목록 토글
+  const toggleWatching = async () => {
+    try {
+      await axios.post(
+        `/user/watch_drugs`,
+        {
+          watch_drug: { user_id: authState.userId, watch_drug_id: drug.id }
+        },
+        { headers: { Authorization: authState.token } }
+      );
+      setWatching(!watching);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   if (match.params.id) {
     return (
       <>
@@ -232,9 +290,14 @@ function Medicine({ match, history, location }) {
                 drug={drug}
                 drugImg={drugimg}
                 addCurrentDrug={addCurrentDrug}
+                toPastDrug={toPastDrug}
+                deleteCurrentDrug={deleteCurrentDrug}
                 modalOn={modalOn}
                 showMore={showMore}
                 toggleShowMore={toggleShowMore}
+                watching={watching}
+                toggleWatching={toggleWatching}
+                additionalModalToggle={additionalModalToggle}
               />
             </>
           )}
@@ -270,6 +333,30 @@ function Medicine({ match, history, location }) {
           )}
         </Container>
         {modal && <DetailModal item_seq={drug.item_seq} modalOff={modalOff} />}
+        {smallModal && (
+          <Modal
+            title="현재 복용내역에서 제거하기"
+            content={
+              <div>
+                <div
+                  onClick={() => {
+                    deleteCurrentDrug();
+                  }}
+                >
+                  제거하기
+                </div>
+                <div
+                  onClick={() => {
+                    toPastDrug();
+                  }}
+                >
+                  복용종료
+                </div>
+              </div>
+            }
+            modalOff={additionalModalToggle}
+          />
+        )}
       </>
     );
   } else {

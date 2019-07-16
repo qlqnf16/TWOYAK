@@ -40,8 +40,13 @@ const PastDrugList = ({ drugs }) => {
 
   // modal on
   const modalOn = async id => {
-    const target = drugs.map(d => d.past_drug_id === id && d);
-    await setTargetDrug(target[0]);
+    let target;
+    drugs.forEach(d => {
+      if (d.past_drug_id === id) {
+        target = d;
+      }
+    });
+    await setTargetDrug(target);
     setShow(true);
   };
 
@@ -72,9 +77,10 @@ const PastDrugList = ({ drugs }) => {
           content={
             targetDrug && (
               <>
-                <div>뭐야</div>
                 <div>{targetDrug && targetDrug.drug_name.split("(")[0]}</div>
-                <div>{targetDrug.my_review.efficacy}</div>
+                <div>
+                  {targetDrug.my_review && targetDrug.my_review.efficacy}
+                </div>
                 <Link to={`medicine/${targetDrug.past_drug_id}`}>
                   상세정보 보기
                 </Link>

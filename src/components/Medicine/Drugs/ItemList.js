@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { BasicText, FlexDiv } from "../../UI/SharedStyles";
+import { BasicText, FlexDiv, BulletText } from "../../UI/SharedStyles";
 import { ReactComponent as Add } from "../../../assets/images/plus-in-search.svg";
 
 const Flex = styled(FlexDiv)`
@@ -82,6 +82,16 @@ const ItemList = ({ drug_list, term, addCurrentDrug, currentDrugs }) => {
           ? "에 대한 검색결과가 없습니다."
           : "과/와 유사한 의약품 목록입니다."}
       </Title>
+      {!drug_list.length && (
+        <>
+          <BulletText>
+            <p>약품의 철자가 정확한 지 확인해주세요.</p>
+          </BulletText>
+          <BulletText>
+            <p>약품의 이름이 정확한 지 확인해주세요.</p>
+          </BulletText>
+        </>
+      )}
       <ItemContainer>{items}</ItemContainer>
     </Container>
   );

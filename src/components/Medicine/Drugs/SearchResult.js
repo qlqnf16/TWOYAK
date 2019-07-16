@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { breakpoints, BasicButton } from "../../UI/SharedStyles";
+import { breakpoints, BasicButton, BasicText } from "../../UI/SharedStyles";
 import Warning from "../../UI/Warning";
 import { ReactComponent as EmptyHeart } from "../../../assets/images/heart-none.svg";
 import { ReactComponent as FullHeart } from "../../../assets/images/heart-fill.svg";
@@ -100,7 +100,17 @@ const ShowMoreButton = styled.div`
 `;
 
 const SearchResult = React.memo(
-  ({ drug, drugImg, addCurrentDrug, modalOn, showMore, toggleShowMore }) => {
+  ({
+    drug,
+    drugImg,
+    addCurrentDrug,
+    modalOn,
+    showMore,
+    toggleShowMore,
+    watching,
+    toggleWatching,
+    additionalModalToggle
+  }) => {
     const drugDetail = drug.package_insert
       ? drug.package_insert.DRB_ITEM
       : null;
@@ -167,13 +177,23 @@ const SearchResult = React.memo(
 
     const ingrKo = new Set(drug.ingr_kor_name);
 
+    const durInfo = [];
+    const dur = drug.dur_info;
+    if (dur.pregnancy) durInfo.push("임산부");
+    else if (dur.age) durInfo.push(dur.age[0].description);
+    else if (dur.elder) durInfo.push("65세 이상 고령자");
+
     return (
       <Container>
         <Warning />
         <InfoContainer>
           <ItemName>{drug.name.split("(")[0]}</ItemName>
           <IconContainer>
-            {drug.watching ? <FullHeart /> : <EmptyHeart />}
+            {watching ? (
+              <FullHeart onClick={toggleWatching} />
+            ) : (
+              <EmptyHeart onClick={toggleWatching} />
+            )}
           </IconContainer>
           {drugImg && (
             <ImgContainer>
@@ -217,20 +237,37 @@ const SearchResult = React.memo(
                     ` (${drug.ingr_eng_name.slice(1, -1)})`}
                 </Benefit>
               </TextContainer>
+              {dur.excluded && (
+                <TextContainer>
+                  <Text bold>복용 중지된 의약품입니다!</Text>
+                </TextContainer>
+              )}
+              {dur.length > 0 && (
+                <TextContainer>
+                  <Text bold>이런 분들은 드실 때 주의해야 해요!</Text>
+                  {durInfo.map(d => (
+                    <BasicText size="0.75rem" bold key={d}>
+                      {d}
+                    </BasicText>
+                  ))}
+                </TextContainer>
+              )}
             </>
           )}
         </InfoContainer>
         <AddButton
           onClick={
             drug.currently_taking
-              ? null
+              ? () => {
+                  additionalModalToggle();
+                }
               : () => {
                   addCurrentDrug(drug.id);
                 }
           }
         >
           {drug.currently_taking
-            ? "복용중인 약품입니다"
+            ? "복용목록에서 제거하기"
             : "복용목록에 추가하기"}
         </AddButton>
       </Container>
