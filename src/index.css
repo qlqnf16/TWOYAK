@@ -4,6 +4,7 @@
   margin: 0;
   text-align: justify;
   font-family: "Nanum Gothic", sans-serif;
+  line-height: 1.5;
 }
 
 :focus {

@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { breakpoints, BasicButton } from "../../UI/SharedStyles";
 import Warning from "../../UI/Warning";
+import { ReactComponent as EmptyHeart } from "../../../assets/images/heart-none.svg";
+import { ReactComponent as FullHeart } from "../../../assets/images/heart-fill.svg";
 
 const Container = styled.div`
   display: flex;
@@ -19,10 +21,17 @@ const Container = styled.div`
 
 const InfoContainer = styled.div`
   width: 100%;
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+
+const IconContainer = styled.div`
+  position: absolute;
+  top: 4px;
+  left: 83%;
 `;
 
 const ItemName = styled.div`
@@ -77,12 +86,11 @@ const Text = styled.div`
 `;
 
 const Benefit = styled.div`
-  max-height: ${props => !props.more && "3.6em"};
+  max-height: ${props => !props.more && "4.5em"};
   white-space: ${props => (props.more ? "pre-wrap" : "nowrap")};
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;
-  line-height: 1.2;
 `;
 
 const ShowMoreButton = styled.div`
@@ -164,6 +172,9 @@ const SearchResult = React.memo(
         <Warning />
         <InfoContainer>
           <ItemName>{drug.name.split("(")[0]}</ItemName>
+          <IconContainer>
+            {drug.watching ? <FullHeart /> : <EmptyHeart />}
+          </IconContainer>
           {drugImg && (
             <ImgContainer>
               <Img src={drugImg} alt={drug.name} />
@@ -171,7 +182,13 @@ const SearchResult = React.memo(
           )}
           {drugDetail && (
             <>
-              <Button onClick={modalOn}>설명서 보기</Button>
+              <Button
+                onClick={() => {
+                  modalOn();
+                }}
+              >
+                설명서 보기
+              </Button>
               <TextContainer>
                 <Text bold>어떤 약인가요?</Text>
                 {showMore ? (

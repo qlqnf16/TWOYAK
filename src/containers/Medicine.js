@@ -192,9 +192,9 @@ function Medicine({ match, history, location }) {
   };
 
   // searchResult 상세정보 modal toggle
-  const modalOn = useCallback(() => {
+  const modalOn = () => {
     setModal(true);
-  }, []);
+  };
   const modalOff = () => {
     setModal(false);
   };
