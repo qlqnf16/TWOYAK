@@ -6,6 +6,7 @@ import HealthRecord from "./containers/HealthRecord";
 import Mypage from "./containers/Mypage";
 import Signup from "./containers/Signup";
 import AddUserInfo from "./containers/AddUserInfo";
+import AddUser from "./containers/AddUser";
 
 const routes = [
   {
@@ -39,18 +40,23 @@ const routes = [
   {
     path: "/login",
     name: "로그인",
-    component: Login,
+    component: Login
   },
   {
     path: "/sign-up",
     name: "회원가입",
-    component: Signup,
+    component: Signup
   },
   {
     path: "/add-info",
     name: "추가정보입력",
-    component: AddUserInfo,
+    component: AddUserInfo
   },
+  {
+    path: "/add-user",
+    name: "사용자 추가",
+    component: AddUser
+  }
 ];
 
 export default routes;

@@ -1,6 +1,6 @@
 import React from "react";
 import AutoSuggestion from "../../Util/AutoSuggestionUserInfo";
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const StyleWrapper = styled.div`
   flex-grow: 1;
@@ -61,10 +61,7 @@ const StyleWrapper = styled.div`
   }
 `;
 
-function SearchInput({
-  diseaseArray,
-  appendDiseaseId,
-}) {
+function SearchInput({ diseaseArray, appendDiseaseId }) {
   return (
     <StyleWrapper>
       <AutoSuggestion
@@ -72,10 +69,10 @@ function SearchInput({
         diseaseSearchTerms={diseaseArray}
         placeholderProp={"ex) 고혈압, 당뇨"}
         searchKey="name"
-        appendDiseaseId={(suggestion) => appendDiseaseId(suggestion)} 
+        appendDiseaseId={suggestion => appendDiseaseId(suggestion)}
       />
     </StyleWrapper>
-  )
-};
+  );
+}
 
 export default SearchInput;

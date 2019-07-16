@@ -14,7 +14,7 @@ function WatchStore(props) {
         dispatch({
           type: "SET_AUTH_REDIRECT_PATH",
           path: "/"
-        })
+        });
       }
     }
     AutoLogin();
