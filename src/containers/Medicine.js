@@ -99,7 +99,6 @@ function Medicine({ match, history, location }) {
 
   // id로 약물검색
   const searchById = async id => {
-    console.log(authState);
     const getDrugData = axios.get(`drugs/${id}`, {
       params: {
         sub_user_id: authState.subUserId
@@ -112,7 +111,6 @@ function Medicine({ match, history, location }) {
         getDrugData,
         getDrugReviews
       ]);
-      console.log(drugData, drugReviews);
 
       setDrug(drugData);
       setDrugReview(drugReviews);
@@ -125,7 +123,6 @@ function Medicine({ match, history, location }) {
   // 검색어로 약물검색
   const searchByTerms = async event => {
     event && event.preventDefault();
-    console.log(term);
     setDrug(null);
     setDrugReview(null);
 
@@ -133,7 +130,6 @@ function Medicine({ match, history, location }) {
       let { data } = await axios.get("searchSingle", {
         params: { search_term: term }
       });
-      console.log(data);
       if (data.item_name) {
         setDrugList(data.item_name);
       } else {
@@ -223,7 +219,6 @@ function Medicine({ match, history, location }) {
         }
       );
     } catch (error) {
-      console.log(authState);
       console.log(error);
     }
   };
