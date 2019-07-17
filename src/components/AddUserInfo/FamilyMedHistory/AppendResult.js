@@ -1,30 +1,108 @@
-import React from 'react';
+import React, { useState, useContext } from "react";
+import axios from "../../../apis";
+import { AuthContext } from "../../../contexts/AuthStore";
+import styled from "styled-components";
 import SearchInput from "./SearchInput";
-import styled from 'styled-components';
 import addIcon from "../../../assets/images/add.svg";
+import closeIcon from "../../../assets/images/close.svg";
 
 const StyleWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
   width: 15.5rem;
-`
+`;
 
-function AppendResult({
-  diseaseArray,
-  appendDiseaseId,
-}) {
+const DiseaseContainer = styled.div`
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+`;
+
+const DiseaseWrapper = styled.div`
+  background-color: var(--twoyak-blue);
+  opacity: 0.7;
+  height: 1.875rem;
+  border-radius: 1.5rem;
+  display: flex;
+  align-items: center;
+`;
+
+const DiseaseButton = styled.div`
+  color: #ffffff;
+  padding-right: 1rem;
+  padding-left: 1rem;
+`;
+
+const Close = styled.img`
+  width: 1rem;
+  margin-right: 0.5rem;
+`;
+
+function AppendResult({ diseaseArray }) {
+  const [familyMedHistories, setFamilyMedHistories] = useState([]);
+  const { state } = useContext(AuthContext);
+
+  console.log(state);
+
+  useState(() => {
+    if (state.userId) {
+      axios({
+        method: "GET",
+        url: `/user/${state.userId}/family_med_histories`,
+        headers: {
+          Authorization: state.token
+        }
+      }).then(response => {
+        setFamilyMedHistories(response.data);
+      });
+    }
+  }, [state.userId]);
+
+  const postDiseaseIdHandler = (method, suggestion) => {
+    axios({
+      method: method,
+      url: `/user/${state.userId}/family_med_histories/${suggestion.id}`,
+      headers: {
+        Authorization: state.token
+      }
+    }).then(response => {
+      switch (method) {
+        case "POST":
+          setFamilyMedHistories(response.data);
+          break;
+        case "DELETE":
+          axios({
+            method: "GET",
+            url: `/user/${state.userId}/family_med_histories`,
+            headers: {
+              Authorization: state.token
+            }
+          }).then(response => {
+            setFamilyMedHistories(response.data);
+          });
+          break;
+      }
+    });
+  };
+
   return (
     <StyleWrapper>
       <SearchInput
         diseaseArray={diseaseArray}
-        appendDiseaseId={(suggestion) => 
-          appendDiseaseId(suggestion)
-        }
+        appendDiseaseId={suggestion => postDiseaseIdHandler("POST", suggestion)}
       />
-      <img src={addIcon} />
+      <DiseaseContainer>
+        {familyMedHistories.map((i, k) => (
+          <DiseaseWrapper key={k} style={{ display: "flex" }}>
+            <DiseaseButton key={k}>{i.name}</DiseaseButton>
+            <Close
+              src={closeIcon}
+              alt="erase-disease"
+              onClick={() => postDiseaseIdHandler("DELETE", i)}
+            />
+          </DiseaseWrapper>
+        ))}
+      </DiseaseContainer>
     </StyleWrapper>
-  )
-};
+  );
+}
 
 export default AppendResult;
-

@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthStore";
 import axios from "../apis";
 import styled from "styled-components";
-import jwt_decode from 'jwt-decode';
+import jwt_decode from "jwt-decode";
 
 import { Container } from "../components/UI/SharedStyles";
 import { BasicButton } from "../components/UI/SharedStyles";
@@ -69,16 +69,16 @@ function Login(props) {
   useEffect(() => {
     dispatch({
       type: "SET_AUTH_REDIRECT_PATH",
-      path: null,
-    })
+      path: null
+    });
     if (
       props.location.search !== "" &&
       props.location.search.includes("?token=")
     ) {
       dispatch({
         type: "SIGNIN_SUCCESS",
-        token: props.location.search.split("=")[1],
-      })
+        token: props.location.search.split("=")[1]
+      });
       dispatch({
         type: "SET_AUTH_REDIRECT_PATH",
         path: "/"
@@ -86,8 +86,8 @@ function Login(props) {
     }
   }, [props.history, props.location.search, dispatch]);
 
-  const signinBySocialAccount = ( supplier ) => {
-    window.open(`http://52.79.228.195/api/users/auth/${supplier}`, '_self')
+  const signinBySocialAccount = supplier => {
+    window.open(`http://52.79.228.195/api/users/auth/${supplier}`, "_self");
   };
 
   const signinDataHandler = (key, event) => {
@@ -108,11 +108,11 @@ function Login(props) {
       .post("api/users/login", signinData)
       .then(response => {
         const payload = response.data.auth_token;
-        console.log(jwt_decode(payload))
+        console.log(jwt_decode(payload));
         dispatch({
-          type: "SIGNIN_SUCCESS", 
-          token: payload,
-        })
+          type: "SIGNIN_SUCCESS",
+          token: payload
+        });
       })
       .catch(error =>
         dispatch({
@@ -192,9 +192,7 @@ function Login(props) {
             onClick={() => signinBySocialAccount("google_oauth2")}
           />
         </SocialLoginArea>
-        {state.token ? (
-          <Redirect to="/" />
-        ) : null}
+        {state.token ? <Redirect to="/" /> : null}
       </LoginArea>
     </Container>
   );

@@ -7,6 +7,7 @@ import deburr from "lodash/deburr";
 import styled from "styled-components";
 import { breakpoints } from "../UI/SharedStyles";
 import { ReactComponent as Erase } from "../../assets/images/erase.svg";
+import addIcon from "../../assets/images/add.svg";
 
 const Container = styled.div`
   display: flex;
@@ -77,7 +78,7 @@ const AutoSuggestion = ({
     const matches = match(suggestion[searchKey], query);
     const parts = parse(suggestion[searchKey], matches);
     return (
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
         {/* <div
           onClick={() => {
             console.log(suggestion.id);
@@ -96,6 +97,7 @@ const AutoSuggestion = ({
             )
           )}
         </div>
+        <img src={addIcon} alt="add-icon" onClick={() => appendDiseaseId(suggestion)} />
       </div>
     );
   };

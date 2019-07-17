@@ -1,5 +1,5 @@
-import React, { useEffect ,useReducer } from 'react';
-import { authReducer } from './reducers';
+import React, { useEffect, useReducer } from "react";
+import { authReducer } from "./reducers";
 
 export const AuthContext = React.createContext();
 
@@ -9,19 +9,18 @@ const AuthStore = props => {
     userName: null,
     subUsers: null,
     subUserId: null,
+    subUserIndex: 0,
     userId: null,
     error: null,
     loading: false,
-    authRedirectPath: null,
+    authRedirectPath: null
   });
 
-  console.log(state)
-
   return (
-    <AuthContext.Provider value={{state, dispatch}}>
+    <AuthContext.Provider value={{ state, dispatch }}>
       {props.children}
     </AuthContext.Provider>
-  )
+  );
 };
 
 export default AuthStore;

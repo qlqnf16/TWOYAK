@@ -17,14 +17,14 @@ const MyPageContainer = styled.div`
   left: 0;
   z-index: 200;
   background-color: white;
-`
+`;
 
 const Divider = styled.div`
   width: 100%;
   height: 1px;
   opacity: 0.1;
   background-color: var(--twoyak-blue);
-`
+`;
 
 function Mypage(props) {
   const [currentDrugs, setCurrentDrugs] = useState([]);
@@ -37,45 +37,46 @@ function Mypage(props) {
 
   useEffect(() => {
     if (state.token) {
-      getUserInfo();
+      getUserInfo(state.subUserIndex);
     }
-  }, [state.token])
+  }, [state.token]);
 
-  const getUserInfo = () => {
+  const getUserInfo = id => {
     axios({
-      method: 'GET',
-      url: '/user/mypage',
+      method: "GET",
+      url: "/user/mypage",
       headers: {
         Authorization: `Bearer ${state.token}`
       }
-    })
-    .then(response => {
+    }).then(response => {
       const payload = response.data;
-      setCurrentDrugs(payload.infos[0].sub_user.current_drugs);
+      dispatch({
+        type: "CHANGE_SUB_USER",
+        subUserId: payload.infos[id].sub_user.basic_info.id,
+        userName: payload.infos[id].sub_user.basic_info.user_name,
+        subUserIndex: id
+      });
+      setCurrentDrugs(payload.infos[id].sub_user.current_drugs);
       setDrugReviews(payload.drug_reviews);
-      setCurrentDiseases(payload.infos[0].sub_user.current_diseases);
+      setCurrentDiseases(payload.infos[id].sub_user.current_diseases);
       setWatchDrugs(payload.watch_drugs);
-    })
-  }
+    });
+  };
 
   return (
     <MyPageContainer>
-      <Topbar
-        history={props.history}
-      />
+      <Topbar history={props.history} />
       <UserGeneralInfo
         currentDrugs={currentDrugs}
         drugReviews={drugReviews}
         myConversation={myConversation}
+        userChange={id => getUserInfo(id)}
+        history={props.history}
       />
       <Divider />
-      <DiseasesAndExtra
-        currentDiseases={currentDiseases}
-      />
+      <DiseasesAndExtra currentDiseases={currentDiseases} />
       <Divider />
-      <WatchDrugs
-        watchDrugs={watchDrugs}
-      />
+      <WatchDrugs watchDrugs={watchDrugs} />
     </MyPageContainer>
   );
 }
