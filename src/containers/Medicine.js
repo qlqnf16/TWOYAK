@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "../apis";
 import styled from "styled-components";
 import { DrugContext } from "../contexts/DrugStore";
@@ -13,9 +13,11 @@ import DrugReview from "../components/Medicine/Review/DrugReview";
 import {
   Container,
   FlexDiv,
+  BasicText,
   RatingText,
   StyledRating
 } from "../components/UI/SharedStyles";
+import Modal from "../components/UI/Modal";
 
 const SearchContainer = styled.div`
   width: 100%;
@@ -28,6 +30,26 @@ const SearchContainer = styled.div`
   background-color: white;
 `;
 
+const ReviewContainer = styled.div`
+  position: relative;
+  width: fit-content;
+`;
+
+const RatingContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 65px;
+  width: 150px;
+`;
+
+const Rating = styled(StyledRating)`
+  margin: 0 -2px;
+  font-size: 10px;
+  .custom {
+    margin: 0 2px;
+  }
+`;
+
 function Medicine({ match, history, location }) {
   let initialparam = !match.params.id ? 0 : match.params.id;
   const [paramId, setParamId] = useState(initialparam);
@@ -38,7 +60,10 @@ function Medicine({ match, history, location }) {
   const [drugimg, setDrugimg] = useState("");
   const [drugList, setDrugList] = useState(null);
   const [drugReview, setDrugReview] = useState(null);
+  const [currentDrugs, setCurrentDrugs] = useState([]);
+  const [watching, setWatching] = useState(false);
 
+  const [smallModal, setSmallModal] = useState(false); // 약품 추가, 제거 모달
   const [modal, setModal] = useState(false); // 의약품 상세정보 모달
   const [showMore, setShowMore] = useState(false); // 더보기 버튼
   const [errorMessage, setErrorMessage] = useState();
@@ -49,10 +74,6 @@ function Medicine({ match, history, location }) {
   // user informations
   const { state: authState } = useContext(AuthContext);
 
-  // useEffect(() => {
-  //   searchByTerms();
-  // }, [location.state.term]);
-
   // url에서 drug id param이 변하면 paramId 수정
   useEffect(() => {
     if (match.params.id) {
@@ -60,23 +81,29 @@ function Medicine({ match, history, location }) {
     }
   }, [match.params.id]);
 
-  // paramId 가 변하면 id로 약물 검색
+  // params 가 변하면 약물 검색
   useEffect(() => {
     // state 초기화
     setDrug(null);
     setDrugList(null);
     setDrugimg(null);
-
     if (paramId) {
       searchById(paramId);
       getDrugImg(paramId);
     }
+    if (authState.token) {
+      getCurrentDrugs();
+    }
     return setDrugList(null);
-  }, [paramId]);
+  }, [paramId, authState]);
 
   // id로 약물검색
   const searchById = async id => {
-    const getDrugData = axios.get(`drugs/${id}`);
+    const getDrugData = axios.get(`drugs/${id}`, {
+      params: {
+        sub_user_id: authState.subUserId
+      }
+    });
     const getDrugReviews = axios.get(`drugs/${id}/drug_reviews`);
 
     try {
@@ -84,10 +111,10 @@ function Medicine({ match, history, location }) {
         getDrugData,
         getDrugReviews
       ]);
-      console.log(drugData, drugReviews);
 
       setDrug(drugData);
       setDrugReview(drugReviews);
+      setWatching(drugData.watching);
     } catch (error) {
       console.log(error);
     }
@@ -104,7 +131,7 @@ function Medicine({ match, history, location }) {
         params: { search_term: term }
       });
       if (data.item_name) {
-        setDrugList(data.name);
+        setDrugList(data.item_name);
       } else {
         history.push(`/medicine/${data.id}`);
       }
@@ -129,10 +156,82 @@ function Medicine({ match, history, location }) {
     setTerm(value);
   };
 
+  // 현재 복용중인 약품
+  const getCurrentDrugs = async () => {
+    try {
+      const { data } = await axios.get(
+        `/user/${authState.subUserId}/current_drugs`,
+        {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        }
+      );
+      const idList = data.map(d => d.current_drug_id);
+      setCurrentDrugs(idList);
+      // console.log(idList);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // 현재 복용중 약품에 추가
+  const addCurrentDrug = async id => {
+    try {
+      await axios({
+        method: "POST",
+        url: `user/${authState.subUserId}/current_drugs/${id}`,
+        headers: {
+          Authorization: `bearer ${authState.token}`
+        }
+      });
+      alert("추가됐습니다");
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  // 과거 복용중으로 보내기
+  const toPastDrug = async () => {
+    try {
+      await axios.delete(
+        `user/${authState.subUserId}/current_drugs/${drug.id}/to_past`,
+        {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // 현재 복용중 약품에서 제거
+  const deleteCurrentDrug = async () => {
+    try {
+      await axios.delete(
+        `user/${authState.subUserId}/current_drugs/${drug.id}`,
+        {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // 약품 추가 / 제거 modal toggle
+  const additionalModalToggle = () => {
+    setSmallModal(!smallModal);
+  };
+
   // searchResult 상세정보 modal toggle
-  const modalOn = useCallback(() => {
+  const modalOn = () => {
     setModal(true);
-  }, []);
+  };
   const modalOff = () => {
     setModal(false);
   };
@@ -152,6 +251,22 @@ function Medicine({ match, history, location }) {
     setShowMore(!showMore);
   };
 
+  // 관심목록 토글
+  const toggleWatching = async () => {
+    try {
+      await axios.post(
+        `/user/watch_drugs`,
+        {
+          watch_drug: { user_id: authState.userId, watch_drug_id: drug.id }
+        },
+        { headers: { Authorization: authState.token } }
+      );
+      setWatching(!watching);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   if (match.params.id) {
     return (
       <>
@@ -160,6 +275,8 @@ function Medicine({ match, history, location }) {
             <SearchInput
               searchTerms={searchByTerms}
               inputChange={searchTermChange}
+              currentDrugs={currentDrugs}
+              addCurrentDrug={addCurrentDrug}
             />
           )}
           {drug && (
@@ -167,25 +284,42 @@ function Medicine({ match, history, location }) {
               <SearchResult
                 drug={drug}
                 drugImg={drugimg}
+                addCurrentDrug={addCurrentDrug}
+                toPastDrug={toPastDrug}
+                deleteCurrentDrug={deleteCurrentDrug}
                 modalOn={modalOn}
                 showMore={showMore}
                 toggleShowMore={toggleShowMore}
+                watching={watching}
+                toggleWatching={toggleWatching}
+                additionalModalToggle={additionalModalToggle}
               />
             </>
           )}
-          {drugList && <ItemList drug_list={drugList} />}
           {errorMessage && <div>{errorMessage}</div>}
-          {drugReview && (
+          {drugReview && drugReview.length > 0 && (
             <>
               <FlexDiv>
-                <div>사용후기</div>
-                <StyledRating
-                  emptySymbol="fas fa-circle custom"
-                  fullSymbol="fas fa-circle custom full"
-                  fractions={2}
-                  // initialRating={drug.rating}
-                  readonly
-                />
+                <ReviewContainer>
+                  <BasicText>사용후기</BasicText>
+                  <RatingContainer>
+                    <Rating
+                      emptySymbol="fas fa-circle custom"
+                      fullSymbol="fas fa-circle custom full"
+                      fractions={2}
+                      initialRating={drug.drug_rating}
+                      readonly
+                    />
+                    <RatingText
+                      margin="0.5rem"
+                      opacity="0.5"
+                      size="0.7rem"
+                      bold
+                    >
+                      {drug.drug_rating.toFixed(1)} / 5.0
+                    </RatingText>
+                  </RatingContainer>
+                </ReviewContainer>
               </FlexDiv>
               {drugReview.map(review => (
                 <DrugReview review={review} key={review.id} />
@@ -194,19 +328,55 @@ function Medicine({ match, history, location }) {
           )}
         </Container>
         {modal && <DetailModal item_seq={drug.item_seq} modalOff={modalOff} />}
+        {smallModal && (
+          <Modal
+            title="현재 복용내역에서 제거하기"
+            content={
+              <div>
+                <div
+                  onClick={() => {
+                    deleteCurrentDrug();
+                  }}
+                >
+                  제거하기
+                </div>
+                <div
+                  onClick={() => {
+                    toPastDrug();
+                  }}
+                >
+                  복용종료
+                </div>
+              </div>
+            }
+            modalOff={additionalModalToggle}
+          />
+        )}
       </>
     );
   } else {
     return (
       <SearchContainer>
         {drugs && (
-          <SearchInput
-            goBack={goBack}
-            term={term}
-            searchTerms={searchByTerms}
-            inputChange={searchTermChange}
-            searchById={moveById}
-          />
+          <>
+            <SearchInput
+              goBack={goBack}
+              term={term}
+              searchTerms={searchByTerms}
+              inputChange={searchTermChange}
+              searchById={moveById}
+              currentDrugs={currentDrugs}
+              addCurrentDrug={addCurrentDrug}
+            />{" "}
+            {drugList && (
+              <ItemList
+                drug_list={drugList}
+                term={term}
+                addCurrentDrug={addCurrentDrug}
+                currentDrugs={currentDrugs}
+              />
+            )}
+          </>
         )}
       </SearchContainer>
     );

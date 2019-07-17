@@ -3,6 +3,8 @@
   padding: 0;
   margin: 0;
   text-align: justify;
+  font-family: "Nanum Gothic", sans-serif;
+  line-height: 1.5;
 }
 
 :focus {
@@ -11,6 +13,7 @@
 
 :root {
   --twoyak-blue: #00a2ff;
+  --twoyak-opacity-blue: #00a2ff33;
   --twoyak-black: #474747;
 }
 

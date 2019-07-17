@@ -5,6 +5,7 @@ import LoginError from "./containers/LoginError";
 import HealthRecord from "./containers/HealthRecord";
 import Mypage from "./containers/Mypage";
 import Signup from "./containers/Signup";
+import AllReviews from "./containers/AllReviews";
 import AddUserInfo from "./containers/AddUserInfo";
 import AddUser from "./containers/AddUser";
 
@@ -15,7 +16,6 @@ const routes = [
     component: Home,
     exact: true
   },
-
   {
     path: "/login-error",
     name: "로그인 에러",
@@ -56,6 +56,11 @@ const routes = [
     path: "/add-user",
     name: "사용자 추가",
     component: AddUser
+  },
+  {
+    path: "/all-reviews",
+    name: "리뷰 모아보기",
+    component: AllReviews
   }
 ];
 
