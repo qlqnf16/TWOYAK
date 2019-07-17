@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import AutoSuggestion from "../../Util/AutoSuggestion";
 import { breakpoints, BasicButton, FlexForm } from "../../UI/SharedStyles";
+import { ReactComponent as SearchArrow } from "../../../assets/images/search-arrow.svg";
 
 import "@fortawesome/fontawesome-free/css/all.css";
 
@@ -12,10 +13,7 @@ const Form = styled(FlexForm)`
   }
 `;
 
-const ArrowIcon = styled.i`
-  display: block;
-  color: var(--twoyak-black);
-  font-size: 1.5rem;
+const Arrow = styled(SearchArrow)`
   margin-right: 10px;
 `;
 
@@ -86,15 +84,24 @@ const Button = styled(BasicButton)`
   }
 `;
 
-const SearchInput = ({ searchTerms, searchById, inputChange, goBack }) => {
+const SearchInput = ({
+  searchTerms,
+  searchById,
+  currentDrugs,
+  addCurrentDrug,
+  inputChange,
+  goBack
+}) => {
   const myInput = (
     <Form onSubmit={searchTerms}>
-      <ArrowIcon className="fas fa-arrow-left" onClick={goBack} />
+      <Arrow onClick={goBack} />
       <StyleWrapper>
         <AutoSuggestion
           search="drug"
           placeholderProp={"약품명 또는 성분명을 입력해주세요"}
           searchKey="name"
+          currentDrugs={currentDrugs}
+          addCurrentDrug={addCurrentDrug}
           inputChange={inputChange}
           submit={searchById}
         />

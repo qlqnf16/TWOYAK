@@ -5,8 +5,9 @@ import parse from "autosuggest-highlight/parse";
 import { DrugContext } from "../../contexts/DrugStore";
 import deburr from "lodash/deburr";
 import styled from "styled-components";
-import { breakpoints } from "../UI/SharedStyles";
+import { breakpoints, BasicText } from "../UI/SharedStyles";
 import { ReactComponent as Erase } from "../../assets/images/erase.svg";
+import { ReactComponent as Add } from "../../assets/images/plus-in-search.svg";
 
 const Container = styled.div`
   display: flex;
@@ -23,12 +24,27 @@ const StyleWrapper = styled.div`
   }
 `;
 
+const RecommendContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const ItemContainer = styled.div`
+  width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
 const AutoSuggestion = ({
   search,
   searchKey,
   placeholderProp,
+  addCurrentDrug,
+  currentDrugs,
   inputChange,
-  submit,
+  submit
 }) => {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -81,26 +97,31 @@ const AutoSuggestion = ({
     const matches = match(suggestion[searchKey], query);
     const parts = parse(suggestion[searchKey], matches);
     return (
-      <div style={{ display: "flex" }}>
-        {/* <div
-          onClick={() => {
-            console.log(suggestion.id);
-          }}
-        >
-          {suggestion.id}
-        </div> */}
-        <div>
+      <RecommendContainer>
+        <ItemContainer>
           {parts.map((part, index) =>
             part.highlight ? (
-              <b key={index} style={{ color: "red" }}>
+              <b key={index} style={{ color: "#00a2ff" }}>
                 {part.text}
               </b>
             ) : (
               <span key={index}>{part.text}</span>
             )
           )}
-        </div>
-      </div>
+        </ItemContainer>
+        {currentDrugs && currentDrugs.includes(suggestion.id) ? (
+          <BasicText size="0.7rem" opacity="0.7">
+            복용중
+          </BasicText>
+        ) : (
+          <Add
+            onClick={e => {
+              e.stopPropagation();
+              addCurrentDrug(suggestion.id);
+            }}
+          />
+        )}
+      </RecommendContainer>
     );
   };
 

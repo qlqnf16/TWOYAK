@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import close from "../../assets/images/(white)close.svg";
+import medIcon from "../../assets/images/(white)med-icon.svg";
 
 const Backdrop = styled.div`
   width: 100%;
@@ -55,12 +56,12 @@ const Content = styled.div`
   margin: 0 auto;
 `;
 
-const Modal = ({ img, imgalt, title, content, modalOff }) => (
+const Modal = ({ title, content, modalOff }) => (
   <>
     <Container>
       <Header>
         <CloseIcon src={close} alt="close" onClick={modalOff} />
-        <HeaderIcon src={img} alt={imgalt} />
+        <HeaderIcon src={medIcon} alt="med-icon" />
         {title}
       </Header>
       <Content>{content}</Content>

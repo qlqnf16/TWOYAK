@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React from "react";
 import { Switch, Route } from "react-router-dom";
 import routes from "./routes";
 import DrugStore from "./contexts/DrugStore";
