@@ -9,8 +9,14 @@ const AddInfoHeader = styled.div`
   letter-spacing: -0.0268rem;
 `;
 
+const Divider = styled.div``;
+
 function Header() {
-  return <AddInfoHeader>투약 맞춤화 서비스</AddInfoHeader>;
+  return (
+    <div>
+      <AddInfoHeader>투약 맞춤화 서비스</AddInfoHeader>
+    </div>
+  );
 }
 
 export default Header;
