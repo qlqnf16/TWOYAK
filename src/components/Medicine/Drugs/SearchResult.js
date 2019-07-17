@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { breakpoints, BasicButton, BasicText } from "../../UI/SharedStyles";
 import Warning from "../../UI/Warning";
-import { ReactComponent as EmptyHeart } from "../../../assets/images/heart-none.svg";
-import { ReactComponent as FullHeart } from "../../../assets/images/heart-fill.svg";
+import emptyHeart from "../../../assets/images/heart-none.svg";
+import fullHeart from "../../../assets/images/heart-fill.svg";
 
 const Container = styled.div`
   display: flex;
@@ -32,6 +32,10 @@ const IconContainer = styled.div`
   position: absolute;
   top: 4px;
   left: 83%;
+`;
+
+const Icon = styled.img`
+  width: 20px;
 `;
 
 const ItemName = styled.div`
@@ -190,9 +194,13 @@ const SearchResult = React.memo(
           <ItemName>{drug.name.split("(")[0]}</ItemName>
           <IconContainer>
             {watching ? (
-              <FullHeart onClick={toggleWatching} />
+              <Icon src={fullHeart} alt="full-heart" onClick={toggleWatching} />
             ) : (
-              <EmptyHeart onClick={toggleWatching} />
+              <Icon
+                src={emptyHeart}
+                alt="empty-heart"
+                onClick={toggleWatching}
+              />
             )}
           </IconContainer>
           {drugImg && (
