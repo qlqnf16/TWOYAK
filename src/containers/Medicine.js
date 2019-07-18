@@ -178,10 +178,13 @@ function Medicine({ match, history, location }) {
   };
 
   // 현재 복용중 약품에 추가
-  const addCurrentDrug = async id => {
+  const addCurrentDrug = async (id, data) => {
     try {
       await axios({
         method: "POST",
+        params: {
+          disease_ids: data
+        },
         url: `user/${authState.subUserId}/current_drugs/${id}`,
         headers: {
           Authorization: `bearer ${authState.token}`
@@ -342,6 +345,7 @@ function Medicine({ match, history, location }) {
           <AddModal
             additionalModalToggle={additionalModalToggle}
             addCurrentDrug={addCurrentDrug}
+            drugId={drug.id}
           />
         )}
         {deleteModal && (

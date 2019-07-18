@@ -44,7 +44,7 @@ const RemoveIcon = styled.img`
   margin-left: 0.6rem;
 `;
 
-const AddModal = ({ additionalModalToggle }) => {
+const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
   const [showDetail, setShowDetail] = useState(false);
   const [diseases, setDiseases] = useState([]);
 
@@ -54,6 +54,11 @@ const AddModal = ({ additionalModalToggle }) => {
 
   const removeDiseaseHandler = id => {
     setDiseases(diseases.filter(disease => disease.id !== id));
+  };
+
+  const addDrug = () => {
+    const diseaseIds = diseases.map(disease => disease.id);
+    addCurrentDrug(drugId, diseaseIds);
   };
 
   return (
@@ -108,7 +113,7 @@ const AddModal = ({ additionalModalToggle }) => {
             </>
           )}
 
-          <Button>완료</Button>
+          <Button onClick={addDrug()}>완료</Button>
         </Container>
       }
       modalOff={() => {
