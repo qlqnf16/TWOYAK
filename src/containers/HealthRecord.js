@@ -61,7 +61,7 @@ function HealthRecord() {
   };
 
   const getInfos = url =>
-    axios.get(`user/${authState.subUsers[0].id}/${url}`, {
+    axios.get(`user/${authState.subUserId}/${url}`, {
       headers: {
         Authorization: `bearer ${authState.token}`
       }

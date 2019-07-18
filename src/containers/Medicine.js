@@ -9,6 +9,8 @@ import SearchResult from "../components/Medicine/Drugs/SearchResult";
 import ItemList from "../components/Medicine/Drugs/ItemList";
 import DetailModal from "../components/Medicine/Drugs/DetailModal";
 import DrugReview from "../components/Medicine/Review/DrugReview";
+import AddModal from "../components/Medicine/Modals/AddModal";
+import DeleteModal from "../components/Medicine/Modals/DeleteModal";
 
 import {
   Container,
@@ -17,7 +19,6 @@ import {
   RatingText,
   StyledRating
 } from "../components/UI/SharedStyles";
-import Modal from "../components/UI/Modal";
 
 const SearchContainer = styled.div`
   width: 100%;
@@ -63,7 +64,8 @@ function Medicine({ match, history, location }) {
   const [currentDrugs, setCurrentDrugs] = useState([]);
   const [watching, setWatching] = useState(false);
 
-  const [smallModal, setSmallModal] = useState(false); // 약품 추가, 제거 모달
+  const [addModal, setAddModal] = useState(false); // 약품 추가 모달
+  const [deleteModal, setDeleteModal] = useState(false); // 약품 제거 모달
   const [modal, setModal] = useState(false); // 의약품 상세정보 모달
   const [showMore, setShowMore] = useState(false); // 더보기 버튼
   const [errorMessage, setErrorMessage] = useState();
@@ -224,8 +226,17 @@ function Medicine({ match, history, location }) {
   };
 
   // 약품 추가 / 제거 modal toggle
-  const additionalModalToggle = () => {
-    setSmallModal(!smallModal);
+  const additionalModalToggle = type => {
+    switch (type) {
+      case "add":
+        setAddModal(!addModal);
+        break;
+      case "delete":
+        setDeleteModal(!deleteModal);
+        break;
+      default:
+        break;
+    }
   };
 
   // searchResult 상세정보 modal toggle
@@ -271,22 +282,21 @@ function Medicine({ match, history, location }) {
     return (
       <>
         <Container>
+          {/* desktop 화면 */}
           {window.innerWidth >= 960 && drugs && (
             <SearchInput
               searchTerms={searchByTerms}
               inputChange={searchTermChange}
               currentDrugs={currentDrugs}
-              addCurrentDrug={addCurrentDrug}
+              additionalModalToggle={additionalModalToggle}
             />
           )}
+
           {drug && (
             <>
               <SearchResult
                 drug={drug}
                 drugImg={drugimg}
-                addCurrentDrug={addCurrentDrug}
-                toPastDrug={toPastDrug}
-                deleteCurrentDrug={deleteCurrentDrug}
                 modalOn={modalOn}
                 showMore={showMore}
                 toggleShowMore={toggleShowMore}
@@ -328,28 +338,17 @@ function Medicine({ match, history, location }) {
           )}
         </Container>
         {modal && <DetailModal item_seq={drug.item_seq} modalOff={modalOff} />}
-        {smallModal && (
-          <Modal
-            title="현재 복용내역에서 제거하기"
-            content={
-              <div>
-                <div
-                  onClick={() => {
-                    deleteCurrentDrug();
-                  }}
-                >
-                  제거하기
-                </div>
-                <div
-                  onClick={() => {
-                    toPastDrug();
-                  }}
-                >
-                  복용종료
-                </div>
-              </div>
-            }
+        {addModal && (
+          <AddModal
+            additionalModalToggle={additionalModalToggle}
+            addCurrentDrug={addCurrentDrug}
+          />
+        )}
+        {deleteModal && (
+          <DeleteModal
             modalOff={additionalModalToggle}
+            deleteCurrentDrug={deleteCurrentDrug}
+            toPastDrug={toPastDrug}
           />
         )}
       </>
@@ -366,14 +365,20 @@ function Medicine({ match, history, location }) {
               inputChange={searchTermChange}
               searchById={moveById}
               currentDrugs={currentDrugs}
-              addCurrentDrug={addCurrentDrug}
+              addCurrentDrug={additionalModalToggle}
             />{" "}
             {drugList && (
               <ItemList
                 drug_list={drugList}
                 term={term}
-                addCurrentDrug={addCurrentDrug}
+                addCurrentDrug={additionalModalToggle}
                 currentDrugs={currentDrugs}
+              />
+            )}
+            {addModal && (
+              <AddModal
+                additionalModalToggle={additionalModalToggle}
+                addCurrentDrug={addCurrentDrug}
               />
             )}
           </>

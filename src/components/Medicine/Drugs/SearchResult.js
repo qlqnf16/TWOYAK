@@ -107,7 +107,6 @@ const SearchResult = React.memo(
   ({
     drug,
     drugImg,
-    addCurrentDrug,
     modalOn,
     showMore,
     toggleShowMore,
@@ -267,10 +266,10 @@ const SearchResult = React.memo(
           onClick={
             drug.currently_taking
               ? () => {
-                  additionalModalToggle();
+                  additionalModalToggle("delete");
                 }
               : () => {
-                  addCurrentDrug(drug.id);
+                  additionalModalToggle("add");
                 }
           }
         >
