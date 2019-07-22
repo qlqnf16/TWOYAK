@@ -49,7 +49,6 @@ function HealthRecord() {
   useEffect(() => {}, [currentDrugs]);
 
   useEffect(() => {
-    console.log(authState);
     if (authState.token) {
       getUserInfo();
     }
@@ -78,8 +77,6 @@ function HealthRecord() {
         getInfos("current_drugs"),
         getInfos("analysis/get")
       ]);
-      console.log(myCurrent);
-      console.log(myPast);
       setCurrentDrugs(myCurrent);
       setPastDrugs(myPast);
       if (myDur.duplicate || myDur.interactions || myDur.same_ingr) {

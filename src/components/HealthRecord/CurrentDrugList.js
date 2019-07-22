@@ -45,7 +45,6 @@ const CurrentDrugList = ({
     setShow(!show);
   };
 
-  console.log(durInfo);
   return (
     <>
       <WhiteButton onClick={toggleModal}>약 이름 모아보기</WhiteButton>

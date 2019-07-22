@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "../apis";
+import qs from "querystring";
 import styled from "styled-components";
 import { DrugContext } from "../contexts/DrugStore";
 import { AuthContext } from "../contexts/AuthStore";
@@ -182,15 +183,22 @@ function Medicine({ match, history, location }) {
     try {
       await axios({
         method: "POST",
-        params: {
-          disease_ids: data
-        },
         url: `user/${authState.subUserId}/current_drugs/${id}`,
+        params: {
+          disease_ids: data.diseaseIds,
+          from: data.formattedFrom,
+          to: data.formattedTo
+        },
+        paramsSerializer: params => {
+          return qs.stringify(params);
+        },
         headers: {
           Authorization: `bearer ${authState.token}`
         }
       });
       alert("추가됐습니다");
+      searchById(drug.id);
+      setAddModal(false);
     } catch (error) {
       console.log(error.response);
     }
@@ -200,13 +208,17 @@ function Medicine({ match, history, location }) {
   const toPastDrug = async () => {
     try {
       await axios.delete(
-        `user/${authState.subUserId}/current_drugs/${drug.id}/to_past`,
+        `user/${authState.subUserId}/current_drugs/${
+          drug.currently_taking.current_drug_id
+        }/to_past`,
         {
           headers: {
             Authorization: `bearer ${authState.token}`
           }
         }
       );
+      searchById(drug.id);
+      setDeleteModal(false);
     } catch (error) {
       console.log(error);
     }
@@ -216,13 +228,17 @@ function Medicine({ match, history, location }) {
   const deleteCurrentDrug = async () => {
     try {
       await axios.delete(
-        `user/${authState.subUserId}/current_drugs/${drug.id}`,
+        `user/${authState.subUserId}/current_drugs/${
+          drug.currently_taking.current_drug_id
+        }`,
         {
           headers: {
             Authorization: `bearer ${authState.token}`
           }
         }
       );
+      searchById(drug.id);
+      setDeleteModal(false);
     } catch (error) {
       console.log(error);
     }
@@ -350,7 +366,7 @@ function Medicine({ match, history, location }) {
         )}
         {deleteModal && (
           <DeleteModal
-            modalOff={additionalModalToggle}
+            additionalModalToggle={additionalModalToggle}
             deleteCurrentDrug={deleteCurrentDrug}
             toPastDrug={toPastDrug}
           />
