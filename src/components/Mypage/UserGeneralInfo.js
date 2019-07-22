@@ -127,7 +127,7 @@ function UserGeneralInfo({
         <AddIcon
           src={AddDash}
           alt="add-users"
-          onClick={() => history.push("/add-user")}
+          onClick={() => history.push("/add-sub-user")}
         />
       </ChangeFunction>
     </ModalContents>

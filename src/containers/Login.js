@@ -10,10 +10,17 @@ import { BasicButton } from "../components/UI/SharedStyles";
 import { BasicInput } from "../components/UI/SharedStyles";
 import FacebookIcon from "../assets/images/facebook.svg";
 import NaverIcon from "../assets/images/naver.svg";
+import GoogleIcon from "../assets/images/google-signin.svg";
 
 const LoginArea = styled(Container)`
   padding-top: 42px;
   margin: auto;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const CustomButton = styled(BasicButton)`
@@ -45,13 +52,6 @@ const AuthFunctionKey = styled.div`
   font-size: 0.875rem;
   color: #c8c8c8;
   cursor: pointer;
-`;
-
-const VerticalDivider = styled.div`
-  width: 1px;
-  height: 0.8125‬rem;
-  opacity: 0.3;
-  border: solid 1px #c8c8c8;
 `;
 
 const SocialLoginArea = styled.div`
@@ -114,18 +114,12 @@ function Login(props) {
           token: payload
         });
       })
-      .catch(error =>
+      .catch(error => {
         dispatch({
           type: "SIGNIN_FAIL",
           error: error.response.data.errors
-        })
-      );
-  };
-
-  const signout = () => {
-    dispatch({
-      type: "SIGNOUT"
-    });
+        });
+      });
   };
 
   const authFunction = authFunction => {
@@ -147,26 +141,32 @@ function Login(props) {
     }
   ];
 
-  const responseGoogle = response => {
-    console.log(response);
-  };
-
   return (
     <Container>
       <LoginArea>
-        <LoginInput
-          type="email"
-          placeholder="이메일"
-          onChange={event => signinDataHandler("email", event)}
-        />
-        <LoginInput
-          type="password"
-          placeholder="비밀번호"
-          onChange={event => signinDataHandler("password", event)}
-        />
-        <CustomButton onClick={() => signinActionHandler()}>
-          로그인
-        </CustomButton>
+        <Form
+          onSubmit={event => {
+            event.preventDefault();
+            signinActionHandler();
+          }}
+        >
+          <LoginInput
+            type="email"
+            placeholder="이메일"
+            onChange={event => signinDataHandler("email", event)}
+          />
+          <LoginInput
+            type="password"
+            placeholder="비밀번호"
+            onChange={event => signinDataHandler("password", event)}
+          />
+          {state.error ? (
+            <div style={{ color: "red" }}>{state.error}</div>
+          ) : null}
+          <CustomButton onClick={() => signinActionHandler()}>
+            로그인
+          </CustomButton>
+        </Form>
         <Divider />
         <AuthFunctionArea>
           {AuthFunctions.map((i, k) => (
@@ -187,7 +187,7 @@ function Login(props) {
             onClick={() => signinBySocialAccount("naver")}
           />
           <img
-            src={NaverIcon}
+            src={GoogleIcon}
             alt="google-signin"
             onClick={() => signinBySocialAccount("google_oauth2")}
           />

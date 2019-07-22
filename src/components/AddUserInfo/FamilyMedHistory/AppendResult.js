@@ -3,11 +3,23 @@ import axios from "../../../apis";
 import { AuthContext } from "../../../contexts/AuthStore";
 import styled from "styled-components";
 import SearchInput from "./SearchInput";
-import addIcon from "../../../assets/images/add.svg";
 import closeIcon from "../../../assets/images/close.svg";
 
 const StyleWrapper = styled.div`
   width: 15.5rem;
+  margin-top: 2.8125rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Category = styled.div`
+  width: auto;
+  font-size: 0.875rem;
+  font-weight: 800;
+  height: 1rem;
+  opacity: 0.6;
+  color: var(--twoyak-blue);
 `;
 
 const DiseaseContainer = styled.div`
@@ -40,21 +52,19 @@ function AppendResult({ diseaseArray }) {
   const [familyMedHistories, setFamilyMedHistories] = useState([]);
   const { state } = useContext(AuthContext);
 
-  console.log(state);
-
-  useState(() => {
-    if (state.userId) {
-      axios({
-        method: "GET",
-        url: `/user/${state.userId}/family_med_histories`,
-        headers: {
-          Authorization: state.token
-        }
-      }).then(response => {
-        setFamilyMedHistories(response.data);
-      });
-    }
-  }, [state.userId]);
+  // useState(() => {
+  //   if (state.userId) {
+  //     axios({
+  //       method: "GET",
+  //       url: `/user/${state.userId}/family_med_histories`,
+  //       headers: {
+  //         Authorization: state.token
+  //       }
+  //     }).then(response => {
+  //       setFamilyMedHistories(response.data);
+  //     });
+  //   }
+  // }, [state.userId]);
 
   const postDiseaseIdHandler = (method, suggestion) => {
     axios({
@@ -79,12 +89,14 @@ function AppendResult({ diseaseArray }) {
             setFamilyMedHistories(response.data);
           });
           break;
+        default:
       }
     });
   };
 
   return (
     <StyleWrapper>
+      <Category>가족력이 있으시면 입력해주세요</Category>
       <SearchInput
         diseaseArray={diseaseArray}
         appendDiseaseId={suggestion => postDiseaseIdHandler("POST", suggestion)}

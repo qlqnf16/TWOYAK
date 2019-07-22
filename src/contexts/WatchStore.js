@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from "react";
 import { AuthContext } from "./AuthStore";
 
 function WatchStore(props) {
-  const { state, dispatch } = useContext(AuthContext);
+  const { dispatch } = useContext(AuthContext);
 
   useEffect(() => {
     function AutoLogin() {

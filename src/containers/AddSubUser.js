@@ -14,7 +14,13 @@ import Birthdate from "../components/AddUserInfo/Birthdate";
 
 import Modal from "../components/UI/Modal";
 import medIcon from "../assets/images/(white)med-icon.svg";
+import Nickname from "../components/AddUserInfo/Nickname";
 
+const AddInfoArea = styled(Container)`
+  padding-top: 24px;
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
+`;
 const SubmitButton = styled(BasicButton)`
   width: 6.8125rem;
   height: 3rem;
@@ -48,26 +54,17 @@ const ModalMessage = styled.div`
   margin-bottom: 38px;
 `;
 
-function AddInfo(props) {
+function AddSubUser(props) {
   const [diseaseArray, setDiseaseArray] = useState([]);
-  const [userName, setUserName] = useState(null);
+  const [userName, setUserName] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [drink, setDrink] = useState(null);
   const [smoke, setSmoke] = useState(null);
   const [caffeine, setCaffeine] = useState(null);
   const [sex, setSex] = useState(null);
-  const [birthDateModal] = useState(false);
   const [skipAddInfo, setSkipAddInfo] = useState(false);
 
   const { state, dispatch } = useContext(AuthContext);
-
-  const AddInfoArea = styled(Container)`
-    padding-top: 24px;
-    padding-left: 1.4rem;
-    padding-right: 1.4rem;
-    position: ${birthDateModal ? "fixed" : "static"};
-    overflow: ${birthDateModal ? "hidden" : "visible"};
-  `;
 
   useEffect(() => {
     axios({
@@ -78,31 +75,10 @@ function AddInfo(props) {
     });
   }, []);
 
-  useEffect(() => {
-    if (state.token) {
-      axios({
-        method: "GET",
-        url: "/user/mypage",
-        headers: {
-          Authorization: `Bearer ${state.token}`
-        }
-      }).then(response => {
-        const payload = response.data;
-        const object = payload.infos[state.subUserIndex].sub_user.basic_info;
-        setUserName(object.user_name);
-        setBirthDate(object.birth_date);
-        setDrink(object.drink);
-        setSmoke(object.smoke);
-        setCaffeine(object.caffeine);
-        setSex(object.sex);
-      });
-    }
-  }, [state.token]);
-
   const addInfoHandler = () => {
     axios({
-      method: "PATCH",
-      url: `/user/sub_users/${state.subUserId}`,
+      method: "POST",
+      url: `/user/sub_users`,
       headers: {
         Authorization: `Bearer ${state.token}`
       },
@@ -146,6 +122,10 @@ function AddInfo(props) {
     setBirthDate(date);
   };
 
+  const changeNicknameHandler = name => {
+    setUserName(name);
+  };
+
   const modalContent = (
     <ModalContents>
       <ModalMessage>
@@ -165,8 +145,12 @@ function AddInfo(props) {
   return (
     <AddInfoArea>
       <Header
-        header="투약 맞춤화 서비스"
-        message="해당 정보는 투약 맞춤화 추천 서비스를 이용하는데에만 사용됩니다. 해당하는 부분을 체크해주세요."
+        header="추가 사용자 정보 입력"
+        message="추가 사용자의 정보를 입력해주세요."
+      />
+      <Nickname
+        getNickname={name => changeNicknameHandler(name)}
+        value={userName}
       />
       <Sex
         sex={sex}
@@ -184,7 +168,7 @@ function AddInfo(props) {
       />
       <AppendDisease diseaseArray={diseaseArray} />
       <ButtonArea>
-        <SubmitButton onClick={() => addInfoHandler()}>제출</SubmitButton>
+        <SubmitButton onClick={() => addInfoHandler()}>추가하기</SubmitButton>
         <SkipButton onClick={() => toggleSkipAddInfoHandler()}>
           건너뛰기
         </SkipButton>
@@ -201,4 +185,4 @@ function AddInfo(props) {
   );
 }
 
-export default AddInfo;
+export default AddSubUser;

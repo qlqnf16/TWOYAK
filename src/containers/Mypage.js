@@ -29,7 +29,7 @@ const Divider = styled.div`
 function Mypage(props) {
   const [currentDrugs, setCurrentDrugs] = useState([]);
   const [drugReviews, setDrugReviews] = useState([]);
-  const [myConversation, setMyConversation] = useState([]);
+  const [myConversation] = useState([]);
   const [currentDiseases, setCurrentDiseases] = useState([]);
   const [watchDrugs, setWatchDrugs] = useState([]);
 
@@ -39,7 +39,7 @@ function Mypage(props) {
     if (state.token) {
       getUserInfo(state.subUserIndex);
     }
-  }, [state.token]);
+  }, [state.token, state.subUserIndex]);
 
   const getUserInfo = id => {
     axios({
@@ -56,6 +56,7 @@ function Mypage(props) {
         userName: payload.infos[id].sub_user.basic_info.user_name,
         subUserIndex: id
       });
+      console.log(payload);
       setCurrentDrugs(payload.infos[id].sub_user.current_drugs);
       setDrugReviews(payload.drug_reviews);
       setCurrentDiseases(payload.infos[id].sub_user.current_diseases);

@@ -1,8 +1,7 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import Autosuggest from "react-autosuggest";
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
-import { AuthContext } from "../../contexts/AuthStore";
 import deburr from "lodash/deburr";
 import styled from "styled-components";
 import { breakpoints } from "../UI/SharedStyles";
@@ -33,9 +32,6 @@ const AutoSuggestion = ({
 }) => {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-
-  const { state } = useContext(AuthContext);
-  const { token } = state;
 
   let suggestList;
   switch (search) {
@@ -97,7 +93,11 @@ const AutoSuggestion = ({
             )
           )}
         </div>
-        <img src={addIcon} alt="add-icon" onClick={() => appendDiseaseId(suggestion)} />
+        <img
+          src={addIcon}
+          alt="add-icon"
+          onClick={() => appendDiseaseId(suggestion)}
+        />
       </div>
     );
   };
