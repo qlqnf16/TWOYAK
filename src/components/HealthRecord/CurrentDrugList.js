@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import CurrentDrug from "./CurrentDrug";
-import AddCard from "./AddCard";
 import { WhiteButton, Line, Card } from "../UI/SharedStyles";
 import medIcon from "../../assets/images/(white)med-icon.svg";
 import Modal from "../UI/Modal";
@@ -114,7 +113,6 @@ const CurrentDrugList = ({
           />
         );
       })}
-      <AddCard text="복용중이신 약을 추가해보세요!" />
     </>
   );
 };

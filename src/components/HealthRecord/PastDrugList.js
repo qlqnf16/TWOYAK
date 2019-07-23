@@ -1,9 +1,27 @@
 import React, { useState } from "react";
-import moment from "moment";
-import PastDrug from "./PastDrug";
-import AddCard from "./AddCard";
-import Modal from "../UI/Modal";
 import { Link } from "react-router-dom";
+import moment from "moment";
+
+import PastDrug from "./PastDrug";
+import DrugReview from "../Medicine/Review/DrugReview";
+import Modal from "../UI/Modal";
+
+import styled from "styled-components";
+import { BulletText, BasicButton } from "../UI/SharedStyles";
+
+const MarginDiv = styled.div`
+  margin-top: 1rem;
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: white;
+`;
+
+const Button = styled(BasicButton)`
+  display: block;
+  margin: 1rem auto;
+`;
 
 const PastDrugList = ({ drugs }) => {
   const monthCategory = {};
@@ -70,20 +88,25 @@ const PastDrugList = ({ drugs }) => {
             modalOn={modalOn}
           />
         ))}
-      <AddCard text={["복용이 끝나신 약을", <br />, "추가해보세요!"]} />
       {show && (
         <Modal
           title={targetDrug.drug_name.split("(")[0]}
           content={
             targetDrug && (
               <>
-                <div>{targetDrug && targetDrug.drug_name.split("(")[0]}</div>
-                <div>
-                  {targetDrug.my_review && targetDrug.my_review.efficacy}
-                </div>
-                <Link to={`medicine/${targetDrug.past_drug_id}`}>
-                  상세정보 보기
-                </Link>
+                {targetDrug.my_review && (
+                  <MarginDiv>
+                    <BulletText>
+                      <p>내 리뷰</p>
+                    </BulletText>
+                    <DrugReview my={true} review={targetDrug.my_review} />
+                  </MarginDiv>
+                )}
+                <Button>
+                  <StyledLink to={`medicine/${targetDrug.past_drug_id}`}>
+                    약 상세정보 보기
+                  </StyledLink>
+                </Button>
               </>
             )
           }

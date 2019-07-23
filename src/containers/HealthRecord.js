@@ -5,6 +5,7 @@ import axios from "../apis";
 import CurrentDrugList from "../components/HealthRecord/CurrentDrugList";
 import PastDrugList from "../components/HealthRecord/PastDrugList";
 import Warning from "../components/UI/Warning";
+import AddCard from "../components/HealthRecord/AddCard";
 
 const Background = styled.div`
   width: 100%;
@@ -152,6 +153,13 @@ function HealthRecord() {
               />
             )
           : pastDrugs && <PastDrugList drugs={pastDrugs} />}
+        <AddCard
+          text={
+            showCurrent
+              ? "복용중이신 약을 추가해보세요!"
+              : ["복용이 끝나신 약을", <br />, "추가해보세요!"]
+          }
+        />
       </Container>
     </>
   );

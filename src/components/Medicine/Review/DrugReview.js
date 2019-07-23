@@ -67,7 +67,7 @@ const DrugReview = ({ my, review, deleteReview, updateButton }) => {
             </BasicText>
           )}
         </FlexStart>
-        {my && (
+        {my && updateButton && (
           <FlexStart>
             <EditIcon
               className="fas fa-pencil-alt"
