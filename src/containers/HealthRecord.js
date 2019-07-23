@@ -45,13 +45,14 @@ const Nav = styled.div.attrs(props => props.active)`
 `;
 
 const ModalContainer = styled.div`
-  padding: 2rem;
+  padding: 2.5rem 0;
   text-align: center;
 `;
 
 const Text = styled(BasicText)`
   display: block;
   text-align: center;
+  margin-top: 2rem;
   margin-bottom: 2.5rem;
   font-size: 0.875rem;
 `;
@@ -167,7 +168,7 @@ function HealthRecord() {
                 <Text>
                   로그인하시면 이용 가능한
                   <br />
-                  투약의 맞춤 서비스 입니다.
+                  투약의 맞춤형 관리서비스 입니다
                 </Text>
                 <BasicButton>
                   <StyledLink to="/login">로그인 하러가기</StyledLink>
