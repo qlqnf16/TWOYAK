@@ -1,11 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthStore";
-import styled from "styled-components";
 import axios from "../apis";
+import styled from "styled-components";
+
 import CurrentDrugList from "../components/HealthRecord/CurrentDrugList";
 import PastDrugList from "../components/HealthRecord/PastDrugList";
-import Warning from "../components/UI/Warning";
 import AddCard from "../components/HealthRecord/AddCard";
+import Warning from "../components/UI/Warning";
+import Modal from "../components/UI/Modal";
+import { BasicText, BasicButton } from "../components/UI/SharedStyles";
 
 const Background = styled.div`
   width: 100%;
@@ -40,11 +44,29 @@ const Nav = styled.div.attrs(props => props.active)`
   cursor: ${props => (props.active ? "none" : "pointer")};
 `;
 
+const ModalContainer = styled.div`
+  padding: 2rem;
+  text-align: center;
+`;
+
+const Text = styled(BasicText)`
+  display: block;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  font-size: 0.875rem;
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: white;
+`;
+
 function HealthRecord() {
   const [currentDrugs, setCurrentDrugs] = useState(null);
   const [pastDrugs, setPastDrugs] = useState(null);
   const [durInfo, setDurInfo] = useState(null);
   const [showCurrent, setShowCurrent] = useState(true);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const { state: authState } = useContext(AuthContext);
 
   useEffect(() => {}, [currentDrugs]);
@@ -52,6 +74,9 @@ function HealthRecord() {
   useEffect(() => {
     if (authState.token) {
       getUserInfo();
+      setShowLoginModal(false);
+    } else {
+      setShowLoginModal(true);
     }
   }, [authState]);
 
@@ -133,6 +158,24 @@ function HealthRecord() {
     <>
       <Background />
       <Container>
+        {showLoginModal && (
+          <Modal
+            title="투약"
+            modalOff={() => {}}
+            content={
+              <ModalContainer>
+                <Text>
+                  로그인하시면 이용 가능한
+                  <br />
+                  투약의 맞춤 서비스 입니다.
+                </Text>
+                <BasicButton>
+                  <StyledLink to="/login">로그인 하러가기</StyledLink>
+                </BasicButton>
+              </ModalContainer>
+            }
+          />
+        )}
         <NavContainer>
           <Nav onClick={currentPastToggle} active={showCurrent}>
             현재 복용
