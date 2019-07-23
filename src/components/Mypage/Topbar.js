@@ -3,6 +3,7 @@ import { Redirect } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthStore";
 import styled from "styled-components";
 import { breakpoints } from "../UI/SharedStyles";
+import arrowIcon from "../../assets/images/search-arrow.svg";
 
 import "@fortawesome/fontawesome-free/css/all.css";
 
@@ -14,13 +15,6 @@ const Bar = styled.div`
   @media (min-width: ${breakpoints.medium}) {
     margin: 1rem;
   }
-`;
-
-const ArrowIcon = styled.i`
-  display: block;
-  color: var(--twoyak-black);
-  font-size: 1.5rem;
-  margin-right: 10px;
 `;
 
 const TopButtonLeftArea = styled.div`
@@ -45,7 +39,7 @@ function Topbar(props) {
 
   return (
     <Bar>
-      <ArrowIcon className="fas fa-arrow-left" onClick={() => goback()} />
+      <img src={arrowIcon} onClick={() => goback()} />
       <TopButtonLeftArea>
         <ActionButton
           onClick={() =>
@@ -56,7 +50,7 @@ function Topbar(props) {
         >
           로그아웃하기
         </ActionButton>
-        <ActionButton onClick={() => props.history.push("/add-info")}>
+        <ActionButton onClick={() => props.history.push("/edit-info")}>
           내 정보 수정하기
         </ActionButton>
       </TopButtonLeftArea>

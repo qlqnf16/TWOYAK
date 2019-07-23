@@ -38,7 +38,6 @@ function Signup(props) {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
-  const [userName, setUserName] = useState(null);
 
   const { state, dispatch } = useContext(AuthContext);
 
@@ -61,11 +60,6 @@ function Signup(props) {
       type: "password",
       placeholder: "비밀번호 확인",
       key: "password-confirmation"
-    },
-    {
-      type: "text",
-      placeholder: "닉네임",
-      key: "user-name"
     }
   ];
 
@@ -79,9 +73,6 @@ function Signup(props) {
         break;
       case "password-confirmation":
         setConfirmPassword(event.target.value);
-        break;
-      case "user-name":
-        setUserName(event.target.value);
         break;
       default:
     }
@@ -104,7 +95,7 @@ function Signup(props) {
       email: email,
       password: password,
       password_confirmation: confirmPassword,
-      user_name: userName,
+      user_name: null,
       birth_date: null,
       drink: false,
       smoke: false,

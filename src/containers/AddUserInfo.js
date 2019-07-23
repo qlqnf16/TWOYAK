@@ -14,7 +14,13 @@ import Birthdate from "../components/AddUserInfo/Birthdate";
 
 import Modal from "../components/UI/Modal";
 import medIcon from "../assets/images/(white)med-icon.svg";
+import Nickname from "../components/AddUserInfo/Nickname";
 
+const AddInfoArea = styled(Container)`
+  padding-top: 24px;
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
+`;
 const SubmitButton = styled(BasicButton)`
   width: 6.8125rem;
   height: 3rem;
@@ -48,26 +54,17 @@ const ModalMessage = styled.div`
   margin-bottom: 38px;
 `;
 
-function AddInfo(props) {
+function AddSubUser(props) {
   const [diseaseArray, setDiseaseArray] = useState([]);
-  const [userName, setUserName] = useState(null);
+  const [userName, setUserName] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [drink, setDrink] = useState(null);
   const [smoke, setSmoke] = useState(null);
   const [caffeine, setCaffeine] = useState(null);
   const [sex, setSex] = useState(null);
-  const [birthDateModal] = useState(false);
   const [skipAddInfo, setSkipAddInfo] = useState(false);
 
   const { state, dispatch } = useContext(AuthContext);
-
-  const AddInfoArea = styled(Container)`
-    padding-top: 24px;
-    padding-left: 1.4rem;
-    padding-right: 1.4rem;
-    position: ${birthDateModal ? "fixed" : "static"};
-    overflow: ${birthDateModal ? "hidden" : "visible"};
-  `;
 
   useEffect(() => {
     axios({
@@ -79,7 +76,7 @@ function AddInfo(props) {
   }, []);
 
   useEffect(() => {
-    if (state.token) {
+    if (props.match.path === "/edit-info" && state.token) {
       axios({
         method: "GET",
         url: "/user/mypage",
@@ -100,30 +97,60 @@ function AddInfo(props) {
   }, [state.token]);
 
   const addInfoHandler = () => {
-    axios({
-      method: "PATCH",
-      url: `/user/sub_users/${state.subUserId}`,
-      headers: {
-        Authorization: `Bearer ${state.token}`
-      },
-      params: {
-        user_name: userName,
-        profile_image: null,
-        birth_date: birthDate === "" ? null : birthDate,
-        drink: drink,
-        smoke: smoke,
-        caffeine: caffeine,
-        sex: sex
-      }
-    }).then(response => {
-      const payload = response.data.auth_token;
-      dispatch({
-        type: "SIGNUP_SUCCESS",
-        token: payload
+    if (props.match.path === "/add-sub-user") {
+      axios({
+        method: "POST",
+        url: `/user/sub_users`,
+        headers: {
+          Authorization: `Bearer ${state.token}`
+        },
+        params: {
+          user_name: userName,
+          profile_image: null,
+          birth_date: birthDate === "" ? null : birthDate,
+          drink: drink,
+          smoke: smoke,
+          caffeine: caffeine,
+          sex: sex
+        }
+      }).then(response => {
+        const payload = response.data.auth_token;
+        dispatch({
+          type: "SIGNUP_SUCCESS",
+          token: payload
+        });
+        localStorage.setItem("token", payload);
+        props.history.push("/mypage");
       });
-      localStorage.setItem("token", payload);
-      props.history.push("/");
-    });
+    } else if (
+      props.match.path === "/add-info" ||
+      props.match.path === "/edit-info"
+    ) {
+      axios({
+        method: "PATCH",
+        url: `/user/sub_users/${state.subUserId}`,
+        headers: {
+          Authorization: `Bearer ${state.token}`
+        },
+        params: {
+          user_name: userName,
+          profile_image: null,
+          birth_date: birthDate === "" ? null : birthDate,
+          drink: drink,
+          smoke: smoke,
+          caffeine: caffeine,
+          sex: sex
+        }
+      }).then(response => {
+        const payload = response.data.auth_token;
+        dispatch({
+          type: "SIGNUP_SUCCESS",
+          token: payload
+        });
+        localStorage.setItem("token", payload);
+        props.history.push("/");
+      });
+    }
   };
 
   const toggleHandler = (key, value) => {
@@ -146,6 +173,10 @@ function AddInfo(props) {
     setBirthDate(date);
   };
 
+  const changeNicknameHandler = name => {
+    setUserName(name);
+  };
+
   const modalContent = (
     <ModalContents>
       <ModalMessage>
@@ -162,11 +193,22 @@ function AddInfo(props) {
     </ModalContents>
   );
 
+  let header = "투약 맞춤화 서비스";
+  let message =
+    "해당 정보는 투약 맞춤화 서비스를 이용하는 데에만 사용됩니다. 해당하는 부분을 체크해주세요.";
+
+  if (props.match.path === "/edit-info") {
+    header = "내 정보 수정하기";
+  } else if (props.match.path === "/add-sub-user") {
+    header = "추가 사용자 정보 입력";
+  }
+
   return (
     <AddInfoArea>
-      <Header
-        header="투약 맞춤화 서비스"
-        message="해당 정보는 투약 맞춤화 추천 서비스를 이용하는데에만 사용됩니다. 해당하는 부분을 체크해주세요."
+      <Header header={header} message={message} />
+      <Nickname
+        getNickname={name => changeNicknameHandler(name)}
+        value={userName}
       />
       <Sex
         sex={sex}
@@ -184,7 +226,9 @@ function AddInfo(props) {
       />
       <AppendDisease diseaseArray={diseaseArray} />
       <ButtonArea>
-        <SubmitButton onClick={() => addInfoHandler()}>제출</SubmitButton>
+        <SubmitButton onClick={() => addInfoHandler()}>
+          {props.match.path === "/edit-info" ? "수정하기" : "추가하기"}
+        </SubmitButton>
         <SkipButton onClick={() => toggleSkipAddInfoHandler()}>
           건너뛰기
         </SkipButton>
@@ -201,4 +245,4 @@ function AddInfo(props) {
   );
 }
 
-export default AddInfo;
+export default AddSubUser;

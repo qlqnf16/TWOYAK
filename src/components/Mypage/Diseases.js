@@ -7,9 +7,9 @@ import Modal from "../UI/Modal";
 import "@fortawesome/fontawesome-free/css/all.css";
 import close from "../../assets/images/close.svg";
 import medIcon from "../../assets/images/(white)med-icon.svg";
-import { BasicButton } from "../../components/UI/SharedStyles";
+import { BasicButton } from "../UI/SharedStyles";
 
-const DiseasesAndExtraDrugsContainer = styled.div`
+const DiseasesContainer = styled.div`
   padding: 17px;
 `;
 
@@ -72,7 +72,7 @@ const DeleteDiseaseButton = styled(BasicButton)`
   text-align: center;
 `;
 
-function DiseasesAndExtra({ currentDiseases }) {
+function DiseasesAndFamilyMedHis({ medHistory, historyChange }) {
   const [modalShow, setModalShow] = useState(false);
   const [diseaseNameDeleted, setDiseaseNameDeleted] = useState(null);
   const [diseaseIdDeleted, setDiseaseIdDeleted] = useState(null);
@@ -100,36 +100,37 @@ function DiseasesAndExtra({ currentDiseases }) {
     }).then(response => console.log(response.data));
   };
 
-  const deleteCurrentDiseaseHandler = () => {
+  const deleteFamilyMedHistoriesHandler = () => {
     axios({
       method: "DELETE",
-      url: `/user/${state.userId}/current_diseases/${diseaseIdDeleted}`,
+      url: `/user/${state.userId}/family_med_histories/${diseaseIdDeleted}`,
       headers: {
         Authorization: `Bearer ${state.token}`
       }
     }).then(response => console.log(response.data));
+    setModalShow(!modalShow);
+    historyChange(state.subUserIndex);
   };
 
   const deleteCurrentDiseaseModalContent = (
     <ModalContents>
       <ModalMessage>
-        {diseaseNameDeleted} 이 다 나았나요? 다 나았으면 '나았어요'를, 잘못
-        입력하셨으면 '삭제'를 눌러주세요.
+        {diseaseNameDeleted} 을 가족력에서 삭제하시겠습니까?
       </ModalMessage>
       <ButtonArea>
-        <PostToPastDiseasesButton onClick={() => postDiseaseToPastHandler()}>
-          나았어요
+        <PostToPastDiseasesButton onClick={() => toggleDeleteDiseaseHandler()}>
+          아니오
         </PostToPastDiseasesButton>
-        <DeleteDiseaseButton onClick={() => deleteCurrentDiseaseHandler()}>
+        <DeleteDiseaseButton onClick={() => deleteFamilyMedHistoriesHandler()}>
           삭제
         </DeleteDiseaseButton>
       </ButtonArea>
     </ModalContents>
   );
 
-  let contents = null;
-  if (currentDiseases) {
-    contents = currentDiseases.map((i, k) => (
+  let medHistoryContents = null;
+  if (medHistory) {
+    medHistoryContents = medHistory.map((i, k) => (
       <Contents key={k}>
         <ContentDot className="fas fa-circle" />
         {i.name}
@@ -142,9 +143,9 @@ function DiseasesAndExtra({ currentDiseases }) {
   }
 
   return (
-    <DiseasesAndExtraDrugsContainer>
-      <Header>질환 및 가족력</Header>
-      {contents}
+    <DiseasesContainer>
+      <Header>가족력</Header>
+      {medHistoryContents}
       {modalShow ? (
         <Modal
           modalOff={() => toggleDeleteDiseaseHandler(null, null)}
@@ -153,8 +154,8 @@ function DiseasesAndExtra({ currentDiseases }) {
           content={deleteCurrentDiseaseModalContent}
         />
       ) : null}
-    </DiseasesAndExtraDrugsContainer>
+    </DiseasesContainer>
   );
 }
 
-export default DiseasesAndExtra;
+export default DiseasesAndFamilyMedHis;

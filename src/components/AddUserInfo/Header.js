@@ -2,6 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { Line } from "../../components/UI/SharedStyles";
 
+const HeaderContainer = styled.div`
+  width: 100%;
+`;
+
 const AddInfoHeader = styled.div`
   color: var(--twoyak-blue);
   font-size: 1.125rem;
@@ -23,11 +27,11 @@ const AddInfoMessage = styled.div`
 
 function Header({ header, message }) {
   return (
-    <div>
+    <HeaderContainer>
       <AddInfoHeader>{header}</AddInfoHeader>
       <Divider />
       <AddInfoMessage>{message}</AddInfoMessage>
-    </div>
+    </HeaderContainer>
   );
 }
 

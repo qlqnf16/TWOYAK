@@ -16,7 +16,7 @@ import {
   ModalContents,
   ModalMessage,
   ButtonArea
-} from "./DiseasesAndExtra";
+} from "./Diseases";
 import Modal from "../UI/Modal";
 
 const WatchDrugsContainer = styled.div`
@@ -30,7 +30,7 @@ const SelectButton = styled(BasicButton)`
   text-align: center;
 `;
 
-function WatchDrugs({ watchDrugs }) {
+function WatchDrugs({ watchDrugs, watchChange }) {
   const [modalShow, setModalShow] = useState(false);
   const [watchDrugNameDeleted, setWatchDrugNameDeleted] = useState(null);
   const [watchDrugIdDeleted, setWatchDrugIdDeleted] = useState(null);
@@ -66,6 +66,7 @@ function WatchDrugs({ watchDrugs }) {
       )
       .then(response => console.log(response.data));
     setModalShow(!modalShow);
+    watchChange(state.subUserIndex);
   };
 
   let contents = null;

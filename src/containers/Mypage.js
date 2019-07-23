@@ -5,8 +5,11 @@ import axios from "../apis";
 
 import Topbar from "../components/Mypage/Topbar";
 import UserGeneralInfo from "../components/Mypage/UserGeneralInfo";
-import DiseasesAndExtra from "../components/Mypage/DiseasesAndExtra";
+import Diseases from "../components/Mypage/Diseases";
 import WatchDrugs from "../components/Mypage/WatchDrugs";
+import ChangeUserModal from "../components/UI/Modal";
+import AddDash from "../assets/images/add-dash.svg";
+import ChangeUserIcon from "../assets/images/change-user-icon.svg";
 
 const MyPageContainer = styled.div`
   width: 100%;
@@ -26,12 +29,42 @@ const Divider = styled.div`
   background-color: var(--twoyak-blue);
 `;
 
+const ModalContents = styled.div``;
+
+const ModalMessage = styled.div`
+  width: auto;
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: #474747;
+  margin-bottom: 38px;
+`;
+
+const AddIcon = styled.img`
+  width: 3.125rem;
+`;
+
+const ChangeFunction = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 1.875rem;
+  padding-bottom: 1.875rem;
+`;
+
+const ChangeUser = styled.img`
+  position: absolute;
+  bottom: 1.4375rem;
+  right: 1.4375rem;
+`;
+
 function Mypage(props) {
   const [currentDrugs, setCurrentDrugs] = useState([]);
   const [drugReviews, setDrugReviews] = useState([]);
   const [myConversation] = useState([]);
   const [currentDiseases, setCurrentDiseases] = useState([]);
+  const [familyMedHistoies, setFamilyMedHistories] = useState([]);
   const [watchDrugs, setWatchDrugs] = useState([]);
+  const [changeUserModalShow, setChangeUserModalShow] = useState(false);
 
   const { state, dispatch } = useContext(AuthContext);
 
@@ -48,7 +81,7 @@ function Mypage(props) {
       headers: {
         Authorization: `Bearer ${state.token}`
       }
-    }).then(response => {
+    }).then(async response => {
       const payload = response.data;
       dispatch({
         type: "CHANGE_SUB_USER",
@@ -56,13 +89,44 @@ function Mypage(props) {
         userName: payload.infos[id].sub_user.basic_info.user_name,
         subUserIndex: id
       });
-      console.log(payload);
       setCurrentDrugs(payload.infos[id].sub_user.current_drugs);
-      setDrugReviews(payload.drug_reviews);
       setCurrentDiseases(payload.infos[id].sub_user.current_diseases);
+      setFamilyMedHistories(payload.infos[id].sub_user.family_med_his);
+      setDrugReviews(payload.drug_reviews);
       setWatchDrugs(payload.watch_drugs);
     });
   };
+
+  const toggleChangeUserModalHandler = () => {
+    setChangeUserModalShow(!changeUserModalShow);
+  };
+
+  const modalContent = (
+    <ModalContents>
+      <ChangeFunction>
+        {state.subUsers
+          ? state.subUsers.map((i, k) =>
+              i.id !== state.subUserId ? (
+                <ModalMessage
+                  key={k}
+                  onClick={() => {
+                    getUserInfo(k);
+                    toggleChangeUserModalHandler();
+                  }}
+                >
+                  {i.user_name}
+                </ModalMessage>
+              ) : null
+            )
+          : null}
+        <AddIcon
+          src={AddDash}
+          alt="add-users"
+          onClick={() => props.history.push("/add-sub-user")}
+        />
+      </ChangeFunction>
+    </ModalContents>
+  );
 
   return (
     <MyPageContainer>
@@ -72,12 +136,27 @@ function Mypage(props) {
         drugReviews={drugReviews}
         myConversation={myConversation}
         userChange={id => getUserInfo(id)}
-        history={props.history}
       />
       <Divider />
-      <DiseasesAndExtra currentDiseases={currentDiseases} />
+      <Diseases
+        medHistory={familyMedHistoies}
+        historyChange={id => getUserInfo(id)}
+      />
       <Divider />
-      <WatchDrugs watchDrugs={watchDrugs} />
+      <WatchDrugs watchDrugs={watchDrugs} watchChange={id => getUserInfo(id)} />
+      <ChangeUser
+        src={ChangeUserIcon}
+        alt="change-user"
+        onClick={() => toggleChangeUserModalHandler()}
+      />
+      {changeUserModalShow ? (
+        <ChangeUserModal
+          modalOff={() => toggleChangeUserModalHandler()}
+          img
+          title="사용자 추가/변경"
+          content={modalContent}
+        />
+      ) : null}
     </MyPageContainer>
   );
 }

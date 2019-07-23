@@ -7,7 +7,6 @@ import Mypage from "./containers/Mypage";
 import Signup from "./containers/Signup";
 import AllReviews from "./containers/AllReviews";
 import AddUserInfo from "./containers/AddUserInfo";
-import AddSubUser from "./containers/AddSubUser";
 
 const routes = [
   {
@@ -55,7 +54,12 @@ const routes = [
   {
     path: "/add-sub-user",
     name: "사용자 추가",
-    component: AddSubUser
+    component: AddUserInfo
+  },
+  {
+    path: "/edit-info",
+    name: "사용자 정보 변경",
+    component: AddUserInfo
   },
   {
     path: "/all-reviews",
