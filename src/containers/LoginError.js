@@ -1,5 +1,7 @@
 import React from "react";
 
-function LoginError() {}
+function LoginError() {
+  return <div />;
+}
 
 export default LoginError;

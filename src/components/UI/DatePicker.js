@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import Picker from 'react-mobile-picker';
-import styled from 'styled-components';
+import React, { Component } from "react";
+import Picker from "react-mobile-picker";
+import styled from "styled-components";
 
 import { BasicButton } from "./SharedStyles";
 
@@ -9,14 +9,14 @@ const DatePickerContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   margin-bottom: 2.125rem;
-`
+`;
 
 const generateNumberArray = (begin, end) => {
   let array = [];
   for (let i = begin; i <= end; i++) {
-    array.push((i < 10 ? '0' : '') + i);
+    array.push((i < 10 ? "0" : "") + i);
   }
-  return array
+  return array;
 };
 
 let date = new Date();
@@ -25,9 +25,9 @@ class DatePicker extends Component {
   state = {
     isPickerShow: false,
     valueGroups: {
-      year: '1985',
-      month: '06',
-      day: '15',
+      year: "1985",
+      month: "06",
+      day: "15"
     },
     optionGroups: {
       year: generateNumberArray(1910, date.getFullYear()),
@@ -36,15 +36,28 @@ class DatePicker extends Component {
     }
   };
 
+  componentDidMount = () => {
+    if (this.props.selectedDate) {
+      const newValueGroups = {
+        year: this.props.selectedDate.slice(0, 4),
+        month: this.props.selectedDate.slice(5, 7),
+        day: this.props.selectedDate.slice(8, 10)
+      };
+      this.setState({
+        valueGroups: newValueGroups
+      });
+    }
+  };
+
   handleChange = (name, value) => {
-    this.setState(({valueGroups, optionGroups}) => {
+    this.setState(({ valueGroups, optionGroups }) => {
       const nextState = {
         valueGroups: {
           ...valueGroups,
-          [name]: value,
+          [name]: value
         }
       };
-      if (name === 'year' && valueGroups.month === '02') {
+      if (name === "year" && valueGroups.month === "02") {
         if (parseInt(value) % 4 === 0) {
           nextState.optionGroups = {
             ...optionGroups,
@@ -56,20 +69,28 @@ class DatePicker extends Component {
             day: generateNumberArray(1, 28)
           };
         }
-      } else if (name === 'month') {
-        if (value === '02') {
+      } else if (name === "month") {
+        if (value === "02") {
           nextState.optionGroups = {
             ...optionGroups,
             day: generateNumberArray(1, 28)
           };
-        } else if (['01', '03', '05', '07', '08', '10', '12'].indexOf(value) > -1 &&
-          ['01', '03', '05', '07', '08', '10', '12'].indexOf(valueGroups.month) < 0) {
+        } else if (
+          ["01", "03", "05", "07", "08", "10", "12"].indexOf(value) > -1 &&
+          ["01", "03", "05", "07", "08", "10", "12"].indexOf(
+            valueGroups.month
+          ) < 0
+        ) {
           nextState.optionGroups = {
-             ...optionGroups,
-             day: generateNumberArray(1, 31)
-           }
-         } else if (['01', '03', '05', '07', '08', '10', '12'].indexOf(value) < 0 &&
-          ['01', '03', '05', '07', '08', '10', '12'].indexOf(valueGroups.month) > -1) {
+            ...optionGroups,
+            day: generateNumberArray(1, 31)
+          };
+        } else if (
+          ["01", "03", "05", "07", "08", "10", "12"].indexOf(value) < 0 &&
+          ["01", "03", "05", "07", "08", "10", "12"].indexOf(
+            valueGroups.month
+          ) > -1
+        ) {
           nextState.optionGroups = {
             ...optionGroups,
             day: generateNumberArray(1, 30)
@@ -77,11 +98,11 @@ class DatePicker extends Component {
         }
       }
       return nextState;
-    })
+    });
   };
 
-  render () {
-    const {optionGroups, valueGroups} = this.state;
+  render() {
+    const { optionGroups, valueGroups } = this.state;
     return (
       <DatePickerContainer>
         <Picker
@@ -91,15 +112,18 @@ class DatePicker extends Component {
         />
         <BasicButton
           onClick={() => {
-            this.props.getDate(`${this.state.valueGroups.year}-${this.state.valueGroups.month}-${this.state.valueGroups.day}`);
+            this.props.getDate(
+              `${this.state.valueGroups.year}-${this.state.valueGroups.month}-${
+                this.state.valueGroups.day
+              }`
+            );
             this.props.modalOff();
-            }
-          }
+          }}
         >
           추가
         </BasicButton>
       </DatePickerContainer>
-    )
+    );
   }
 }
 

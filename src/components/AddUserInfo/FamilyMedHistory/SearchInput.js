@@ -15,6 +15,7 @@ const StyleWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 0.9375rem;
 
   & .react-autosuggest__input {
     box-sizing: border-box;

@@ -1,6 +1,10 @@
 import React from "react";
-import { AuthContext } from "../../contexts/AuthStore";
 import styled from "styled-components";
+import { Line } from "../../components/UI/SharedStyles";
+
+const HeaderContainer = styled.div`
+  width: 100%;
+`;
 
 const AddInfoHeader = styled.div`
   color: var(--twoyak-blue);
@@ -9,13 +13,25 @@ const AddInfoHeader = styled.div`
   letter-spacing: -0.0268rem;
 `;
 
-const Divider = styled.div``;
+const Divider = styled(Line)`
+  width: 100%;
+  margin-top: 0.375rem;
+  margin-bottom: 0.125rem;
+`;
 
-function Header() {
+const AddInfoMessage = styled.div`
+  color: #757575;
+  opacity: 0.7;
+  font-size: 11px;
+`;
+
+function Header({ header, message }) {
   return (
-    <div>
-      <AddInfoHeader>투약 맞춤화 서비스</AddInfoHeader>
-    </div>
+    <HeaderContainer>
+      <AddInfoHeader>{header}</AddInfoHeader>
+      <Divider />
+      <AddInfoMessage>{message}</AddInfoMessage>
+    </HeaderContainer>
   );
 }
 
