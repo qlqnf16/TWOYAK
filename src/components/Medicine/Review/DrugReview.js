@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { StyledRating, RatingText, BasicText } from "../../UI/SharedStyles";
+import { ReactComponent as Edit } from "../../../assets/images/edit-review.svg";
 import { ReactComponent as Close } from "../../../assets/images/close.svg";
 import "@fortawesome/fontawesome-free/css/all.css";
 
@@ -69,8 +70,8 @@ const DrugReview = ({ my, review, deleteReview, updateButton }) => {
         </FlexStart>
         {my && updateButton && (
           <FlexStart>
-            <EditIcon
-              className="fas fa-pencil-alt"
+            <Edit
+              // className="fas fa-pencil-alt"
               onClick={() => updateButton(review)}
             />
             <Close onClick={() => deleteReview(review.id)} />
