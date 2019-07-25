@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthStore";
 import search from "../../assets/images/(white)search-icon.svg";
 import user from "../../assets/images/(white)user-icon.svg";
 
@@ -25,13 +26,15 @@ const StyledNavLink = styled(NavLink)`
 `;
 
 const Header = () => {
+  const { state: authState } = useContext(AuthContext);
+
   return (
     <HeaderContainer>
       <NavLink to="/medicine">
         <img src={search} alt="search-icon" />
       </NavLink>
       <StyledNavLink to="/">투약</StyledNavLink>
-      <StyledNavLink to="/mypage">
+      <StyledNavLink to={authState.token ? "/mypage" : "/login"}>
         <img src={user} alt="user-icon" />
       </StyledNavLink>
     </HeaderContainer>

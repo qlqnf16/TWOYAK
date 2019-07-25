@@ -1,9 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthStore";
-import styled from "styled-components";
 import axios from "../apis";
+import styled from "styled-components";
+
 import CurrentDrugList from "../components/HealthRecord/CurrentDrugList";
 import PastDrugList from "../components/HealthRecord/PastDrugList";
+import AddCard from "../components/HealthRecord/AddCard";
+import Warning from "../components/UI/Warning";
+import Modal from "../components/UI/Modal";
+import { BasicText, BasicButton } from "../components/UI/SharedStyles";
 
 const Background = styled.div`
   width: 100%;
@@ -35,14 +41,25 @@ const Nav = styled.div.attrs(props => props.active)`
   pointer-events: ${props => props.active && "none"};
   padding: 0.7rem;
   font-weight: 800;
+  cursor: ${props => (props.active ? "none" : "pointer")};
 `;
 
-const Notice = styled.div`
-  opacity: 0.6;
-  font-size: 0.5rem;
-  color: #474747;
-  margin: 1rem auto;
+const ModalContainer = styled.div`
+  padding: 2.5rem 0;
   text-align: center;
+`;
+
+const Text = styled(BasicText)`
+  display: block;
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 2.5rem;
+  font-size: 0.875rem;
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: white;
 `;
 
 function HealthRecord() {
@@ -50,6 +67,7 @@ function HealthRecord() {
   const [pastDrugs, setPastDrugs] = useState(null);
   const [durInfo, setDurInfo] = useState(null);
   const [showCurrent, setShowCurrent] = useState(true);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const { state: authState } = useContext(AuthContext);
 
   useEffect(() => {}, [currentDrugs]);
@@ -57,16 +75,19 @@ function HealthRecord() {
   useEffect(() => {
     if (authState.token) {
       getUserInfo();
+      setShowLoginModal(false);
+    } else {
+      setShowLoginModal(true);
     }
   }, [authState]);
 
   const loadingHandler = async () => {
-    const { data } = await getInfos(`${authState.userId}/current_drugs`);
+    const { data } = await getInfos(`/current_drugs`);
     setCurrentDrugs(data);
   };
 
   const getInfos = url =>
-    axios.get(`user/${authState.userId}/${url}`, {
+    axios.get(`user/${authState.subUserId}/${url}`, {
       headers: {
         Authorization: `bearer ${authState.token}`
       }
@@ -83,12 +104,15 @@ function HealthRecord() {
         getInfos("current_drugs"),
         getInfos("analysis/get")
       ]);
-      console.log(myCurrent);
-      console.log(myPast);
-      console.log(myDur);
       setCurrentDrugs(myCurrent);
       setPastDrugs(myPast);
-      setDurInfo(myDur);
+      if (myDur.duplicate || myDur.interactions || myDur.same_ingr) {
+        setDurInfo({
+          duplicate: myDur.duplicate,
+          interactions: myDur.interactions,
+          same_ingr: myDur.same_ingr
+        });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -101,7 +125,7 @@ function HealthRecord() {
   const drugToPast = async id => {
     try {
       await axios.delete(
-        `user/${authState.userId}/current_drugs/${id}/to_past`,
+        `user/${authState.subUsers[0].id}/current_drugs/${id}/to_past`,
         {
           headers: {
             Authorization: `bearer ${authState.token}`
@@ -115,10 +139,44 @@ function HealthRecord() {
     }
   };
 
+  const deleteDrug = async id => {
+    try {
+      await axios.delete(
+        `user/${authState.subUsers[0].id}/current_drugs/${id}`,
+        {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        }
+      );
+      loadingHandler();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Background />
       <Container>
+        {showLoginModal && (
+          <Modal
+            title="투약"
+            modalOff={() => {}}
+            content={
+              <ModalContainer>
+                <Text>
+                  로그인하시면 이용 가능한
+                  <br />
+                  투약의 맞춤형 관리서비스 입니다
+                </Text>
+                <BasicButton>
+                  <StyledLink to="/login">로그인 하러가기</StyledLink>
+                </BasicButton>
+              </ModalContainer>
+            }
+          />
+        )}
         <NavContainer>
           <Nav onClick={currentPastToggle} active={showCurrent}>
             현재 복용
@@ -127,21 +185,25 @@ function HealthRecord() {
             과거 복용
           </Nav>
         </NavContainer>
-        <Notice>
-          투약은 식약처 공공데이터를 이용하여 의약품 안정정보 등을 제공하고
-          있으며,
-          <br /> 이러한 정보는 단순 참조용으로 서비스 제공자는 어떠한 법적
-          책임도 지지 않습니다.
-        </Notice>
+        <Warning />
         {showCurrent
           ? currentDrugs && (
               <CurrentDrugList
                 currentDrugs={currentDrugs}
                 loadingHandler={loadingHandler}
                 drugToPast={drugToPast}
+                deleteDrug={deleteDrug}
+                durInfo={durInfo}
               />
             )
           : pastDrugs && <PastDrugList drugs={pastDrugs} />}
+        <AddCard
+          text={
+            showCurrent
+              ? "복용중이신 약을 추가해보세요!"
+              : ["복용이 끝나신 약을", <br />, "추가해보세요!"]
+          }
+        />
       </Container>
     </>
   );

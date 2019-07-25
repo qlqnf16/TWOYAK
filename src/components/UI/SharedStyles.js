@@ -15,7 +15,7 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 70px auto;
+  margin: 70px auto 120px auto;
 
   @media (min-width: ${breakpoints.medium}) {
     margin: 25vh auto;
@@ -31,7 +31,9 @@ export const Container = styled.div`
 
 export const FlexDiv = styled.div`
   display: flex;
-  align-items: center;
+  align-items: ${props => (props.align ? props.align : "center")};
+  justify-content: ${props => (props.justify ? props.justify : "flex-start")};
+  flex-shrink: ${props => (props.shrink ? props.shrink : 1)};
 `;
 
 export const FlexForm = styled.form`
@@ -58,7 +60,7 @@ export const EmptyCard = styled(Card)`
   border: 2px #c4c9cc dashed;
   align-items: center;
   box-shadow: none;
-  padding: 4.875rem 2.5rem;
+  padding: 4.875rem 0;
 `;
 
 export const BasicButton = styled.button`
@@ -71,6 +73,7 @@ export const BasicButton = styled.button`
   font-size: 0.93rem;
   border: none;
   margin: 0 auto;
+  cursor: pointer;
 `;
 
 export const WhiteButton = styled(BasicButton)`
@@ -80,6 +83,7 @@ export const WhiteButton = styled(BasicButton)`
   display: block;
   font-weight: 1rem;
   margin: 1rem auto 1.25rem auto;
+  opacity: ${props => props.opacity && props.opacity};
 `;
 
 export const Line = styled.div`
@@ -94,9 +98,9 @@ export const BasicInput = styled.input`
   height: 3rem;
   border-radius: 1.5rem;
   border: solid 1px var(--twoyak-blue);
-  padding-left: 1.0937rem; 
+  padding-left: 1.0937rem;
   padding-right: 1.0937rem;
-`
+`;
 
 export const StyledRating = styled(Rating)`
   color: #d8d8d8;
@@ -109,25 +113,24 @@ export const StyledRating = styled(Rating)`
   }
 `;
 
-export const BasicText = styled.p`
+export const BasicText = styled.div`
   display: inline;
-  font-size: 0.875rem;
+  font-size: ${props => (props.size ? props.size : "0.875rem")};
   color: #474747;
-  opacity: 0.6;
-  font-weight: bold;
-  margin-left: 1rem;
+  opacity: ${props => props.opacity};
+  font-weight: ${props => (props.bold ? props.bold : "bold")};
 `;
 
 export const RatingText = styled(BasicText)`
-  margin-left: 1rem;
+  margin-left: ${props => (props.margin ? props.margin : "1rem")};
 `;
 
 export const BulletText = styled.li`
   color: var(--twoyak-blue);
   margin-left: 1.68rem;
   & p {
-    display: inline;
     color: var(--twoyak-black);
+    display: inline;
     margin-left: -5px;
     font-size: 0.8rem;
     font-weight: 800;
