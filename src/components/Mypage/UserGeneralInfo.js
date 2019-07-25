@@ -72,7 +72,9 @@ function UserGeneralInfo({
       <GeneralInfo>
         {infoIndex.map((i, k) => (
           <EachInfo key={k}>
-            <Count onClick={() => history.push(i.src)}>{i.value}</Count>
+            <Count onClick={() => (i.value > 0 ? history.push(i.src) : null)}>
+              {i.value}
+            </Count>
             <InfoIndex>{i.label}</InfoIndex>
           </EachInfo>
         ))}

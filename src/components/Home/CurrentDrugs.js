@@ -41,7 +41,7 @@ function CurrentDrugs({ currentDrugs, history, medIcon, userName }) {
       </HeaderContainer>
       {currentDrugs ? (
         currentDrugs.map((i, k) => (
-          <div onClick={() => searchDrugHandler(i.current_drug_id)}>
+          <div key={k} onClick={() => searchDrugHandler(i.current_drug_id)}>
             {i.drug_name}
           </div>
         ))

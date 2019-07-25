@@ -17,7 +17,6 @@ function Home(props) {
   const [currentDrugs, setCurrentDrugs] = useState(null);
   const { state: authState, dispatch } = useContext(AuthContext);
 
-  console.log(authState);
   useEffect(() => {
     dispatch({
       type: "SET_AUTH_REDIRECT_PATH",
@@ -32,7 +31,6 @@ function Home(props) {
         }
       })
         .then(response => {
-          console.log(response.data !== []);
           if (response.data.length > 0) {
             setCurrentDrugs(response.data);
           }

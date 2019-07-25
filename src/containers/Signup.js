@@ -38,7 +38,7 @@ function Signup(props) {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
-
+  const [userName, setUserName] = useState(null);
   const { state, dispatch } = useContext(AuthContext);
 
   const goLoginPage = () => {
@@ -60,6 +60,11 @@ function Signup(props) {
       type: "password",
       placeholder: "비밀번호 확인",
       key: "password-confirmation"
+    },
+    {
+      type: "text",
+      placeholder: "닉네임",
+      key: "user-name"
     }
   ];
 
@@ -73,6 +78,9 @@ function Signup(props) {
         break;
       case "password-confirmation":
         setConfirmPassword(event.target.value);
+        break;
+      case "user-name":
+        setUserName(event.target.value);
         break;
       default:
     }
@@ -95,11 +103,11 @@ function Signup(props) {
       email: email,
       password: password,
       password_confirmation: confirmPassword,
-      user_name: null,
+      user_name: userName,
       birth_date: null,
-      drink: false,
-      smoke: false,
-      caffeine: false,
+      drink: null,
+      smoke: null,
+      caffeine: null,
       sex: null
     };
     axios
@@ -113,16 +121,16 @@ function Signup(props) {
         storeUserDataForAutoLogin("token", payload);
       })
       .catch(error => {
-        console.log(error.response);
         dispatch({
           type: "SIGNUP_FAIL",
           error: error.response.data.errors
         });
+        alert(error.response.data.errors);
       });
   };
 
   const form = signupScheme.map((i, k) => (
-    <form onSubmit={() => signupActionHandler()}>
+    <form key={k} onSubmit={() => signupActionHandler()}>
       <SignupInput
         key={k}
         type={i.type}

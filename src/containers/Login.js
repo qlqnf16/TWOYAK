@@ -108,7 +108,6 @@ function Login(props) {
       .post("api/users/login", signinData)
       .then(response => {
         const payload = response.data.auth_token;
-        console.log(jwt_decode(payload));
         dispatch({
           type: "SIGNIN_SUCCESS",
           token: payload

@@ -76,23 +76,28 @@ function AddSubUser(props) {
   }, []);
 
   useEffect(() => {
-    if (props.match.path === "/edit-info" && state.token) {
-      axios({
-        method: "GET",
-        url: "/user/mypage",
-        headers: {
-          Authorization: `Bearer ${state.token}`
-        }
-      }).then(response => {
-        const payload = response.data;
-        const object = payload.infos[state.subUserIndex].sub_user.basic_info;
-        setUserName(object.user_name);
-        setBirthDate(object.birth_date);
-        setDrink(object.drink);
-        setSmoke(object.smoke);
-        setCaffeine(object.caffeine);
-        setSex(object.sex);
-      });
+    if (state.token) {
+      if (
+        props.match.path === "/edit-info" ||
+        props.match.path === "/add-info"
+      ) {
+        axios({
+          method: "GET",
+          url: "/user/mypage",
+          headers: {
+            Authorization: `Bearer ${state.token}`
+          }
+        }).then(response => {
+          const payload = response.data;
+          const object = payload.infos[state.subUserIndex].sub_user.basic_info;
+          setUserName(object.user_name);
+          setBirthDate(object.birth_date);
+          setDrink(object.drink);
+          setSmoke(object.smoke);
+          setCaffeine(object.caffeine);
+          setSex(object.sex);
+        });
+      }
     }
   }, [props.match.params, state.subUserId, state.token]);
 
@@ -113,15 +118,17 @@ function AddSubUser(props) {
           caffeine: caffeine,
           sex: sex
         }
-      }).then(response => {
-        const payload = response.data.auth_token;
-        dispatch({
-          type: "SIGNUP_SUCCESS",
-          token: payload
-        });
-        localStorage.setItem("token", payload);
-        props.history.push("/mypage");
-      });
+      })
+        .then(response => {
+          const payload = response.data.auth_token;
+          dispatch({
+            type: "SIGNUP_SUCCESS",
+            token: payload
+          });
+          localStorage.setItem("token", payload);
+          props.history.push("/mypage");
+        })
+        .catch(error => alert(error.data.errors));
     } else if (
       props.match.path === "/add-info" ||
       props.match.path === "/edit-info"
@@ -141,15 +148,17 @@ function AddSubUser(props) {
           caffeine: caffeine,
           sex: sex
         }
-      }).then(response => {
-        const payload = response.data.auth_token;
-        dispatch({
-          type: "SIGNUP_SUCCESS",
-          token: payload
-        });
-        localStorage.setItem("token", payload);
-        props.history.push("/");
-      });
+      })
+        .then(response => {
+          const payload = response.data.auth_token;
+          dispatch({
+            type: "SIGNUP_SUCCESS",
+            token: payload
+          });
+          localStorage.setItem("token", payload);
+          props.history.push("/");
+        })
+        .catch(error => alert(error.data.errors));
     }
   };
 
@@ -180,14 +189,16 @@ function AddSubUser(props) {
   const modalContent = (
     <ModalContents>
       <ModalMessage>
-        정말 투약의 맞춤화 추천 서비스를 이용하지 않으실건가요?
+        {props.match.path === "/edit-info"
+          ? "수정 창을 닫으시겠어요?"
+          : "정말 투약의 맞춤화 추천 서비스를 이용하지 않으실건가요?"}
       </ModalMessage>
       <div>
         <SubmitButton onClick={() => toggleSkipAddInfoHandler()}>
           돌아가기
         </SubmitButton>
         <SkipButton onClick={() => props.history.push("/")}>
-          건너뛰기
+          {props.match.path === "/edit-info" ? "닫기" : "건너뛰기"}
         </SkipButton>
       </div>
     </ModalContents>
@@ -208,14 +219,14 @@ function AddSubUser(props) {
       <Header header={header} message={message} />
       <Nickname
         getNickname={name => changeNicknameHandler(name)}
-        value={userName}
+        value={!userName ? "" : userName}
       />
       <Sex
         sex={sex}
         toggleHandle={(label, value) => toggleHandler(label, value)}
       />
       <Birthdate
-        value={birthDate}
+        value={!birthDate ? "" : birthDate}
         getBirthDate={date => getBirthDateHandler(date)}
       />
       <Health
@@ -230,7 +241,7 @@ function AddSubUser(props) {
           {props.match.path === "/edit-info" ? "수정하기" : "추가하기"}
         </SubmitButton>
         <SkipButton onClick={() => toggleSkipAddInfoHandler()}>
-          건너뛰기
+          {props.match.path === "/edit-info" ? "닫기" : "건너뛰기"}
         </SkipButton>
       </ButtonArea>
       {skipAddInfo ? (
