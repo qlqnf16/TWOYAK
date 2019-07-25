@@ -50,7 +50,7 @@ const AutoSuggestion = ({
   const [suggestions, setSuggestions] = useState([]);
 
   const { state } = useContext(DrugContext);
-  const { drugs, adverse_effects } = state;
+  const { drugs, adverse_effects, diseases } = state;
 
   let suggestList;
   switch (search) {
@@ -60,6 +60,8 @@ const AutoSuggestion = ({
     case "adverse_effect":
       suggestList = adverse_effects;
       break;
+    case "disease":
+      suggestList = diseases;
     default:
       break;
   }
@@ -90,6 +92,7 @@ const AutoSuggestion = ({
 
   const onSuggestionSelected = (event, { suggestion }) => {
     if (search === "adverse_effect") inputChange(suggestion);
+    if (search === "disease") inputChange(suggestion);
     if (search === "drug") submit(suggestion.id);
   };
 
@@ -109,18 +112,19 @@ const AutoSuggestion = ({
             )
           )}
         </ItemContainer>
-        {currentDrugs && currentDrugs.includes(suggestion.id) ? (
-          <BasicText size="0.7rem" opacity="0.7">
-            복용중
-          </BasicText>
-        ) : (
-          <Add
-            onClick={e => {
-              e.stopPropagation();
-              addCurrentDrug(suggestion.id);
-            }}
-          />
-        )}
+        {search === "drug" &&
+          (currentDrugs && currentDrugs.includes(suggestion.id) ? (
+            <BasicText size="0.7rem" opacity="0.7">
+              복용중
+            </BasicText>
+          ) : (
+            <Add
+              onClick={e => {
+                e.stopPropagation();
+                addCurrentDrug("add");
+              }}
+            />
+          ))}
       </RecommendContainer>
     );
   };

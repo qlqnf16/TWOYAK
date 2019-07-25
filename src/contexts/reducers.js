@@ -1,10 +1,14 @@
 import { updateObject } from "./utility";
 import jwt_decode from "jwt-decode";
 
-export const drugReducer = (drugs, { type, payload }) => {
+export const drugReducer = (state, { type, payload }) => {
   switch (type) {
     case "SET_INIT_DATA":
-      return { drugs: payload[0].data, adverse_effects: payload[1].data };
+      return {
+        drugs: payload[0].data,
+        adverse_effects: payload[1].data,
+        diseases: payload[2].data
+      };
     default:
       break;
   }

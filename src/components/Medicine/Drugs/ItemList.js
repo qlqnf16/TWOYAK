@@ -50,7 +50,6 @@ const isEqual = (prevProps, nextProps) => {
 };
 
 const ItemList = ({ drug_list, term, addCurrentDrug, currentDrugs }) => {
-  console.log(drug_list);
   const items = drug_list.map(item => (
     <Flex key={item.current_drug_id}>
       <BlockText to={`/medicine/${item.current_drug_id}`}>

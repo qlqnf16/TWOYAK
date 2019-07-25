@@ -45,6 +45,7 @@ function AllReviews() {
           Authorization: `bearer ${authState.token}`
         }
       });
+      console.log(data);
       setReveiws(data);
     } catch (error) {
       console.log(error);
@@ -56,7 +57,7 @@ function AllReviews() {
       <Container>
         {reviews &&
           reviews.map(review => (
-            <ReviewCard>
+            <ReviewCard key={review.id}>
               <FlexDiv align="flex-start">
                 <img
                   src={medIcon}

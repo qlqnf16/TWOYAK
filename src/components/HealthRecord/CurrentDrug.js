@@ -242,7 +242,19 @@ const CurrentDrug = ({
           modalOff={newReviewToggle}
         />
       )}
-      {drug.dur_info && (
+      {drug.diseases.length > 0 && (
+        <>
+          <BulletText>
+            <p>복용이유</p>
+          </BulletText>
+          <Content>
+            {drug.diseases.map(disease => disease.name).join(", ")}
+          </Content>
+        </>
+      )}
+      {!drug.dur_info.length ? (
+        ""
+      ) : (
         <>
           <BulletText>
             <p>안전정보</p>
@@ -254,7 +266,6 @@ const CurrentDrug = ({
           </Content>
         </>
       )}
-
       {drug.memo && (
         <>
           <BulletText>
