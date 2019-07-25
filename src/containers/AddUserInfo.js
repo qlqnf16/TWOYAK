@@ -94,7 +94,7 @@ function AddSubUser(props) {
         setSex(object.sex);
       });
     }
-  }, [state.token]);
+  }, [props.match.params, state.subUserId, state.token]);
 
   const addInfoHandler = () => {
     if (props.match.path === "/add-sub-user") {
