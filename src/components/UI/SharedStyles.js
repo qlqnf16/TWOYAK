@@ -136,3 +136,51 @@ export const BulletText = styled.li`
     font-weight: 800;
   }
 `;
+
+export const AutosuggestStyleWrapper = styled.div`
+  flex-grow: 1;
+  flex-shrink: 1;
+  position: relative;
+  width: 100%;
+  margin: 1rem 0;
+  border-radius: 1.5rem;
+  border: solid 1px var(--twoyak-blue);
+
+  & .react-autosuggest__container {
+    height: 2rem;
+    padding: 1rem;
+
+    display: flex;
+    align-items: center;
+  }
+
+  & .react-autosuggest__input {
+    width: 100%;
+    padding: 1rem;
+    height: 2rem;
+    background: transparent;
+    border: none;
+  }
+
+  & .react-autosuggest__suggestions-container--open {
+    width: 100%;
+    overflow: hidden;
+    margin: 0;
+    position: absolute;
+    left: 0;
+    top: 33px;
+    background-color: white;
+    border: 1px solid var(--twoyak-blue);
+    z-index: 140;
+  }
+
+  & .react-autosuggest__suggestion {
+    list-style-type: none;
+    font-size: 0.7rem;
+    margin-bottom: -1px;
+    color: var(--twoyak-black);
+    cursor: pointer;
+    padding: 0.5rem;
+    font-weight: bold;
+  }
+`;

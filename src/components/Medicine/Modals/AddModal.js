@@ -9,7 +9,11 @@ import { DateRange } from "react-date-range";
 import moment from "moment";
 
 import styled from "styled-components";
-import { BasicText, BasicButton } from "../../UI/SharedStyles";
+import {
+  BasicText,
+  BasicButton,
+  AutosuggestStyleWrapper
+} from "../../UI/SharedStyles";
 import close from "../../../assets/images/(white)close.svg";
 
 const Container = styled.div`
@@ -18,54 +22,6 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: start;
   align-items: flex-start;
-`;
-
-const StyleWrapper = styled.div`
-  flex-grow: 1;
-  flex-shrink: 1;
-  position: relative;
-  width: 100%;
-  margin: 1rem 0;
-   border-radius: 1.5rem;
-    border: solid 1px var(--twoyak-blue);
-  
-& .react-autosuggest__container {
-    height: 2rem;
-    padding: 1rem;
-   
-    display: flex;
-    align-items: center;
-}
-
-  & .react-autosuggest__input {
-    width: 100%;
-    padding: 1rem;
-    height: 2rem;
-    background: transparent;
-    border: none
-  }
-
-  & .react-autosuggest__suggestions-container--open {
-    width: 100%
-    overflow: hidden;
-    margin: 0;
-    position: absolute;
-    left: 0;
-    top: 33px;
-    background-color: white;
-    border: 1px solid var(--twoyak-blue);
-    z-index: 140;
-  }
-
-    & .react-autosuggest__suggestion {
-    list-style-type: none;
-    font-size: 0.7rem;
-    margin-bottom: -1px;
-    color: var(--twoyak-black);
-    cursor: pointer;
-    padding: 0.5rem;
-    font-weight: bold;
-  }
 `;
 
 const TextArea = styled.textarea`
@@ -167,14 +123,14 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
       content={
         <Container>
           <BasicText>왜 이 약을 드시나요?</BasicText>
-          <StyleWrapper>
+          <AutosuggestStyleWrapper>
             <AutoSuggestion
               search="disease"
               placeholderProp={"질환명 입력"}
               searchKey="name"
               inputChange={diseasesInputChange}
             />
-          </StyleWrapper>
+          </AutosuggestStyleWrapper>
           {diseases.length > 0 &&
             diseases.map(disease => (
               <RemovableButton key={disease.id}>
