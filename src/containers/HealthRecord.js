@@ -45,7 +45,7 @@ const Nav = styled.div.attrs(props => props.active)`
 `;
 const UserContainer = styled.div`
   width: 88%;
-  margin: 1.25rem auto 2.5rem auto;
+  margin: 1.25rem auto 2rem auto;
   text-align: center;
 `;
 
@@ -72,18 +72,22 @@ const StyledLink = styled(Link)`
 `;
 
 function HealthRecord() {
+  const { state: authState } = useContext(AuthContext);
+
   const [currentDrugs, setCurrentDrugs] = useState(null);
   const [pastDrugs, setPastDrugs] = useState(null);
   const [durInfo, setDurInfo] = useState(null);
+  const [subUserInfo, setSubUserInfo] = useState();
+
   const [showCurrent, setShowCurrent] = useState(true);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const { state: authState } = useContext(AuthContext);
 
   useEffect(() => {}, [currentDrugs]);
 
   useEffect(() => {
     if (authState.token) {
       getUserInfo();
+      getSubUserInfo();
       setShowLoginModal(false);
     } else {
       setShowLoginModal(true);
@@ -101,6 +105,22 @@ function HealthRecord() {
         Authorization: `bearer ${authState.token}`
       }
     });
+
+  const getSubUserInfo = async () => {
+    try {
+      const { data } = await axios.get(
+        `user/sub_users/${authState.subUserId}`,
+        {
+          headers: {
+            Authorization: authState.token
+          }
+        }
+      );
+      setSubUserInfo(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const getUserInfo = async () => {
     try {
@@ -213,6 +233,7 @@ function HealthRecord() {
                 drugToPast={drugToPast}
                 deleteDrug={deleteDrug}
                 durInfo={durInfo}
+                subUserInfo={subUserInfo}
               />
             )
           : pastDrugs && <PastDrugList drugs={pastDrugs} />}

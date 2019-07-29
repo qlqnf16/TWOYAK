@@ -30,9 +30,15 @@ const ReviewContainer = styled.div`
   margin: -1rem -1rem;
 `;
 
+const FilterContainer = styled.div`
+  margin: 1rem;
+  align-self: flex-start;
+`;
+
 function AllReviews() {
   const { state: authState } = useContext(AuthContext);
-  const [reviews, setReveiws] = useState();
+  const [recentReviews, setRecentReviews] = useState();
+  const [popularReviews, setPopularReviews] = useState();
 
   useEffect(() => {
     getReviews();
@@ -40,23 +46,37 @@ function AllReviews() {
 
   const getReviews = async () => {
     try {
-      const { data } = await axios.get(`/reviews/recent`, {
-        headers: {
-          Authorization: `bearer ${authState.token}`
-        }
-      });
-      console.log(data);
-      setReveiws(data);
+      const [{ data: recent }, { data: popular }] = await Promise.all([
+        axiosReviews("recent"),
+        axiosReviews("popular")
+      ]);
+      setRecentReviews(recent);
+      setPopularReviews(popular);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const axiosReviews = url =>
+    axios.get(`/reviews/${url}`, {
+      headers: {
+        Authorization: `bearer ${authState.token}`
+      }
+    });
+
   return (
     <>
       <Background />
       <Container>
-        {reviews &&
-          reviews.map(review => (
+        <FilterContainer>
+          <BasicText size="0.7rem">정렬 기준</BasicText>
+          <br />
+          <BasicText size="0.75rem" color="var(--twoyak-blue)">
+            최신순
+          </BasicText>
+        </FilterContainer>
+        {recentReviews &&
+          recentReviews.map(review => (
             <ReviewCard key={review.id}>
               <FlexDiv align="flex-start">
                 <img

@@ -82,7 +82,7 @@ export const WhiteButton = styled(BasicButton)`
   box-shadow: 1px 2px 7px 1px rgba(212, 212, 212, 0.5);
   display: block;
   font-weight: 1rem;
-  margin: 1rem auto 1.25rem auto;
+  margin: 1rem auto 2rem auto;
   opacity: ${props => props.opacity && props.opacity};
 `;
 

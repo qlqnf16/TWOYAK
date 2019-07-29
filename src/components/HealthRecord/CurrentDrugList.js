@@ -1,6 +1,12 @@
 import React, { useState, useContext } from "react";
 import CurrentDrug from "./CurrentDrug";
-import { WhiteButton, Line, Card, BasicText } from "../UI/SharedStyles";
+import {
+  WhiteButton,
+  Line,
+  Card,
+  BasicText,
+  BulletText
+} from "../UI/SharedStyles";
 import medIcon from "../../assets/images/(white)med-icon.svg";
 import Modal from "../UI/Modal";
 import styled from "styled-components";
@@ -25,9 +31,7 @@ const Duration = styled(Item)`
 const ContentContainer = styled.div`
   max-height: 65vh;
   overflow: scroll;
-`;
-
-const ModalContainer = styled.div`
+  padding: 1rem 0;
   text-align: center;
 `;
 
@@ -36,7 +40,8 @@ const CurrentDrugList = ({
   durInfo,
   loadingHandler,
   drugToPast,
-  deleteDrug
+  deleteDrug,
+  subUserInfo
 }) => {
   const [show, setShow] = useState(false);
 
@@ -55,16 +60,43 @@ const CurrentDrugList = ({
           modalOff={toggleModal}
           content={
             <ContentContainer>
+              <Item>가족력</Item>
+              <BasicText>가족력 여기</BasicText>
+              {(subUserInfo.smoke ||
+                subUserInfo.caffeine ||
+                subUserInfo.drink) && (
+                <>
+                  {" "}
+                  <Line />
+                  {subUserInfo.smoke && (
+                    <BulletText>
+                      <p>흡연자입니다</p>
+                    </BulletText>
+                  )}
+                  {subUserInfo.drink && (
+                    <BulletText>
+                      <p>음주를 많이 해요</p>
+                    </BulletText>
+                  )}
+                  {subUserInfo.caffeine && (
+                    <BulletText>
+                      <p>카페인 섭취를 많이 해요</p>
+                    </BulletText>
+                  )}
+                </>
+              )}
+
+              <Line />
               {currentDrugs.map(drug => {
                 return (
-                  <ModalContainer key={drug.id}>
+                  <div key={drug.id}>
                     <Item>{drug.drug_name.split("(")[0]}</Item>
                     <Duration>
                       {drug.from}
                       {drug.to && ` ~ ${drug.to}`}
                     </Duration>
                     <Line />
-                  </ModalContainer>
+                  </div>
                 );
               })}
             </ContentContainer>
