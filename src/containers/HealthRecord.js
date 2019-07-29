@@ -9,7 +9,7 @@ import PastDrugList from "../components/HealthRecord/PastDrugList";
 import AddCard from "../components/HealthRecord/AddCard";
 import Warning from "../components/UI/Warning";
 import Modal from "../components/UI/Modal";
-import { BasicText, BasicButton } from "../components/UI/SharedStyles";
+import { BasicText, BasicButton, Line } from "../components/UI/SharedStyles";
 
 const Background = styled.div`
   width: 100%;
@@ -42,6 +42,15 @@ const Nav = styled.div.attrs(props => props.active)`
   padding: 0.7rem;
   font-weight: 800;
   cursor: ${props => (props.active ? "none" : "pointer")};
+`;
+const UserContainer = styled.div`
+  width: 88%;
+  margin: 1.25rem auto 2.5rem auto;
+  text-align: center;
+`;
+
+const TopLine = styled(Line)`
+  margin: 0.8rem 0;
 `;
 
 const ModalContainer = styled.div`
@@ -186,6 +195,16 @@ function HealthRecord() {
           </Nav>
         </NavContainer>
         <Warning />
+        <UserContainer>
+          <TopLine />
+          <BasicText size="0.7rem" bold>
+            <BasicText color="var(--twoyak-blue)">
+              '{authState.userName}'{" "}
+            </BasicText>
+            의 복용내역
+          </BasicText>
+          <TopLine />
+        </UserContainer>
         {showCurrent
           ? currentDrugs && (
               <CurrentDrugList
