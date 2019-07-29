@@ -60,14 +60,24 @@ const CurrentDrugList = ({
           modalOff={toggleModal}
           content={
             <ContentContainer>
-              <Item>가족력</Item>
-              <BasicText>가족력 여기</BasicText>
+              {!subUserInfo.family_med_history ? (
+                ""
+              ) : (
+                <>
+                  {" "}
+                  <Item>가족력</Item>
+                  {subUserInfo.family_med_history.map(disease => (
+                    <BasicText>{disease.name}</BasicText>
+                  ))}
+                  <Line />
+                </>
+              )}
+
               {(subUserInfo.smoke ||
                 subUserInfo.caffeine ||
                 subUserInfo.drink) && (
                 <>
                   {" "}
-                  <Line />
                   {subUserInfo.smoke && (
                     <BulletText>
                       <p>흡연자입니다</p>
@@ -83,10 +93,10 @@ const CurrentDrugList = ({
                       <p>카페인 섭취를 많이 해요</p>
                     </BulletText>
                   )}
+                  <Line />
                 </>
               )}
 
-              <Line />
               {currentDrugs.map(drug => {
                 return (
                   <div key={drug.id}>
