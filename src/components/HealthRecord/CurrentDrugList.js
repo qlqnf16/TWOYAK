@@ -1,10 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import CurrentDrug from "./CurrentDrug";
-import { WhiteButton, Line, Card } from "../UI/SharedStyles";
+import { WhiteButton, Line, Card, BasicText } from "../UI/SharedStyles";
 import medIcon from "../../assets/images/(white)med-icon.svg";
 import Modal from "../UI/Modal";
 import styled from "styled-components";
 import InteractionNotice from "./InteractionNotice";
+import { AuthContext } from "../../contexts/AuthStore";
+
+const UserContainer = styled.div`
+  width: 88%;
+  margin: 1.25rem auto 2.5rem auto;
+  text-align: center;
+`;
+
+const TopLine = styled(Line)`
+  margin: 0.8rem 0;
+`;
 
 const Item = styled.div`
   width: 100%;
@@ -44,8 +55,20 @@ const CurrentDrugList = ({
     setShow(!show);
   };
 
+  const { state: authState } = useContext(AuthContext);
+
   return (
     <>
+      <UserContainer>
+        <TopLine />
+        <BasicText size="0.7rem" bold>
+          <BasicText color="var(--twoyak-blue)">
+            '{authState.userName}'{" "}
+          </BasicText>
+          의 복용내역
+        </BasicText>
+        <TopLine />
+      </UserContainer>
       <WhiteButton onClick={toggleModal}>약 이름 모아보기</WhiteButton>
       {show && (
         <Modal

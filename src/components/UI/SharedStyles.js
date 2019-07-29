@@ -116,7 +116,7 @@ export const StyledRating = styled(Rating)`
 export const BasicText = styled.div`
   display: inline;
   font-size: ${props => (props.size ? props.size : "0.875rem")};
-  color: #474747;
+  color: ${props => (props.color ? props.color : "#474747")};
   opacity: ${props => props.opacity};
   font-weight: ${props => (props.bold ? props.bold : "bold")};
 `;
