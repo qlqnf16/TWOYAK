@@ -17,7 +17,6 @@ import {
   BasicButton,
   AutosuggestStyleWrapper
 } from "../../UI/SharedStyles";
-import close from "../../../assets/images/(white)close.svg";
 
 const Container = styled.div`
   padding: 1rem 0;
@@ -42,15 +41,6 @@ const Button = styled(BasicButton)`
   margin-bottom: 1rem;
 `;
 
-const RemovableButton = styled(BasicButton)`
-  font-size: 0.75rem;
-  opacity: 0.7;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-right: 0.7rem;
-`;
-
 const FakeInput = styled.div`
   width: 100%;
   height: 2rem;
@@ -63,11 +53,6 @@ const FakeInput = styled.div`
   margin: 1rem 0;
   font-size: 0.7rem;
   color: #474747;
-`;
-
-const RemoveIcon = styled.img`
-  width: 0.7rem;
-  margin-left: 0.6rem;
 `;
 
 const DatePickerContainer = styled.div`
@@ -89,7 +74,7 @@ const StyledDateRange = styled(DateRange)`
 `;
 
 const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
-  const [diseases, setDiseases] = useState([]);
+  const [disease, setDisease] = useState([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [from, setFrom] = useState(moment());
   const [to, setTo] = useState(moment());
@@ -97,7 +82,6 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
   const { state: drugState, dispatch } = useContext(DrugContext);
 
   useEffect(() => {
-    // console.log(drugState);
     !drugState.diseases && fetchDiseaseData();
   }, []);
 
@@ -110,18 +94,14 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
   };
 
   const diseasesInputChange = value => {
-    if (diseases.indexOf(value) === -1) setDiseases(diseases.concat(value));
-  };
-
-  const removeDiseaseHandler = id => {
-    setDiseases(diseases.filter(disease => disease.id !== id));
+    setDisease(value);
   };
 
   const addDrug = () => {
-    const diseaseIds = diseases.map(disease => disease.id);
+    const diseaseId = disease.id;
     const formattedFrom = from.format("YYYY-MM-DD");
     const formattedTo = to.format("YYYY-MM-DD");
-    addCurrentDrug(drugId, { diseaseIds, formattedFrom, formattedTo });
+    addCurrentDrug(drugId, { diseaseId, formattedFrom, formattedTo });
   };
 
   const selectionRange = {
@@ -151,19 +131,6 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
               inputChange={diseasesInputChange}
             />
           </AutosuggestStyleWrapper>
-          {diseases.length > 0 &&
-            diseases.map(disease => (
-              <RemovableButton key={disease.id}>
-                {disease.name}
-                <RemoveIcon
-                  src={close}
-                  alt="close-button"
-                  onClick={() => {
-                    removeDiseaseHandler(disease.id);
-                  }}
-                />
-              </RemovableButton>
-            ))}
           <>
             {" "}
             <BasicText>기간</BasicText>

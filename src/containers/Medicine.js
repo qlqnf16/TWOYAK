@@ -185,7 +185,7 @@ function Medicine({ match, history, location }) {
         method: "POST",
         url: `user/${authState.subUserId}/current_drugs/${id}`,
         params: {
-          disease_ids: data.diseaseIds,
+          disease_ids: data.diseaseId,
           from: data.formattedFrom,
           to: data.formattedTo
         },
