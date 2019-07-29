@@ -114,7 +114,8 @@ const SearchResult = React.memo(
     toggleShowMore,
     watching,
     toggleWatching,
-    additionalModalToggle
+    additionalModalToggle,
+    auth
   }) => {
     const drugDetail = drug.package_insert
       ? drug.package_insert.DRB_ITEM
@@ -264,21 +265,23 @@ const SearchResult = React.memo(
             </>
           )}
         </InfoContainer>
-        <AddButton
-          onClick={
-            drug.currently_taking
-              ? () => {
-                  additionalModalToggle("delete");
-                }
-              : () => {
-                  additionalModalToggle("add");
-                }
-          }
-        >
-          {drug.currently_taking
-            ? "복용목록에서 제거하기"
-            : "복용목록에 추가하기"}
-        </AddButton>
+        {auth && (
+          <AddButton
+            onClick={
+              drug.currently_taking
+                ? () => {
+                    additionalModalToggle("delete");
+                  }
+                : () => {
+                    additionalModalToggle("add");
+                  }
+            }
+          >
+            {drug.currently_taking
+              ? "복용목록에서 제거하기"
+              : "복용목록에 추가하기"}
+          </AddButton>
+        )}
       </Container>
     );
   }

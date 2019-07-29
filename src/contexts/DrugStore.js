@@ -16,14 +16,10 @@ const DrugStore = props => {
   const fetchInitialData = async () => {
     const payload = await Promise.all([
       axios.get("autocomplete/drug"),
-      axios.get("autocomplete/adverse_effect"),
-      axios.get("autocomplete/disease", {
-        headers: { Authorization: authState.token }
-      })
+      axios.get("autocomplete/adverse_effect")
     ]);
     dispatch({ type: "SET_INIT_DATA", payload: payload });
   };
-
   useEffect(() => {
     if (authState.token) {
       fetchInitialData();

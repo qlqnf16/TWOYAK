@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useReducer, useEffect, useContext } from "react";
 import Modal from "../../UI/Modal";
 import AutoSuggestion from "../../Util/AutoSuggestion";
 import { ko } from "date-fns/esm/locale";
+import { AuthContext } from "../../../contexts/AuthStore";
+import { DrugContext } from "../../../contexts/DrugStore";
+import axios from "../../../apis";
 
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
@@ -90,6 +93,21 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [from, setFrom] = useState(moment());
   const [to, setTo] = useState(moment());
+  const { state: authState } = useContext(AuthContext);
+  const { state: drugState, dispatch } = useContext(DrugContext);
+
+  useEffect(() => {
+    // console.log(drugState);
+    !drugState.diseases && fetchDiseaseData();
+  }, []);
+
+  const fetchDiseaseData = async () => {
+    const { data } = await axios.get("autocomplete/disease", {
+      headers: { Authorization: authState.token }
+    });
+    const payload = JSON.parse(data.standard_diseases);
+    dispatch({ type: "GET_DISEASES", payload: payload });
+  };
 
   const diseasesInputChange = value => {
     if (diseases.indexOf(value) === -1) setDiseases(diseases.concat(value));
@@ -117,7 +135,9 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
     setTo(moment(ranges.selection.endDate));
   };
 
-  return (
+  return !drugState ? (
+    ""
+  ) : (
     <Modal
       title="복용 목록에 추가"
       content={

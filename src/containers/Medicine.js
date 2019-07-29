@@ -318,10 +318,11 @@ function Medicine({ match, history, location }) {
                 drugImg={drugimg}
                 modalOn={modalOn}
                 showMore={showMore}
-                toggleShowMore={toggleShowMore}
                 watching={watching}
+                toggleShowMore={toggleShowMore}
                 toggleWatching={toggleWatching}
                 additionalModalToggle={additionalModalToggle}
+                auth={!authState.token ? false : true}
               />
             </>
           )}
