@@ -45,7 +45,7 @@ const Bold = styled.div`
   margin-bottom: 0.65rem;
 `;
 
-const EditIcon = styled.i`
+const EditIcon = styled(Edit)`
   margin-right: 10px;
   color: var(--twoyak-black);
 `;
@@ -70,10 +70,7 @@ const DrugReview = ({ my, review, deleteReview, updateButton }) => {
         </FlexStart>
         {my && updateButton && (
           <FlexStart>
-            <Edit
-              // className="fas fa-pencil-alt"
-              onClick={() => updateButton(review)}
-            />
+            <EditIcon onClick={() => updateButton(review)} />
             <Close onClick={() => deleteReview(review.id)} />
           </FlexStart>
         )}

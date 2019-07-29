@@ -303,7 +303,7 @@ function Medicine({ match, history, location }) {
   if (match.params.id) {
     return (
       <>
-        <Container>
+        <Container preventScroll={addModal || deleteModal}>
           {/* desktop 화면 */}
           {window.innerWidth >= 960 && drugs && (
             <SearchInput

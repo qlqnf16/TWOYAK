@@ -16,6 +16,7 @@ export const Container = styled.div`
   justify-content: center;
   align-items: center;
   margin: 70px auto 120px auto;
+  ${props => (props.preventScroll ? `position: fixed; overflow-y: hidden` : "")}
 
   @media (min-width: ${breakpoints.medium}) {
     margin: 25vh auto;
