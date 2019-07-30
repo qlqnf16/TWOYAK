@@ -5,12 +5,14 @@ import { AuthContext } from "../contexts/AuthStore";
 
 import Header from "../components/Home/Header";
 import CurrentDrugs from "../components/Home/CurrentDrugs";
+import RecommendedContents from "../components/Home/RecommendedContents";
 import medIcon from "../assets/images/med-icon.svg";
 
 const HomeContainer = styled.div`
   margin-top: 70px;
   padding-left: 1.375rem;
   padding-right: 1.375rem;
+  color: var(--twoyak-black);
 `;
 
 function Home(props) {
@@ -32,22 +34,23 @@ function Home(props) {
       })
         .then(response => {
           if (response.data.length > 0) {
-            setCurrentDrugs(response.data);
+            setCurrentDrugs(response.data.splice(0, 4));
           }
         })
         .catch(error => console.log(error));
     }
-  }, [dispatch, authState.subUserId]);
+  }, [authState.subUserId, authState.token]);
 
   return (
     <HomeContainer>
       <Header />
       <CurrentDrugs
-        currentDrugs={currentDrugs ? currentDrugs.splice(0, 4) : null}
+        currentDrugs={currentDrugs ? currentDrugs : null}
         history={props.history}
         medIcon={medIcon}
         userName={authState.userName}
       />
+      <RecommendedContents history={props.history} />
     </HomeContainer>
   );
 }

@@ -48,23 +48,12 @@ const Close = styled.img`
   margin-right: 0.5rem;
 `;
 
-function AppendResult({ diseaseArray }) {
-  const [familyMedHistories, setFamilyMedHistories] = useState([]);
+function AppendResult({
+  diseaseArray,
+  currentFamilyMedHis,
+  getCurrentFamilyMedHistory
+}) {
   const { state } = useContext(AuthContext);
-
-  // useState(() => {
-  //   if (state.userId) {
-  //     axios({
-  //       method: "GET",
-  //       url: `/user/${state.userId}/family_med_histories`,
-  //       headers: {
-  //         Authorization: state.token
-  //       }
-  //     }).then(response => {
-  //       setFamilyMedHistories(response.data);
-  //     });
-  //   }
-  // }, [state.userId]);
 
   const postDiseaseIdHandler = (method, suggestion) => {
     axios({
@@ -76,7 +65,7 @@ function AppendResult({ diseaseArray }) {
     }).then(response => {
       switch (method) {
         case "POST":
-          setFamilyMedHistories(response.data);
+          getCurrentFamilyMedHistory();
           break;
         case "DELETE":
           axios({
@@ -86,7 +75,7 @@ function AppendResult({ diseaseArray }) {
               Authorization: state.token
             }
           }).then(response => {
-            setFamilyMedHistories(response.data);
+            getCurrentFamilyMedHistory();
           });
           break;
         default:
@@ -102,8 +91,8 @@ function AppendResult({ diseaseArray }) {
         appendDiseaseId={suggestion => postDiseaseIdHandler("POST", suggestion)}
       />
       <DiseaseContainer>
-        {familyMedHistories.map((i, k) => (
-          <DiseaseWrapper key={k} style={{ display: "flex" }}>
+        {currentFamilyMedHis.map((i, k) => (
+          <DiseaseWrapper key={k}>
             <DiseaseButton key={k}>{i.name}</DiseaseButton>
             <Close
               src={closeIcon}

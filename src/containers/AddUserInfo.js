@@ -62,6 +62,7 @@ function AddSubUser(props) {
   const [smoke, setSmoke] = useState(null);
   const [caffeine, setCaffeine] = useState(null);
   const [sex, setSex] = useState(null);
+  const [familyMedHistory, setFamilyMedHistory] = useState([]);
   const [skipAddInfo, setSkipAddInfo] = useState(false);
 
   const { state, dispatch } = useContext(AuthContext);
@@ -69,11 +70,14 @@ function AddSubUser(props) {
   useEffect(() => {
     axios({
       method: "GET",
-      url: "/autocomplete/disease"
+      url: "/autocomplete/disease",
+      headers: {
+        Authorization: `Bearer ${state.token}`
+      }
     }).then(response => {
       setDiseaseArray(response.data);
     });
-  }, []);
+  }, [state.token]);
 
   useEffect(() => {
     if (state.token) {
@@ -81,25 +85,38 @@ function AddSubUser(props) {
         props.match.path === "/edit-info" ||
         props.match.path === "/add-info"
       ) {
-        axios({
-          method: "GET",
-          url: "/user/mypage",
-          headers: {
-            Authorization: `Bearer ${state.token}`
-          }
-        }).then(response => {
-          const payload = response.data;
-          const object = payload.infos[state.subUserIndex].sub_user.basic_info;
-          setUserName(object.user_name);
-          setBirthDate(object.birth_date);
-          setDrink(object.drink);
-          setSmoke(object.smoke);
-          setCaffeine(object.caffeine);
-          setSex(object.sex);
-        });
+        getUserInfo();
       }
     }
-  }, [props.match.params, state.subUserId, state.token]);
+  }, [
+    props.match.path,
+    props.match.params,
+    state.subUserId,
+    state.token,
+    state.subUserIndex
+  ]);
+
+  const getUserInfo = () => {
+    axios({
+      method: "GET",
+      url: "/user/mypage",
+      headers: {
+        Authorization: `Bearer ${state.token}`
+      }
+    }).then(response => {
+      const payload = response.data;
+      const object = payload.infos[state.subUserIndex].sub_user.basic_info;
+      setUserName(object.user_name);
+      setBirthDate(object.birth_date);
+      setDrink(object.drink);
+      setSmoke(object.smoke);
+      setCaffeine(object.caffeine);
+      setSex(object.sex);
+      setFamilyMedHistory(
+        payload.infos[state.subUserIndex].sub_user.family_med_his
+      );
+    });
+  };
 
   const addInfoHandler = () => {
     if (props.match.path === "/add-sub-user") {
@@ -235,7 +252,11 @@ function AddSubUser(props) {
         caffeine={caffeine}
         toggleHandle={(label, value) => toggleHandler(label, value)}
       />
-      <AppendDisease diseaseArray={diseaseArray} />
+      <AppendDisease
+        diseaseArray={diseaseArray}
+        currentFamilyMedHis={familyMedHistory}
+        getCurrentFamilyMedHistory={() => getUserInfo()}
+      />
       <ButtonArea>
         <SubmitButton onClick={() => addInfoHandler()}>
           {props.match.path === "/edit-info" ? "수정하기" : "추가하기"}

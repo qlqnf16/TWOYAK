@@ -3,7 +3,6 @@ import { Redirect } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthStore";
 import axios from "../apis";
 import styled from "styled-components";
-import jwt_decode from "jwt-decode";
 
 import { Container } from "../components/UI/SharedStyles";
 import { BasicButton } from "../components/UI/SharedStyles";
