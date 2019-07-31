@@ -5,7 +5,7 @@ export const thumbnail = [
       "https://static.wixstatic.com/media/a27d24_cb4b83671b414977b9c1b80bb83b2dce~mv2.png/v1/fit/w_458,h_359,al_c,q_80/file.webp",
     contentURL:
       "https://anamaccompany.wixsite.com/nutriview/forum/geongang-jeongbo/amuri-swieodo-pigonhadamyeon-ggog-ilgeobwaya-hal-geul",
-    paragraph: `<div>
+    paragraph: `<div style="max-width: 720px;"> 
       <div>
         대학생 독자분들은 개강한 지 벌써 1주일이 지났고, 직장인 독자분들은
         매일 출근으로 하루하루 열심히 보내고 계시겠군요! 매일 반복되는

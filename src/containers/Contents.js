@@ -15,6 +15,12 @@ const ContentContiner = styled.div`
   background-color: white;
   padding: 0;
   overflow: auto;
+  display: flex;
+  justify-content: center;
+`;
+
+const ContentGrid = styled.div`
+  max-width: 720px;
 `;
 
 const CloseImg = styled.img`
@@ -47,15 +53,17 @@ function Content(props) {
   console.log(props);
   return (
     <ContentContiner>
-      <CloseImg src={close} onClick={() => props.history.goBack()} />
-      <ContentTitle>{thumbnail[props.match.params.id].title}</ContentTitle>
-      <ContentImg
-        src={thumbnail[props.match.params.id].src}
-        alt={`content${props.match.params.id}`}
-      />
-      <ContentParagraph>
-        {ReactHtmlParser(thumbnail[props.match.params.id].paragraph)}
-      </ContentParagraph>
+      <ContentGrid>
+        <CloseImg src={close} onClick={() => props.history.goBack()} />
+        <ContentTitle>{thumbnail[props.match.params.id].title}</ContentTitle>
+        <ContentImg
+          src={thumbnail[props.match.params.id].src}
+          alt={`content${props.match.params.id}`}
+        />
+        <ContentParagraph>
+          {ReactHtmlParser(thumbnail[props.match.params.id].paragraph)}
+        </ContentParagraph>
+      </ContentGrid>
     </ContentContiner>
   );
 }
