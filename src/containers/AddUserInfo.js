@@ -173,7 +173,7 @@ function AddSubUser(props) {
             token: payload
           });
           localStorage.setItem("token", payload);
-          props.history.push("/");
+          props.history.push("/mypage");
         })
         .catch(error => alert(error.data.errors));
     }

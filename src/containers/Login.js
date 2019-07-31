@@ -190,7 +190,7 @@ function Login(props) {
             onClick={() => signinBySocialAccount("google_oauth2")}
           />
         </SocialLoginArea>
-        {state.token ? <Redirect to="/" /> : null}
+        {state.token ? <Redirect to="/mypage" /> : null}
       </LoginArea>
     </Container>
   );

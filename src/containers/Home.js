@@ -44,12 +44,15 @@ function Home(props) {
   return (
     <HomeContainer>
       <Header />
-      <CurrentDrugs
-        currentDrugs={currentDrugs ? currentDrugs : null}
-        history={props.history}
-        medIcon={medIcon}
-        userName={authState.userName}
-      />
+      {authState.token ? (
+        <CurrentDrugs
+          currentDrugs={currentDrugs ? currentDrugs : null}
+          history={props.history}
+          medIcon={medIcon}
+          userName={authState.userName}
+        />
+      ) : null}
+
       <RecommendedContents history={props.history} />
     </HomeContainer>
   );
