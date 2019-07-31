@@ -3,7 +3,6 @@ import { Redirect } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthStore";
 import axios from "../apis";
 import styled from "styled-components";
-import jwt_decode from "jwt-decode";
 
 import { Container } from "../components/UI/SharedStyles";
 import { BasicButton } from "../components/UI/SharedStyles";
@@ -108,7 +107,6 @@ function Login(props) {
       .post("api/users/login", signinData)
       .then(response => {
         const payload = response.data.auth_token;
-        console.log(jwt_decode(payload));
         dispatch({
           type: "SIGNIN_SUCCESS",
           token: payload
@@ -192,7 +190,7 @@ function Login(props) {
             onClick={() => signinBySocialAccount("google_oauth2")}
           />
         </SocialLoginArea>
-        {state.token ? <Redirect to="/" /> : null}
+        {state.token ? <Redirect to="/mypage" /> : null}
       </LoginArea>
     </Container>
   );

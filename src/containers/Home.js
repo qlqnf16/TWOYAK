@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { AuthContext } from "../contexts/AuthStore";
 
 import CurrentDrugs from "../components/Home/CurrentDrugs";
+import RecommendedContents from "../components/Home/RecommendedContents";
 import medIcon from "../assets/images/med-icon.svg";
 import Warning from "../components/UI/Warning";
 
@@ -11,13 +12,13 @@ const HomeContainer = styled.div`
   margin-top: 70px;
   padding-left: 1.375rem;
   padding-right: 1.375rem;
+  color: var(--twoyak-black);
 `;
 
 function Home(props) {
   const [currentDrugs, setCurrentDrugs] = useState(null);
   const { state: authState, dispatch } = useContext(AuthContext);
 
-  console.log(authState);
   useEffect(() => {
     dispatch({
       type: "SET_AUTH_REDIRECT_PATH",
@@ -32,17 +33,27 @@ function Home(props) {
         }
       })
         .then(response => {
-          console.log(response.data !== []);
           if (response.data.length > 0) {
-            setCurrentDrugs(response.data);
+            setCurrentDrugs(response.data.splice(0, 4));
           }
         })
         .catch(error => console.log(error));
     }
-  }, [dispatch, authState.subUserId]);
+  }, [authState.subUserId, authState.token]);
 
   return (
     <HomeContainer>
+      <Header />
+      {authState.token ? (
+        <CurrentDrugs
+          currentDrugs={currentDrugs ? currentDrugs : null}
+          history={props.history}
+          medIcon={medIcon}
+          userName={authState.userName}
+        />
+      ) : null}
+
+      <RecommendedContents history={props.history} />
       <Warning />
       <CurrentDrugs
         currentDrugs={currentDrugs ? currentDrugs.splice(0, 4) : null}

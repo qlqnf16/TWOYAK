@@ -90,16 +90,6 @@ function DiseasesAndFamilyMedHis({ medHistory, historyChange }) {
     setModalShow(!modalShow);
   };
 
-  const postDiseaseToPastHandler = () => {
-    axios({
-      method: "DELETE",
-      url: `/user/${state.userId}/current_diseases/${diseaseIdDeleted}/to_past`,
-      headers: {
-        Authorization: `Bearer ${state.token}`
-      }
-    }).then(response => console.log(response.data));
-  };
-
   const deleteFamilyMedHistoriesHandler = () => {
     axios({
       method: "DELETE",

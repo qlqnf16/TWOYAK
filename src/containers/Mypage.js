@@ -61,7 +61,6 @@ function Mypage(props) {
   const [currentDrugs, setCurrentDrugs] = useState([]);
   const [drugReviews, setDrugReviews] = useState([]);
   const [myConversation] = useState([]);
-  const [currentDiseases, setCurrentDiseases] = useState([]);
   const [familyMedHistoies, setFamilyMedHistories] = useState([]);
   const [watchDrugs, setWatchDrugs] = useState([]);
   const [changeUserModalShow, setChangeUserModalShow] = useState(false);
@@ -90,7 +89,6 @@ function Mypage(props) {
         subUserIndex: id
       });
       setCurrentDrugs(payload.infos[id].sub_user.current_drugs);
-      setCurrentDiseases(payload.infos[id].sub_user.current_diseases);
       setFamilyMedHistories(payload.infos[id].sub_user.family_med_his);
       setDrugReviews(payload.drug_reviews);
       setWatchDrugs(payload.watch_drugs);
@@ -136,6 +134,7 @@ function Mypage(props) {
         drugReviews={drugReviews}
         myConversation={myConversation}
         userChange={id => getUserInfo(id)}
+        history={props.history}
       />
       <Divider />
       <Diseases

@@ -64,7 +64,8 @@ function WatchDrugs({ watchDrugs, watchChange }) {
           }
         }
       )
-      .then(response => console.log(response.data));
+      .then()
+      .catch(error => console.log(error));
     setModalShow(!modalShow);
     watchChange(state.subUserIndex);
   };
