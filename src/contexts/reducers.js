@@ -6,8 +6,12 @@ export const drugReducer = (state, { type, payload }) => {
     case "SET_INIT_DATA":
       return {
         drugs: payload[0].data,
-        adverse_effects: payload[1].data,
-        diseases: payload[2].data
+        adverse_effects: payload[1].data
+      };
+    case "GET_DISEASES":
+      return {
+        ...state,
+        diseases: payload
       };
     default:
       break;

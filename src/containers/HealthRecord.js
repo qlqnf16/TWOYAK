@@ -9,7 +9,7 @@ import PastDrugList from "../components/HealthRecord/PastDrugList";
 import AddCard from "../components/HealthRecord/AddCard";
 import Warning from "../components/UI/Warning";
 import Modal from "../components/UI/Modal";
-import { BasicText, BasicButton } from "../components/UI/SharedStyles";
+import { BasicText, BasicButton, Line } from "../components/UI/SharedStyles";
 
 const Background = styled.div`
   width: 100%;
@@ -43,6 +43,15 @@ const Nav = styled.div.attrs(props => props.active)`
   font-weight: 800;
   cursor: ${props => (props.active ? "none" : "pointer")};
 `;
+const UserContainer = styled.div`
+  width: 88%;
+  margin: 1.25rem auto 2rem auto;
+  text-align: center;
+`;
+
+const TopLine = styled(Line)`
+  margin: 0.8rem 0;
+`;
 
 const ModalContainer = styled.div`
   padding: 2.5rem 0;
@@ -63,18 +72,22 @@ const StyledLink = styled(Link)`
 `;
 
 function HealthRecord() {
+  const { state: authState } = useContext(AuthContext);
+
   const [currentDrugs, setCurrentDrugs] = useState(null);
   const [pastDrugs, setPastDrugs] = useState(null);
   const [durInfo, setDurInfo] = useState(null);
+  const [subUserInfo, setSubUserInfo] = useState();
+
   const [showCurrent, setShowCurrent] = useState(true);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const { state: authState } = useContext(AuthContext);
 
   useEffect(() => {}, [currentDrugs]);
 
   useEffect(() => {
     if (authState.token) {
       getUserInfo();
+      getSubUserInfo();
       setShowLoginModal(false);
     } else {
       setShowLoginModal(true);
@@ -92,6 +105,22 @@ function HealthRecord() {
         Authorization: `bearer ${authState.token}`
       }
     });
+
+  const getSubUserInfo = async () => {
+    try {
+      const { data } = await axios.get(
+        `user/sub_users/${authState.subUserId}`,
+        {
+          headers: {
+            Authorization: authState.token
+          }
+        }
+      );
+      setSubUserInfo(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const getUserInfo = async () => {
     try {
@@ -186,6 +215,16 @@ function HealthRecord() {
           </Nav>
         </NavContainer>
         <Warning />
+        <UserContainer>
+          <TopLine />
+          <BasicText size="0.7rem" bold>
+            <BasicText color="var(--twoyak-blue)">
+              '{authState.userName}'{" "}
+            </BasicText>
+            의 복용내역
+          </BasicText>
+          <TopLine />
+        </UserContainer>
         {showCurrent
           ? currentDrugs && (
               <CurrentDrugList
@@ -194,6 +233,7 @@ function HealthRecord() {
                 drugToPast={drugToPast}
                 deleteDrug={deleteDrug}
                 durInfo={durInfo}
+                subUserInfo={subUserInfo}
               />
             )
           : pastDrugs && <PastDrugList drugs={pastDrugs} />}

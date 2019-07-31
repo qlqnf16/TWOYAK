@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "../apis";
 import qs from "querystring";
 import styled from "styled-components";
+import moment from "moment";
 import { DrugContext } from "../contexts/DrugStore";
 import { AuthContext } from "../contexts/AuthStore";
 
@@ -181,11 +182,13 @@ function Medicine({ match, history, location }) {
   // 현재 복용중 약품에 추가
   const addCurrentDrug = async (id, data) => {
     try {
+      let url = "current_drugs";
+      if (data.formattedTo <= moment().format("YYYY-MM-DD")) url = "past_drugs";
       await axios({
         method: "POST",
-        url: `user/${authState.subUserId}/current_drugs/${id}`,
+        url: `user/${authState.subUserId}/${url}/${id}`,
         params: {
-          disease_ids: data.diseaseIds,
+          disease_ids: data.diseaseId,
           from: data.formattedFrom,
           to: data.formattedTo
         },
@@ -300,7 +303,7 @@ function Medicine({ match, history, location }) {
   if (match.params.id) {
     return (
       <>
-        <Container>
+        <Container preventScroll={addModal || deleteModal}>
           {/* desktop 화면 */}
           {window.innerWidth >= 960 && drugs && (
             <SearchInput
@@ -318,10 +321,11 @@ function Medicine({ match, history, location }) {
                 drugImg={drugimg}
                 modalOn={modalOn}
                 showMore={showMore}
-                toggleShowMore={toggleShowMore}
                 watching={watching}
+                toggleShowMore={toggleShowMore}
                 toggleWatching={toggleWatching}
                 additionalModalToggle={additionalModalToggle}
+                auth={!authState.token ? false : true}
               />
             </>
           )}
