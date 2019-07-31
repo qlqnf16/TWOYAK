@@ -7,7 +7,8 @@ import {
   FlexForm,
   FlexDiv,
   StyledRating,
-  RatingText
+  RatingText,
+  AutosuggestStyleWrapper
 } from "../../UI/SharedStyles";
 import medIcon from "../../../assets/images/(white)med-icon.svg";
 import "@fortawesome/fontawesome-free/css/all.css";
@@ -124,15 +125,14 @@ const NewReview = React.memo(({ reviewSubmit, review, modalOff }) => {
           </FlexDiv>
           <Titles>복용 후 이상반응이 있었나요?</Titles>
           <Form onSubmit={adverseEffectSubmit}>
-            <Suggestion>
+            <AutosuggestStyleWrapper>
               <AutoSuggestion
                 search="adverse_effect"
                 searchKey="symptom_name"
                 placeholderProp="느끼신 증상을 입력하세요"
                 inputChange={adverseEffectInputChange}
               />
-            </Suggestion>
-            <AddButton type="submit">추가</AddButton>
+            </AutosuggestStyleWrapper>
           </Form>
           {adverseEffects &&
             adverseEffects.map(effect => (

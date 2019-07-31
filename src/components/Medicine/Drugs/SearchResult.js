@@ -39,6 +39,8 @@ const Icon = styled.img`
 `;
 
 const ItemName = styled.div`
+  width: 55%;
+  text-align: center;
   font-weight: bold;
   font-size: 1.125rem;
 `;
@@ -112,7 +114,8 @@ const SearchResult = React.memo(
     toggleShowMore,
     watching,
     toggleWatching,
-    additionalModalToggle
+    additionalModalToggle,
+    auth
   }) => {
     const drugDetail = drug.package_insert
       ? drug.package_insert.DRB_ITEM
@@ -181,7 +184,7 @@ const SearchResult = React.memo(
     const ingrKo = new Set(drug.ingr_kor_name);
 
     const durInfo = [];
-    const dur = drug.dur_info;
+    const dur = !drug.dur_info ? {} : drug.dur_info;
     if (dur.pregnancy) durInfo.push("임산부");
     else if (dur.age) durInfo.push(dur.age[0].description);
     else if (dur.elder) durInfo.push("65세 이상 고령자");
@@ -262,21 +265,23 @@ const SearchResult = React.memo(
             </>
           )}
         </InfoContainer>
-        <AddButton
-          onClick={
-            drug.currently_taking
-              ? () => {
-                  additionalModalToggle("delete");
-                }
-              : () => {
-                  additionalModalToggle("add");
-                }
-          }
-        >
-          {drug.currently_taking
-            ? "복용목록에서 제거하기"
-            : "복용목록에 추가하기"}
-        </AddButton>
+        {auth && (
+          <AddButton
+            onClick={
+              drug.currently_taking
+                ? () => {
+                    additionalModalToggle("delete");
+                  }
+                : () => {
+                    additionalModalToggle("add");
+                  }
+            }
+          >
+            {drug.currently_taking
+              ? "복용목록에서 제거하기"
+              : "복용목록에 추가하기"}
+          </AddButton>
+        )}
       </Container>
     );
   }

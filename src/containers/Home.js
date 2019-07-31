@@ -3,10 +3,10 @@ import axios from "../apis";
 import styled from "styled-components";
 import { AuthContext } from "../contexts/AuthStore";
 
-import Header from "../components/Home/Header";
 import CurrentDrugs from "../components/Home/CurrentDrugs";
 import RecommendedContents from "../components/Home/RecommendedContents";
 import medIcon from "../assets/images/med-icon.svg";
+import Warning from "../components/UI/Warning";
 
 const HomeContainer = styled.div`
   margin-top: 70px;
@@ -54,6 +54,13 @@ function Home(props) {
       ) : null}
 
       <RecommendedContents history={props.history} />
+      <Warning />
+      <CurrentDrugs
+        currentDrugs={currentDrugs ? currentDrugs.splice(0, 4) : null}
+        history={props.history}
+        medIcon={medIcon}
+        userName={authState.userName}
+      />
     </HomeContainer>
   );
 }

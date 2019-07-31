@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useReducer, useEffect, useContext } from "react";
 import Modal from "../../UI/Modal";
 import AutoSuggestion from "../../Util/AutoSuggestion";
+import { ko } from "date-fns/esm/locale";
+import { AuthContext } from "../../../contexts/AuthStore";
+import { DrugContext } from "../../../contexts/DrugStore";
+import axios from "../../../apis";
 
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
@@ -8,8 +12,11 @@ import { DateRange } from "react-date-range";
 import moment from "moment";
 
 import styled from "styled-components";
-import { BasicText, BasicButton } from "../../UI/SharedStyles";
-import close from "../../../assets/images/(white)close.svg";
+import {
+  BasicText,
+  BasicButton,
+  AutosuggestStyleWrapper
+} from "../../UI/SharedStyles";
 
 const Container = styled.div`
   padding: 1rem 0;
@@ -17,54 +24,6 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: start;
   align-items: flex-start;
-`;
-
-const StyleWrapper = styled.div`
-  flex-grow: 1;
-  flex-shrink: 1;
-  position: relative;
-  width: 100%;
-  margin: 1rem 0;
-   border-radius: 1.5rem;
-    border: solid 1px var(--twoyak-blue);
-  
-& .react-autosuggest__container {
-    height: 2rem;
-    padding: 1rem;
-   
-    display: flex;
-    align-items: center;
-}
-
-  & .react-autosuggest__input {
-    width: 100%;
-    padding: 1rem;
-    height: 2rem;
-    background: transparent;
-    border: none
-  }
-
-  & .react-autosuggest__suggestions-container--open {
-    width: 100%
-    overflow: hidden;
-    margin: 0;
-    position: absolute;
-    left: 0;
-    top: 33px;
-    background-color: white;
-    border: 1px solid var(--twoyak-blue);
-    z-index: 140;
-  }
-
-    & .react-autosuggest__suggestion {
-    list-style-type: none;
-    font-size: 0.7rem;
-    margin-bottom: -1px;
-    color: var(--twoyak-black);
-    cursor: pointer;
-    padding: 0.5rem;
-    font-weight: bold;
-  }
 `;
 
 const TextArea = styled.textarea`
@@ -82,15 +41,6 @@ const Button = styled(BasicButton)`
   margin-bottom: 1rem;
 `;
 
-const RemovableButton = styled(BasicButton)`
-  font-size: 0.75rem;
-  opacity: 0.7;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-right: 0.7rem;
-`;
-
 const FakeInput = styled.div`
   width: 100%;
   height: 2rem;
@@ -103,11 +53,6 @@ const FakeInput = styled.div`
   margin: 1rem 0;
   font-size: 0.7rem;
   color: #474747;
-`;
-
-const RemoveIcon = styled.img`
-  width: 0.7rem;
-  margin-left: 0.6rem;
 `;
 
 const DatePickerContainer = styled.div`
@@ -129,24 +74,34 @@ const StyledDateRange = styled(DateRange)`
 `;
 
 const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
-  const [diseases, setDiseases] = useState([]);
+  const [disease, setDisease] = useState([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [from, setFrom] = useState(moment());
   const [to, setTo] = useState(moment());
+  const { state: authState } = useContext(AuthContext);
+  const { state: drugState, dispatch } = useContext(DrugContext);
 
-  const diseasesInputChange = value => {
-    if (diseases.indexOf(value) === -1) setDiseases(diseases.concat(value));
+  useEffect(() => {
+    !drugState.diseases && fetchDiseaseData();
+  }, []);
+
+  const fetchDiseaseData = async () => {
+    const { data } = await axios.get("autocomplete/disease", {
+      headers: { Authorization: authState.token }
+    });
+    const payload = JSON.parse(data.standard_diseases);
+    dispatch({ type: "GET_DISEASES", payload: payload });
   };
 
-  const removeDiseaseHandler = id => {
-    setDiseases(diseases.filter(disease => disease.id !== id));
+  const diseasesInputChange = value => {
+    setDisease(value);
   };
 
   const addDrug = () => {
-    const diseaseIds = diseases.map(disease => disease.id);
+    const diseaseId = disease.id;
     const formattedFrom = from.format("YYYY-MM-DD");
     const formattedTo = to.format("YYYY-MM-DD");
-    addCurrentDrug(drugId, { diseaseIds, formattedFrom, formattedTo });
+    addCurrentDrug(drugId, { diseaseId, formattedFrom, formattedTo });
   };
 
   const selectionRange = {
@@ -160,33 +115,22 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
     setTo(moment(ranges.selection.endDate));
   };
 
-  return (
+  return !drugState ? (
+    ""
+  ) : (
     <Modal
       title="복용 목록에 추가"
       content={
         <Container>
           <BasicText>왜 이 약을 드시나요?</BasicText>
-          <StyleWrapper>
+          <AutosuggestStyleWrapper>
             <AutoSuggestion
               search="disease"
               placeholderProp={"질환명 입력"}
               searchKey="name"
               inputChange={diseasesInputChange}
             />
-          </StyleWrapper>
-          {diseases.length > 0 &&
-            diseases.map(disease => (
-              <RemovableButton key={disease.id}>
-                {disease.name}
-                <RemoveIcon
-                  src={close}
-                  alt="close-button"
-                  onClick={() => {
-                    removeDiseaseHandler(disease.id);
-                  }}
-                />
-              </RemovableButton>
-            ))}
+          </AutosuggestStyleWrapper>
           <>
             {" "}
             <BasicText>기간</BasicText>
@@ -200,6 +144,7 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
             {showDatePicker && (
               <DatePickerContainer>
                 <StyledDateRange
+                  locale={ko}
                   months={1}
                   ranges={[selectionRange]}
                   onChange={handleSelect}
