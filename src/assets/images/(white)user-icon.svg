@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="21px" viewBox="0 0 20 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>user-icon</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="add-info-warning" transform="translate(-334.000000, -47.000000)" fill="#FFFFFF">
+            <g id="navbar">
+                <g id="user-icon" transform="translate(334.000000, 47.000000)">
+                    <circle id="Oval" cx="10.5" cy="6.5" r="6.5"></circle>
+                    <path d="M10,11 C4.4770589,11 0,15.2425118 0,20.4757907 C0,20.6517794 0.00579436117,20.8264677 0.0158582516,21 L19.9841417,21 C19.9940532,20.8264677 20,20.6517794 20,20.4757907 C20,15.2425118 15.5229411,11 10,11 Z" id="Fill-1"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
