@@ -6,14 +6,13 @@ import close from "../assets/images/erase.svg";
 
 const ContentContainer = styled.div`
   width: 100%;
-  padding: 20px;
+  padding: 2rem;
   height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 200;
   background-color: white;
-  padding: 0;
   overflow: auto;
   display: flex;
   justify-content: center;
@@ -32,8 +31,6 @@ const ContentTitle = styled.div`
   font-size: 1.12rem;
   font-weight: 800;
   margin-top: 1.625rem;
-  margin-right: 1rem;
-  margin-left: 1rem;
 `;
 
 const ContentImg = styled.img`
@@ -42,11 +39,9 @@ const ContentImg = styled.img`
 `;
 
 const ContentParagraph = styled.div`
-  margin-top: 2.125rem;
-  margin-right: 1rem;
-  margin-left: 1rem;
-  margin-bottom: 2rem;
+  margin: 2.125rem 0 2rem 0;
   text-align: left;
+  font-size: 0.9rem;
 `;
 
 function Content(props) {

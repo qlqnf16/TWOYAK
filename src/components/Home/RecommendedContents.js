@@ -3,17 +3,19 @@ import styled from "styled-components";
 import { thumbnail } from "./ContentDummy";
 
 const ContentsContainer = styled.div`
-  display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 6px;
+  grid-auto-rows: minmax(100px, auto);
+  margin-top: 1rem;
 `;
 
 const ThumbnailContainer = styled.div`
-  width: 50%;
-  height: 15rem;
-  border-radius: 13px;
-  box-shadow: 1px 2px 7px 1px rgba(212, 212, 212, 0.5);
-  margin-top: 1.375rem;
+  width: 100%;
+  height: 11rem;
+  /* border-radius: 13px; */
+  /* box-shadow: 1px 2px 7px 1px rgba(212, 212, 212, 0.5); */
 `;
 
 const ThumbnailTitle = styled.div`
@@ -21,7 +23,6 @@ const ThumbnailTitle = styled.div`
   height: 30%;
   font-size: 0.7rem;
   font-weight: 700;
-  line-height: 1.6rem;
   padding-right: 0.5rem;
   padding-left: 0.5rem;
 `;
@@ -29,6 +30,8 @@ const ThumbnailTitle = styled.div`
 const ThumbnailImg = styled.img`
   width: 100%;
   height: 70%;
+  /* border-top-left-radius: 13px; */
+  /* border-top-right-radius: 13px; */
 `;
 
 function RecommendedContents({ history }) {

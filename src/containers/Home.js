@@ -9,7 +9,8 @@ import medIcon from "../assets/images/med-icon.svg";
 import Warning from "../components/UI/Warning";
 
 const HomeContainer = styled.div`
-  margin-top: 70px;
+  width: 88%;
+  margin: 90px auto 50px auto;
   padding-left: 0.5625rem;
   padding-right: 0.5625rem;
   color: var(--twoyak-black);

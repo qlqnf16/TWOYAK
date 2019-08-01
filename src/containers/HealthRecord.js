@@ -52,6 +52,10 @@ const TopLine = styled(Line)`
   margin: 0.8rem 0;
 `;
 
+const Margin = styled.div`
+  margin: 1rem;
+`;
+
 function HealthRecord() {
   const { state: authState } = useContext(AuthContext);
 
@@ -178,7 +182,9 @@ function HealthRecord() {
             과거 복용
           </Nav>
         </NavContainer>
-        <Warning />
+        <Margin>
+          <Warning />
+        </Margin>
         <UserContainer>
           <TopLine />
           <BasicText size="0.7rem" bold>
