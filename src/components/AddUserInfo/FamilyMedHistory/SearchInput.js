@@ -66,7 +66,7 @@ function SearchInput({ diseaseArray, appendDiseaseId }) {
   return (
     <StyleWrapper>
       <AutoSuggestion
-        search="standard_diseases"
+        search="disease"
         diseaseSearchTerms={diseaseArray}
         placeholderProp={"ex) 고혈압, 당뇨"}
         searchKey="name"

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Modal from "./Modal";
-import { BasicButton, BasicText } from "./SharedStyles";
+import Modal from "../UI/Modal";
+import { BasicButton, BasicText } from "../UI/SharedStyles";
 import styled from "styled-components";
 
 const ModalContainer = styled.div`

@@ -7,8 +7,6 @@ import Mypage from "./containers/Mypage";
 import Signup from "./containers/Signup";
 import AllReviews from "./containers/AllReviews";
 import AddUserInfo from "./containers/AddUserInfo";
-import Contents from "./containers/Contents";
-import Terms from "./containers/Terms";
 
 const routes = [
   {
@@ -67,16 +65,6 @@ const routes = [
     path: "/all-reviews",
     name: "리뷰 모아보기",
     component: AllReviews
-  },
-  {
-    path: "/content/:id?",
-    name: "콘텐츠 보기",
-    component: Contents
-  },
-  {
-    path: "/terms/:id?",
-    name: "약관",
-    component: Terms
   }
 ];
 

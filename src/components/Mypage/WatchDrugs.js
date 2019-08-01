@@ -21,7 +21,6 @@ import Modal from "../UI/Modal";
 
 const WatchDrugsContainer = styled.div`
   padding: 17px;
-  min-height: 6.25rem;
 `;
 
 const HeartFillImg = styled(CloseImg)``;
@@ -65,8 +64,7 @@ function WatchDrugs({ watchDrugs, watchChange }) {
           }
         }
       )
-      .then()
-      .catch(error => console.log(error));
+      .then(response => console.log(response.data));
     setModalShow(!modalShow);
     watchChange(state.subUserIndex);
   };

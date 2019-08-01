@@ -27,6 +27,7 @@ const StyledNavLink = styled(NavLink)`
 
 const Header = () => {
   const { state: authState } = useContext(AuthContext);
+
   return (
     <HeaderContainer>
       <NavLink to="/medicine">

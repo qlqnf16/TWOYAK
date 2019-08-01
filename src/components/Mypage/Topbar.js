@@ -39,7 +39,7 @@ function Topbar(props) {
 
   return (
     <Bar>
-      <img src={arrowIcon} alt="arrow-icon" onClick={() => goback()} />
+      <img src={arrowIcon} onClick={() => goback()} />
       <TopButtonLeftArea>
         <ActionButton
           onClick={() =>

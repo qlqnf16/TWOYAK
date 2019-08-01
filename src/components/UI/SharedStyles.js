@@ -138,13 +138,6 @@ export const BulletText = styled.li`
   }
 `;
 
-export const Divider = styled.div`
-  width: 100%;
-  height: 1px;
-  opacity: 0.5;
-  background-color: var(--twoyak-blue);
-`;
-
 export const AutosuggestStyleWrapper = styled.div`
   flex-grow: 1;
   flex-shrink: 1;
