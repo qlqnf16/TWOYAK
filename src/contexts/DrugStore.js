@@ -21,9 +21,7 @@ const DrugStore = props => {
     dispatch({ type: "SET_INIT_DATA", payload: payload });
   };
   useEffect(() => {
-    if (authState.token) {
-      fetchInitialData();
-    }
+    fetchInitialData();
   }, [authState]);
 
   return (

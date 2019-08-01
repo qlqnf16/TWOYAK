@@ -21,6 +21,7 @@ import {
   RatingText,
   StyledRating
 } from "../components/UI/SharedStyles";
+import LoginModal from "../components/UI/LoginModal";
 
 const SearchContainer = styled.div`
   width: 100%;
@@ -70,6 +71,7 @@ function Medicine({ match, history, location }) {
   const [deleteModal, setDeleteModal] = useState(false); // 약품 제거 모달
   const [modal, setModal] = useState(false); // 의약품 상세정보 모달
   const [showMore, setShowMore] = useState(false); // 더보기 버튼
+  const [showLogin, setShowLogin] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
 
   const { state } = useContext(DrugContext);
@@ -284,6 +286,11 @@ function Medicine({ match, history, location }) {
     setShowMore(!showMore);
   };
 
+  // 로그인 토글
+  const toggleLogin = () => {
+    setShowLogin(!showLogin);
+  };
+
   // 관심목록 토글
   const toggleWatching = async () => {
     try {
@@ -313,6 +320,7 @@ function Medicine({ match, history, location }) {
               additionalModalToggle={additionalModalToggle}
             />
           )}
+          {showLogin && <LoginModal modalOff={() => setShowLogin(false)} />}
 
           {drug && (
             <>
@@ -325,6 +333,7 @@ function Medicine({ match, history, location }) {
                 toggleShowMore={toggleShowMore}
                 toggleWatching={toggleWatching}
                 additionalModalToggle={additionalModalToggle}
+                showLogin={() => setShowLogin(true)}
                 auth={!authState.token ? false : true}
               />
             </>

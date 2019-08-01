@@ -64,38 +64,39 @@ function AllReviews() {
   const [showFilter, setShowFilter] = useState(false);
 
   useEffect(() => {
-    if (authState.token) getReviews();
+    getReviews();
+    if (authState.token) getMyReviews();
   }, [authState]);
 
   const getReviews = async () => {
     try {
-      const { data: recent } = await axiosReviews("recent");
+      const { data: recent } = await axios.get("/reviews/recent");
       setReviews(recent);
       setRecentReviews(recent);
 
-      const [
-        { data: popular },
-        { data: highRating },
-        { data: myReview }
-      ] = await Promise.all([
-        axiosReviews("popular"),
-        axiosReviews("high_rating"),
-        axiosReviews("my_reviews")
+      const [{ data: popular }, { data: highRating }] = await Promise.all([
+        axios.get("/reviews/popular"),
+        axios.get("/reviews/high_rating")
       ]);
       setPopularReviews(popular);
       setHighRatedReviews(highRating);
-      setMyReviews(myReview);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const axiosReviews = url =>
-    axios.get(`/reviews/${url}`, {
-      headers: {
-        Authorization: `bearer ${authState.token}`
-      }
-    });
+  const getMyReviews = async () => {
+    try {
+      const { data: my } = await axios.get("/reviews/my_reviews", {
+        headers: {
+          Authorization: `bearer ${authState.token}`
+        }
+      });
+      setMyReviews(my);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -145,16 +146,18 @@ function AllReviews() {
                 평점순
               </BasicText>
               <br />
-              <BasicText
-                size="0.7rem"
-                bold
-                onClick={() => {
-                  setReviews(myReviews);
-                  setCategory("내 리뷰");
-                }}
-              >
-                내 리뷰
-              </BasicText>
+              {myReviews && (
+                <BasicText
+                  size="0.7rem"
+                  bold
+                  onClick={() => {
+                    setReviews(myReviews);
+                    setCategory("내 리뷰");
+                  }}
+                >
+                  내 리뷰
+                </BasicText>
+              )}
             </Filters>
           )}
         </FilterContainer>

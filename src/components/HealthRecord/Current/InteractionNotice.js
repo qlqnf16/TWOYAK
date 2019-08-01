@@ -1,7 +1,7 @@
 import React from "react";
-import { BasicText, Line, FlexDiv } from "../UI/SharedStyles";
+import { BasicText, Line, FlexDiv } from "../../UI/SharedStyles";
 import styled from "styled-components";
-import { ReactComponent as MedIcon } from "../../assets/images/med-icon.svg";
+import { ReactComponent as MedIcon } from "../../../assets/images/med-icon.svg";
 
 const Container = styled.div`
   margin: 1rem 0;

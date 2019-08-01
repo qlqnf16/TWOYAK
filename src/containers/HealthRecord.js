@@ -1,15 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthStore";
 import axios from "../apis";
 import styled from "styled-components";
 
-import CurrentDrugList from "../components/HealthRecord/CurrentDrugList";
-import PastDrugList from "../components/HealthRecord/PastDrugList";
+import CurrentDrugList from "../components/HealthRecord/Current/CurrentDrugList";
+import PastDrugList from "../components/HealthRecord/Past/PastDrugList";
 import AddCard from "../components/HealthRecord/AddCard";
 import Warning from "../components/UI/Warning";
-import Modal from "../components/UI/Modal";
-import { BasicText, BasicButton, Line } from "../components/UI/SharedStyles";
+import { BasicText, Line } from "../components/UI/SharedStyles";
+import LoginModal from "../components/UI/LoginModal";
 
 const Background = styled.div`
   width: 100%;
@@ -51,24 +50,6 @@ const UserContainer = styled.div`
 
 const TopLine = styled(Line)`
   margin: 0.8rem 0;
-`;
-
-const ModalContainer = styled.div`
-  padding: 2.5rem 0;
-  text-align: center;
-`;
-
-const Text = styled(BasicText)`
-  display: block;
-  text-align: center;
-  margin-top: 2rem;
-  margin-bottom: 2.5rem;
-  font-size: 0.875rem;
-`;
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: white;
 `;
 
 function HealthRecord() {
@@ -188,24 +169,7 @@ function HealthRecord() {
     <>
       <Background />
       <Container>
-        {showLoginModal && (
-          <Modal
-            title="투약"
-            modalOff={() => {}}
-            content={
-              <ModalContainer>
-                <Text>
-                  로그인하시면 이용 가능한
-                  <br />
-                  투약의 맞춤형 관리서비스 입니다
-                </Text>
-                <BasicButton>
-                  <StyledLink to="/login">로그인 하러가기</StyledLink>
-                </BasicButton>
-              </ModalContainer>
-            }
-          />
-        )}
+        {showLoginModal && <LoginModal />}
         <NavContainer>
           <Nav onClick={currentPastToggle} active={showCurrent}>
             현재 복용

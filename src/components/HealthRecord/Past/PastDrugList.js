@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 
 import PastDrug from "./PastDrug";
-import DrugReview from "../Medicine/Review/DrugReview";
-import Modal from "../UI/Modal";
+import DrugReview from "../../Medicine/Review/DrugReview";
+import Modal from "../../UI/Modal";
 
 import styled from "styled-components";
-import { BulletText, BasicButton } from "../UI/SharedStyles";
+import { BulletText, BasicButton } from "../../UI/SharedStyles";
 
 const MarginDiv = styled.div`
   margin-top: 1rem;
@@ -38,6 +38,7 @@ const PastDrugList = ({ drugs }) => {
       from: drug.from,
       to: drug.to,
       id: drug.past_drug_id
+      // disease: drug.disease
     };
 
     !monthCategory[from.format("YYYY-MM")]
@@ -55,6 +56,28 @@ const PastDrugList = ({ drugs }) => {
       }
     }
   });
+
+  // 질환별 약품 분류
+  const categorizeByDisease = drugs => {
+    const diseaseCategory = {};
+    drugs.forEach(drug => {
+      const addingData = {
+        name: drug.name,
+        from: drug.from,
+        to: drug.to,
+        id: drug.id,
+        disease: drug.disease
+      };
+
+      !diseaseCategory[drug.disease]
+        ? (diseaseCategory[drug.disease] = [addingData])
+        : diseaseCategory[drug.disease].push(addingData);
+    });
+  };
+
+  // monthCategory.forEach(drugs => {
+  //   categorizeByDisease(drugs)
+  // })
 
   // modal on
   const modalOn = async id => {

@@ -1,11 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
-import axios from "../../apis";
+import axios from "../../../apis";
 import styled from "styled-components";
-import NewReview from "../Medicine/Review/NewReview";
-import { AuthContext } from "../../contexts/AuthStore";
-import DrugReview from "../Medicine/Review/DrugReview";
+import NewReview from "../../Medicine/Review/NewReview";
+import { AuthContext } from "../../../contexts/AuthStore";
+import DrugReview from "../../Medicine/Review/DrugReview";
 import { Link } from "react-router-dom";
-import { ReactComponent as Close } from "../../assets/images/close.svg";
+import { ReactComponent as Close } from "../../../assets/images/close.svg";
 
 import {
   Card,
@@ -15,8 +15,8 @@ import {
   RatingText,
   FlexDiv,
   BulletText
-} from "../UI/SharedStyles";
-import medIcon from "../../assets/images/med-icon.svg";
+} from "../../UI/SharedStyles";
+import medIcon from "../../../assets/images/med-icon.svg";
 
 const CloseIcon = styled(Close)`
   width: 1rem;
@@ -242,14 +242,12 @@ const CurrentDrug = ({
           modalOff={newReviewToggle}
         />
       )}
-      {drug.diseases.length > 0 && (
+      {!!drug.disease && (
         <>
           <BulletText>
             <p>복용이유</p>
           </BulletText>
-          <Content>
-            {drug.diseases.map(disease => disease.name).join(", ")}
-          </Content>
+          <Content>{drug.disease}</Content>
         </>
       )}
       {!drug.dur_info.length ? (
@@ -260,8 +258,8 @@ const CurrentDrug = ({
             <p>안전정보</p>
           </BulletText>
           <Content>
-            {message.map(m => (
-              <div key={m}>{m}</div>
+            {message.map((m, key) => (
+              <div key={key}>{m}</div>
             ))}
           </Content>
         </>

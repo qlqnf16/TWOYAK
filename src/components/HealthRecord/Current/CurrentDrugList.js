@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import CurrentDrug from "./CurrentDrug";
 import {
   WhiteButton,
@@ -6,9 +6,9 @@ import {
   Card,
   BasicText,
   BulletText
-} from "../UI/SharedStyles";
-import medIcon from "../../assets/images/(white)med-icon.svg";
-import Modal from "../UI/Modal";
+} from "../../UI/SharedStyles";
+import medIcon from "../../../assets/images/(white)med-icon.svg";
+import Modal from "../../UI/Modal";
 import styled from "styled-components";
 import InteractionNotice from "./InteractionNotice";
 

@@ -113,6 +113,7 @@ const SearchResult = React.memo(
     showMore,
     toggleShowMore,
     watching,
+    showLogin,
     toggleWatching,
     additionalModalToggle,
     auth
@@ -196,12 +197,13 @@ const SearchResult = React.memo(
           <ItemName>{drug.name.split("(")[0]}</ItemName>
           <IconContainer>
             {watching ? (
+              // 여기
               <Icon src={fullHeart} alt="full-heart" onClick={toggleWatching} />
             ) : (
               <Icon
                 src={emptyHeart}
                 alt="empty-heart"
-                onClick={toggleWatching}
+                onClick={auth ? toggleWatching : showLogin}
               />
             )}
           </IconContainer>

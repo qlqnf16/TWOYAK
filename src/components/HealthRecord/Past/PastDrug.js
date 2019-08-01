@@ -1,5 +1,11 @@
 import React from "react";
-import { Card, Line, BulletText, FlexDiv, BasicText } from "../UI/SharedStyles";
+import {
+  Card,
+  Line,
+  BulletText,
+  FlexDiv,
+  BasicText
+} from "../../UI/SharedStyles";
 import styled from "styled-components";
 
 const Flex = styled(FlexDiv)`
