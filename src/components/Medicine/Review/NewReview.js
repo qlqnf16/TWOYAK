@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import AutoSuggestion from "../../Util/AutoSuggestion";
 import RemovableButton from "../../UI/RemovableButton";
 import {
@@ -20,23 +20,21 @@ const Titles = styled.div`
   color: #474747;
   margin-top: 1.82rem;
   margin-bottom: 0.625rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 `;
 
-const Suggestion = styled.div`
-  & .react-autosuggest__input {
-    font-size: 0.9rem;
-    height: 26px;
-  }
+const blinker = keyframes`
+  50% {
+    opacity: 0;
+  }`;
 
-  & .react-autosuggest__suggestions-container--open {
-    width: 100%;
-    top: 25px;
-  }
-`;
-
-const AddButton = styled(BasicButton)`
-  font-size: 0.9rem;
-  background-color: #a0a0a0;
+const AlertSpan = styled.span`
+  font-size: 0.7rem;
+  color: ${props => (props.clicked ? "red" : "var(--twoyak-blue)")};
+  margin-left: 0.7rem;
+  display: ${props => (props.show ? "inline" : "none")};
 `;
 
 const Form = styled(FlexForm)`
@@ -58,12 +56,15 @@ const CustomTextarea = styled.textarea`
 const SubmitButton = styled(BasicButton)`
   display: block;
   margin: 3.25rem auto 2.43rem auto;
+  ${props =>
+    props.disable ? ` background-color: #d8d8d8; pointer: none;` : ""}
 `;
 
 const NewReview = React.memo(({ reviewSubmit, review, modalOff }) => {
-  const [efficacy, setEfficacy] = useState(0);
+  const [efficacy, setEfficacy] = useState(null);
   const [adverseEffects, setAdverseEffects] = useState([]);
   const [detail, setDetail] = useState();
+  const [clicked, setClicked] = useState(false);
 
   // 리뷰 수정 시
   useEffect(() => {
@@ -104,6 +105,10 @@ const NewReview = React.memo(({ reviewSubmit, review, modalOff }) => {
     setDetail();
   };
 
+  const showAlert = () => {
+    setClicked(true);
+  };
+
   return (
     <Modal
       modalOff={modalOff}
@@ -112,7 +117,12 @@ const NewReview = React.memo(({ reviewSubmit, review, modalOff }) => {
       title="리뷰 작성"
       content={
         <>
-          <Titles>평점</Titles>
+          <Titles>
+            평점
+            <AlertSpan show={!efficacy} clicked={clicked}>
+              *필수 필드입니다
+            </AlertSpan>
+          </Titles>
           <FlexDiv>
             <StyledRating
               emptySymbol="fas fa-circle fa-2x custom"
@@ -149,7 +159,18 @@ const NewReview = React.memo(({ reviewSubmit, review, modalOff }) => {
             placeholder="많은 사람들이 참고할 만한 의약품 리뷰를 남겨주세요"
             value={detail ? detail : ""}
           />
-          <SubmitButton onClick={finalReviewSubmit}>완료</SubmitButton>
+          <SubmitButton
+            onClick={
+              !efficacy
+                ? () => {
+                    showAlert();
+                  }
+                : finalReviewSubmit
+            }
+            disable={!efficacy}
+          >
+            완료
+          </SubmitButton>
         </>
       }
     />
