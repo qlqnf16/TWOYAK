@@ -5,50 +5,52 @@ import parse from "autosuggest-highlight/parse";
 import { DrugContext } from "../../contexts/DrugStore";
 import deburr from "lodash/deburr";
 import styled from "styled-components";
+import { breakpoints, BasicText } from "../UI/SharedStyles";
+import { ReactComponent as Erase } from "../../assets/images/erase.svg";
+import { ReactComponent as Add } from "../../assets/images/plus-in-search.svg";
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
 const StyleWrapper = styled.div`
-  & .react-autosuggest__input {
-    width: 490px;
-    height: 30px;
-    border-width: 0;
-    border-bottom: 1px solid #dbdbdb;
-    margin-right: 0.3rem;
-    font-size: 1rem;
-  }
+  flex-grow: 1;
+  flex-shrink: 1;
+  position: relative;
 
-  & .react-autosuggest__suggestions-container--open {
-    width: 490px;
-    margin: 0;
-  }
-
-  & .react-autosuggest__suggestions-list {
+  @media (max-width: ${breakpoints}) {
     width: 100%;
-    margin: 10px 0;
-    padding: 0;
   }
+`;
 
-  & .react-autosuggest__suggestion {
-    list-style-type: none;
-    font-size: 0.9rem;
-    cursor: pointer;
-  }
+const RecommendContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
-  & .react-autosuggest__suggestion--highlighted {
-    background-color: aliceblue;
-  }
+const ItemContainer = styled.div`
+  width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const AutoSuggestion = ({
   search,
   searchKey,
   placeholderProp,
-  inputChange
+  addCurrentDrug,
+  currentDrugs,
+  inputChange,
+  submit
 }) => {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
   const { state } = useContext(DrugContext);
-  const { drugs, adverse_effects } = state;
+  const { drugs, adverse_effects, diseases } = state;
 
   let suggestList;
   switch (search) {
@@ -58,6 +60,8 @@ const AutoSuggestion = ({
     case "adverse_effect":
       suggestList = adverse_effects;
       break;
+    case "disease":
+      suggestList = diseases;
     default:
       break;
   }
@@ -71,7 +75,7 @@ const AutoSuggestion = ({
       ? []
       : suggestList.filter(suggestion => {
           const keep =
-            count < 7 &&
+            count < 20 &&
             suggestion[searchKey].toLowerCase().includes(inputValue);
 
           if (keep) {
@@ -88,23 +92,40 @@ const AutoSuggestion = ({
 
   const onSuggestionSelected = (event, { suggestion }) => {
     if (search === "adverse_effect") inputChange(suggestion);
+    if (search === "disease") inputChange(suggestion);
+    if (search === "drug") submit(suggestion.id);
   };
 
   const renderSuggestion = (suggestion, { query, isHighlited }) => {
     const matches = match(suggestion[searchKey], query);
     const parts = parse(suggestion[searchKey], matches);
     return (
-      <div>
-        {parts.map((part, index) =>
-          part.highlight ? (
-            <b key={index} style={{ color: "red" }}>
-              {part.text}
-            </b>
+      <RecommendContainer>
+        <ItemContainer>
+          {parts.map((part, index) =>
+            part.highlight ? (
+              <b key={index} style={{ color: "#00a2ff" }}>
+                {part.text}
+              </b>
+            ) : (
+              <span key={index}>{part.text}</span>
+            )
+          )}
+        </ItemContainer>
+        {search === "drug" &&
+          (currentDrugs && currentDrugs.includes(suggestion.id) ? (
+            <BasicText size="0.7rem" opacity="0.7">
+              복용중
+            </BasicText>
           ) : (
-            <span key={index}>{part.text}</span>
-          )
-        )}
-      </div>
+            <Add
+              onClick={e => {
+                e.stopPropagation();
+                addCurrentDrug("add");
+              }}
+            />
+          ))}
+      </RecommendContainer>
     );
   };
 
@@ -130,18 +151,27 @@ const AutoSuggestion = ({
   };
 
   return (
-    <StyleWrapper>
-      <Autosuggest
-        suggestions={suggestions}
-        onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={onSuggestionsClearRequested}
-        getSuggestionValue={getSuggestionValue}
-        renderSuggestion={renderSuggestion}
-        inputProps={inputProps}
-        highlightFirstSuggestion={true}
-        onSuggestionSelected={onSuggestionSelected}
-      />
-    </StyleWrapper>
+    <Container>
+      <StyleWrapper>
+        <Autosuggest
+          suggestions={suggestions}
+          onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+          onSuggestionsClearRequested={onSuggestionsClearRequested}
+          getSuggestionValue={getSuggestionValue}
+          renderSuggestion={renderSuggestion}
+          inputProps={inputProps}
+          highlightFirstSuggestion={true}
+          onSuggestionSelected={onSuggestionSelected}
+        />
+      </StyleWrapper>
+      {value && (
+        <Erase
+          onClick={() => {
+            setValue("");
+          }}
+        />
+      )}
+    </Container>
   );
 };
 

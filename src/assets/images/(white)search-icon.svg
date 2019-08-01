@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>search-icon</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="add-info-warning" transform="translate(-22.000000, -48.000000)">
+            <g id="navbar">
+                <g id="search-icon" transform="translate(23.000000, 49.000000)">
+                    <circle id="Oval" stroke="#FFFFFF" stroke-width="2" cx="6.5" cy="6.5" r="6.5"></circle>
+                    <path d="M9.50974628,13.9168143 L18.5790103,13.9384593 C19.0805907,13.9396564 19.4869042,14.3459698 19.4881013,14.8475502 C19.489291,15.3460467 19.0861442,15.7511224 18.5876477,15.7523121 C18.5862116,15.7523155 18.5847755,15.7523155 18.5833393,15.7523121 L9.51407528,15.7306671 C9.01249492,15.72947 8.60618146,15.3231565 8.60498437,14.8215762 C8.60379464,14.3230797 9.00694141,13.918004 9.50543789,13.9168143 C9.50687401,13.9168108 9.50831015,13.9168108 9.50974628,13.9168143 Z" id="Rectangle" fill="#FFFFFF" transform="translate(14.046543, 14.834563) rotate(-315.000000) translate(-14.046543, -14.834563) "></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

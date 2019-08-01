@@ -1,8 +1,12 @@
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import routes from "./routes";
 import DrugStore from "./contexts/DrugStore";
+import AuthStore from "./contexts/AuthStore";
+import WatchStore from "./contexts/WatchStore";
+
 import Navbar from "./components/Navbars/Navbar";
+import Header from "./components/Navbars/Header";
 
 function App() {
   const switchRoutes = (
@@ -21,10 +25,15 @@ function App() {
   );
 
   return (
-    <DrugStore>
-      <Navbar />
-      {switchRoutes}
-    </DrugStore>
+    <AuthStore>
+      <DrugStore>
+        <WatchStore>
+          <Header />
+          <Navbar />
+          {switchRoutes}
+        </WatchStore>
+      </DrugStore>
+    </AuthStore>
   );
 }
 
