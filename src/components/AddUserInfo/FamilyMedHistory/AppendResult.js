@@ -26,15 +26,20 @@ const DiseaseContainer = styled.div`
   display: flex;
   width: 100%;
   flex-wrap: wrap;
+  margin-top: 1rem;
+  justify-content: space-between;
 `;
 
 const DiseaseWrapper = styled.div`
   background-color: var(--twoyak-blue);
   opacity: 0.7;
+  width: 45%;
   height: 1.875rem;
   border-radius: 1.5rem;
   display: flex;
   align-items: center;
+  justify-content: space-around;
+  margin-top: 0.5rem;
 `;
 
 const DiseaseButton = styled.div`
@@ -48,23 +53,12 @@ const Close = styled.img`
   margin-right: 0.5rem;
 `;
 
-function AppendResult({ diseaseArray }) {
-  const [familyMedHistories, setFamilyMedHistories] = useState([]);
+function AppendResult({
+  diseaseArray,
+  currentFamilyMedHis,
+  getCurrentFamilyMedHistory
+}) {
   const { state } = useContext(AuthContext);
-
-  // useState(() => {
-  //   if (state.userId) {
-  //     axios({
-  //       method: "GET",
-  //       url: `/user/${state.userId}/family_med_histories`,
-  //       headers: {
-  //         Authorization: state.token
-  //       }
-  //     }).then(response => {
-  //       setFamilyMedHistories(response.data);
-  //     });
-  //   }
-  // }, [state.userId]);
 
   const postDiseaseIdHandler = (method, suggestion) => {
     axios({
@@ -76,7 +70,7 @@ function AppendResult({ diseaseArray }) {
     }).then(response => {
       switch (method) {
         case "POST":
-          setFamilyMedHistories(response.data);
+          getCurrentFamilyMedHistory();
           break;
         case "DELETE":
           axios({
@@ -86,7 +80,7 @@ function AppendResult({ diseaseArray }) {
               Authorization: state.token
             }
           }).then(response => {
-            setFamilyMedHistories(response.data);
+            getCurrentFamilyMedHistory();
           });
           break;
         default:
@@ -102,8 +96,8 @@ function AppendResult({ diseaseArray }) {
         appendDiseaseId={suggestion => postDiseaseIdHandler("POST", suggestion)}
       />
       <DiseaseContainer>
-        {familyMedHistories.map((i, k) => (
-          <DiseaseWrapper key={k} style={{ display: "flex" }}>
+        {currentFamilyMedHis.map((i, k) => (
+          <DiseaseWrapper key={k}>
             <DiseaseButton key={k}>{i.name}</DiseaseButton>
             <Close
               src={closeIcon}

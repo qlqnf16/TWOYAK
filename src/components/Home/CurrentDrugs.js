@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-import { EmptyCard } from "../UI/SharedStyles";
+import { EmptyCard, Divider } from "../UI/SharedStyles";
 import addDash from "../../assets/images/add-dash.svg";
+import "@fortawesome/fontawesome-free/css/all.css";
 
 const CurrentDrugsContainer = styled.div`
   margin-top: 1.3125rem;
@@ -10,6 +11,8 @@ const CurrentDrugsContainer = styled.div`
 
 const HeaderContainer = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 const Header = styled.div`
@@ -29,6 +32,36 @@ const AddButton = styled.img`
   width: 2.25rem;
 `;
 
+const CurrentDrugsDiv = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 1.0625rem;
+`;
+
+const ContentDot = styled.div`
+  color: var(--twoyak-blue);
+  font-size: 0.375rem;
+  margin-right: 0.4375rem;
+`;
+
+const DrugName = styled.div`
+  font-size: 0.75rem;
+  font-weight: 800;
+`;
+
+const HomeDivider = styled(Divider)`
+  margin-top: 2.125rem;
+`;
+
+const HomeContent = styled.div`
+  margin-top: 2.125rem;
+  display: flex;
+`;
+
+const MoreInfo = styled.div`
+  font-size: 0.875rem;
+`;
+
 function CurrentDrugs({ currentDrugs, history, medIcon, userName }) {
   const searchDrugHandler = drug_id => {
     history.push(`/medicine/${drug_id}`);
@@ -36,20 +69,34 @@ function CurrentDrugs({ currentDrugs, history, medIcon, userName }) {
   return (
     <CurrentDrugsContainer>
       <HeaderContainer>
-        <img src={medIcon} alt="med-icon" />
-        <Header>{userName}님이 복용중인 약</Header>
+        <div style={{ display: "flex" }}>
+          <img src={medIcon} alt="med-icon" />
+          <Header>{userName}님이 복용중인 약</Header>
+        </div>
+        <MoreInfo onClick={() => history.push("/health-record")}>
+          자세히 보기
+        </MoreInfo>
       </HeaderContainer>
       {currentDrugs ? (
         currentDrugs.map((i, k) => (
-          <div onClick={() => searchDrugHandler(i.current_drug_id)}>
-            {i.drug_name}
-          </div>
+          <CurrentDrugsDiv
+            key={k}
+            onClick={() => searchDrugHandler(i.current_drug_id)}
+          >
+            <ContentDot className="fas fa-circle" />
+            <DrugName>{i.drug_name.split("(")[0]}</DrugName>
+          </CurrentDrugsDiv>
         ))
       ) : (
-        <PressCard>
+        <PressCard onClick={() => history.push("/medicine")}>
           <AddButton src={addDash} />
         </PressCard>
       )}
+      <HomeDivider />
+      <HomeContent>
+        <img src={medIcon} alt="med-icon" />
+        <Header>투약이 추천하는 컨텐츠</Header>
+      </HomeContent>
     </CurrentDrugsContainer>
   );
 }

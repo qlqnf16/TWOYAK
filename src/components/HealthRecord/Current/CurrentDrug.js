@@ -247,7 +247,7 @@ const CurrentDrug = ({
           <BulletText>
             <p>복용이유</p>
           </BulletText>
-          <Content>{drug.disease}</Content>
+          <Content>{drug.disease.name}</Content>
         </>
       )}
       {!drug.dur_info.length ? (

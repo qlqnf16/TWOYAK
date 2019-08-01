@@ -17,11 +17,12 @@ const SayHello = styled.div`
 
 const GeneralInfo = styled.div`
   display: flex;
-  width: 10rem;
+  width: 100%;
   justify-content: space-between;
 `;
 
 const EachInfo = styled.div`
+  width: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -58,11 +59,6 @@ function UserGeneralInfo({
       label: "리뷰",
       value: drugReviews.length,
       src: "/all-reviews"
-    },
-    {
-      label: "내 대화",
-      value: myConversation.length,
-      src: "/my-conversation"
     }
   ];
 
@@ -72,7 +68,9 @@ function UserGeneralInfo({
       <GeneralInfo>
         {infoIndex.map((i, k) => (
           <EachInfo key={k}>
-            <Count onClick={() => history.push(i.src)}>{i.value}</Count>
+            <Count onClick={() => (i.value > 0 ? history.push(i.src) : null)}>
+              {i.value}
+            </Count>
             <InfoIndex>{i.label}</InfoIndex>
           </EachInfo>
         ))}
