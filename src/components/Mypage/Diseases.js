@@ -11,7 +11,6 @@ import { BasicButton } from "../UI/SharedStyles";
 
 const DiseasesContainer = styled.div`
   padding: 17px;
-  min-height: 6.25rem;
 `;
 
 export const Header = styled.div`
@@ -89,6 +88,16 @@ function DiseasesAndFamilyMedHis({ medHistory, historyChange }) {
       setDiseaseIdDeleted(null);
     }
     setModalShow(!modalShow);
+  };
+
+  const postDiseaseToPastHandler = () => {
+    axios({
+      method: "DELETE",
+      url: `/user/${state.userId}/current_diseases/${diseaseIdDeleted}/to_past`,
+      headers: {
+        Authorization: `Bearer ${state.token}`
+      }
+    }).then(response => console.log(response.data));
   };
 
   const deleteFamilyMedHistoriesHandler = () => {

@@ -3,6 +3,7 @@ import { Redirect } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthStore";
 import axios from "../apis";
 import styled from "styled-components";
+import jwt_decode from "jwt-decode";
 
 import { Container } from "../components/UI/SharedStyles";
 import { BasicButton } from "../components/UI/SharedStyles";
@@ -31,7 +32,6 @@ const CustomButton = styled(BasicButton)`
 const LoginInput = styled(BasicInput)`
   margin-bottom: 1.3125rem;
 `;
-
 const Divider = styled.div`
   width: 20.1875rem;
   height: 1px;
@@ -83,7 +83,6 @@ function Login(props) {
         type: "SET_AUTH_REDIRECT_PATH",
         path: "/"
       });
-      window.location.replace("/login");
     }
   }, [props.history, props.location.search, dispatch]);
 
@@ -109,6 +108,7 @@ function Login(props) {
       .post("api/users/login", signinData)
       .then(response => {
         const payload = response.data.auth_token;
+        console.log(jwt_decode(payload));
         dispatch({
           type: "SIGNIN_SUCCESS",
           token: payload

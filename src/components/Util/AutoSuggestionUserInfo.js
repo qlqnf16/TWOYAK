@@ -35,8 +35,8 @@ const AutoSuggestion = ({
 
   let suggestList;
   switch (search) {
-    case "standard_diseases":
-      suggestList = diseaseSearchTerms.standard_diseases;
+    case "disease":
+      suggestList = diseaseSearchTerms;
       break;
     default:
       break;
@@ -67,7 +67,7 @@ const AutoSuggestion = ({
   };
 
   const onSuggestionSelected = (event, { suggestion }) => {
-    if (search === "standard_diseases") appendDiseaseId(suggestion);
+    if (search === "disease") appendDiseaseId(suggestion);
   };
 
   const renderSuggestion = (suggestion, { query, isHighlited }) => {

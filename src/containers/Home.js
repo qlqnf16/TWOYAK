@@ -4,22 +4,20 @@ import styled from "styled-components";
 import { AuthContext } from "../contexts/AuthStore";
 
 import CurrentDrugs from "../components/Home/CurrentDrugs";
-import RecommendedContents from "../components/Home/RecommendedContents";
 import medIcon from "../assets/images/med-icon.svg";
 import Warning from "../components/UI/Warning";
 
 const HomeContainer = styled.div`
-  width: 88%;
-  margin: 90px auto 50px auto;
-  padding-left: 0.5625rem;
-  padding-right: 0.5625rem;
-  color: var(--twoyak-black);
+  margin-top: 70px;
+  padding-left: 1.375rem;
+  padding-right: 1.375rem;
 `;
 
 function Home(props) {
   const [currentDrugs, setCurrentDrugs] = useState(null);
   const { state: authState, dispatch } = useContext(AuthContext);
 
+  console.log(authState);
   useEffect(() => {
     dispatch({
       type: "SET_AUTH_REDIRECT_PATH",
@@ -34,26 +32,24 @@ function Home(props) {
         }
       })
         .then(response => {
+          console.log(response.data !== []);
           if (response.data.length > 0) {
-            setCurrentDrugs(response.data.splice(0, 4));
+            setCurrentDrugs(response.data);
           }
         })
         .catch(error => console.log(error));
     }
-  }, [authState.subUserId, authState.token]);
+  }, [dispatch, authState.subUserId]);
 
   return (
     <HomeContainer>
       <Warning />
-      {authState.token ? (
-        <CurrentDrugs
-          currentDrugs={currentDrugs ? currentDrugs : null}
-          history={props.history}
-          medIcon={medIcon}
-          userName={authState.userName}
-        />
-      ) : null}
-      <RecommendedContents history={props.history} />
+      <CurrentDrugs
+        currentDrugs={currentDrugs ? currentDrugs.splice(0, 4) : null}
+        history={props.history}
+        medIcon={medIcon}
+        userName={authState.userName}
+      />
     </HomeContainer>
   );
 }
