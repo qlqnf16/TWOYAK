@@ -4,7 +4,7 @@ import { thumbnail } from "../components/Home/ContentDummy";
 import ReactHtmlParser from "react-html-parser";
 import close from "../assets/images/erase.svg";
 
-const ContentContiner = styled.div`
+const ContentContainer = styled.div`
   width: 100%;
   padding: 20px;
   height: 100vh;
@@ -50,9 +50,8 @@ const ContentParagraph = styled.div`
 `;
 
 function Content(props) {
-  console.log(props);
   return (
-    <ContentContiner>
+    <ContentContainer>
       <ContentGrid>
         <CloseImg src={close} onClick={() => props.history.goBack()} />
         <ContentTitle>{thumbnail[props.match.params.id].title}</ContentTitle>
@@ -64,7 +63,7 @@ function Content(props) {
           {ReactHtmlParser(thumbnail[props.match.params.id].paragraph)}
         </ContentParagraph>
       </ContentGrid>
-    </ContentContiner>
+    </ContentContainer>
   );
 }
 

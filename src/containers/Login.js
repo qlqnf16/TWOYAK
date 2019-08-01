@@ -31,6 +31,7 @@ const CustomButton = styled(BasicButton)`
 const LoginInput = styled(BasicInput)`
   margin-bottom: 1.3125rem;
 `;
+
 const Divider = styled.div`
   width: 20.1875rem;
   height: 1px;
@@ -82,6 +83,7 @@ function Login(props) {
         type: "SET_AUTH_REDIRECT_PATH",
         path: "/"
       });
+      window.location.replace("/login");
     }
   }, [props.history, props.location.search, dispatch]);
 
@@ -190,7 +192,7 @@ function Login(props) {
             onClick={() => signinBySocialAccount("google_oauth2")}
           />
         </SocialLoginArea>
-        {state.token ? <Redirect to="/mypage" /> : null}
+        {state.token ? <Redirect to="/" /> : null}
       </LoginArea>
     </Container>
   );

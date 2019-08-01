@@ -26,15 +26,20 @@ const DiseaseContainer = styled.div`
   display: flex;
   width: 100%;
   flex-wrap: wrap;
+  margin-top: 1rem;
+  justify-content: space-between;
 `;
 
 const DiseaseWrapper = styled.div`
   background-color: var(--twoyak-blue);
   opacity: 0.7;
+  width: 45%;
   height: 1.875rem;
   border-radius: 1.5rem;
   display: flex;
   align-items: center;
+  justify-content: space-around;
+  margin-top: 0.5rem;
 `;
 
 const DiseaseButton = styled.div`

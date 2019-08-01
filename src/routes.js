@@ -8,6 +8,7 @@ import Signup from "./containers/Signup";
 import AllReviews from "./containers/AllReviews";
 import AddUserInfo from "./containers/AddUserInfo";
 import Contents from "./containers/Contents";
+import Terms from "./containers/Terms";
 
 const routes = [
   {
@@ -71,6 +72,11 @@ const routes = [
     path: "/content/:id?",
     name: "콘텐츠 보기",
     component: Contents
+  },
+  {
+    path: "/terms/:id?",
+    name: "약관",
+    component: Terms
   }
 ];
 

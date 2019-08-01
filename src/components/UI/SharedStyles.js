@@ -143,6 +143,7 @@ export const Divider = styled.div`
   height: 1px;
   opacity: 0.5;
   background-color: var(--twoyak-blue);
+`;
 
 export const AutosuggestStyleWrapper = styled.div`
   flex-grow: 1;

@@ -2,28 +2,33 @@ import React from "react";
 import styled from "styled-components";
 import { thumbnail } from "./ContentDummy";
 
-const ThumbnailContainer = styled.div`
+const ContentsContainer = styled.div`
   display: flex;
-  width: 19.687rem;
-  height: 12.937rem;
+  align-items: center;
+  flex-wrap: wrap;
+`;
+
+const ThumbnailContainer = styled.div`
+  width: 50%;
+  height: 15rem;
   border-radius: 13px;
   box-shadow: 1px 2px 7px 1px rgba(212, 212, 212, 0.5);
   margin-top: 1.375rem;
 `;
 
 const ThumbnailTitle = styled.div`
-  width: 10.0625rem;
-  padding: 1.0625rem;
-  font-size: 1.125rem;
-  font-weight: 800;
-  text-align: left;
+  width: 100%;
+  height: 30%;
+  font-size: 0.7rem;
+  font-weight: 700;
   line-height: 1.6rem;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
 `;
 
 const ThumbnailImg = styled.img`
-  width: 9.625rem;
-  height: 100%;
-  overflow: hidden;
+  width: 100%;
+  height: 70%;
 `;
 
 function RecommendedContents({ history }) {
@@ -32,14 +37,14 @@ function RecommendedContents({ history }) {
   };
 
   return (
-    <div>
+    <ContentsContainer>
       {thumbnail.map((i, k) => (
         <ThumbnailContainer key={k} onClick={() => showContentHandler(k)}>
-          <ThumbnailTitle>{i.title}</ThumbnailTitle>
           <ThumbnailImg src={i.src} />
+          <ThumbnailTitle>{i.title}</ThumbnailTitle>
         </ThumbnailContainer>
       ))}
-    </div>
+    </ContentsContainer>
   );
 }
 
