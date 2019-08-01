@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import AutoSuggestion from "../../Util/AutoSuggestion";
 import RemovableButton from "../../UI/RemovableButton";
 import {
@@ -14,6 +14,11 @@ import medIcon from "../../../assets/images/(white)med-icon.svg";
 import "@fortawesome/fontawesome-free/css/all.css";
 import Modal from "../../UI/Modal";
 
+const Container = styled.div`
+  max-height: 75vh;
+  overflow: scroll;
+`;
+
 const Titles = styled.div`
   font-size: 0.875rem;
   font-weight: 800;
@@ -24,11 +29,6 @@ const Titles = styled.div`
   justify-content: flex-start;
   align-items: center;
 `;
-
-const blinker = keyframes`
-  50% {
-    opacity: 0;
-  }`;
 
 const AlertSpan = styled.span`
   font-size: 0.7rem;
@@ -61,7 +61,7 @@ const SubmitButton = styled(BasicButton)`
 `;
 
 const NewReview = React.memo(({ reviewSubmit, review, modalOff }) => {
-  const [efficacy, setEfficacy] = useState(null);
+  const [efficacy, setEfficacy] = useState(0);
   const [adverseEffects, setAdverseEffects] = useState([]);
   const [detail, setDetail] = useState();
   const [clicked, setClicked] = useState(false);
@@ -116,7 +116,7 @@ const NewReview = React.memo(({ reviewSubmit, review, modalOff }) => {
       imgalt="med-icon"
       title="리뷰 작성"
       content={
-        <>
+        <Container>
           <Titles>
             평점
             <AlertSpan show={!efficacy} clicked={clicked}>
@@ -165,13 +165,15 @@ const NewReview = React.memo(({ reviewSubmit, review, modalOff }) => {
                 ? () => {
                     showAlert();
                   }
-                : finalReviewSubmit
+                : e => {
+                    finalReviewSubmit(e);
+                  }
             }
             disable={!efficacy}
           >
             완료
           </SubmitButton>
-        </>
+        </Container>
       }
     />
   );
