@@ -11,6 +11,7 @@ import { BasicButton } from "../UI/SharedStyles";
 
 const DiseasesContainer = styled.div`
   padding: 17px;
+  min-height: 6.25rem;
 `;
 
 export const Header = styled.div`

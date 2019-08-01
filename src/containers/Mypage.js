@@ -7,6 +7,7 @@ import Topbar from "../components/Mypage/Topbar";
 import UserGeneralInfo from "../components/Mypage/UserGeneralInfo";
 import Diseases from "../components/Mypage/Diseases";
 import WatchDrugs from "../components/Mypage/WatchDrugs";
+import Footer from "../components/Mypage/Footer";
 import ChangeUserModal from "../components/UI/Modal";
 import AddDash from "../assets/images/add-dash.svg";
 import ChangeUserIcon from "../assets/images/change-user-icon.svg";
@@ -20,6 +21,7 @@ const MyPageContainer = styled.div`
   left: 0;
   z-index: 200;
   background-color: white;
+  overflow: auto;
 `;
 
 const Divider = styled.div`
@@ -52,9 +54,10 @@ const ChangeFunction = styled.div`
 `;
 
 const ChangeUser = styled.img`
-  position: absolute;
+  position: fixed;
   bottom: 1.4375rem;
   right: 1.4375rem;
+  z-index: 300;
 `;
 
 function Mypage(props) {
@@ -148,6 +151,7 @@ function Mypage(props) {
         alt="change-user"
         onClick={() => toggleChangeUserModalHandler()}
       />
+      <Footer routes={props} />
       {changeUserModalShow ? (
         <ChangeUserModal
           modalOff={() => toggleChangeUserModalHandler()}

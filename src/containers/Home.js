@@ -10,8 +10,8 @@ import Warning from "../components/UI/Warning";
 
 const HomeContainer = styled.div`
   margin-top: 70px;
-  padding-left: 1.375rem;
-  padding-right: 1.375rem;
+  padding-left: 0.5625rem;
+  padding-right: 0.5625rem;
   color: var(--twoyak-black);
 `;
 
@@ -43,7 +43,7 @@ function Home(props) {
 
   return (
     <HomeContainer>
-      <Header />
+      <Warning />
       {authState.token ? (
         <CurrentDrugs
           currentDrugs={currentDrugs ? currentDrugs : null}
@@ -52,15 +52,7 @@ function Home(props) {
           userName={authState.userName}
         />
       ) : null}
-
       <RecommendedContents history={props.history} />
-      <Warning />
-      <CurrentDrugs
-        currentDrugs={currentDrugs ? currentDrugs.splice(0, 4) : null}
-        history={props.history}
-        medIcon={medIcon}
-        userName={authState.userName}
-      />
     </HomeContainer>
   );
 }

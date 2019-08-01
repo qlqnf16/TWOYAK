@@ -88,7 +88,7 @@ function CurrentDrugs({ currentDrugs, history, medIcon, userName }) {
           </CurrentDrugsDiv>
         ))
       ) : (
-        <PressCard>
+        <PressCard onClick={() => history.push("/medicine")}>
           <AddButton src={addDash} />
         </PressCard>
       )}
