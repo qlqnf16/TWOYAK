@@ -1,12 +1,11 @@
-import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
-import routes from './routes';
+import React from "react";
+import { Switch, Route, Redirect } from "react-router-dom";
+import routes from "./routes";
 
 function App() {
   const switchRoutes = (
     <Switch>
-    {
-      routes.map((prop, key) => {
+      {routes.map((prop, key) => {
         return (
           <Route
             path={prop.path}
@@ -14,17 +13,12 @@ function App() {
             exact={prop.exact}
             key={key}
           />
-        )
-      })
-    }
+        );
+      })}
     </Switch>
-  )
-
-  return (
-    <div>
-      {switchRoutes}
-    </div>
   );
+
+  return <div>{switchRoutes}</div>;
 }
 
 export default App;
