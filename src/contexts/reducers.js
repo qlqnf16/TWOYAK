@@ -27,7 +27,7 @@ export const authReducer = (state, action) => {
   };
 
   const signinSuccess = (state, action) => {
-    localStorage.setItem("token", action.token);
+    localStorage.setItem("jwt_token", action.token);
     return updateObject(state, {
       token: action.token,
       userName: jwt_decode(action.token).user.sub_users[0].user_name,
@@ -54,7 +54,7 @@ export const authReducer = (state, action) => {
   };
 
   const signupSuccess = (state, action) => {
-    localStorage.setItem("token", action.token);
+    localStorage.setItem("jwt_token", action.token);
     return updateObject(state, {
       token: action.token,
       userName: jwt_decode(action.token).user.sub_users[0].user_name,

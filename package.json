@@ -12,6 +12,7 @@
     "react-date-range": "^1.0.0-beta",
     "react-dom": "^16.8.6",
     "react-google-login": "^5.0.4",
+    "react-helmet": "^5.2.1",
     "react-html-parser": "^2.0.2",
     "react-mobile-picker": "^0.1.12",
     "react-rating": "^1.7.2",

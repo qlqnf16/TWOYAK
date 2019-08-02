@@ -59,10 +59,15 @@ const Bullet = styled(BulletText)`
 const PastDrug = ({ dateArray, monthCategory, modalOn }) => {
   return (
     <PastCard>
-      <DateContainer>
-        <Year>{dateArray[0]}년</Year>
-        <div>{parseInt(dateArray[1])}월</div>
-      </DateContainer>
+      {dateArray[0] !== "Invalid date" ? (
+        <DateContainer>
+          <Year>{dateArray[0]}년</Year>
+          <div>{parseInt(dateArray[1])}월</div>
+        </DateContainer>
+      ) : (
+        <DateContainer>기록하지 않음</DateContainer>
+      )}
+
       <Line />
       <DrugsContainer>
         {monthCategory.map(drug => (
@@ -78,14 +83,18 @@ const PastDrug = ({ dateArray, monthCategory, modalOn }) => {
             </Bullet>
             <Text>
               {drug.from
-                .slice(5)
-                .split("-")
-                .join("/")}
+                ? drug.from
+                    .slice(5)
+                    .split("-")
+                    .join("/")
+                : null}
               {` ~ `}
               {drug.to
-                .slice(5)
-                .split("-")
-                .join("/")}
+                ? drug.to
+                    .slice(5)
+                    .split("-")
+                    .join("/")
+                : null}
             </Text>
           </Flex>
         ))}

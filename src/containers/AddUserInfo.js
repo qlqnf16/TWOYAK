@@ -143,7 +143,7 @@ function AddSubUser(props) {
             type: "SIGNUP_SUCCESS",
             token: payload
           });
-          localStorage.setItem("token", payload);
+          localStorage.setItem("jwt_token", payload);
           props.history.push("/mypage");
         })
         .catch(error => alert(error.data.errors));
@@ -173,7 +173,7 @@ function AddSubUser(props) {
             type: "SIGNUP_SUCCESS",
             token: payload
           });
-          localStorage.setItem("token", payload);
+          localStorage.setItem("jwt_token", payload);
           props.history.push("/mypage");
         })
         .catch(error => alert(error.data.errors));

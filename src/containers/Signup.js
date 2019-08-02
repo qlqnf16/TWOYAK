@@ -164,7 +164,7 @@ function Signup(props) {
             type: "SIGNUP_SUCCESS",
             token: payload
           });
-          storeUserDataForAutoLogin("token", payload);
+          storeUserDataForAutoLogin("jwt_token", payload);
         })
         .catch(error => {
           dispatch({

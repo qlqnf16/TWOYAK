@@ -250,7 +250,7 @@ const CurrentDrug = ({
           <Content>{drug.disease.name}</Content>
         </>
       )}
-      {!drug.dur_info.length ? (
+      {!drug.dur_info ? (
         ""
       ) : (
         <>
