@@ -5,14 +5,22 @@ import { AuthContext } from "../contexts/AuthStore";
 import styled from "styled-components";
 
 import Terms from "./Terms";
-import { Container } from "../components/UI/SharedStyles";
-import { BasicButton } from "../components/UI/SharedStyles";
-import { BasicInput } from "../components/UI/SharedStyles";
+import {
+  Container,
+  BasicButton,
+  BasicInput
+} from "../components/UI/SharedStyles";
+import FacebookIcon from "../assets/images/facebook.svg";
+import NaverIcon from "../assets/images/naver.svg";
+import GoogleIcon from "../assets/images/google-signin.svg";
 import "@fortawesome/fontawesome-free/css/all.css";
 
 const SignupArea = styled(Container)`
   padding-top: 6rem;
-  margin: auto;
+  margin-left: 9.375px;
+  margin-right: 9.375px;
+  margin-top: 0;
+  overflow: auto;
 `;
 
 const CustomButton = styled(BasicButton)`
@@ -48,6 +56,12 @@ const CheckWrapper = styled.div`
   justify-content: space-between;
 `;
 
+const CustomForm = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 const WatchAgree = styled.div`
   text-align: center;
   color: red;
@@ -71,12 +85,32 @@ const EachTerm = styled.div`
   align-items: center;
 `;
 
+const SocialSignupArea = styled.div`
+  width: 15rem;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+`;
+
+const SignupByWhichContainer = styled.div`
+  display: flex;
+  width: 100%;
+  margin-top: 24px;
+  margin-bottom: 24px;
+`;
+
+const NotPressedButton = styled(BasicButton)`
+  color: var(--twoyak-blue);
+  background-color: white;
+  box-shadow: 1px 2px 7px 1px rgba(212, 212, 212, 0.5);
+`;
+
 function Signup(props) {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
   const [userName, setUserName] = useState(null);
-  const [showTerm, setShowTerm] = useState(false);
+  const [byWhom, setByWhom] = useState(null);
   const [agreeAllTerms, setAgreeAllTerms] = useState(false);
   const { state, dispatch } = useContext(AuthContext);
 
@@ -188,16 +222,57 @@ function Signup(props) {
     }
   };
 
-  const form = signupScheme.map((i, k) => (
-    <form key={k} onSubmit={() => signupActionHandler()}>
-      <SignupInput
-        key={k}
-        type={i.type}
-        placeholder={i.placeholder}
-        onChange={event => fillInSignupForm(i.key, event)}
-      />
-    </form>
-  ));
+  const signupBySocialAccount = supplier => {
+    if (agreeAllTerms) {
+      if (supplier === "naver") {
+        alert("네이버 로그인은 현재 준비중입니다");
+      } else {
+        window.open(
+          `http://api.twoyak.com/api/users/auth/${supplier}`,
+          "_self"
+        );
+      }
+    } else {
+      alert("약관에 동의하셔야 회원가입이 가능합니다");
+    }
+  };
+
+  const signupByWhich = (
+    <SignupByWhichContainer>
+      {byWhom === true ? (
+        <BasicButton>이메일로 가입</BasicButton>
+      ) : (
+        <NotPressedButton onClick={() => setByWhom(true)}>
+          이메일로 가입
+        </NotPressedButton>
+      )}
+      {byWhom === false ? (
+        <BasicButton>소셜계정으로 가입</BasicButton>
+      ) : (
+        <NotPressedButton onClick={() => setByWhom(false)}>
+          소셜계정으로 가입
+        </NotPressedButton>
+      )}
+    </SignupByWhichContainer>
+  );
+
+  const form = (
+    <CustomForm>
+      {signupScheme.map((i, k) => (
+        <form key={k} onSubmit={() => signupActionHandler()}>
+          <SignupInput
+            key={k}
+            type={i.type}
+            placeholder={i.placeholder}
+            onChange={event => fillInSignupForm(i.key, event)}
+          />
+        </form>
+      ))}
+      <CustomButton onClick={() => signupActionHandler()}>
+        회원가입
+      </CustomButton>
+    </CustomForm>
+  );
 
   const terms = (
     <TermsContainer>
@@ -233,16 +308,34 @@ function Signup(props) {
     </TermsContainer>
   );
 
+  const socialSignupForm = (
+    <SocialSignupArea>
+      <img
+        src={FacebookIcon}
+        alt="facebook-signin"
+        onClick={() => signupBySocialAccount("facebook")}
+      />
+      <img
+        src={NaverIcon}
+        alt="naver-signin"
+        onClick={() => signupBySocialAccount("naver")}
+      />
+      <img
+        src={GoogleIcon}
+        alt="google-signin"
+        onClick={() => signupBySocialAccount("google_oauth2")}
+      />
+    </SocialSignupArea>
+  );
+
   return (
     <SignupArea>
       <GoLoginMark onClick={() => goLoginPage()}>
         이미 아이디가 있으신가요? 로그인하러가기
       </GoLoginMark>
-      {form}
       {terms}
-      <CustomButton onClick={() => signupActionHandler()}>
-        회원가입
-      </CustomButton>
+      {agreeAllTerms ? signupByWhich : null}
+      {byWhom !== false ? (byWhom === true ? form : null) : socialSignupForm}
       {state.token ? <Redirect to="/add-info" /> : null}
     </SignupArea>
   );

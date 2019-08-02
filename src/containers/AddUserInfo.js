@@ -81,11 +81,19 @@ function AddSubUser(props) {
   }, [state.token]);
 
   useEffect(() => {
-    if (state.token) {
+    if (props.match.path === "/add-info") {
       if (
-        props.match.path === "/edit-info" ||
-        props.match.path === "/add-info"
+        props.location.search !== "" &&
+        props.location.search.includes("?token=")
       ) {
+        dispatch({
+          type: "SIGNUP_SUCCESS",
+          token: props.location.search.split("=")[1]
+        });
+        window.location.replace("/add-info");
+      }
+    } else if (props.match.path === "/edit-info") {
+      if (state.token) {
         getUserInfo();
       }
     }
@@ -96,6 +104,12 @@ function AddSubUser(props) {
     state.token,
     state.subUserIndex
   ]);
+
+  useEffect(() => {
+    if (state.token) {
+      getUserInfo();
+    }
+  }, [state.token]);
 
   const getUserInfo = () => {
     axios({

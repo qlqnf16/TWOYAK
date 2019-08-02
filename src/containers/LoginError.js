@@ -14,7 +14,6 @@ const CustomButton = styled(BasicButton)`
 `;
 
 function LoginError(props) {
-  console.log(props);
   return (
     <ErrorMessage>
       <div>해당 이메일은 이미 가입한 이메일입니다.</div>
