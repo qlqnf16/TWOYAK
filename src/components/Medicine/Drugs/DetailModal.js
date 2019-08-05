@@ -17,7 +17,29 @@ const Flex = styled.div`
 display: flex;
 justify-content: center;
 align-items: center;
-height: 100vh;
+height: 93vh;
+`
+
+const StyleWrapper = styled.div`
+  height: 93vh;
+	-webkit-overflow-scrolling: touch;
+  overflow-y: scroll;
+
+  & iframe {
+    
+  }
+`
+
+const CloseDiv = styled.div`
+  width: 100%;
+  height: 7vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  background-color: var(--twoyak-blue);
+  color: white; 
 `
 
 const DetailModal = ({ item_seq, modalOff }) => {
@@ -29,19 +51,23 @@ const DetailModal = ({ item_seq, modalOff }) => {
 
   return (
     <ModalContainer>
-      {loading && <Flex>
-        <Spinner />
-      </Flex>}
-      <div>
-        <Close onClick={modalOff} />
-      </div>
-      <iframe
-        title="medicineInfo"
-        style={{ width: "100%", minwidht: "100%", height: "100%" }}
-        src={`https://nedrug.mfds.go.kr/pbp/CCBBB01/getItemDetail?itemSeq=${item_seq}`}
-        frameBorder="0"
-        onLoad={hideSpinner}
-      />
+      {loading &&
+        <>
+          <Flex>
+            <Spinner />
+          </Flex>
+          <CloseDiv onClick={modalOff}>닫기</CloseDiv>
+        </>}
+      <StyleWrapper>
+        <iframe
+          title="medicineInfo"
+          style={{ width: "100%", minwidht: "100%", height: "93vh" }}
+          src={`https://nedrug.mfds.go.kr/pbp/CCBBB01/getItemDetail?itemSeq=${item_seq}`}
+          frameBorder="0"
+          onLoad={hideSpinner}
+        />
+      </StyleWrapper>
+      <CloseDiv onClick={modalOff}>닫기</CloseDiv>
     </ModalContainer>
   );
 };
