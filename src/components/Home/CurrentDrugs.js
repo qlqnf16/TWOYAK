@@ -36,6 +36,7 @@ const CurrentDrugsDiv = styled.div`
   display: flex;
   align-items: center;
   margin-top: 1.0625rem;
+  width: 50%;
 `;
 
 const ContentDot = styled.div`
@@ -73,25 +74,27 @@ function CurrentDrugs({ currentDrugs, history, medIcon, userName }) {
           <img src={medIcon} alt="med-icon" />
           <Header>{userName}님이 복용중인 약</Header>
         </div>
-        <MoreInfo onClick={() => history.push("/health-record")}>
-          자세히 보기
-        </MoreInfo>
       </HeaderContainer>
-      {currentDrugs ? (
-        currentDrugs.map((i, k) => (
-          <CurrentDrugsDiv
-            key={k}
-            onClick={() => searchDrugHandler(i.current_drug_id)}
-          >
-            <ContentDot className="fas fa-circle" />
-            <DrugName>{i.drug_name.split("(")[0]}</DrugName>
-          </CurrentDrugsDiv>
-        ))
-      ) : (
-        <PressCard onClick={() => history.push("/medicine")}>
-          <AddButton src={addDash} />
-        </PressCard>
-      )}
+      <div>
+        {currentDrugs ? (
+          currentDrugs.map((i, k) => (
+            <CurrentDrugsDiv
+              key={k}
+              onClick={() => searchDrugHandler(i.current_drug_id)}
+            >
+              <ContentDot className="fas fa-circle" />
+              <DrugName>{i.drug_name.split("(")[0]}</DrugName>
+            </CurrentDrugsDiv>
+          ))
+        ) : (
+          <PressCard onClick={() => history.push("/medicine")}>
+            <AddButton src={addDash} />
+          </PressCard>
+        )}
+      </div>
+      <MoreInfo onClick={() => history.push("/health-record")}>
+        자세히 보기
+      </MoreInfo>
       <HomeDivider />
       <HomeContent>
         <img src={medIcon} alt="med-icon" />

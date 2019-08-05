@@ -60,6 +60,11 @@ const SocialLoginArea = styled.div`
   justify-content: space-around;
 `;
 
+const LoginErrorMessage = styled.div`
+  color: red;
+  margin-bottom: 1.3125rem;
+`;
+
 function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -164,9 +169,11 @@ function Login(props) {
             placeholder="비밀번호"
             onChange={event => signinDataHandler("password", event)}
           />
-          {state.error ? (
-            <div style={{ color: "red" }}>{state.error}</div>
-          ) : null}
+          {state.error
+            ? state.error
+                .split(".")
+                .map((i, k) => <LoginErrorMessage>{i}</LoginErrorMessage>)
+            : null}
           <CustomButton onClick={() => signinActionHandler()}>
             로그인
           </CustomButton>

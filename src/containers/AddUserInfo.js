@@ -72,6 +72,9 @@ function AddSubUser(props) {
     axios({
       method: "GET",
       url: "/autocomplete/disease",
+      params: {
+        sub_user_id: state.subUserId
+      },
       headers: {
         Authorization: `Bearer ${state.token}`
       }
@@ -92,6 +95,7 @@ function AddSubUser(props) {
         });
         window.location.replace("/add-info");
       }
+      getUserInfo();
     } else if (props.match.path === "/edit-info") {
       if (state.token) {
         getUserInfo();
@@ -104,12 +108,6 @@ function AddSubUser(props) {
     state.token,
     state.subUserIndex
   ]);
-
-  useEffect(() => {
-    if (state.token) {
-      getUserInfo();
-    }
-  }, [state.token]);
 
   const getUserInfo = () => {
     axios({
