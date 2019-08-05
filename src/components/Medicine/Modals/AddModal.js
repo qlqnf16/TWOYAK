@@ -57,7 +57,7 @@ const FakeInput = styled.div`
 
 const DatePickerContainer = styled.div`
   position: absolute;
-  top: 9rem;
+  top: 3rem;
   left: -1rem;
   width: 110%;
   display: flex;
@@ -118,65 +118,65 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
   return !drugState ? (
     ""
   ) : (
-    <Modal
-      title="복용 목록에 추가"
-      content={
-        <Container>
-          <BasicText>왜 이 약을 드시나요?</BasicText>
-          <AutosuggestStyleWrapper>
-            <AutoSuggestion
-              search="disease"
-              placeholderProp={"질환명 입력"}
-              searchKey="name"
-              inputChange={diseasesInputChange}
-            />
-          </AutosuggestStyleWrapper>
-          <>
-            {" "}
-            <BasicText>기간</BasicText>
-            <FakeInput
+      <Modal
+        title="복용 목록에 추가"
+        content={
+          <Container>
+            <BasicText>왜 이 약을 드시나요?</BasicText>
+            <AutosuggestStyleWrapper>
+              <AutoSuggestion
+                search="disease"
+                placeholderProp={"질환명 입력"}
+                searchKey="name"
+                inputChange={diseasesInputChange}
+              />
+            </AutosuggestStyleWrapper>
+            <>
+              {" "}
+              <BasicText>기간</BasicText>
+              <FakeInput
+                onClick={() => {
+                  setShowDatePicker(true);
+                }}
+              >
+                {from.format("YYYY/MM/DD")} - {to.format("YYYY/MM/DD")}
+              </FakeInput>
+              {showDatePicker && (
+                <DatePickerContainer>
+                  <StyledDateRange
+                    locale={ko}
+                    months={1}
+                    ranges={[selectionRange]}
+                    onChange={handleSelect}
+                    showSelectionPreview={false}
+                  />
+                  <BasicButton
+                    onClick={() => {
+                      setShowDatePicker(false);
+                    }}
+                  >
+                    완료
+                </BasicButton>
+                </DatePickerContainer>
+              )}
+              <BasicText>메모</BasicText>
+              <TextArea placeholder="ex) 하루에 언제 몇 알 씩 먹는지, 상세 복용 규칙 등을 기록해보세요" />
+            </>
+
+            <Button
               onClick={() => {
-                setShowDatePicker(true);
+                addDrug();
               }}
             >
-              {from.format("YYYY/MM/DD")} - {to.format("YYYY/MM/DD")}
-            </FakeInput>
-            {showDatePicker && (
-              <DatePickerContainer>
-                <StyledDateRange
-                  locale={ko}
-                  months={1}
-                  ranges={[selectionRange]}
-                  onChange={handleSelect}
-                  showSelectionPreview={false}
-                />
-                <BasicButton
-                  onClick={() => {
-                    setShowDatePicker(false);
-                  }}
-                >
-                  완료
-                </BasicButton>
-              </DatePickerContainer>
-            )}
-            <BasicText>메모</BasicText>
-            <TextArea placeholder="ex) 하루에 언제 몇 알 씩 먹는지, 상세 복용 규칙 등을 기록해보세요" />
-          </>
-
-          <Button
-            onClick={() => {
-              addDrug();
-            }}
-          >
-            완료
+              완료
           </Button>
-        </Container>
-      }
-      modalOff={() => {
-        additionalModalToggle("add");
-      }}
-    />
-  );
+          </Container>
+        }
+        modalOff={() => {
+          additionalModalToggle("add");
+        }}
+      />
+    );
 };
 
 export default AddModal;
