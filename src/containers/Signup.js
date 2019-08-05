@@ -208,7 +208,9 @@ function Signup(props) {
           alert(error.response.data.errors);
         });
     } else {
-      if (!validateEmail(email)) {
+      if (!email) {
+        alert("이메일을 입력해주세요");
+      } else if (!validateEmail(email)) {
         alert("이메일 형식을 확인해주세요");
       } else if (!password || !confirmPassword) {
         alert("비밀번호와 비밀번호 확인을 모두 입력해주세요");
@@ -334,7 +336,7 @@ function Signup(props) {
         이미 아이디가 있으신가요? 로그인하러가기
       </GoLoginMark>
       {terms}
-      {agreeAllTerms ? signupByWhich : null}
+      {signupByWhich}
       {byWhom !== false ? (byWhom === true ? form : null) : socialSignupForm}
       {state.token ? <Redirect to="/add-info" /> : null}
     </SignupArea>
