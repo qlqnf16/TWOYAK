@@ -120,11 +120,11 @@ const SearchResult = React.memo(
   }) => {
     const drugDetail = drug.package_insert
       ? JSON.parse(
-          JSON.stringify(drug.package_insert.DRB_ITEM).replace(
-            /&nbsp;|&amp;|&lt;|&gt;|u0026nbsp;|'\"'/i,
-            ""
-          )
+        JSON.stringify(drug.package_insert.DRB_ITEM).replace(
+          /&nbsp;|&amp;|&lt;|&gt;|u0026nbsp;|'\"'|(<.*?>)/gi,
+          ""
         )
+      )
       : null;
 
     const pushValidItem = (array, item) => {
@@ -201,12 +201,12 @@ const SearchResult = React.memo(
               // 여기
               <Icon src={fullHeart} alt="full-heart" onClick={toggleWatching} />
             ) : (
-              <Icon
-                src={emptyHeart}
-                alt="empty-heart"
-                onClick={auth ? toggleWatching : showLogin}
-              />
-            )}
+                <Icon
+                  src={emptyHeart}
+                  alt="empty-heart"
+                  onClick={auth ? toggleWatching : showLogin}
+                />
+              )}
           </IconContainer>
           {drugImg && (
             <ImgContainer>
@@ -232,15 +232,15 @@ const SearchResult = React.memo(
                     </ShowMoreButton>
                   </>
                 ) : (
-                  <>
-                    <Benefit>주효능: {benefitTextShortend}</Benefit>
-                    {benefitTextShortend !== benefitText && (
-                      <ShowMoreButton onClick={toggleShowMore}>
-                        더보기
+                    <>
+                      <Benefit>주효능: {benefitTextShortend}</Benefit>
+                      {benefitTextShortend !== benefitText && (
+                        <ShowMoreButton onClick={toggleShowMore}>
+                          더보기
                       </ShowMoreButton>
-                    )}
-                  </>
-                )}
+                      )}
+                    </>
+                  )}
               </TextContainer>
               <TextContainer>
                 <Text bold>주요 성분</Text>
@@ -273,11 +273,11 @@ const SearchResult = React.memo(
             onClick={
               drug.currently_taking
                 ? () => {
-                    additionalModalToggle("delete");
-                  }
+                  additionalModalToggle("delete");
+                }
                 : () => {
-                    additionalModalToggle("add");
-                  }
+                  additionalModalToggle("add");
+                }
             }
           >
             {drug.currently_taking
