@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "../apis";
+import { Link } from 'react-router-dom'
 import {
   Container,
   Card,
@@ -52,6 +53,13 @@ const Filters = styled.div`
 const ArrowIcon = styled(Arrow)`
   margin-left: 0.5rem;
 `;
+
+const ReviewTitle = styled(Link)`
+font-size: 0.875rem;
+  color: var(--twoyak-black);
+  font-weight: bold;
+  text-decoration: none;
+`
 
 function AllReviews() {
   const { state: authState } = useContext(AuthContext);
@@ -228,13 +236,13 @@ function AllReviews() {
                   alt="med-icon"
                   style={{ marginRight: "6px", marginTop: "5px" }}
                 />
-                <BasicText>{review.drug.split("(")[0]}</BasicText>
+                <ReviewTitle to={`/medicine/${review.drug_id}`}>{review.drug.split("(")[0]}</ReviewTitle>
               </FlexDiv>
               <Line />
               <ReviewContainer>
                 <DrugReview
                   review={review}
-                  // toggleLike={toggleLike}
+                // toggleLike={toggleLike}
                 />
               </ReviewContainer>
             </ReviewCard>
