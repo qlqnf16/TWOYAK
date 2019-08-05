@@ -106,7 +106,6 @@ const SearchInput = ({
           submit={searchById}
         />
       </StyleWrapper>
-      {/* <Button type="submit">검색</Button> */}
     </Form>
   );
   return myInput;

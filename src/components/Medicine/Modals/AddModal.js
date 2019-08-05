@@ -83,7 +83,8 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
 
   useEffect(() => {
     !drugState.diseases && fetchDiseaseData();
-  }, []);
+    console.log(drugId)
+  }, [drugId]);
 
   const fetchDiseaseData = async () => {
     const { data } = await axios.get("autocomplete/disease", {

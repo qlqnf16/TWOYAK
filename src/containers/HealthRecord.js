@@ -67,7 +67,7 @@ function HealthRecord() {
   const [showCurrent, setShowCurrent] = useState(true);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
-  useEffect(() => {}, [currentDrugs]);
+  useEffect(() => { }, [currentDrugs]);
 
   useEffect(() => {
     if (authState.token) {
@@ -79,9 +79,14 @@ function HealthRecord() {
     }
   }, [authState]);
 
-  const loadingHandler = async () => {
-    const { data } = await getInfos(`/current_drugs`);
-    setCurrentDrugs(data);
+  const loadingHandler = async (past) => {
+    if (!past) {
+      const { data } = await getInfos(`/current_drugs`)
+      setCurrentDrugs(data)
+    } else {
+      const { data } = await getInfos('/past_drugs');
+      setPastDrugs(data);
+    }
   };
 
   const getInfos = url =>
@@ -153,10 +158,11 @@ function HealthRecord() {
     }
   };
 
-  const deleteDrug = async id => {
+  const deleteDrug = async (id, past) => {
+    const url = !past ? 'current_drugs' : 'past_drugs'
     try {
       await axios.delete(
-        `user/${authState.subUsers[0].id}/current_drugs/${id}`,
+        `user/${authState.subUsers[0].id}/${url}/${id}`,
         {
           headers: {
             Authorization: `bearer ${authState.token}`
@@ -168,6 +174,7 @@ function HealthRecord() {
       console.log(error);
     }
   };
+
 
   return (
     <>
@@ -197,16 +204,16 @@ function HealthRecord() {
         </UserContainer>
         {showCurrent
           ? currentDrugs && (
-              <CurrentDrugList
-                currentDrugs={currentDrugs}
-                loadingHandler={loadingHandler}
-                drugToPast={drugToPast}
-                deleteDrug={deleteDrug}
-                durInfo={durInfo}
-                subUserInfo={subUserInfo}
-              />
-            )
-          : pastDrugs && <PastDrugList drugs={pastDrugs} />}
+            <CurrentDrugList
+              currentDrugs={currentDrugs}
+              loadingHandler={loadingHandler}
+              drugToPast={drugToPast}
+              deleteDrug={deleteDrug}
+              durInfo={durInfo}
+              subUserInfo={subUserInfo}
+            />
+          )
+          : pastDrugs && <PastDrugList drugs={pastDrugs} deleteDrug={deleteDrug} loadingHandler={loadingHandler} />}
         <AddCard
           text={
             showCurrent

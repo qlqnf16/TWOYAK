@@ -7,7 +7,7 @@ import DrugReview from "../../Medicine/Review/DrugReview";
 import Modal from "../../UI/Modal";
 
 import styled from "styled-components";
-import { BulletText, BasicButton } from "../../UI/SharedStyles";
+import { BulletText, BasicButton, FlexDiv } from "../../UI/SharedStyles";
 
 const MarginDiv = styled.div`
   margin-top: 1rem;
@@ -21,9 +21,23 @@ const StyledLink = styled(Link)`
 const Button = styled(BasicButton)`
   display: block;
   margin: 1rem auto;
+  font-size: 0.8rem;
 `;
 
-const PastDrugList = ({ drugs }) => {
+const EmptyReview = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 1rem;
+  background-color:#f0f9ff;
+  margin-top: 1rem;
+  border-radius: 1rem;
+  border: 1px #bbb dashed;
+  font-size: 0.9rem;
+`
+
+const PastDrugList = ({ drugs, deleteDrug, loadingHandler }) => {
   const monthCategory = {};
   const [show, setShow] = useState(false);
   const [targetDrug, setTargetDrug] = useState();
@@ -100,6 +114,12 @@ const PastDrugList = ({ drugs }) => {
     .sort()
     .reverse();
 
+  const deletePastDrug = async id => {
+    await deleteDrug(id, true)
+    setShow(false);
+    loadingHandler(true)
+  }
+
   return (
     <div>
       {months.length > 0 &&
@@ -117,19 +137,22 @@ const PastDrugList = ({ drugs }) => {
           content={
             targetDrug && (
               <>
-                {targetDrug.my_review && (
+                {targetDrug.my_review ? (
                   <MarginDiv>
                     <BulletText>
                       <p>내 리뷰</p>
                     </BulletText>
                     <DrugReview my={true} review={targetDrug.my_review} />
                   </MarginDiv>
-                )}
-                <Button>
-                  <StyledLink to={`medicine/${targetDrug.past_drug_id}`}>
-                    약 상세정보 보기
+                ) : <EmptyReview>내가 남긴 리뷰가 없습니다.</EmptyReview>}
+                <FlexDiv>
+                  <Button>
+                    <StyledLink to={`medicine/${targetDrug.past_drug_id}`}>
+                      약 정보 보기
                   </StyledLink>
-                </Button>
+                  </Button>
+                  <Button onClick={() => deletePastDrug(targetDrug.id)}>삭제하기</Button>
+                </FlexDiv>
               </>
             )
           }

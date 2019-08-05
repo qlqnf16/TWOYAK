@@ -69,6 +69,7 @@ function Medicine({ match, history, location }) {
 
   const [addModal, setAddModal] = useState(false); // 약품 추가 모달
   const [deleteModal, setDeleteModal] = useState(false); // 약품 제거 모달
+  const [drugId, setDrugId] = useState()
   const [modal, setModal] = useState(false); // 의약품 상세정보 모달
   const [showMore, setShowMore] = useState(false); // 더보기 버튼
   const [showLogin, setShowLogin] = useState(false);
@@ -183,12 +184,13 @@ function Medicine({ match, history, location }) {
 
   // 현재 복용중 약품에 추가
   const addCurrentDrug = async (id, data) => {
+    const idParam = !id ? drugId : id
     try {
       let url = "current_drugs";
-      if (data.formattedTo <= moment().format("YYYY-MM-DD")) url = "past_drugs";
+      if (data.formattedTo < moment().format("YYYY-MM-DD")) url = "past_drugs";
       await axios({
         method: "POST",
-        url: `user/${authState.subUserId}/${url}/${id}`,
+        url: `user/${authState.subUserId}/${url}/${idParam}`,
         params: {
           disease_ids: data.diseaseId,
           from: data.formattedFrom,
@@ -202,8 +204,8 @@ function Medicine({ match, history, location }) {
         }
       });
       alert("추가됐습니다");
-      searchById(drug.id);
       setAddModal(false);
+      searchById(drug.id);
     } catch (error) {
       console.log(error.response);
     }
@@ -214,7 +216,7 @@ function Medicine({ match, history, location }) {
     try {
       await axios.delete(
         `user/${authState.subUserId}/current_drugs/${
-          drug.currently_taking.current_drug_id
+        drug.currently_taking.current_drug_id
         }/to_past`,
         {
           headers: {
@@ -234,7 +236,7 @@ function Medicine({ match, history, location }) {
     try {
       await axios.delete(
         `user/${authState.subUserId}/current_drugs/${
-          drug.currently_taking.current_drug_id
+        drug.currently_taking.current_drug_id
         }`,
         {
           headers: {
@@ -250,7 +252,10 @@ function Medicine({ match, history, location }) {
   };
 
   // 약품 추가 / 제거 modal toggle
-  const additionalModalToggle = type => {
+  const additionalModalToggle = async (type, id) => {
+    if (!!id)
+      setDrugId(id)
+
     switch (type) {
       case "add":
         setAddModal(!addModal);
@@ -261,6 +266,7 @@ function Medicine({ match, history, location }) {
       default:
         break;
     }
+
   };
 
   // searchResult 상세정보 modal toggle
@@ -369,7 +375,7 @@ function Medicine({ match, history, location }) {
           <AddModal
             additionalModalToggle={additionalModalToggle}
             addCurrentDrug={addCurrentDrug}
-            drugId={drug.id}
+            drugId={!drug.id ? drugId : drug.id}
           />
         )}
         {deleteModal && (

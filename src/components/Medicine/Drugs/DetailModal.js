@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Close } from "../../UI/Icons";
 import Spinner from "../../UI/Spinner";
 
 const ModalContainer = styled.div`
@@ -24,7 +23,6 @@ const StyleWrapper = styled.div`
   height: 93vh;
 	-webkit-overflow-scrolling: touch;
   overflow-y: scroll;
-
   & iframe {
     
   }
