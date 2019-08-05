@@ -58,11 +58,6 @@ const EditIcon = styled(Edit)`
   color: var(--twoyak-black);
 `;
 
-const MyFlex = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
 const DrugReview = React.memo(({ my, review, deleteReview, updateButton }) => {
   return (
     <Container>

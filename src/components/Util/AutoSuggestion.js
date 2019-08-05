@@ -74,16 +74,16 @@ const AutoSuggestion = ({
     return inputLength === 0
       ? []
       : suggestList.filter(suggestion => {
-          const keep =
-            count < 20 &&
-            suggestion[searchKey].toLowerCase().includes(inputValue);
+        const keep =
+          count < 20 &&
+          suggestion[searchKey].toLowerCase().includes(inputValue);
 
-          if (keep) {
-            count += 1;
-          }
+        if (keep) {
+          count += 1;
+        }
 
-          return keep;
-        });
+        return keep;
+      });
   };
 
   const getSuggestionValue = suggestion => {
@@ -108,8 +108,8 @@ const AutoSuggestion = ({
                 {part.text}
               </b>
             ) : (
-              <span key={index}>{part.text}</span>
-            )
+                <span key={index}>{part.text}</span>
+              )
           )}
         </ItemContainer>
         {search === "drug" &&
@@ -118,13 +118,13 @@ const AutoSuggestion = ({
               복용중
             </BasicText>
           ) : (
-            <Add
-              onClick={e => {
-                e.stopPropagation();
-                addCurrentDrug("add");
-              }}
-            />
-          ))}
+              <Add
+                onClick={e => {
+                  e.stopPropagation();
+                  addCurrentDrug("add", suggestion.id);
+                }}
+              />
+            ))}
       </RecommendContainer>
     );
   };
