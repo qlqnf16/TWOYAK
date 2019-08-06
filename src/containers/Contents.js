@@ -52,11 +52,11 @@ function Content(props) {
         <ContentTitle>{thumbnail[props.match.params.id].title}</ContentTitle>
         <ContentParagraph>
           <img
-            style="width: 100%"
+            style={{ width: "100%" }}
             src="https://static.wixstatic.com/media/a27d24_cb4b83671b414977b9c1b80bb83b2dce~mv2.png/v1/fill/w_350,h_274,al_c,q_90,usm_0.66_1.00_0.01/a27d24_cb4b83671b414977b9c1b80bb83b2dce~mv2.webp"
             alt="content-img"
           />
-          {/* {ReactHtmlParser(thumbnail[props.match.params.id].paragraph)} */}
+          {ReactHtmlParser(thumbnail[props.match.params.id].paragraph)}
         </ContentParagraph>
       </ContentGrid>
     </ContentContainer>
