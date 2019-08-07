@@ -31,7 +31,7 @@ export const thumbnail = [
         스트레스와 긴장, 불안, 편두통 등으로 이어지게 됩니다.
       </div>
       <br />
-      <img style="width: 100%" src="https://static.wixstatic.com/media/a27d24_cb4b83671b414977b9c1b80bb83b2dce~mv2.png/v1/fill/w_350,h_274,al_c,q_90,usm_0.66_1.00_0.01/a27d24_cb4b83671b414977b9c1b80bb83b2dce~mv2.webp" alt="content-img" />
+      <img style="width: 100%" src="https://static.wixstatic.com/media/a27d24_cb4b83671b414977b9c1b80bb83b2dce~mv2.png/v1/fill/w_350,h_274,al_c,q_90,usm_0.66_1.00_0.01/a27d24_cb4b83671b414977b9c1b80bb83b2dce~mv2.png" alt="content-img" />
       <br />
       <div>
         마그네슘은 신경 전달 물질인 아세틸콜린의 분비를 감소시켜 신경 안정에
@@ -65,7 +65,7 @@ export const thumbnail = [
       <br />
       <div>
         <div>
-          <img style="width: 100%" src="https://static.wixstatic.com/media/a27d24_5ac6525706404ea7b75bbab9819dd23d~mv2.png/v1/fill/w_350,h_373,al_c,q_90,usm_0.66_1.00_0.01/a27d24_5ac6525706404ea7b75bbab9819dd23d~mv2.webp" alt="content-img" />
+          <img style="width: 100%" src="https://static.wixstatic.com/media/a27d24_5ac6525706404ea7b75bbab9819dd23d~mv2.png/v1/fill/w_350,h_373,al_c,q_90,usm_0.66_1.00_0.01/a27d24_5ac6525706404ea7b75bbab9819dd23d~mv2.png" alt="content-img" />
           <div>
             <a href="https://kr.iherb.com/pr/Doctor-s-Best-High-Absorption-Magnesium-100-Chelated-with-Albion-Minerals-100-mg-240-Tablets/16567">상품보기</a>
             <div>
@@ -76,7 +76,7 @@ export const thumbnail = [
           </div>
         </div>
         <div>
-          <img style="width: 100%" src="https://static.wixstatic.com/media/a27d24_8a743bcf20f5487d9eb42ebc6c6d65df~mv2.png/v1/fill/w_350,h_387,al_c,q_90,usm_0.66_1.00_0.01/a27d24_8a743bcf20f5487d9eb42ebc6c6d65df~mv2.webp" alt="content-img"/>
+          <img style="width: 100%" src="https://static.wixstatic.com/media/a27d24_8a743bcf20f5487d9eb42ebc6c6d65df~mv2.png/v1/fill/w_350,h_387,al_c,q_90,usm_0.66_1.00_0.01/a27d24_8a743bcf20f5487d9eb42ebc6c6d65df~mv2.png" alt="content-img"/>
           <div>
             <a href="https://kr.iherb.com/pr/Nature-s-Bounty-Calcium-Magnesium-Zinc-with-Vitamin-D3-100-Coated-Caplets/32229">상품보기</a>
             <div>
@@ -98,13 +98,13 @@ export const thumbnail = [
   <div>영양제 뒷면을 보시면 성분 함량과 퍼센티지(%) 표시가 보이죠.</div>
   <div>하지만 이를 꼼꼼하게 따져가면서 구매하시는 분 많지 않으시죠?</div>
   <br />
-  <img style="width: 100%" src="https://static.wixstatic.com/media/a27d24_2ed7b9a0a7104809915a45060cec4d75~mv2.jpg/v1/fill/w_350,h_350,al_c,q_90,usm_0.66_1.00_0.01/a27d24_2ed7b9a0a7104809915a45060cec4d75~mv2.webp" alt="content-img"/>
+  <img style="width: 100%" src="https://static.wixstatic.com/media/a27d24_2ed7b9a0a7104809915a45060cec4d75~mv2.jpg/v1/fill/w_350,h_350,al_c,q_90,usm_0.66_1.00_0.01/a27d24_2ed7b9a0a7104809915a45060cec4d75~mv2.png" alt="content-img"/>
   <br />
   <div>
     건강기능식품 뒷면에는 이렇게 성분 함량과 일일섭취 기준의 몇 %인지가
     적혀있는데요. 우리나라 식약처에서 정한 기준은 아래와 같답니다.
   </div>
-  <img style="width: 100%" src="https://static.wixstatic.com/media/a27d24_e2362a02e02e4ba185bd6c649679fb5f~mv2.png/v1/fill/w_740,h_393,al_c,q_90,usm_0.66_1.00_0.01/a27d24_e2362a02e02e4ba185bd6c649679fb5f~mv2.webp" alt="content-img"/>
+  <img style="width: 100%" src="https://static.wixstatic.com/media/a27d24_e2362a02e02e4ba185bd6c649679fb5f~mv2.png/v1/fill/w_740,h_393,al_c,q_90,usm_0.66_1.00_0.01/a27d24_e2362a02e02e4ba185bd6c649679fb5f~mv2.png" alt="content-img"/>
   <br />
   <div>
     그럼 일일섭취 기준의 100%를 섭취하면 충분한 걸까요? 일일섭취량, 평균필요량,
@@ -131,7 +131,7 @@ export const thumbnail = [
     상한섭취량이라는 용어가 나오게 되었습니다.
   </div>
   <br />
-  <img style="width: 100%" src="https://static.wixstatic.com/media/a27d24_9d96a7aad7b7415994db9fc62740e50e~mv2.png/v1/fill/w_740,h_397,al_c,lg_1,q_90/a27d24_9d96a7aad7b7415994db9fc62740e50e~mv2.webp" alt="content-img"/>
+  <img style="width: 100%" src="https://static.wixstatic.com/media/a27d24_9d96a7aad7b7415994db9fc62740e50e~mv2.png/v1/fill/w_740,h_397,al_c,lg_1,q_90/a27d24_9d96a7aad7b7415994db9fc62740e50e~mv2.png" alt="content-img"/>
   <br />
   <div>
     평균필요량은 단순히 중앙값을 기준으로 한 것이기 때문에 이상적인 영양소
@@ -169,7 +169,7 @@ export const thumbnail = [
     영양제 구매시 참고하면 좋겠습니다.
   </div>
   <br />
-  <img style="width: 100%" src="https://static.wixstatic.com/media/a27d24_ba3b4212f8a74deb8a203b7ec687c11a~mv2.png/v1/fill/w_740,h_531,al_c,q_90,usm_0.66_1.00_0.01/a27d24_ba3b4212f8a74deb8a203b7ec687c11a~mv2.webp" alt="content-img"/>
+  <img style="width: 100%" src="https://static.wixstatic.com/media/a27d24_ba3b4212f8a74deb8a203b7ec687c11a~mv2.png/v1/fill/w_740,h_531,al_c,q_90,usm_0.66_1.00_0.01/a27d24_ba3b4212f8a74deb8a203b7ec687c11a~mv2.png" alt="content-img"/>
   <br />
   <div>
     얼마나 먹어야 하는지 고민되는 영양제! 구매에 도움이 되길 바라며 이상
@@ -203,7 +203,7 @@ export const thumbnail = [
   </div>
   <img
     style="width: 100%;"
-    src="https://static.wixstatic.com/media/a27d24_abe6c9d6f22f43d7927da0d74b077ef1~mv2.jpg/v1/fill/w_350,h_255,al_c,q_90,usm_0.66_1.00_0.01/a27d24_abe6c9d6f22f43d7927da0d74b077ef1~mv2.webp"
+    src="https://static.wixstatic.com/media/a27d24_abe6c9d6f22f43d7927da0d74b077ef1~mv2.jpg/v1/fill/w_350,h_255,al_c,q_90,usm_0.66_1.00_0.01/a27d24_abe6c9d6f22f43d7927da0d74b077ef1~mv2.png"
     alt="content-img"
   />
   <div>
@@ -241,7 +241,7 @@ export const thumbnail = [
   <br />
   <img
     style="width: 100%;"
-    src="https://static.wixstatic.com/media/a27d24_3026ee5bee674b15a5d7cc4d539621ee~mv2.png/v1/fill/w_740,h_752,al_c,q_90,usm_0.66_1.00_0.01/a27d24_3026ee5bee674b15a5d7cc4d539621ee~mv2.webp"
+    src="https://static.wixstatic.com/media/a27d24_3026ee5bee674b15a5d7cc4d539621ee~mv2.png/v1/fill/w_740,h_752,al_c,q_90,usm_0.66_1.00_0.01/a27d24_3026ee5bee674b15a5d7cc4d539621ee~mv2.png"
     alt="content-img"
   />
   <div>
@@ -315,7 +315,7 @@ export const thumbnail = [
   </div>
   <img
     style="width: 100%;"
-    src="https://static.wixstatic.com/media/a27d24_92c8395d1a724fa489209bf1c04f5fc3~mv2.png/v1/fill/w_740,h_178,al_c,q_90,usm_0.66_1.00_0.01/a27d24_92c8395d1a724fa489209bf1c04f5fc3~mv2.webp"
+    src="https://static.wixstatic.com/media/a27d24_92c8395d1a724fa489209bf1c04f5fc3~mv2.png/v1/fill/w_740,h_178,al_c,q_90,usm_0.66_1.00_0.01/a27d24_92c8395d1a724fa489209bf1c04f5fc3~mv2.png"
     alt="content-img"
   />
   <br />
@@ -377,7 +377,7 @@ export const thumbnail = [
   <br />
   <img
     style="width: 100%;"    
-    src="https://static.wixstatic.com/media/a27d24_304c5b8783c0477f8adcff2807b8ceaf~mv2_d_5760_3840_s_4_2.jpg/v1/fill/w_320,h_213,al_c,q_90,usm_0.66_1.00_0.01/a27d24_304c5b8783c0477f8adcff2807b8ceaf~mv2_d_5760_3840_s_4_2.webp"
+    src="https://static.wixstatic.com/media/a27d24_304c5b8783c0477f8adcff2807b8ceaf~mv2_d_5760_3840_s_4_2.jpg/v1/fill/w_320,h_213,al_c,q_90,usm_0.66_1.00_0.01/a27d24_304c5b8783c0477f8adcff2807b8ceaf~mv2_d_5760_3840_s_4_2.png"
     alt="content-img"
   />
   <div>
@@ -442,7 +442,7 @@ export const thumbnail = [
   <br />
   <img
     style="width: 100%;"
-    src="https://static.wixstatic.com/media/a27d24_0f86112ce76849989e5f35d205f7e26c~mv2.png/v1/fill/w_320,h_84,al_c,q_90,usm_0.66_1.00_0.01/a27d24_0f86112ce76849989e5f35d205f7e26c~mv2.webp"
+    src="https://static.wixstatic.com/media/a27d24_0f86112ce76849989e5f35d205f7e26c~mv2.png/v1/fill/w_320,h_84,al_c,q_90,usm_0.66_1.00_0.01/a27d24_0f86112ce76849989e5f35d205f7e26c~mv2.png"
     alt="content-img"
   />
   <br />
@@ -483,7 +483,7 @@ export const thumbnail = [
   <br />
   <img
     style="width: 100%"
-    src="https://static.wixstatic.com/media/a27d24_f6afc947a37f41278d95cbce35954493~mv2.png/v1/fill/w_878,h_367,al_c,q_90,usm_0.66_1.00_0.01/a27d24_f6afc947a37f41278d95cbce35954493~mv2.webp"
+    src="https://static.wixstatic.com/media/a27d24_f6afc947a37f41278d95cbce35954493~mv2.png/v1/fill/w_878,h_367,al_c,q_90,usm_0.66_1.00_0.01/a27d24_f6afc947a37f41278d95cbce35954493~mv2.png"
     alt="content-img"
   />
   <div>
@@ -505,7 +505,7 @@ export const thumbnail = [
   </div>
   <img
     style="width: 100%"
-    src="https://static.wixstatic.com/media/a27d24_a451396a620a410c956d25519712c0e8~mv2.png/v1/fill/w_878,h_102,al_c,lg_1,q_90/a27d24_a451396a620a410c956d25519712c0e8~mv2.webp"
+    src="https://static.wixstatic.com/media/a27d24_a451396a620a410c956d25519712c0e8~mv2.png/v1/fill/w_878,h_102,al_c,lg_1,q_90/a27d24_a451396a620a410c956d25519712c0e8~mv2.png"
     alt="content-img"
   />
   <div>
