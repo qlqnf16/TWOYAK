@@ -1,9 +1,9 @@
-import Image1 from "../../assets/contents/1st.png";
-import Image2 from "../../assets/contents/2nd.png";
-import Image3 from "../../assets/contents/3rd.png";
-import Image4 from "../../assets/contents/4th.png";
-import Image5 from "../../assets/contents/5th.png";
-import Image6 from "../../assets/contents/6th.png";
+import Image1 from "../../assets/contents/1st.jpg";
+import Image2 from "../../assets/contents/2nd.jpg";
+import Image3 from "../../assets/contents/3rd.jpg";
+import Image4 from "../../assets/contents/4th.jpg";
+import Image5 from "../../assets/contents/5th.jpg";
+import Image6 from "../../assets/contents/6th.jpg";
 
 export const thumbnail = [
   {
