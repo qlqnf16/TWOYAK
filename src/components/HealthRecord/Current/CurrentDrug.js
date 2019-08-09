@@ -60,7 +60,8 @@ const CustomRatingText = styled(RatingText)`
 
 const ButtonContainer = styled(FlexDiv)`
   justify-content: space-around;
-  margin: 1rem 1.7rem 0 1.7rem;
+  margin: 1rem;
+  margin-bottom: 0;
 `;
 
 const CurrentDrug = ({
@@ -229,8 +230,8 @@ const CurrentDrug = ({
               </CustomRatingText>
             </>
           ) : (
-            ""
-          )}
+              ""
+            )}
         </FlexDiv>
       </FlexDiv>
       {(drug.dur_info || drug.memo || review) && <Line />}
@@ -253,17 +254,17 @@ const CurrentDrug = ({
       {!drug.dur_info ? (
         ""
       ) : (
-        <>
-          <BulletText>
-            <p>안전정보</p>
-          </BulletText>
-          <Content>
-            {message.map((m, key) => (
-              <div key={key}>{m}</div>
-            ))}
-          </Content>
-        </>
-      )}
+          <>
+            <BulletText>
+              <p>안전정보</p>
+            </BulletText>
+            <Content>
+              {message.map((m, key) => (
+                <div key={key}>{m}</div>
+              ))}
+            </Content>
+          </>
+        )}
       {drug.memo && (
         <>
           <BulletText>
@@ -293,18 +294,18 @@ const CurrentDrug = ({
           </BasicButton>
         </>
       ) : (
-        <ButtonContainer>
-          <BasicButton onClick={newReviewToggle}>리뷰 등록</BasicButton>
-          <BasicButton
-            opacity="0.6"
-            onClick={() => {
-              drugToPast(drug.id);
-            }}
-          >
-            복용 종료
+          <ButtonContainer>
+            <BasicButton onClick={newReviewToggle}>리뷰 등록</BasicButton>
+            <BasicButton
+              opacity="0.6"
+              onClick={() => {
+                drugToPast(drug.id);
+              }}
+            >
+              복용 종료
           </BasicButton>
-        </ButtonContainer>
-      )}
+          </ButtonContainer>
+        )}
     </Card>
   );
 };
