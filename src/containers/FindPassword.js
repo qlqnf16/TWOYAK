@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { Redirect } from "react-router-dom";
 import axios from "../apis";
 import {
   BasicInput,
@@ -36,6 +37,7 @@ function FindPassword(props) {
   const [passwordConfirmationTyped, setPasswordConfirmationTyped] = useState(
     ""
   );
+  const [completeRedirect, setCompleteRedirect] = useState(false);
 
   if (props.match.path === "/find-password") {
     const postResetPasswordEmailHandler = () => {
@@ -79,13 +81,18 @@ function FindPassword(props) {
             method: "PUT",
             url: "/api/users/password",
             params: {
-              reset_password_token: props.location.search.split("=")[1],
-              password: passwordTyped,
-              password_confirmation: passwordConfirmationTyped
+              user: {
+                reset_password_token: props.location.search.split("=")[1],
+                password: passwordTyped,
+                password_confirmation: passwordConfirmationTyped
+              }
             }
-              .then(response => alert("비밀번호가 재설정되었습니다"))
-              .catch(error => console.log(error))
-          });
+          })
+            .then(response => {
+              alert("비밀번호가 재설정되었습니다");
+              setCompleteRedirect(true);
+            })
+            .catch(error => console.log(error));
         }
       }
     };
@@ -109,6 +116,7 @@ function FindPassword(props) {
             비밀번호 재설정 하기
           </ResetButton>
         </FindPasswordWrapper>
+        {completeRedirect ? <Redirect to="login" /> : null}
       </FindPasswordContainer>
     );
   }
