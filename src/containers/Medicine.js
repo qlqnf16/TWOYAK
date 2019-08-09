@@ -194,7 +194,8 @@ function Medicine({ match, history, location }) {
         params: {
           disease_ids: data.diseaseId,
           from: data.formattedFrom,
-          to: data.formattedTo
+          to: data.formattedTo,
+          memo: data.memoToSend
         },
         paramsSerializer: params => {
           return qs.stringify(params);
