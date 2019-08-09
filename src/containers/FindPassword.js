@@ -33,12 +33,15 @@ const ResetButton = styled(BasicButton)`
 function FindPassword(props) {
   const [emailTyped, setEmailTyped] = useState("");
   const [passwordTyped, setPasswordTyped] = useState("");
+  const [passwordConfirmationTyped, setPasswordConfirmationTyped] = useState(
+    ""
+  );
 
   if (props.match.path === "/find-password") {
     const postResetPasswordEmailHandler = () => {
       axios({
         method: "POST",
-        url: "/users/password",
+        url: "/api/users/password",
         params: {
           email: emailTyped
         }
@@ -64,7 +67,28 @@ function FindPassword(props) {
       </FindPasswordContainer>
     );
   } else if (props.match.path === "/reset-password") {
-    const postResetPasswordHandler = () => {};
+    const postResetPasswordHandler = () => {
+      if (passwordTyped !== passwordConfirmationTyped) {
+        alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+      } else {
+        if (
+          props.location.search !== "" &&
+          props.location.search.includes("?token")
+        ) {
+          axios({
+            method: "PUT",
+            url: "/api/users/password",
+            params: {
+              reset_password_token: props.location.search.split("=")[1],
+              password: passwordTyped,
+              password_confirmation: passwordConfirmationTyped
+            }
+              .then(response => alert("비밀번호가 재설정되었습니다"))
+              .catch(error => console.log(error))
+          });
+        }
+      }
+    };
     return (
       <FindPasswordContainer>
         <Header>비밀번호 재설정</Header>
@@ -74,6 +98,12 @@ function FindPassword(props) {
             value={passwordTyped}
             onChange={e => setPasswordTyped(e.target.value)}
             placeholder="새로운 비밀번호를 입력하세요."
+          />
+          <br />
+          <BasicInput
+            value={passwordConfirmationTyped}
+            onChange={e => setPasswordConfirmationTyped(e.target.value)}
+            placeholder="새로운 비밀번호를 한번 더 입력하세요."
           />
           <ResetButton onClick={() => postResetPasswordHandler()}>
             비밀번호 재설정 하기
