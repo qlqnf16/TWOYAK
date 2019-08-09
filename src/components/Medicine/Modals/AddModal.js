@@ -78,6 +78,7 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [from, setFrom] = useState(moment());
   const [to, setTo] = useState(moment());
+  const [memo, setMemo] = useState()
   const { state: authState } = useContext(AuthContext);
   const { state: drugState, dispatch } = useContext(DrugContext);
 
@@ -102,7 +103,8 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
     const diseaseId = disease.id;
     const formattedFrom = from.format("YYYY-MM-DD");
     const formattedTo = to.format("YYYY-MM-DD");
-    addCurrentDrug(drugId, { diseaseId, formattedFrom, formattedTo });
+    const memoToSend = memo
+    addCurrentDrug(drugId, { diseaseId, formattedFrom, formattedTo, memoToSend });
   };
 
   const selectionRange = {
@@ -161,7 +163,7 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
                 </DatePickerContainer>
               )}
               <BasicText>메모</BasicText>
-              <TextArea placeholder="ex) 하루에 언제 몇 알 씩 먹는지, 상세 복용 규칙 등을 기록해보세요" />
+              <TextArea onChange={(e) => setMemo(e.target.value)} placeholder="ex) 하루에 언제 몇 알 씩 먹는지, 상세 복용 규칙 등을 기록해보세요" />
             </>
 
             <Button

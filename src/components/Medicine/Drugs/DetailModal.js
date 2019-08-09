@@ -34,9 +34,9 @@ const CloseDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: bold;
-  background-color: var(--twoyak-blue);
+  background-image: linear-gradient(121deg, #00cfff, #00a2ff);
   color: white; 
 `
 
@@ -58,6 +58,7 @@ const DetailModal = ({ item_seq, modalOff }) => {
         </>}
       <StyleWrapper>
         <iframe
+          id='detail'
           title="medicineInfo"
           style={{ width: "100%", minwidht: "100%", height: "93vh" }}
           src={`https://nedrug.mfds.go.kr/pbp/CCBBB01/getItemDetail?itemSeq=${item_seq}`}
