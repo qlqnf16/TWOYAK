@@ -9,6 +9,7 @@ import AllReviews from "./containers/AllReviews";
 import AddUserInfo from "./containers/AddUserInfo";
 import Contents from "./containers/Contents";
 import Terms from "./containers/Terms";
+import FindPassword from "./containers/FindPassword";
 
 const routes = [
   {
@@ -77,6 +78,16 @@ const routes = [
     path: "/terms/:id?",
     name: "약관",
     component: Terms
+  },
+  {
+    path: "/find-password",
+    name: "비밀번호 찾기",
+    component: FindPassword
+  },
+  {
+    path: "/reset-password",
+    name: "비밀번호 재설정",
+    component: FindPassword
   }
 ];
 

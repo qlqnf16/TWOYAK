@@ -93,11 +93,7 @@ function Login(props) {
   }, [props.history, props.location.search, dispatch]);
 
   const signinBySocialAccount = supplier => {
-    if (supplier === "naver") {
-      alert("네이버 로그인은 현재 준비중입니다.");
-    } else {
-      window.open(`http://api.twoyak.com/api/users/auth/${supplier}`, "_self");
-    }
+    window.open(`http://api.twoyak.com/api/users/auth/${supplier}`, "_self");
   };
 
   const signinDataHandler = (key, event) => {
@@ -137,12 +133,8 @@ function Login(props) {
 
   const AuthFunctions = [
     {
-      label: "아이디 찾기",
-      action: "seek-user-d"
-    },
-    {
       label: "비밀번호 찾기",
-      action: "seek-user-password"
+      action: "find-password"
     },
     {
       label: "회원가입",
