@@ -87,7 +87,7 @@ const routes = [
   {
     path: "/reset-password",
     name: "비밀번호 재설정",
-    component: "ResetPassword"
+    component: FindPassword
   }
 ];
 

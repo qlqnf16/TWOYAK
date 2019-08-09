@@ -30,37 +30,58 @@ const ResetButton = styled(BasicButton)`
   margin-top: 1rem;
 `;
 
-function FindPassword() {
+function FindPassword(props) {
   const [emailTyped, setEmailTyped] = useState("");
+  const [passwordTyped, setPasswordTyped] = useState("");
 
-  const postResetPasswordEmail = () => {
-    axios({
-      method: "POST",
-      url: "/users/password",
-      params: {
-        email: emailTyped
-      }
-    })
-      .then(response => console.log(response.data))
-      .catch(error => console.log(error));
-  };
+  if (props.match.path === "/find-password") {
+    const postResetPasswordEmailHandler = () => {
+      axios({
+        method: "POST",
+        url: "/users/password",
+        params: {
+          email: emailTyped
+        }
+      })
+        .then(response => console.log(response.data))
+        .catch(error => console.log(error));
+    };
 
-  return (
-    <FindPasswordContainer>
-      <Header>비밀번호 찾기</Header>
-      <Divider />
-      <FindPasswordWrapper>
-        <BasicInput
-          value={emailTyped}
-          onChange={e => setEmailTyped(e.target.value)}
-          placeholder="비밀번호를 찾고자 하는 이메일을 입력해 주세요."
-        />
-        <ResetButton onClick={() => postResetPasswordEmail()}>
-          비밀번호 재설정 이메일 보내기
-        </ResetButton>
-      </FindPasswordWrapper>
-    </FindPasswordContainer>
-  );
+    return (
+      <FindPasswordContainer>
+        <Header>비밀번호 찾기</Header>
+        <Divider />
+        <FindPasswordWrapper>
+          <BasicInput
+            value={emailTyped}
+            onChange={e => setEmailTyped(e.target.value)}
+            placeholder="비밀번호를 찾고자 하는 이메일을 입력해 주세요."
+          />
+          <ResetButton onClick={() => postResetPasswordEmailHandler()}>
+            비밀번호 재설정 이메일 보내기
+          </ResetButton>
+        </FindPasswordWrapper>
+      </FindPasswordContainer>
+    );
+  } else if (props.match.path === "/reset-password") {
+    const postResetPasswordHandler = () => {};
+    return (
+      <FindPasswordContainer>
+        <Header>비밀번호 재설정</Header>
+        <Divider />
+        <FindPasswordWrapper>
+          <BasicInput
+            value={passwordTyped}
+            onChange={e => setPasswordTyped(e.target.value)}
+            placeholder="새로운 비밀번호를 입력하세요."
+          />
+          <ResetButton onClick={() => postResetPasswordHandler()}>
+            비밀번호 재설정 하기
+          </ResetButton>
+        </FindPasswordWrapper>
+      </FindPasswordContainer>
+    );
+  }
 }
 
 export default FindPassword;
