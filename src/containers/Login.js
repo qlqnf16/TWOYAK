@@ -133,12 +133,8 @@ function Login(props) {
 
   const AuthFunctions = [
     {
-      label: "아이디 찾기",
-      action: "seek-user-d"
-    },
-    {
       label: "비밀번호 찾기",
-      action: "seek-user-password"
+      action: "find-password"
     },
     {
       label: "회원가입",
