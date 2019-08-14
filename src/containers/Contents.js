@@ -39,7 +39,7 @@ const ContentImg = styled.img`
 `;
 
 const ContentParagraph = styled.div`
-  margin: 2.125rem 0 2rem 0;
+  margin: 2.125rem 0 7rem 0;
   text-align: left;
   font-size: 0.9rem;
 `;
