@@ -106,7 +106,7 @@ function DiseasesAndFamilyMedHis({ medHistory, historyChange }) {
   const deleteCurrentDiseaseModalContent = (
     <ModalContents>
       <ModalMessage>
-        {diseaseNameDeleted} 을 가족력에서 삭제하시겠습니까?
+        {diseaseNameDeleted} 을/를 가족력에서 삭제하시겠습니까?
       </ModalMessage>
       <ButtonArea>
         <PostToPastDiseasesButton onClick={() => toggleDeleteDiseaseHandler()}>
@@ -124,10 +124,12 @@ function DiseasesAndFamilyMedHis({ medHistory, historyChange }) {
     medHistoryContents = medHistory.map((i, k) => (
       <Contents key={k}>
         <ContentDot className="fas fa-circle" />
-        {i.name}
+        {i.data.attributes.name}
         <CloseImg
           src={close}
-          onClick={() => toggleDeleteDiseaseHandler(i.name, i.id)}
+          onClick={() =>
+            toggleDeleteDiseaseHandler(i.data.attributes.name, i.data.id)
+          }
         />
       </Contents>
     ));

@@ -41,8 +41,8 @@ const InfoIndex = styled.div`
 `;
 
 function UserGeneralInfo({
-  currentDrugs,
-  drugReviews,
+  currentDrugsCount,
+  drugReviewsCount,
   myConversation,
   userChange,
   history
@@ -52,18 +52,18 @@ function UserGeneralInfo({
   const infoIndex = [
     {
       label: "복용 중인 약",
-      value: currentDrugs.length,
+      value: currentDrugsCount,
       src: "/health-record"
     },
     {
       label: "리뷰",
-      value: drugReviews.length,
+      value: drugReviewsCount,
       src: "/all-reviews"
     }
   ];
 
   let generalInfo = null;
-  if (currentDrugs && drugReviews && myConversation) {
+  if (currentDrugsCount && drugReviewsCount && myConversation) {
     generalInfo = (
       <GeneralInfo>
         {infoIndex.map((i, k) => (

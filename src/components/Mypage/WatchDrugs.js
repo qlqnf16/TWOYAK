@@ -76,7 +76,7 @@ function WatchDrugs({ watchDrugs, watchChange }) {
     contents = watchDrugs.map((i, k) => (
       <Contents key={k}>
         <ContentDot className="fas fa-circle" />
-        {i.name}
+        {i.name.split("(")[0]}
         <CloseImg
           src={close}
           onClick={() => toggleWatchDrugHandler(i.name, i.id)}

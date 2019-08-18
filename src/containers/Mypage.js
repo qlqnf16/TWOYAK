@@ -61,8 +61,8 @@ const ChangeUser = styled.img`
 `;
 
 function Mypage(props) {
-  const [currentDrugs, setCurrentDrugs] = useState([]);
-  const [drugReviews, setDrugReviews] = useState([]);
+  const [currentDrugsCount, setCurrentDrugsCount] = useState([]);
+  const [drugReviewsCount, setDrugReviewsCount] = useState([]);
   const [myConversation] = useState([]);
   const [familyMedHistoies, setFamilyMedHistories] = useState([]);
   const [watchDrugs, setWatchDrugs] = useState([]);
@@ -79,22 +79,24 @@ function Mypage(props) {
   const getUserInfo = id => {
     axios({
       method: "GET",
-      url: "/user/mypage",
+      url: "/user/mypage/test",
       headers: {
         Authorization: `Bearer ${state.token}`
       }
     }).then(async response => {
       const payload = response.data;
+      console.log(payload);
       dispatch({
         type: "CHANGE_SUB_USER",
-        subUserId: payload.infos[id].sub_user.basic_info.id,
-        userName: payload.infos[id].sub_user.basic_info.user_name,
+        subUserId: payload.included[id].id,
+        userName: payload.included[id].attributes.user_name,
         subUserIndex: id
       });
-      setCurrentDrugs(payload.infos[id].sub_user.current_drugs);
-      setFamilyMedHistories(payload.infos[id].sub_user.family_med_his);
-      setDrugReviews(payload.drug_reviews);
-      setWatchDrugs(payload.watch_drugs);
+      setCurrentDrugsCount(payload.included[id].meta.current_drugs_count);
+      setDrugReviewsCount(payload.data.meta.drug_reviews_count);
+      setFamilyMedHistories(payload.included[id].meta.family_med_histories);
+      console.log(payload.included[id].meta.family_med_histories);
+      setWatchDrugs(payload.data.meta.watch_drugs);
     });
   };
 
@@ -133,8 +135,8 @@ function Mypage(props) {
     <MyPageContainer>
       <Topbar history={props.history} />
       <UserGeneralInfo
-        currentDrugs={currentDrugs}
-        drugReviews={drugReviews}
+        currentDrugsCount={currentDrugsCount}
+        drugReviewsCount={drugReviewsCount}
         myConversation={myConversation}
         userChange={id => getUserInfo(id)}
         history={props.history}
