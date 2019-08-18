@@ -64,9 +64,11 @@ export const thumbnail = [
       <br />
       <div>
         <div>
-          <img style="width: 100%" src="https://static.wixstatic.com/media/a27d24_5ac6525706404ea7b75bbab9819dd23d~mv2.png/v1/fill/w_350,h_373,al_c,q_90,usm_0.66_1.00_0.01/a27d24_5ac6525706404ea7b75bbab9819dd23d~mv2.png" alt="content-img" />
+          <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FDoctor-s-Best-High-Absorption-Magnesium-100-Chelated-with-Albion-Minerals-100-mg-240-Tablets%2F16567"><img style="width: 100%" src="https://static.wixstatic.com/media/a27d24_5ac6525706404ea7b75bbab9819dd23d~mv2.png/v1/fill/w_350,h_373,al_c,q_90,usm_0.66_1.00_0.01/a27d24_5ac6525706404ea7b75bbab9819dd23d~mv2.png" alt="content-img" /></a>
           <div>
-            <a href="https://kr.iherb.com/pr/Doctor-s-Best-High-Absorption-Magnesium-100-Chelated-with-Albion-Minerals-100-mg-240-Tablets/16567">상품보기</a>
+            <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FDoctor-s-Best-High-Absorption-Magnesium-100-Chelated-with-Albion-Minerals-100-mg-240-Tablets%2F16567
+            ">고흡수 마그네슘, Albion Minerals로 100% 킬레이트, 100 mg, 240 정</a>
+            <br />
             <div>
               매일 하루에 두 번, 매회 2알씩 복용하라고 권장되어 있고 2알에
               마그네슘 200mg입니다. (즉 하루에 총 4알을 먹게 된다면 400mg을
@@ -75,9 +77,12 @@ export const thumbnail = [
           </div>
         </div>
         <div>
-          <img style="width: 100%" src="https://static.wixstatic.com/media/a27d24_8a743bcf20f5487d9eb42ebc6c6d65df~mv2.png/v1/fill/w_350,h_387,al_c,q_90,usm_0.66_1.00_0.01/a27d24_8a743bcf20f5487d9eb42ebc6c6d65df~mv2.png" alt="content-img"/>
+          <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FNature-s-Bounty-Calcium-Magnesium-Zinc-with-Vitamin-D3-100-Coated-Caplets%2F32229
+          "><img style="width: 100%" src="https://static.wixstatic.com/media/a27d24_8a743bcf20f5487d9eb42ebc6c6d65df~mv2.png/v1/fill/w_350,h_387,al_c,q_90,usm_0.66_1.00_0.01/a27d24_8a743bcf20f5487d9eb42ebc6c6d65df~mv2.png" alt="content-img"/></a>
           <div>
-            <a href="https://kr.iherb.com/pr/Nature-s-Bounty-Calcium-Magnesium-Zinc-with-Vitamin-D3-100-Coated-Caplets/32229">상품보기</a>
+            <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FNature-s-Bounty-Calcium-Magnesium-Zinc-with-Vitamin-D3-100-Coated-Caplets%2F32229
+            ">네이쳐스 바우티, 칼슘 마그네슘 아연과 비타민 D3, 100 당의정</a>
+            <br />
             <div>
               성인의 경우 3알을 음식과 함께 섭취하라고 권장되어 있고 3캡슐에
               마그네슘 400mg입니다.
@@ -337,7 +342,9 @@ export const thumbnail = [
     동영상에서는 비타민D를 보충제로 먹는 것이 도움이 안 된다는 연구 결과를
     소개하고 있는데요.
   </div>
-  <a href src="https://www.youtube.com/watch?v=FRs64E5sPbw&feature=youtu.be">영상 보러가기</a><br />
+  <br />
+  <a href src="https://www.youtube.com/watch?v=FRs64E5sPbw&feature=youtu.be">영상 보러가기</a>
+  <br />
   <div>
     미세먼지 때문에 밖에 나가는 것 자체가 꺼려지는 요즘. 내 피부와 폐 건강을
     버려가면서까지 밖에 나가야 하느냐라는 댓글도 많이 달려 있었습니다. 물론
@@ -354,7 +361,21 @@ export const thumbnail = [
   <br />
   <div>
     정답이 없어서 혼란스럽지만 햇빛을 자주 쐬지 못하시는 분의 경우 비타민D3
-    보조제를 적정량 복용하는게 좋을 것 같네요. 여러분은 어떤가요? 이미 비타민D를
+    보조제를 적정량 복용하는게 좋을 것 같네요.
+  </div>
+  <br />
+  <div>
+    <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FSolgar-Vitamin-D3-Cholecalciferol-250-mcg-10-000-IU-120-Softgels%2F36215
+    ">
+      <img src="https://s3.images-iherb.com/sol/sol35872/w/114.jpg" />
+    </a>
+    <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FSolgar-Vitamin-D3-Cholecalciferol-250-mcg-10-000-IU-120-Softgels%2F36215
+    ">솔가, 천연 비타민 D3, 10,000 IU, 120 소프트젤
+    </a>
+  </div>
+  <br />
+  <div> 
+    여러분은 어떤가요? 이미 비타민D를
     복용하고 계신가요? 복용 후에는 어땠는지 공유해주세요! 이상 '투약 건강
     정보'였습니다 :)
   </div>
@@ -439,14 +460,64 @@ export const thumbnail = [
     침실에서 나와 음악을 듣거나 책을 읽는 것이 이런 상황을 방지할 수 있습니다.
   </div>
   <br />
-  <img
-    style="width: 100%;"
-    src="https://static.wixstatic.com/media/a27d24_0f86112ce76849989e5f35d205f7e26c~mv2.png/v1/fill/w_320,h_84,al_c,q_90,usm_0.66_1.00_0.01/a27d24_0f86112ce76849989e5f35d205f7e26c~mv2.png"
-    alt="content-img"
-  />
+  <div style="display: flex;">
+    <div style="width: 50%; display: flex; flex-direction: column; align-items: center; padding: 8px;">
+      <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FCalifornia-Gold-Nutrition-Valerian-EuroHerbs-500-mg-60-Veggie-Caps%2F72087
+      ">
+        <img
+          style="width: 100%;"
+          src="https://s3.images-iherb.com/cgn/cgn01118/w/0.jpg"
+          alt="content-img"
+        />
+      </a>
+      <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FCalifornia-Gold-Nutrition-Valerian-EuroHerbs-500-mg-60-Veggie-Caps%2F72087
+      ">캘리포니아 골드 뉴트리션, 발레리안, 유로허브, 500 mg, 식물성 캡슐 60 알</a>
+    </div>
+    <div style="width: 50%; display: flex; flex-direction: column; align-items: center; padding: 8px;">
+      <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FGaia-Herbs-SleepThru-60-Vegetarian-Liquid-Phyto-Caps%2F38862
+      ">
+        <img
+          style="width: 100%;"
+          src="https://s3.images-iherb.com/gai/gai14576/w/4.jpg"
+          alt="content-img"
+        />
+      </a>
+      <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FGaia-Herbs-SleepThru-60-Vegetarian-Liquid-Phyto-Caps%2F38862
+      ">가이아 허브, 슬립쓰루, 60 베지 액상 피토-캡슐</a>
+    </div>
+  </div>
+
+  <div style="display: flex;">
+    <div style="width: 50%; display: flex; flex-direction: column; align-items: center; padding: 8px;">
+      <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FSource-Naturals-L-Tryptophan-500-mg-60-Tablets%2F7277
+      ">
+        <img
+          style="width: 100%;"
+          src="https://s3.images-iherb.com/sns/sns01979/w/4.jpg"
+          alt="content-img"
+        />
+      </a>
+      <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FSource-Naturals-L-Tryptophan-500-mg-60-Tablets%2F7277
+      ">소스 네츄럴, L-트립토판, 500 mg, 60 정</a>
+    </div>
+    <div style="width: 50%; display: flex; flex-direction: column; align-items: center; padding: 8px;">
+      <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FLife-Extension-Optimized-Tryptophan-Plus-90-Vegetarian-Capsules%2F48808
+      ">
+        <img
+          style="width: 100%;"
+          src="https://s3.images-iherb.com/lex/lex17219/w/5.jpg"
+          alt="content-img"
+        />
+      </a>
+      <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FLife-Extension-Optimized-Tryptophan-Plus-90-Vegetarian-Capsules%2F48808
+      ">라이프 익스텐션, 최적화 트립토판 플러스, 베지테리언 캡슐 90정</a>
+    </div>  
+  </div>
+</div>
   <br />
   <div>
-    이 외에도 숙면을 위해서 멜라토닌 건강보조식품이나 아로마 오일을 이용하기도
+    이 외에도 숙면을 위해서 멜라토닌 건강보조식품이나 <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FNow-Foods-Essential-Oils-Lavender-1-fl-oz-30-ml%2F37823
+    ">에센셜 오일</a>을 이용하기도
     하는대요. 이들 보조제를 장기적으로 이용하는 것에 대한 안전성은 확립되어 있지
     않다고 하니 장기 복용시 의사나 약사와 상의하는 것이 좋을 것 같아요.
   </div>
@@ -480,11 +551,6 @@ export const thumbnail = [
     맞닥뜨리게 됩니다.
   </div>
   <br />
-  <img
-    style="width: 100%"
-    src="https://static.wixstatic.com/media/a27d24_f6afc947a37f41278d95cbce35954493~mv2.png/v1/fill/w_878,h_367,al_c,q_90,usm_0.66_1.00_0.01/a27d24_f6afc947a37f41278d95cbce35954493~mv2.png"
-    alt="content-img"
-  />
   <div>
     그럼 우선 유산균과 함께 표시되는 경우가 많은 프로바이오틱스가 무엇인지부터
     알아볼까요?
@@ -494,7 +560,7 @@ export const thumbnail = [
       프로바이오틱스
     </a>
     란 쉽게 말해 우리에게 이로움을 주는 세균을 총칭하는 말입니다. 유익균이라는
-    말로 표현할 수 있죠. 젖산을 만들어내는{" "}
+    말로 표현할 수 있죠. 젖산을 만들어내는
     <a href="https://ko.wikipedia.org/wiki/%EC%9C%A0%EC%82%B0%EA%B7%A0%EC%86%8D">
       유산균
     </a>
@@ -502,14 +568,25 @@ export const thumbnail = [
     사용하곤 합니다. 엄밀히 말하면 유산균은 프로바이오틱스 안에 포함되는 녀석인
     거죠!
   </div>
-  <img
-    style="width: 100%"
-    src="https://static.wixstatic.com/media/a27d24_a451396a620a410c956d25519712c0e8~mv2.png/v1/fill/w_878,h_102,al_c,lg_1,q_90/a27d24_a451396a620a410c956d25519712c0e8~mv2.png"
-    alt="content-img"
-  />
+  <br />
   <div>
-    프로바이오틱스에는 유산균, 비피더스균, 효모균 일부 등 우리 몸에 유익한
-    작용을 하는 균주를 말한다
+    <div>
+      프로바이오틱스에는 유산균, 비피더스균, 효모균 일부 등 우리 몸에 유익한
+      작용을 하는 균주를 말한다
+    <div>
+    <br />
+    <div>
+      <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FCalifornia-Gold-Nutrition-LactoBif-Probiotics-30-Billion-CFU-60-Veggie-Capsules%2F64009
+      ">
+        <img
+          style="width: 100%;"
+          src="https://s3.images-iherb.com/cgn/cgn00965/w/14.jpg"
+          alt="content-img"
+        />
+      </a>
+      <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FCalifornia-Gold-Nutrition-LactoBif-Probiotics-30-Billion-CFU-60-Veggie-Capsules%2F64009
+      ">캘리포니아 골드 뉴트리션, LactoBif 유산균, 300억 유산균 CFU, 60 베지켑슐</a>
+    </div>  
   </div>
   <br />
   <div>
@@ -522,7 +599,7 @@ export const thumbnail = [
     프로바이오틱스와 글자 한끗 차이인 프리바이오틱스는 무엇일까요? 이름에서 그
     힌트를 찾을 수 있는데요. 'pro'라는 접두사가 '위하다'라는 의미를 지닌다면
     'pre'라는 접두사는 '미리'라는 의미를 지니죠. 우리 몸을 '위한' 유익균이
-    프로바이오틱스라면{" "}
+    프로바이오틱스라면
     <a href="https://ko.wikipedia.org/wiki/%ED%94%84%EB%A6%AC%EB%B0%94%EC%9D%B4%EC%98%A4%ED%8B%B1%EC%8A%A4">
       프리바이오틱스
     </a>
@@ -532,32 +609,70 @@ export const thumbnail = [
     되는데요. 서로 다른 프리바오틱스 종류라고 생각하면 됩니다.
   </div><br />
   <div>
-    <a href="https://terms.naver.com/entry.nhn?docId=777465&cid=58440&categoryId=58475">
-      FOS
-    </a>
-    는 프락토올리고당이라고도 불리며 바나나, 양파, 아스파라거스 등에 많이
-    포함되어 있는 천연 물질입니다. 프락토올리고당을 유익균은 잘 활용하여
-    증식하지만 유해균은 잘 활용하지 못해 증식이 억제 된다고 해요.
+    <div>
+      <a href="https://terms.naver.com/entry.nhn?docId=777465&cid=58440&categoryId=58475">
+        FOS
+      </a>
+      는 프락토올리고당이라고도 불리며 바나나, 양파, 아스파라거스 등에 많이
+      포함되어 있는 천연 물질입니다. 프락토올리고당을 유익균은 잘 활용하여
+      증식하지만 유해균은 잘 활용하지 못해 증식이 억제 된다고 해요.
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FSource-Naturals-FOS-Fructooligosaccharides-1-000-mg-100-Tablets%2F1199
+      ">
+        <img src="https://s3.images-iherb.com/sns/sns00575/w/5.jpg" />
+      </a>
+      <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FSource-Naturals-FOS-Fructooligosaccharides-1-000-mg-100-Tablets%2F1199">소스 네츄럴, FOS,(프락토올리고당), 100 정</a>
+    </div>
   </div>
   <br />
   <div>
-    MOS는 만난올리고당이라고도 불리며 효모에서 추출한 식이섬유입니다.
-    만난올리고당은 유해균을 배변으로 배출하는데 도움을 준다고 해요.
+    <div>
+      MOS는 만난올리고당이라고도 불리며 효모에서 추출한 식이섬유입니다.
+      만난올리고당은 유해균을 배변으로 배출하는데 도움을 준다고 해요.
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FJarrow-Formulas-Saccharomyces-Boulardii-MOS-5-Billion-90-Veggie-Caps%2F372
+      ">
+        <img src="https://s3.images-iherb.com/jrw/jrw03004/w/45.jpg" />
+      </a>
+      <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FJarrow-Formulas-Saccharomyces-Boulardii-MOS-5-Billion-90-Veggie-Caps%2F372
+      ">자로우 포뮬라, 사카라마이세스 보울라디 + MOS, 50 억, 90 식물성 캡슐</a>
+    </div>
   </div>
   <br />
   <div>
-    <a href="https://terms.naver.com/entry.nhn?docId=296311&cid=60262&categoryId=60262">
-      XOS
-    </a>
-    는 자일로올리고당이라고도 불리는 저칼로리 감미료로 비피더스균 증식을
-    촉진합니다. 옥수수속, 면화깍지 등의 농산부산물을 활용해서 추출하며 유익균
-    증식, 유해균 억제, 배변활동에 도움을 줄 수 있습니다.
+    <div>
+      <a href="https://terms.naver.com/entry.nhn?docId=296311&cid=60262&categoryId=60262">
+        XOS
+      </a>
+      는 자일로올리고당이라고도 불리는 저칼로리 감미료로 비피더스균 증식을
+      촉진합니다. 옥수수속, 면화깍지 등의 농산부산물을 활용해서 추출하며 유익균
+      증식, 유해균 억제, 배변활동에 도움을 줄 수 있습니다.
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FNow-Foods-Prebiotic-Bifido-Boost-Powder-3-oz-85-g%2F82389
+      ">
+        <img src="https://s3.images-iherb.com/now/now02948/w/10.jpg" />
+      </a>
+      <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FNow-Foods-Prebiotic-Bifido-Boost-Powder-3-oz-85-g%2F82389">나우푸드, 프레바이오틱 비피도 부스트 파우더, 3 oz (85 g)</a>
+    </div>
   </div>
   <br />
   <div>
-    GOS는 갈락토올리고당이라고도 불리며 모유에 포함된 올리고당의 유익한 효과를
-    재현하기 위해 자주 사용하는 성분입니다. 장내 미생물을 자극하여 유익균 증식,
-    면역 증진, 변비에 도움이 된다고 해요.
+    <div>
+      GOS는 갈락토올리고당이라고도 불리며 모유에 포함된 올리고당의 유익한 효과를
+      재현하기 위해 자주 사용하는 성분입니다. 장내 미생물을 자극하여 유익균 증식,
+      면역 증진, 변비에 도움이 된다고 해요.
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FJarrow-Formulas-Prebiotics-XOS-GOS-90-Chewable-Tablets%2F73284
+      ">
+        <img src="https://s3.images-iherb.com/jrw/jrw03045/w/4.jpg" />
+      </a>
+      <a href="https://prf.hn/click/camref:1101l4PEu/destination:https%3A%2F%2Fkr.iherb.com%2Fpr%2FJarrow-Formulas-Prebiotics-XOS-GOS-90-Chewable-Tablets%2F73284
+      ">자로우 포뮬라, 프리바이오틱스 XOS+GOS, 90 씹는 정</a>
+    </div>
   </div>
   <br />
   <div>

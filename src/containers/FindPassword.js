@@ -9,9 +9,11 @@ import {
 } from "../components/UI/SharedStyles";
 
 const FindPasswordContainer = styled.div`
-  margin: 90px 0.6rem 50px 0.6rem;
   padding-left: 0.5625rem;
   padding-right: 0.5625rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const FindPasswordWrapper = styled.div`
@@ -48,8 +50,14 @@ function FindPassword(props) {
           email: emailTyped
         }
       })
-        .then(response => console.log(response.data))
-        .catch(error => console.log(error));
+        .then(response =>
+          response.data.status === "ok"
+            ? alert(
+                "비밀번호 변경 이메일을 보내드렸습니다. 받은 메일함에서 확인하실 수 있습니다."
+              )
+            : alert("이메일을 다시 한번 확인해주세요.")
+        )
+        .catch(error => alert("이메일을 다시 한번 확인해주세요."));
     };
 
     return (
