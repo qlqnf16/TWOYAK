@@ -8,6 +8,7 @@ import CurrentDrugs from "../components/Home/CurrentDrugs";
 import RecommendedContents from "../components/Home/RecommendedContents";
 import medIcon from "../assets/images/med-icon.svg";
 import Warning from "../components/UI/Warning";
+import Footer from "../components/Home/Footer";
 
 const HomeContainer = styled.div`
   width: 88%;
@@ -64,6 +65,7 @@ function Home(props) {
         />
       ) : null}
       <RecommendedContents history={props.history} />
+      <Footer history={props.history} />
       {tokenChange ? <Redirect to="/login" /> : null}
     </HomeContainer>
   );

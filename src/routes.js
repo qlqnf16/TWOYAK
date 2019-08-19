@@ -11,6 +11,7 @@ import Contents from "./containers/Contents";
 import Terms from "./containers/Terms";
 import FindPassword from "./containers/FindPassword";
 import RecommendSupplements from "./containers/RecommendSupplments";
+import AboutUs from "./containers/AboutUs";
 
 const routes = [
   {
@@ -94,6 +95,11 @@ const routes = [
     path: "/recommend-supplements",
     name: "건강기능식품 추천 페이지",
     component: RecommendSupplements
+  },
+  {
+    path: "/about-us",
+    name: "기업소개",
+    component: AboutUs
   }
 ];
 
