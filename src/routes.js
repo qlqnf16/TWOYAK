@@ -10,6 +10,7 @@ import AddUserInfo from "./containers/AddUserInfo";
 import Contents from "./containers/Contents";
 import Terms from "./containers/Terms";
 import FindPassword from "./containers/FindPassword";
+import RecommendSupplements from "./containers/RecommendSupplments";
 
 const routes = [
   {
@@ -88,6 +89,11 @@ const routes = [
     path: "/reset-password",
     name: "비밀번호 재설정",
     component: FindPassword
+  },
+  {
+    path: "/recommend-supplements",
+    name: "건강기능식품 추천 페이지",
+    component: RecommendSupplements
   }
 ];
 

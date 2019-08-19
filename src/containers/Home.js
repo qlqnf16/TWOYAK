@@ -1,4 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
+import { Redirect } from "react-router-dom";
 import axios from "../apis";
 import styled from "styled-components";
 import { AuthContext } from "../contexts/AuthStore";
@@ -18,6 +19,7 @@ const HomeContainer = styled.div`
 
 function Home(props) {
   const [currentDrugs, setCurrentDrugs] = useState(null);
+  const [tokenChange, setTokenChange] = useState(false);
   const { state: authState, dispatch } = useContext(AuthContext);
 
   useEffect(() => {
@@ -38,7 +40,15 @@ function Home(props) {
             setCurrentDrugs(response.data.splice(0, 4));
           }
         })
-        .catch(error => console.log(error));
+        .catch(async error => {
+          if (error.response.data.errors[0]) {
+            await dispatch({
+              type: "SIGNOUT"
+            });
+            alert(error.response.data.errors[0]);
+            setTokenChange(true);
+          }
+        });
     }
   }, [authState.subUserId, authState.token]);
 
@@ -54,6 +64,7 @@ function Home(props) {
         />
       ) : null}
       <RecommendedContents history={props.history} />
+      {tokenChange ? <Redirect to="/login" /> : null}
     </HomeContainer>
   );
 }

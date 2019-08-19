@@ -1,4 +1,5 @@
 import React, { useEffect, useContext } from "react";
+import axios from "../apis";
 import { AuthContext } from "./AuthStore";
 
 function WatchStore(props) {
