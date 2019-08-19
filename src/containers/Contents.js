@@ -39,9 +39,10 @@ const ContentImg = styled.img`
 `;
 
 const ContentParagraph = styled.div`
-  margin: 2.125rem 0 15rem 0;
+  margin: 2.125rem 0 0 0;
   text-align: left;
   font-size: 0.9rem;
+  padding-bottom: 15rem;
 `;
 
 function Content(props) {
