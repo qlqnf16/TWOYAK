@@ -36,11 +36,14 @@ const StyleWrapper = styled.div`
   }
 `;
 
-function BirthdayInfo({ value, getBirthDate }) {
+function BirthdayInfo({ value, getBirthDate, backgroundScroll }) {
   const [birthDateModalShow, setBirthDateModlaShow] = useState(false);
+  const [backgroundScrollable, setBackgroundScrollable] = useState(false);
 
   const toggleBirthDateModalHandler = () => {
     setBirthDateModlaShow(!birthDateModalShow);
+    setBackgroundScrollable(!backgroundScrollable);
+    backgroundScroll(backgroundScrollable);
   };
 
   const getDate = date => {
