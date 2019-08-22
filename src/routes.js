@@ -67,7 +67,7 @@ const routes = [
     component: AddUserInfo
   },
   {
-    path: "/all-reviews",
+    path: "/all-reviews/:my?",
     name: "리뷰 모아보기",
     component: AllReviews
   },

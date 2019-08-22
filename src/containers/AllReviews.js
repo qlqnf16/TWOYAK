@@ -61,7 +61,7 @@ font-size: 0.875rem;
   text-decoration: none;
 `
 
-function AllReviews() {
+function AllReviews({ match }) {
   const { state: authState } = useContext(AuthContext);
   const [reviews, setReviews] = useState();
   const [recentReviews, setRecentReviews] = useState();
@@ -79,7 +79,7 @@ function AllReviews() {
   const getReviews = async () => {
     try {
       const { data: recent } = await axios.get("/reviews/recent");
-      setReviews(recent);
+      if (!match.params.my) setReviews(recent);
       setRecentReviews(recent);
 
       // // 좋아요 구현 후
@@ -95,27 +95,6 @@ function AllReviews() {
     }
   };
 
-  const getReview = async url => {
-    try {
-      const { data } = await axios.get(`/reviews/${url}`);
-      switch (url) {
-        case "recent":
-          setRecentReviews(data);
-          break;
-        case "popular":
-          setPopularReviews(data);
-          break;
-        case "high_rating":
-          setHighRatedReviews(data);
-          break;
-        default:
-          break;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const getMyReviews = async () => {
     try {
       const { data: my } = await axios.get("/reviews/my_reviews", {
@@ -124,6 +103,10 @@ function AllReviews() {
         }
       });
       setMyReviews(my);
+      if (match.params.my) {
+        setReviews(my)
+        setCategory('내 리뷰')
+      }
     } catch (error) {
       console.log(error);
     }
