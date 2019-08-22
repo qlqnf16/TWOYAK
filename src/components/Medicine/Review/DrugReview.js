@@ -58,7 +58,7 @@ const EditIcon = styled(Edit)`
   color: var(--twoyak-black);
 `;
 
-const DrugReview = React.memo(({ my, review, deleteReview, updateButton }) => {
+const DrugReview = React.memo(({ my, review, deleteReview, updateButton, toggleLike }) => {
   return (
     <Container>
       <Flex>
@@ -76,18 +76,17 @@ const DrugReview = React.memo(({ my, review, deleteReview, updateButton }) => {
             </BasicText>
           )}
         </FlexStart>
-        {/* 좋아요 기능 구현
-          <MyFlex>
-            <BasicText bold size="0.7rem">
-              {review.attributes.drug_review_likes_count}
-            </BasicText>
-            <LikeIcon
-              liked={reviewLike ? 1 : 0}
-              onClick={() => {
-                toggleLike(review.id);
-              }}
-            /> 
-            </MyFlex> */}
+        <Flex>
+          <BasicText bold size="0.7rem">
+            {review.attributes.drug_review_likes_count}
+          </BasicText>
+          <LikeIcon
+            liked={review.meta.user.liked ? 1 : 0}
+            onClick={() => {
+              toggleLike(review.id);
+            }}
+          />
+        </Flex>
         {my && updateButton && (
           <FlexStart>
             <EditIcon onClick={() => updateButton(review)} />

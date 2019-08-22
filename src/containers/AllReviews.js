@@ -64,91 +64,66 @@ font-size: 0.875rem;
 function AllReviews({ match }) {
   const { state: authState } = useContext(AuthContext);
   const [reviews, setReviews] = useState();
-  const [category, setCategory] = useState("최신순");
+  const [category, setCategory] = useState({ name: "최신순", url: 'recent' });
   const [showFilter, setShowFilter] = useState(false);
 
   useEffect(() => {
-    if (match.params.my) getMyReviews()
-    else
-      getReviews('recent');
+    if (match.params.my) getReviews('my_reviews')
+    else getReviews('recent');
   }, []);
 
   const getReviews = async type => {
     try {
-      const { data } = await axios.get(`/reviews/${type}`);
-      setReviews(data.data);
+      let result = {}
+      if (type === 'my_reviews') {
+        result = await axios.get("/reviews/my_reviews", {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        });
+      }
+      else {
+        result = await axios.get(`/reviews/${type}`);
+      }
+
+      setReviews(result.data.data);
       switch (type) {
         case 'recent':
-          setCategory("최신순");
+          setCategory({ name: "최신순", url: 'recent' });
           break;
         case 'high_rating':
-          setCategory("평점순");
+          setCategory({ name: "평점순", url: 'high_rating' });
+          break;
+        case 'popular':
+          setCategory({ name: "좋아요순", url: 'popular' });
+          break;
+        case 'my_reviews':
+          setCategory({ name: "내 리뷰", url: 'my_reviews' })
           break;
         default:
           break;
       }
-
-      // // 좋아요 구현 후
-      // const [{ data: popular }, { data: highRating }] = await Promise.all([
-      //   axios.get("/reviews/popular"),
-      //   axios.get("/reviews/high_rating")
-      // ]);
-      // setPopularReviews(popular);
-
-      // const { data: high } = await axios.get("/reviews/high_rating");
-      // setHighRatedReviews(high.data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getMyReviews = async () => {
+
+  // 좋아요 토글
+  const toggleLike = async id => {
     try {
-      const { data: my } = await axios.get("/reviews/my_reviews", {
+      await axios({
+        method: "POST",
+        url: `/drug_reviews/${id}/like`,
         headers: {
-          Authorization: `bearer ${authState.token}`
+          Authorization: authState.token
         }
       });
-      setReviews(my.data);
-      setCategory('내 리뷰')
-    } catch (error) {
-      console.log(error);
+      getReviews(category.url)
+    } catch (err) {
+      console.log(err);
     }
   };
-  // 좋아요 구현
-  // const toggleLike = async id => {
-  //   try {
-  //     await axios({
-  //       method: "POST",
-  //       url: `/drug_reviews/${id}/like`,
-  //       headers: {
-  //         Authorization: authState.token
-  //       }
-  //     });
-  //   } catch (err) {
-  //     console.log(err);
-  //   } finally {
-  //     switch (category) {
-  //       case "최신순":
-  //         getReview("recent");
-  //         setReviews(recentReviews);
-  //         break;
-  //       case "좋아요순":
-  //         getReview("popular");
-  //         break;
-  //       case "평점순":
-  //         getReview("high_rating");
-  //         break;
-  //       case "내 리뷰":
-  //         getMyReviews();
-  //         break;
-  //       default:
-  //         break;
-  //     }
-  //     setLoading(!loading);
-  //     console.log(loading);
-  //   }
-  // };
 
   return (
     <>
@@ -160,7 +135,7 @@ function AllReviews({ match }) {
           }}
         >
           <BasicText size="0.75rem" color="var(--twoyak-blue)">
-            {category}
+            {category.name}
           </BasicText>
           <ArrowIcon />
           {showFilter && (
@@ -173,18 +148,14 @@ function AllReviews({ match }) {
                 최신순
               </BasicText>
               <br />
-              {/* 좋아요 구현
               <BasicText
                 size="0.7rem"
                 bold
-                onClick={() => {
-                  setReviews(popularReviews);
-                  setCategory("좋아요순");
-                }}
+                onClick={() => getReviews('popular')}
               >
                 좋아요순
               </BasicText>
-              <br /> */}
+              <br />
               <BasicText
                 size="0.7rem"
                 bold
@@ -200,7 +171,7 @@ function AllReviews({ match }) {
                   size="0.7rem"
                   bold
                   onClick={() => {
-                    getMyReviews()
+                    getReviews('my_reviews')
                   }}
                 >
                   내 리뷰
@@ -224,7 +195,7 @@ function AllReviews({ match }) {
               <ReviewContainer>
                 <DrugReview
                   review={review}
-                // toggleLike={toggleLike}
+                  toggleLike={toggleLike}
                 />
               </ReviewContainer>
             </ReviewCard>
