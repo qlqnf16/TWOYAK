@@ -21,11 +21,9 @@ height: 93vh;
 
 const StyleWrapper = styled.div`
   height: 93vh;
-	-webkit-overflow-scrolling: touch;
+  overflow:auto; 
   overflow-y: scroll;
-  & iframe {
-    
-  }
+	-webkit-overflow-scrolling: touch;
 `
 
 const CloseDiv = styled.div`

@@ -58,7 +58,7 @@ function UserGeneralInfo({
     {
       label: "리뷰",
       value: drugReviews.length,
-      src: "/all-reviews"
+      src: "/all-reviews/my"
     }
   ];
 

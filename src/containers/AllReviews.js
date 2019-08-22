@@ -13,6 +13,7 @@ import DrugReview from "../components/Medicine/Review/DrugReview";
 import medIcon from "../assets/images/med-icon.svg";
 import { ReactComponent as Arrow } from "../assets/images/arrow.svg";
 import styled from "styled-components";
+import LoginModal from "../components/UI/LoginModal";
 
 const Background = styled.div`
   width: 100%;
@@ -61,52 +62,45 @@ font-size: 0.875rem;
   text-decoration: none;
 `
 
-function AllReviews() {
+function AllReviews({ match }) {
   const { state: authState } = useContext(AuthContext);
   const [reviews, setReviews] = useState();
-  const [recentReviews, setRecentReviews] = useState();
-  const [popularReviews, setPopularReviews] = useState();
-  const [highRatedReviews, setHighRatedReviews] = useState();
-  const [myReviews, setMyReviews] = useState();
-  const [category, setCategory] = useState("최신순");
+  const [category, setCategory] = useState({ name: "최신순", url: 'recent' });
   const [showFilter, setShowFilter] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false)
 
   useEffect(() => {
-    getReviews();
-    if (authState.token) getMyReviews();
-  }, [authState]);
+    if (match.params.my) getReviews('my_reviews')
+    else getReviews('recent');
+  }, []);
 
-  const getReviews = async () => {
+  const getReviews = async type => {
     try {
-      const { data: recent } = await axios.get("/reviews/recent");
-      setReviews(recent);
-      setRecentReviews(recent);
+      let result = {}
+      if (type === 'my_reviews') {
+        result = await axios.get("/reviews/my_reviews", {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        });
+      }
+      else {
+        result = await axios.get(`/reviews/${type}`);
+      }
 
-      // // 좋아요 구현 후
-      // const [{ data: popular }, { data: highRating }] = await Promise.all([
-      //   axios.get("/reviews/popular"),
-      //   axios.get("/reviews/high_rating")
-      // ]);
-      // setPopularReviews(popular);
-      const { data } = await axios.get("/reviews/high_rating");
-      setHighRatedReviews(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getReview = async url => {
-    try {
-      const { data } = await axios.get(`/reviews/${url}`);
-      switch (url) {
-        case "recent":
-          setRecentReviews(data);
+      setReviews(result.data.data);
+      switch (type) {
+        case 'recent':
+          setCategory({ name: "최신순", url: 'recent' });
           break;
-        case "popular":
-          setPopularReviews(data);
+        case 'high_rating':
+          setCategory({ name: "평점순", url: 'high_rating' });
           break;
-        case "high_rating":
-          setHighRatedReviews(data);
+        case 'popular':
+          setCategory({ name: "좋아요순", url: 'popular' });
+          break;
+        case 'my_reviews':
+          setCategory({ name: "내 리뷰", url: 'my_reviews' })
           break;
         default:
           break;
@@ -116,52 +110,26 @@ function AllReviews() {
     }
   };
 
-  const getMyReviews = async () => {
-    try {
-      const { data: my } = await axios.get("/reviews/my_reviews", {
-        headers: {
-          Authorization: `bearer ${authState.token}`
-        }
-      });
-      setMyReviews(my);
-    } catch (error) {
-      console.log(error);
+
+  // 좋아요 토글
+  const toggleLike = async id => {
+    if (authState.token) {
+      try {
+        await axios({
+          method: "POST",
+          url: `/drug_reviews/${id}/like`,
+          headers: {
+            Authorization: authState.token
+          }
+        });
+        getReviews(category.url)
+      } catch (err) {
+        console.log(err)
+      }
+    } else {
+      setShowLoginModal(true)
     }
   };
-  // 좋아요 구현
-  // const toggleLike = async id => {
-  //   try {
-  //     await axios({
-  //       method: "POST",
-  //       url: `/drug_reviews/${id}/like`,
-  //       headers: {
-  //         Authorization: authState.token
-  //       }
-  //     });
-  //   } catch (err) {
-  //     console.log(err);
-  //   } finally {
-  //     switch (category) {
-  //       case "최신순":
-  //         getReview("recent");
-  //         setReviews(recentReviews);
-  //         break;
-  //       case "좋아요순":
-  //         getReview("popular");
-  //         break;
-  //       case "평점순":
-  //         getReview("high_rating");
-  //         break;
-  //       case "내 리뷰":
-  //         getMyReviews();
-  //         break;
-  //       default:
-  //         break;
-  //     }
-  //     setLoading(!loading);
-  //     console.log(loading);
-  //   }
-  // };
 
   return (
     <>
@@ -173,7 +141,7 @@ function AllReviews() {
           }}
         >
           <BasicText size="0.75rem" color="var(--twoyak-blue)">
-            {category}
+            {category.name}
           </BasicText>
           <ArrowIcon />
           {showFilter && (
@@ -181,44 +149,35 @@ function AllReviews() {
               <BasicText
                 size="0.7rem"
                 bold
-                onClick={() => {
-                  setReviews(recentReviews);
-                  setCategory("최신순");
-                }}
+                onClick={() => getReviews('recent')}
               >
                 최신순
               </BasicText>
               <br />
-              {/* 좋아요 구현
               <BasicText
                 size="0.7rem"
                 bold
-                onClick={() => {
-                  setReviews(popularReviews);
-                  setCategory("좋아요순");
-                }}
+                onClick={() => getReviews('popular')}
               >
                 좋아요순
               </BasicText>
-              <br /> */}
+              <br />
               <BasicText
                 size="0.7rem"
                 bold
                 onClick={() => {
-                  setReviews(highRatedReviews);
-                  setCategory("평점순");
+                  getReviews('high_rating')
                 }}
               >
                 평점순
               </BasicText>
               <br />
-              {myReviews && (
+              {authState.token && (
                 <BasicText
                   size="0.7rem"
                   bold
                   onClick={() => {
-                    setReviews(myReviews);
-                    setCategory("내 리뷰");
+                    getReviews('my_reviews')
                   }}
                 >
                   내 리뷰
@@ -236,18 +195,19 @@ function AllReviews() {
                   alt="med-icon"
                   style={{ marginRight: "6px", marginTop: "5px" }}
                 />
-                <ReviewTitle to={`/medicine/${review.drug_id}`}>{review.drug.split("(")[0]}</ReviewTitle>
+                <ReviewTitle to={`/medicine/${review.meta.drug.id}`}>{review.meta.drug.name.split("(")[0]}</ReviewTitle>
               </FlexDiv>
               <Line />
               <ReviewContainer>
                 <DrugReview
                   review={review}
-                // toggleLike={toggleLike}
+                  toggleLike={toggleLike}
                 />
               </ReviewContainer>
             </ReviewCard>
           ))}
       </Container>
+      {showLoginModal && <LoginModal modalOff={() => setShowLoginModal(false)} />}
     </>
   );
 }

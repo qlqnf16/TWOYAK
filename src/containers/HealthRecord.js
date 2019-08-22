@@ -56,7 +56,7 @@ const Margin = styled.div`
   margin: 1rem;
 `;
 
-function HealthRecord() {
+function HealthRecord({ history }) {
   const { state: authState } = useContext(AuthContext);
 
   const [currentDrugs, setCurrentDrugs] = useState(null);
@@ -176,11 +176,12 @@ function HealthRecord() {
   };
 
 
+
   return (
     <>
       <Background />
       <Container>
-        {showLoginModal && <LoginModal />}
+        {showLoginModal && <LoginModal modalOff={() => history.goBack()} />}
         <NavContainer>
           <Nav onClick={currentPastToggle} active={showCurrent}>
             현재 복용

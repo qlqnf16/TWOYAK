@@ -58,7 +58,7 @@ const EditIcon = styled(Edit)`
   color: var(--twoyak-black);
 `;
 
-const DrugReview = React.memo(({ my, review, deleteReview, updateButton }) => {
+const DrugReview = React.memo(({ my, review, deleteReview, updateButton, toggleLike }) => {
   return (
     <Container>
       <Flex>
@@ -66,32 +66,31 @@ const DrugReview = React.memo(({ my, review, deleteReview, updateButton }) => {
           <Rating
             emptySymbol="fas fa-circle  custom"
             fullSymbol="fas fa-circle  custom full"
-            initialRating={review.efficacy}
+            initialRating={review.attributes.efficacy}
             readonly
           />
-          <CustomRatingText>{review.efficacy.toFixed(1)}</CustomRatingText>
+          <CustomRatingText>{review.attributes.efficacy.toFixed(1)}</CustomRatingText>
           {!my && (
             <BasicText size="0.7rem" bold="normal">
-              {review.age} {review.sex === true ? "남" : "여"}
+              {review.meta.user.age} {review.meta.user.sex === true ? "남" : "여"}
             </BasicText>
           )}
         </FlexStart>
-        {/* 좋아요 기능 구현
-          <MyFlex>
-            <BasicText bold size="0.7rem">
-              {review.drug_review_likes_count}
-            </BasicText>
-            <LikeIcon
-              liked={reviewLike ? 1 : 0}
-              onClick={() => {
-                toggleLike(review.id);
-              }}
-            /> 
-            </MyFlex> */}
+        <FlexStart>
+          <BasicText bold size="0.7rem">
+            {review.attributes.drug_review_likes_count}
+          </BasicText>
+          <LikeIcon
+            liked={review.meta.user.liked ? 1 : 0}
+            onClick={() => {
+              toggleLike(review.id);
+            }}
+          />
+        </FlexStart>
         {my && updateButton && (
           <FlexStart>
             <EditIcon onClick={() => updateButton(review)} />
-            <Close onClick={() => deleteReview(review.id)} />
+            <Close onClick={() => deleteReview(review.attributes.id)} />
           </FlexStart>
         )}
       </Flex>
@@ -101,7 +100,7 @@ const DrugReview = React.memo(({ my, review, deleteReview, updateButton }) => {
           ? review.adverse_effects.map(effect => effect.symptom_name).join(", ")
           : "없음"}
       </Bold>
-      <div>{review.body}</div>
+      <div>{review.attributes.body}</div>
     </Container>
   );
 });
