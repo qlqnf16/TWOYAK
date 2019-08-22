@@ -65,6 +65,7 @@ function AddSubUser(props) {
   const [sex, setSex] = useState(null);
   const [familyMedHistory, setFamilyMedHistory] = useState([]);
   const [skipAddInfo, setSkipAddInfo] = useState(false);
+  const [backgroundScrollable, setBackgroundScrollable] = useState(true);
 
   const { state, dispatch } = useContext(AuthContext);
 
@@ -245,7 +246,7 @@ function AddSubUser(props) {
   }
 
   return (
-    <AddInfoArea>
+    <AddInfoArea preventScroll={!backgroundScrollable}>
       <Header header={header} message={message} />
       <Nickname
         getNickname={name => changeNicknameHandler(name)}
@@ -258,6 +259,7 @@ function AddSubUser(props) {
       <Birthdate
         value={!birthDate ? "" : birthDate}
         getBirthDate={date => getBirthDateHandler(date)}
+        backgroundScroll={e => setBackgroundScrollable(e)}
       />
       <Health
         drink={drink}

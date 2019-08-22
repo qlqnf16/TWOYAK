@@ -7,11 +7,14 @@ import {
   BasicButton,
   Divider
 } from "../components/UI/SharedStyles";
+import Spinner from "../components/UI/Spinner";
 
 const FindPasswordContainer = styled.div`
-  margin: 90px 0.6rem 50px 0.6rem;
   padding-left: 0.5625rem;
   padding-right: 0.5625rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const FindPasswordWrapper = styled.div`
@@ -38,9 +41,11 @@ function FindPassword(props) {
     ""
   );
   const [completeRedirect, setCompleteRedirect] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   if (props.match.path === "/find-password") {
     const postResetPasswordEmailHandler = () => {
+      setLoading(true);
       axios({
         method: "POST",
         url: "/api/users/password",
@@ -48,8 +53,18 @@ function FindPassword(props) {
           email: emailTyped
         }
       })
-        .then(response => console.log(response.data))
-        .catch(error => console.log(error));
+        .then(response => {
+          setLoading(false);
+          response.data.status === "ok"
+            ? alert(
+                "비밀번호 변경 이메일을 보내드렸습니다. 받은 메일함에서 확인하실 수 있습니다."
+              )
+            : alert("이메일을 다시 한번 확인해주세요.");
+        })
+        .catch(error => {
+          setLoading(false);
+          alert("이메일을 다시 한번 확인해주세요.");
+        });
     };
 
     return (
@@ -62,9 +77,13 @@ function FindPassword(props) {
             onChange={e => setEmailTyped(e.target.value)}
             placeholder="비밀번호를 찾고자 하는 이메일을 입력해 주세요."
           />
-          <ResetButton onClick={() => postResetPasswordEmailHandler()}>
-            비밀번호 재설정 이메일 보내기
-          </ResetButton>
+          {loading ? (
+            <Spinner />
+          ) : (
+            <ResetButton onClick={() => postResetPasswordEmailHandler()}>
+              비밀번호 재설정 이메일 보내기
+            </ResetButton>
+          )}
         </FindPasswordWrapper>
       </FindPasswordContainer>
     );
@@ -104,12 +123,14 @@ function FindPassword(props) {
           <BasicInput
             value={passwordTyped}
             onChange={e => setPasswordTyped(e.target.value)}
+            type="password"
             placeholder="새로운 비밀번호를 입력하세요."
           />
           <br />
           <BasicInput
             value={passwordConfirmationTyped}
             onChange={e => setPasswordConfirmationTyped(e.target.value)}
+            type="password"
             placeholder="새로운 비밀번호를 한번 더 입력하세요."
           />
           <ResetButton onClick={() => postResetPasswordHandler()}>
