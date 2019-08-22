@@ -64,23 +64,29 @@ font-size: 0.875rem;
 function AllReviews({ match }) {
   const { state: authState } = useContext(AuthContext);
   const [reviews, setReviews] = useState();
-  const [recentReviews, setRecentReviews] = useState();
-  const [popularReviews, setPopularReviews] = useState();
-  const [highRatedReviews, setHighRatedReviews] = useState();
-  const [myReviews, setMyReviews] = useState();
   const [category, setCategory] = useState("최신순");
   const [showFilter, setShowFilter] = useState(false);
 
   useEffect(() => {
-    getReviews();
-    if (authState.token) getMyReviews();
-  }, [authState]);
+    if (match.params.my) getMyReviews()
+    else
+      getReviews('recent');
+  }, []);
 
-  const getReviews = async () => {
+  const getReviews = async type => {
     try {
-      const { data: recent } = await axios.get("/reviews/recent");
-      if (!match.params.my) setReviews(recent.data);
-      setRecentReviews(recent.data);
+      const { data } = await axios.get(`/reviews/${type}`);
+      setReviews(data.data);
+      switch (type) {
+        case 'recent':
+          setCategory("최신순");
+          break;
+        case 'high_rating':
+          setCategory("평점순");
+          break;
+        default:
+          break;
+      }
 
       // // 좋아요 구현 후
       // const [{ data: popular }, { data: highRating }] = await Promise.all([
@@ -89,8 +95,8 @@ function AllReviews({ match }) {
       // ]);
       // setPopularReviews(popular);
 
-      const { data: high } = await axios.get("/reviews/high_rating");
-      setHighRatedReviews(high.data);
+      // const { data: high } = await axios.get("/reviews/high_rating");
+      // setHighRatedReviews(high.data);
     } catch (error) {
       console.log(error);
     }
@@ -103,11 +109,8 @@ function AllReviews({ match }) {
           Authorization: `bearer ${authState.token}`
         }
       });
-      setMyReviews(my.data);
-      if (match.params.my) {
-        setReviews(my.data)
-        setCategory('내 리뷰')
-      }
+      setReviews(my.data);
+      setCategory('내 리뷰')
     } catch (error) {
       console.log(error);
     }
@@ -165,10 +168,7 @@ function AllReviews({ match }) {
               <BasicText
                 size="0.7rem"
                 bold
-                onClick={() => {
-                  setReviews(recentReviews);
-                  setCategory("최신순");
-                }}
+                onClick={() => getReviews('recent')}
               >
                 최신순
               </BasicText>
@@ -189,20 +189,18 @@ function AllReviews({ match }) {
                 size="0.7rem"
                 bold
                 onClick={() => {
-                  setReviews(highRatedReviews);
-                  setCategory("평점순");
+                  getReviews('high_rating')
                 }}
               >
                 평점순
               </BasicText>
               <br />
-              {myReviews && (
+              {authState.token && (
                 <BasicText
                   size="0.7rem"
                   bold
                   onClick={() => {
-                    setReviews(myReviews);
-                    setCategory("내 리뷰");
+                    getMyReviews()
                   }}
                 >
                   내 리뷰
