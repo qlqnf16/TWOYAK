@@ -164,7 +164,7 @@ function Login(props) {
           {state.error
             ? state.error
                 .split(".")
-                .map((i, k) => <LoginErrorMessage>{i}</LoginErrorMessage>)
+                .map((i, k) => <LoginErrorMessage key={k}>{i}</LoginErrorMessage>)
             : null}
           <CustomButton onClick={() => signinActionHandler()}>
             로그인

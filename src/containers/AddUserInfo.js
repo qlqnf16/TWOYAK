@@ -15,6 +15,7 @@ import Birthdate from "../components/AddUserInfo/Birthdate";
 import Modal from "../components/UI/Modal";
 import medIcon from "../assets/images/(white)med-icon.svg";
 import Nickname from "../components/AddUserInfo/Nickname";
+import Spinner from "../components/UI/Spinner";
 
 const AddInfoArea = styled(Container)`
   padding-top: 24px;
@@ -66,6 +67,7 @@ function AddSubUser(props) {
   const [familyMedHistory, setFamilyMedHistory] = useState([]);
   const [skipAddInfo, setSkipAddInfo] = useState(false);
   const [backgroundScrollable, setBackgroundScrollable] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const { state, dispatch } = useContext(AuthContext);
 
@@ -133,6 +135,7 @@ function AddSubUser(props) {
   };
 
   const addInfoHandler = () => {
+    setLoading(true);
     if (props.match.path === "/add-sub-user") {
       axios({
         method: "POST",
@@ -158,8 +161,12 @@ function AddSubUser(props) {
           });
           localStorage.setItem("jwt_token", payload);
           props.history.push("/mypage");
+          setLoading(false);
         })
-        .catch(error => alert(error.data.errors));
+        .catch(error => {
+          alert(error.data.errors);
+          setLoading(false);
+        });
     } else if (
       props.match.path === "/add-info" ||
       props.match.path === "/edit-info"
@@ -188,8 +195,12 @@ function AddSubUser(props) {
           });
           localStorage.setItem("jwt_token", payload);
           props.history.push("/mypage");
+          setLoading(false);
         })
-        .catch(error => alert(error.data.errors));
+        .catch(error => {
+          alert(error.response.data.errors);
+          setLoading(false);
+        });
     }
   };
 

@@ -21,6 +21,7 @@ const HomeContainer = styled.div`
 function Home(props) {
   const [currentDrugs, setCurrentDrugs] = useState(null);
   const [tokenChange, setTokenChange] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { state: authState, dispatch } = useContext(AuthContext);
 
   useEffect(() => {
@@ -29,6 +30,7 @@ function Home(props) {
       path: null
     });
     if (authState.subUserId) {
+      setLoading(true);
       axios({
         method: "GET",
         url: `/user/${authState.subUserId}/current_drugs`,
@@ -40,6 +42,7 @@ function Home(props) {
           if (response.data.length > 0) {
             setCurrentDrugs(response.data.splice(0, 4));
           }
+          setLoading(false);
         })
         .catch(async error => {
           if (error.response.data.errors[0]) {
@@ -48,6 +51,7 @@ function Home(props) {
             });
             alert(error.response.data.errors[0]);
             setTokenChange(true);
+            setLoading(false);
           }
         });
     }
@@ -62,6 +66,7 @@ function Home(props) {
           history={props.history}
           medIcon={medIcon}
           userName={authState.userName}
+          loading={loading}
         />
       ) : null}
       <RecommendedContents history={props.history} />

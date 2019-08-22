@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { EmptyCard, Divider } from "../UI/SharedStyles";
+import Spinner from "../UI/Spinner";
 import addDash from "../../assets/images/add-dash.svg";
 import "@fortawesome/fontawesome-free/css/all.css";
 
@@ -36,7 +37,6 @@ const CurrentDrugsDiv = styled.div`
   display: flex;
   align-items: center;
   margin-top: 1.0625rem;
-  width: 50%;
 `;
 
 const ContentDot = styled.div`
@@ -61,9 +61,10 @@ const HomeContent = styled.div`
 
 const MoreInfo = styled.div`
   font-size: 0.875rem;
+  margin-top: 1rem;
 `;
 
-function CurrentDrugs({ currentDrugs, history, medIcon, userName }) {
+function CurrentDrugs({ currentDrugs, history, medIcon, userName, loading }) {
   const searchDrugHandler = drug_id => {
     history.push(`/medicine/${drug_id}`);
   };
@@ -76,7 +77,9 @@ function CurrentDrugs({ currentDrugs, history, medIcon, userName }) {
         </div>
       </HeaderContainer>
       <div>
-        {currentDrugs ? (
+        {loading ? (
+          <Spinner />
+        ) : currentDrugs ? (
           currentDrugs.map((i, k) => (
             <CurrentDrugsDiv
               key={k}
