@@ -13,6 +13,7 @@ import DrugReview from "../components/Medicine/Review/DrugReview";
 import medIcon from "../assets/images/med-icon.svg";
 import { ReactComponent as Arrow } from "../assets/images/arrow.svg";
 import styled from "styled-components";
+import LoginModal from "../components/UI/LoginModal";
 
 const Background = styled.div`
   width: 100%;
@@ -66,6 +67,7 @@ function AllReviews({ match }) {
   const [reviews, setReviews] = useState();
   const [category, setCategory] = useState({ name: "최신순", url: 'recent' });
   const [showFilter, setShowFilter] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false)
 
   useEffect(() => {
     if (match.params.my) getReviews('my_reviews')
@@ -111,17 +113,21 @@ function AllReviews({ match }) {
 
   // 좋아요 토글
   const toggleLike = async id => {
-    try {
-      await axios({
-        method: "POST",
-        url: `/drug_reviews/${id}/like`,
-        headers: {
-          Authorization: authState.token
-        }
-      });
-      getReviews(category.url)
-    } catch (err) {
-      console.log(err);
+    if (authState.token) {
+      try {
+        await axios({
+          method: "POST",
+          url: `/drug_reviews/${id}/like`,
+          headers: {
+            Authorization: authState.token
+          }
+        });
+        getReviews(category.url)
+      } catch (err) {
+        console.log(err)
+      }
+    } else {
+      setShowLoginModal(true)
     }
   };
 
@@ -201,6 +207,7 @@ function AllReviews({ match }) {
             </ReviewCard>
           ))}
       </Container>
+      {showLoginModal && <LoginModal modalOff={() => setShowLoginModal(false)} />}
     </>
   );
 }

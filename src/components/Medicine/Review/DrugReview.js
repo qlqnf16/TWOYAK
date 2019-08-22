@@ -76,7 +76,7 @@ const DrugReview = React.memo(({ my, review, deleteReview, updateButton, toggleL
             </BasicText>
           )}
         </FlexStart>
-        <Flex>
+        <FlexStart>
           <BasicText bold size="0.7rem">
             {review.attributes.drug_review_likes_count}
           </BasicText>
@@ -86,7 +86,7 @@ const DrugReview = React.memo(({ my, review, deleteReview, updateButton, toggleL
               toggleLike(review.id);
             }}
           />
-        </Flex>
+        </FlexStart>
         {my && updateButton && (
           <FlexStart>
             <EditIcon onClick={() => updateButton(review)} />

@@ -120,7 +120,7 @@ function Medicine({ match, history, location }) {
       ]);
 
       setDrug(drugData);
-      setDrugReview(drugReviews);
+      setDrugReview(drugReviews.data);
       setWatching(drugData.watching);
     } catch (error) {
       console.log(error);
@@ -309,6 +309,27 @@ function Medicine({ match, history, location }) {
     }
   };
 
+  // 리뷰 좋아요 토글
+  const toggleLike = async id => {
+    if (authState.token) {
+      try {
+        await axios({
+          method: "POST",
+          url: `/drug_reviews/${id}/like`,
+          headers: {
+            Authorization: authState.token
+          }
+        });
+        const { data } = await axios.get(`drugs/${id}/drug_reviews`);
+        setDrugReview(data.data)
+      } catch (err) {
+        console.log(err)
+      }
+    } else {
+      setShowLogin(true)
+    }
+  };
+
   if (match.params.id) {
     return (
       <>
@@ -360,13 +381,13 @@ function Medicine({ match, history, location }) {
                       size="0.7rem"
                       bold
                     >
-                      {drug.drug_rating.toFixed(1)} / 5.0
+                      {drug.drug_rating.toFixed(1)}  / 5.0
                     </RatingText>
                   </RatingContainer>
                 </ReviewContainer>
               </FlexDiv>
               {drugReview.map(review => (
-                <DrugReview review={review} key={review.id} />
+                <DrugReview review={review} key={review.id} toggleLike={toggleLike} />
               ))}
             </>
           )}
