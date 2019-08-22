@@ -79,8 +79,8 @@ function AllReviews({ match }) {
   const getReviews = async () => {
     try {
       const { data: recent } = await axios.get("/reviews/recent");
-      if (!match.params.my) setReviews(recent);
-      setRecentReviews(recent);
+      if (!match.params.my) setReviews(recent.data);
+      setRecentReviews(recent.data);
 
       // // 좋아요 구현 후
       // const [{ data: popular }, { data: highRating }] = await Promise.all([
@@ -88,8 +88,9 @@ function AllReviews({ match }) {
       //   axios.get("/reviews/high_rating")
       // ]);
       // setPopularReviews(popular);
-      const { data } = await axios.get("/reviews/high_rating");
-      setHighRatedReviews(data);
+
+      const { data: high } = await axios.get("/reviews/high_rating");
+      setHighRatedReviews(high.data);
     } catch (error) {
       console.log(error);
     }
@@ -102,9 +103,9 @@ function AllReviews({ match }) {
           Authorization: `bearer ${authState.token}`
         }
       });
-      setMyReviews(my);
+      setMyReviews(my.data);
       if (match.params.my) {
-        setReviews(my)
+        setReviews(my.data)
         setCategory('내 리뷰')
       }
     } catch (error) {
@@ -219,7 +220,7 @@ function AllReviews({ match }) {
                   alt="med-icon"
                   style={{ marginRight: "6px", marginTop: "5px" }}
                 />
-                <ReviewTitle to={`/medicine/${review.drug_id}`}>{review.drug.split("(")[0]}</ReviewTitle>
+                <ReviewTitle to={`/medicine/${review.meta.drug.id}`}>{review.meta.drug.name.split("(")[0]}</ReviewTitle>
               </FlexDiv>
               <Line />
               <ReviewContainer>
