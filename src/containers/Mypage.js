@@ -8,7 +8,7 @@ import UserGeneralInfo from "../components/Mypage/UserGeneralInfo";
 import Diseases from "../components/Mypage/Diseases";
 import WatchDrugs from "../components/Mypage/WatchDrugs";
 import Footer from "../components/Mypage/Footer";
-import ChangeUserModal from "../components/UI/Modal";
+import ChangeUserModal from "../components/UI/Modals/Modal";
 import AddDash from "../assets/images/add-dash.svg";
 import ChangeUserIcon from "../assets/images/change-user-icon.svg";
 
@@ -107,18 +107,18 @@ function Mypage(props) {
       <ChangeFunction>
         {state.subUsers
           ? state.subUsers.map((i, k) =>
-              i.id !== state.subUserId ? (
-                <ModalMessage
-                  key={k}
-                  onClick={() => {
-                    getUserInfo(k);
-                    toggleChangeUserModalHandler();
-                  }}
-                >
-                  {i.user_name}
-                </ModalMessage>
-              ) : null
-            )
+            i.id !== state.subUserId ? (
+              <ModalMessage
+                key={k}
+                onClick={() => {
+                  getUserInfo(k);
+                  toggleChangeUserModalHandler();
+                }}
+              >
+                {i.user_name}
+              </ModalMessage>
+            ) : null
+          )
           : null}
         <AddIcon
           src={AddDash}

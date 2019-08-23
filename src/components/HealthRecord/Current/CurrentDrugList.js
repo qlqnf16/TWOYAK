@@ -8,7 +8,7 @@ import {
   BulletText
 } from "../../UI/SharedStyles";
 import medIcon from "../../../assets/images/(white)med-icon.svg";
-import Modal from "../../UI/Modal";
+import Modal from "../../UI/Modals/Modal";
 import styled from "styled-components";
 import InteractionNotice from "./InteractionNotice";
 
@@ -63,39 +63,39 @@ const CurrentDrugList = ({
               {!subUserInfo.family_med_history ? (
                 ""
               ) : (
-                <>
-                  {" "}
-                  <Item>가족력</Item>
-                  {subUserInfo.family_med_history.map(disease => (
-                    <BasicText>{disease.name}</BasicText>
-                  ))}
-                  <Line />
-                </>
-              )}
+                  <>
+                    {" "}
+                    <Item>가족력</Item>
+                    {subUserInfo.family_med_history.map(disease => (
+                      <BasicText>{disease.name}</BasicText>
+                    ))}
+                    <Line />
+                  </>
+                )}
 
               {(subUserInfo.smoke ||
                 subUserInfo.caffeine ||
                 subUserInfo.drink) && (
-                <>
-                  {" "}
-                  {subUserInfo.smoke && (
-                    <BulletText>
-                      <p>흡연자입니다</p>
-                    </BulletText>
-                  )}
-                  {subUserInfo.drink && (
-                    <BulletText>
-                      <p>음주를 많이 해요</p>
-                    </BulletText>
-                  )}
-                  {subUserInfo.caffeine && (
-                    <BulletText>
-                      <p>카페인 섭취를 많이 해요</p>
-                    </BulletText>
-                  )}
-                  <Line />
-                </>
-              )}
+                  <>
+                    {" "}
+                    {subUserInfo.smoke && (
+                      <BulletText>
+                        <p>흡연자입니다</p>
+                      </BulletText>
+                    )}
+                    {subUserInfo.drink && (
+                      <BulletText>
+                        <p>음주를 많이 해요</p>
+                      </BulletText>
+                    )}
+                    {subUserInfo.caffeine && (
+                      <BulletText>
+                        <p>카페인 섭취를 많이 해요</p>
+                      </BulletText>
+                    )}
+                    <Line />
+                  </>
+                )}
 
               {currentDrugs.map(drug => {
                 return (

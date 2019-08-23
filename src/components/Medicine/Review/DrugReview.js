@@ -59,7 +59,7 @@ const EditIcon = styled(Edit)`
   color: var(--twoyak-black);
 `;
 
-const DrugReview = React.memo(({ review, deleteReview, updateButton, toggleLike }) => {
+const DrugReview = React.memo(({ review, deleteReview, deleteButton, updateButton, toggleLike }) => {
   const { state: authState } = useContext(AuthContext)
   let my = authState.userId === review.meta.user.id ? true : false;
 
@@ -82,7 +82,7 @@ const DrugReview = React.memo(({ review, deleteReview, updateButton, toggleLike 
           {my && updateButton && (
             <FlexStart>
               <EditIcon onClick={() => updateButton(review)} />
-              <Close onClick={() => deleteReview(review.attributes.id, review.meta.drug.id)} />
+              <Close onClick={() => deleteButton(review)} />
             </FlexStart>
           )}
         </FlexStart>

@@ -6,15 +6,18 @@ import {
   Card,
   Line,
   FlexDiv,
-  BasicText
+  BasicText,
+  BasicButton
 } from "../components/UI/SharedStyles";
 import { AuthContext } from "../contexts/AuthStore";
 import DrugReview from "../components/Medicine/Review/DrugReview";
 import medIcon from "../assets/images/med-icon.svg";
 import { ReactComponent as Arrow } from "../assets/images/arrow.svg";
 import styled from "styled-components";
-import LoginModal from "../components/UI/LoginModal";
+import LoginModal from "../components/UI/Modals/LoginModal";
 import NewReview from "../components/Medicine/Review/NewReview";
+import Modal from "../components/UI/Modals/Modal";
+import ConfirmModal from "../components/UI/Modals/ConfirmModal";
 
 const Background = styled.div`
   width: 100%;
@@ -63,12 +66,15 @@ font-size: 0.875rem;
   text-decoration: none;
 `
 
+
+
 function AllReviews({ match }) {
   const { state: authState } = useContext(AuthContext);
   const [reviews, setReviews] = useState();
   const [category, setCategory] = useState({ name: "최신순", url: 'recent' });
   const [showFilter, setShowFilter] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
   const [showNewReview, setShowNewReview] = useState(false);
   const [updateTarget, setUpdateTarget] = useState()
 
@@ -173,11 +179,17 @@ function AllReviews({ match }) {
           Authorization: `bearer ${authState.token}`
         }
       });
+      setShowConfirm(false)
       getReviews(category.url)
     } catch (error) {
       console.log(error);
     }
   };
+
+  const deleteButton = review => {
+    setShowConfirm(true);
+    setUpdateTarget(review)
+  }
 
   // DrugReview.js 리뷰 수정하기 버튼
   const updateButton = review => {
@@ -256,6 +268,7 @@ function AllReviews({ match }) {
                 <DrugReview
                   review={review}
                   toggleLike={toggleLike}
+                  deleteButton={deleteButton}
                   deleteReview={deleteReview}
                   updateButton={updateButton}
                 />
@@ -264,6 +277,9 @@ function AllReviews({ match }) {
           ))}
       </Container>
       {showNewReview && <NewReview reviewSubmit={updateReview} review={updateTarget} modalOff={() => setShowNewReview(false)} />}
+      {showConfirm &&
+        <ConfirmModal modalOff={() => setShowConfirm(false)} handleClick={() => deleteReview(updateTarget.id, updateTarget.meta.drug.id)} />
+      }
       {showLoginModal && <LoginModal modalOff={() => setShowLoginModal(false)} />}
     </>
   );

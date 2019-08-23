@@ -4,7 +4,7 @@ import moment from "moment";
 
 import PastDrug from "./PastDrug";
 import DrugReview from "../../Medicine/Review/DrugReview";
-import Modal from "../../UI/Modal";
+import Modal from "../../UI/Modals/Modal";
 
 import styled from "styled-components";
 import { BulletText, BasicButton, FlexDiv } from "../../UI/SharedStyles";

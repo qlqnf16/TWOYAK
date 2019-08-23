@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../../contexts/AuthStore";
 import styled from "styled-components";
 import axios from "../../apis";
-import DropoutModal from "../UI/Modal";
+import DropoutModal from "../UI/Modals/Modal";
 import { BasicButton, WhiteButton } from "../UI/SharedStyles";
 
 const FooterContainer = styled.div`

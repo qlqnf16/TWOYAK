@@ -8,7 +8,8 @@ import PastDrugList from "../components/HealthRecord/Past/PastDrugList";
 import AddCard from "../components/HealthRecord/AddCard";
 import Warning from "../components/UI/Warning";
 import { BasicText, Line } from "../components/UI/SharedStyles";
-import LoginModal from "../components/UI/LoginModal";
+import LoginModal from "../components/UI/Modals/LoginModal";
+import ConfirmModal from "../components/UI/Modals/ConfirmModal";
 
 const Background = styled.div`
   width: 100%;
@@ -66,6 +67,8 @@ function HealthRecord({ history }) {
 
   const [showCurrent, setShowCurrent] = useState(true);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [deleteTarget, setDeleteTarget] = useState()
 
   useEffect(() => { }, [currentDrugs]);
 
@@ -175,7 +178,10 @@ function HealthRecord({ history }) {
     }
   };
 
-
+  const deleteButton = (...drug) => {
+    setShowConfirm(true);
+    setDeleteTarget(drug)
+  }
 
   return (
     <>
@@ -209,7 +215,7 @@ function HealthRecord({ history }) {
               currentDrugs={currentDrugs}
               loadingHandler={loadingHandler}
               drugToPast={drugToPast}
-              deleteDrug={deleteDrug}
+              deleteDrug={deleteButton}
               durInfo={durInfo}
               subUserInfo={subUserInfo}
             />
@@ -223,6 +229,7 @@ function HealthRecord({ history }) {
           }
         />
       </Container>
+      {showConfirm && <ConfirmModal modalOff={() => { setShowConfirm(false) }} handleClick={() => { deleteDrug(...deleteTarget) }} />}
     </>
   );
 }

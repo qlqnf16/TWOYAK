@@ -1,5 +1,5 @@
 import React, { useState, useReducer, useEffect, useContext } from "react";
-import Modal from "../../UI/Modal";
+import Modal from "../../UI/Modals/Modal";
 import AutoSuggestion from "../../Util/AutoSuggestion";
 import { ko } from "date-fns/esm/locale";
 import { AuthContext } from "../../../contexts/AuthStore";

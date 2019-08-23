@@ -12,7 +12,7 @@ import {
 } from "../../UI/SharedStyles";
 import medIcon from "../../../assets/images/(white)med-icon.svg";
 import "@fortawesome/fontawesome-free/css/all.css";
-import Modal from "../../UI/Modal";
+import Modal from "../../UI/Modals/Modal";
 
 const Container = styled.div`
   max-height: 75vh;

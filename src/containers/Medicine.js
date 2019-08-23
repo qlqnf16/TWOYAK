@@ -22,7 +22,8 @@ import {
   RatingText,
   StyledRating
 } from "../components/UI/SharedStyles";
-import LoginModal from "../components/UI/LoginModal";
+import LoginModal from "../components/UI/Modals/LoginModal";
+import ConfirmModal from "../components/UI/Modals/ConfirmModal";
 
 const SearchContainer = styled.div`
   width: 100%;
@@ -77,6 +78,7 @@ function Medicine({ match, history, location }) {
 
   const [reviewModal, setReviewModal] = useState(false);
   const [updateTarget, setUpdateTarget] = useState();
+  const [showConfirm, setShowConfirm] = useState(false)
 
   const [errorMessage, setErrorMessage] = useState();
 
@@ -396,11 +398,17 @@ function Medicine({ match, history, location }) {
     }
   };
 
-  // DrugReview.js 리뷰 수정하기 버튼
+  // DrugReview.js 리뷰 수정/삭제 버튼
   const updateButton = review => {
     setReviewModal(true);
     setUpdateTarget(review);
   };
+
+  const deleteButton = review => {
+    setShowConfirm(true);
+    setUpdateTarget(review)
+  }
+
 
   if (match.params.id) {
     return (
@@ -456,7 +464,7 @@ function Medicine({ match, history, location }) {
                     </ReviewContainer>
                   </FlexDiv>
                   {drugReview.map(review => (
-                    <DrugReview review={review} key={review.id} toggleLike={toggleLike} updateButton={updateButton} deleteReview={deleteReview} />
+                    <DrugReview review={review} key={review.id} toggleLike={toggleLike} updateButton={updateButton} deleteButton={deleteButton} />
                   ))}
                 </>
               )}
@@ -481,6 +489,7 @@ function Medicine({ match, history, location }) {
           />
         )}
         {reviewModal && <NewReview reviewSubmit={updateReview} review={updateTarget} modalOff={() => setReviewModal(false)} />}
+        {showConfirm && <ConfirmModal modalOff={() => { setShowConfirm(false) }} handleClick={() => { deleteReview(updateTarget.id, updateTarget.meta.drug.id) }} />}
       </>
     );
   } else {
