@@ -30,30 +30,24 @@ class WebCamCapture extends Component {
 
   render() {
     const videoConstraints = {
-      width: window.innerWidth,
-      height: window.innerHeight,
+      width: window.screen.height,
+      height: window.screen.height,
       facingMode: "environment"
     };
-
-    console.log(window.innerHeight);
 
     return (
       <WebCamContainer>
         <WebCam
           audio={false}
           width="100%"
-          height={window.innerHeight}
+          height={window.screen.height}
           ref={this.setRef}
-          style={{ transform: "scaleX(-1)", WebkitTransform: "scaleX(-1)" }}
           screenshotFormat="image/jpeg"
           videoConstraints={videoConstraints}
         />
 
         <button onClick={this.capture}>capture</button>
-        <img
-          style={{ transform: "scaleX(-1)", WebkitTransform: "scaleX(-1)" }}
-          src={this.state.imgSrc}
-        />
+        <img src={this.state.imgSrc} />
       </WebCamContainer>
     );
   }
