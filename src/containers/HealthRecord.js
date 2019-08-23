@@ -85,7 +85,7 @@ function HealthRecord({ history }) {
   const loadingHandler = async (past) => {
     if (!past) {
       const { data } = await getInfos(`/current_drugs`)
-      setCurrentDrugs(data)
+      setCurrentDrugs(data.data)
     } else {
       const { data } = await getInfos('/past_drugs');
       setPastDrugs(data);
@@ -126,8 +126,8 @@ function HealthRecord({ history }) {
         getInfos("current_drugs"),
         getInfos("analysis/get")
       ]);
-      setCurrentDrugs(myCurrent);
-      setPastDrugs(myPast);
+      setCurrentDrugs(myCurrent.data);
+      setPastDrugs(myPast.data);
       if (myDur.duplicate || myDur.interactions || myDur.same_ingr) {
         setDurInfo({
           duplicate: myDur.duplicate,

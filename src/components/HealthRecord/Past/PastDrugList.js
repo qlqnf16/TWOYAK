@@ -44,14 +44,14 @@ const PastDrugList = ({ drugs, deleteDrug, loadingHandler }) => {
 
   // 월별 복용 약품 분류
   drugs.forEach(drug => {
-    const from = moment(drug.from);
-    const to = moment(drug.to);
+    const from = moment(drug.attributes.from);
+    const to = moment(drug.attributes.to);
     const difference = to.diff(from, "months");
     const addingData = {
-      name: drug.drug_name,
-      from: drug.from,
-      to: drug.to,
-      id: drug.past_drug_id
+      name: drug.attributes.drug.data.attributes.name,
+      from: drug.attributes.from,
+      to: drug.attributes.to,
+      id: drug.attributes.past_drug_id
       // disease: drug.disease
     };
 
@@ -76,16 +76,16 @@ const PastDrugList = ({ drugs, deleteDrug, loadingHandler }) => {
     const diseaseCategory = {};
     drugs.forEach(drug => {
       const addingData = {
-        name: drug.name,
-        from: drug.from,
-        to: drug.to,
-        id: drug.id,
-        disease: drug.disease
+        name: drug.attributes.drug.data.attributes.name,
+        from: drug.attributes.from,
+        to: drug.attributes.to,
+        id: drug.attributes.past_drug_id,
+        disease: drug.attributes.disease
       };
 
-      !diseaseCategory[drug.disease]
-        ? (diseaseCategory[drug.disease] = [addingData])
-        : diseaseCategory[drug.disease].push(addingData);
+      !diseaseCategory[drug.attributes.disease.attributes.name]
+        ? (diseaseCategory[drug.attributes.diseas.attributes.name] = [addingData])
+        : diseaseCategory[drug.attributes.disease.attributes.name].push(addingData);
     });
   };
 
@@ -97,7 +97,7 @@ const PastDrugList = ({ drugs, deleteDrug, loadingHandler }) => {
   const modalOn = async id => {
     let target;
     drugs.forEach(d => {
-      if (d.past_drug_id === id) {
+      if (d.attributes.past_drug_id === id) {
         target = d;
       }
     });
@@ -133,21 +133,21 @@ const PastDrugList = ({ drugs, deleteDrug, loadingHandler }) => {
         ))}
       {show && (
         <Modal
-          title={targetDrug.drug_name.split("(")[0]}
+          title={targetDrug.attributes.drug.data.attributes.name.split("(")[0]}
           content={
             targetDrug && (
               <>
-                {targetDrug.my_review ? (
+                {targetDrug.attributes.my_review.data.length ? (
                   <MarginDiv>
                     <BulletText>
                       <p>내 리뷰</p>
                     </BulletText>
-                    <DrugReview my={true} review={targetDrug.my_review} />
+                    <DrugReview my={true} review={targetDrug.attributes.my_review.data} />
                   </MarginDiv>
                 ) : <EmptyReview>내가 남긴 리뷰가 없습니다.</EmptyReview>}
                 <FlexDiv>
                   <Button>
-                    <StyledLink to={`medicine/${targetDrug.past_drug_id}`}>
+                    <StyledLink to={`medicine/${targetDrug.attributes.past_drug_id}`}>
                       약 정보 보기
                   </StyledLink>
                   </Button>

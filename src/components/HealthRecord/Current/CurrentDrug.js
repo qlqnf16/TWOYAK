@@ -78,12 +78,12 @@ const CurrentDrug = ({
 
   useEffect(() => {
     const loadMessage = () => {
-      if (drug.dur_info) {
+      if (drug.attributes.drug.data.attributes.dur_info) {
         const messageArray = [];
-        Object.keys(drug.dur_info).forEach(info => {
+        Object.keys(drug.attributes.drug.data.attributes.dur_info).forEach(info => {
           let infoVariable =
-            drug.dur_info[info] &&
-            drug.dur_info[info][0].description.split(" ");
+            drug.attributes.drug.data.attributes.dur_info[info] &&
+            drug.attributes.drug.data.attributes.dur_info[info][0].description.split(" ");
           switch (info) {
             case "age":
               messageArray.push(`${infoVariable.join("")} 안 돼요!`);
@@ -111,7 +111,7 @@ const CurrentDrug = ({
       }
     };
     loadMessage();
-  }, [drug.dur_info]);
+  }, [drug.attributes.drug.data.attributes.dur_info]);
 
   const newReviewToggle = () => {
     setShow(!show);
@@ -127,7 +127,7 @@ const CurrentDrug = ({
   ) => {
     const data = {
       user_id: authState.userId,
-      drug_id: drug.current_drug_id,
+      drug_id: drug.attributes.current_drug_id,
       efficacy: efficacy,
       body: detail,
       adverse_effect_ids: adverse_effect
@@ -209,24 +209,24 @@ const CurrentDrug = ({
             alt="med-icon"
             style={{ marginRight: "6px", marginTop: "5px" }}
           />
-          <div style={{ width: typeof drug.drug_rating === "number" && "87%" }}>
-            <Title to={`/medicine/${drug.current_drug_id}`}>
-              {drug.drug_name.split("(")[0]}
+          <div style={{ width: typeof drug.attributes.drug.data.attributes.drug_rating === "number" && "87%" }}>
+            <Title to={`/medicine/${drug.attributes.current_drug_id}`}>
+              {drug.attributes.drug.data.attributes.name.split("(")[0]}
             </Title>
-            <Text>복용 시작일: {drug.from}</Text>
+            <Text>복용 시작일: {drug.attributes.from}</Text>
           </div>
         </FlexDiv>
         <FlexDiv shrink="0">
-          {typeof drug.drug_rating === "number" ? (
+          {typeof drug.attributes.drug.data.attributes.drug_rating === "number" ? (
             <>
               <Rating
                 emptySymbol="fas fa-circle  custom"
                 fullSymbol="fas fa-circle  custom full"
-                initialRating={drug.drug_rating}
+                initialRating={drug.attributes.drug.data.attributes.drug_rating}
                 readonly
               />
               <CustomRatingText>
-                {drug.drug_rating.toFixed(1)} / 5.0
+                {drug.attributes.drug.data.attributes.drug_rating.toFixed(1)} / 5.0
               </CustomRatingText>
             </>
           ) : (
@@ -234,24 +234,24 @@ const CurrentDrug = ({
             )}
         </FlexDiv>
       </FlexDiv>
-      {(drug.dur_info || drug.memo || review) && <Line />}
+      {(drug.attributes.drug.data.attributes.dur_info || drug.attributes.memo || review) && <Line />}
       {show && (
         <NewReview
           reviewSubmit={reviewSubmitHandler}
-          drugId={drug.current_drug_id}
+          drugId={drug.attributes.current_drug_id}
           review={updateTarget}
           modalOff={newReviewToggle}
         />
       )}
-      {!!drug.disease && (
+      {drug.attributes.disease && (
         <>
           <BulletText>
             <p>복용이유</p>
           </BulletText>
-          <Content>{drug.disease.name}</Content>
+          <Content>{drug.attributes.disease.attributes.name}</Content>
         </>
       )}
-      {!drug.dur_info ? (
+      {!drug.attributes.drug.data.attributes.dur_info ? (
         ""
       ) : (
           <>
@@ -265,15 +265,15 @@ const CurrentDrug = ({
             </Content>
           </>
         )}
-      {drug.memo && (
+      {drug.attributes.memo && (
         <>
           <BulletText>
             <p>메모</p>
           </BulletText>
-          <Content>{drug.memo}</Content>
+          <Content>{drug.attributes.memo}</Content>
         </>
       )}
-      {review ? (
+      {review.length > 0 ? (
         <>
           <BulletText>
             <p>내 리뷰</p>

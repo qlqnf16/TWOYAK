@@ -100,10 +100,10 @@ const CurrentDrugList = ({
               {currentDrugs.map(drug => {
                 return (
                   <div key={drug.id}>
-                    <Item>{drug.drug_name.split("(")[0]}</Item>
+                    <Item>{drug.attributes.drug.data.attributes.name.split("(")[0]}</Item>
                     <Duration>
-                      {drug.from}
-                      {drug.to && ` ~ ${drug.to}`}
+                      {drug.attributes.from}
+                      {drug.attributes.to && ` ~ ${drug.attributes.to}`}
                     </Duration>
                     <Line />
                   </div>
@@ -148,7 +148,7 @@ const CurrentDrugList = ({
           <CurrentDrug
             drug={drug}
             key={drug.id}
-            review={drug.my_review}
+            review={drug.attributes.my_review.data}
             loadingHandler={loadingHandler}
             drugToPast={drugToPast}
             deleteDrug={deleteDrug}
