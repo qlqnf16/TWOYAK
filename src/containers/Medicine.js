@@ -95,11 +95,16 @@ function Medicine({ match, history, location }) {
     setDrugList(null);
     setDrugimg(null);
     if (paramId) {
-      searchById(paramId);
-      getDrugImg(paramId);
-    }
-    if (authState.token) {
-      getCurrentDrugs();
+      if (localStorage.jwt_token) {
+        if (authState.token) {
+          searchById(paramId);
+          getDrugImg(paramId);
+          getCurrentDrugs()
+        }
+      } else {
+        searchById(paramId);
+        getDrugImg(paramId);
+      }
     }
     return setDrugList(null);
   }, [paramId, authState]);
@@ -359,38 +364,39 @@ function Medicine({ match, history, location }) {
                 showLogin={() => setShowLogin(true)}
                 auth={!authState.token ? false : true}
               />
+              {drugReview && drugReview.length > 0 && (
+                <>
+                  <FlexDiv>
+                    <ReviewContainer>
+                      <BasicText>사용후기</BasicText>
+                      <RatingContainer>
+                        <Rating
+                          emptySymbol="fas fa-circle custom"
+                          fullSymbol="fas fa-circle custom full"
+                          fractions={2}
+                          initialRating={drug.drug_rating}
+                          readonly
+                        />
+                        <RatingText
+                          margin="0.5rem"
+                          opacity="0.5"
+                          size="0.7rem"
+                          bold
+                        >
+                          {drug.drug_rating.toFixed(1)}  / 5.0
+                    </RatingText>
+                      </RatingContainer>
+                    </ReviewContainer>
+                  </FlexDiv>
+                  {drugReview.map(review => (
+                    <DrugReview review={review} key={review.id} toggleLike={toggleLike} />
+                  ))}
+                </>
+              )}
             </>
           )}
           {errorMessage && <div>{errorMessage}</div>}
-          {drugReview && drugReview.length > 0 && (
-            <>
-              <FlexDiv>
-                <ReviewContainer>
-                  <BasicText>사용후기</BasicText>
-                  <RatingContainer>
-                    <Rating
-                      emptySymbol="fas fa-circle custom"
-                      fullSymbol="fas fa-circle custom full"
-                      fractions={2}
-                      initialRating={drug.drug_rating}
-                      readonly
-                    />
-                    <RatingText
-                      margin="0.5rem"
-                      opacity="0.5"
-                      size="0.7rem"
-                      bold
-                    >
-                      {drug.drug_rating.toFixed(1)}  / 5.0
-                    </RatingText>
-                  </RatingContainer>
-                </ReviewContainer>
-              </FlexDiv>
-              {drugReview.map(review => (
-                <DrugReview review={review} key={review.id} toggleLike={toggleLike} />
-              ))}
-            </>
-          )}
+
         </Container>
         {modal && <DetailModal item_seq={drug.item_seq} modalOff={modalOff} />}
         {addModal && (
