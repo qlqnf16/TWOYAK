@@ -279,7 +279,6 @@ const CurrentDrug = ({
             <p>내 리뷰</p>
           </BulletText>
           <DrugReview
-            my={true}
             review={review}
             deleteReview={deleteReview}
             updateButton={updateButton}

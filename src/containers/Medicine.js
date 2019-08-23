@@ -13,6 +13,7 @@ import DetailModal from "../components/Medicine/Drugs/DetailModal";
 import DrugReview from "../components/Medicine/Review/DrugReview";
 import AddModal from "../components/Medicine/Modals/AddModal";
 import DeleteModal from "../components/Medicine/Modals/DeleteModal";
+import NewReview from '../components/Medicine/Review/NewReview'
 
 import {
   Container,
@@ -73,6 +74,10 @@ function Medicine({ match, history, location }) {
   const [modal, setModal] = useState(false); // 의약품 상세정보 모달
   const [showMore, setShowMore] = useState(false); // 더보기 버튼
   const [showLogin, setShowLogin] = useState(false);
+
+  const [reviewModal, setReviewModal] = useState(false);
+  const [updateTarget, setUpdateTarget] = useState();
+
   const [errorMessage, setErrorMessage] = useState();
 
   const { state } = useContext(DrugContext);
@@ -316,6 +321,12 @@ function Medicine({ match, history, location }) {
     }
   };
 
+  // 리뷰 가져오기
+  const fetchDrugReviews = async () => {
+    const { data } = await axios.get(`drugs/${drug.id}/drug_reviews`);
+    setDrugReview(data.data)
+  }
+
   // 리뷰 좋아요 토글
   const toggleLike = async id => {
     if (authState.token) {
@@ -327,14 +338,60 @@ function Medicine({ match, history, location }) {
             Authorization: authState.token
           }
         });
-        const { data } = await axios.get(`drugs/${drug.id}/drug_reviews`);
-        setDrugReview(data.data)
+        fetchDrugReviews()
       } catch (err) {
         console.log(err)
       }
     } else {
       setShowLogin(true)
     }
+  };
+
+  // 리뷰 수정/삭제
+  // review update
+  const updateReview = async (method, efficacy, adverse_effect, detail, reviewId, drugId) => {
+    const data = {
+      user_id: authState.userId,
+      drug_id: drugId,
+      efficacy: efficacy,
+      body: detail,
+      adverse_effect_ids: adverse_effect
+    }
+    try {
+      await axios.put(
+        `drugs/${drugId}/drug_reviews/${reviewId}`,
+        { drug_review: data },
+        {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        }
+      );
+      setReviewModal(false);
+      fetchDrugReviews()
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // review delete
+  const deleteReview = async (reviewId, drugId) => {
+    try {
+      await axios.delete(`drugs/${drugId}/drug_reviews/${reviewId}`, {
+        headers: {
+          Authorization: `bearer ${authState.token}`
+        }
+      });
+      fetchDrugReviews()
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // DrugReview.js 리뷰 수정하기 버튼
+  const updateButton = review => {
+    setReviewModal(true);
+    setUpdateTarget(review);
   };
 
   if (match.params.id) {
@@ -391,7 +448,7 @@ function Medicine({ match, history, location }) {
                     </ReviewContainer>
                   </FlexDiv>
                   {drugReview.map(review => (
-                    <DrugReview review={review} key={review.id} toggleLike={toggleLike} />
+                    <DrugReview review={review} key={review.id} toggleLike={toggleLike} updateButton={updateButton} deleteReview={deleteReview} />
                   ))}
                 </>
               )}
@@ -415,6 +472,7 @@ function Medicine({ match, history, location }) {
             toPastDrug={toPastDrug}
           />
         )}
+        {reviewModal && <NewReview reviewSubmit={updateReview} review={updateTarget} modalOff={() => setReviewModal(false)} />}
       </>
     );
   } else {
