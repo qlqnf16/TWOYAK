@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthStore";
 import axios from "../apis";
+import moment from 'moment'
 import styled from "styled-components";
 
 import CurrentDrugList from "../components/HealthRecord/Current/CurrentDrugList";
@@ -133,6 +134,8 @@ function HealthRecord({ history }) {
         getInfos("current_drugs"),
         getInfos("analysis/get")
       ]);
+      myCurrent.data.sort((a, b) => moment(a.attributes.from).isBefore(moment(b.attributes.from), 'date') ? 1 : -1)
+      myPast.data.sort((a, b) => moment(a.attributes.from).isAfter(moment(b.attributes.from), 'date') ? 1 : -1)
       setCurrentDrugs(myCurrent.data);
       setPastDrugs(myPast.data);
       if (myDur.duplicate || myDur.interactions || myDur.same_ingr) {

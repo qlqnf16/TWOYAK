@@ -64,10 +64,8 @@ const Bullet = styled(BulletText)`
 `;
 
 const PastDrug = ({ dateArray, monthCategory, modalOn }) => {
-
   const diseases = Object.keys(monthCategory)
   const drugs = diseases.map(disease => {
-    console.log(monthCategory[disease])
     return (
       <>
         <DiseaseName>{disease}</DiseaseName>

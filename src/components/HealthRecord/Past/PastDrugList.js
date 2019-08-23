@@ -98,8 +98,6 @@ const PastDrugList = ({ drugs, deleteDrug, loadingHandler }) => {
     categorizeByDisease(monthCategory[month], month)
   })
 
-  console.log(monthCategory)
-
   // modal on
   const modalOn = async id => {
     let target;
