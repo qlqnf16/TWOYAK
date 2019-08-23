@@ -12,6 +12,7 @@ import Terms from "./containers/Terms";
 import FindPassword from "./containers/FindPassword";
 import RecommendSupplements from "./containers/RecommendSupplments";
 import AboutUs from "./containers/AboutUs";
+import WebCamCapture from "./containers/WebCam";
 
 const routes = [
   {
@@ -100,6 +101,11 @@ const routes = [
     path: "/about-us",
     name: "기업소개",
     component: AboutUs
+  },
+  {
+    path: "/capture",
+    name: "처방전 사진",
+    component: WebCamCapture
   }
 ];
 

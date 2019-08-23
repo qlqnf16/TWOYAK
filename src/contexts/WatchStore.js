@@ -19,10 +19,6 @@ function WatchStore(props) {
           type: "SIGNIN_SUCCESS",
           token: localStorage.getItem("jwt_token")
         });
-        dispatch({
-          type: "SET_AUTH_REDIRECT_PATH",
-          path: "/"
-        });
       }
     }
     AutoLogin();

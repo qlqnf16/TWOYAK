@@ -9,6 +9,7 @@ import RecommendedContents from "../components/Home/RecommendedContents";
 import medIcon from "../assets/images/med-icon.svg";
 import Warning from "../components/UI/Warning";
 import Footer from "../components/Home/Footer";
+import "@fortawesome/fontawesome-free/css/all.css";
 
 const HomeContainer = styled.div`
   width: 88%;
@@ -18,10 +19,21 @@ const HomeContainer = styled.div`
   color: var(--twoyak-black);
 `;
 
+const Camera = styled.input`
+  position: fixed;
+  bottom: 4rem;
+  left: 1.4375rem;
+  z-index: 300;
+  padding: 10px;
+  border-radius: 50%;
+  background-color: var(--twoyak-blue);
+`;
+
 function Home(props) {
   const [currentDrugs, setCurrentDrugs] = useState(null);
   const [tokenChange, setTokenChange] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [clickCamera, setClickCamera] = useState(false);
   const { state: authState, dispatch } = useContext(AuthContext);
 
   useEffect(() => {
