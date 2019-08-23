@@ -84,8 +84,15 @@ function HealthRecord({ history }) {
 
   const loadingHandler = async (past) => {
     if (!past) {
-      const { data } = await getInfos(`/current_drugs`)
-      setCurrentDrugs(data.data)
+      const [{ data: current }, { data: dur }] = await Promise.all([getInfos(`/current_drugs`), getInfos('/analysis/get')])
+      setCurrentDrugs(current.data)
+      if (dur.duplicate || dur.interactions || dur.same_ingr) {
+        setDurInfo({
+          duplicate: dur.duplicate,
+          interactions: dur.interactions,
+          same_ingr: dur.same_ingr
+        });
+      }
     } else {
       const { data } = await getInfos('/past_drugs');
       setPastDrugs(data);
@@ -173,6 +180,7 @@ function HealthRecord({ history }) {
         }
       );
       loadingHandler();
+      setShowConfirm(false)
     } catch (error) {
       console.log(error);
     }

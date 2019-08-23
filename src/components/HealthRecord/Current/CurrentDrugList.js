@@ -148,7 +148,7 @@ const CurrentDrugList = ({
           <CurrentDrug
             drug={drug}
             key={drug.id}
-            review={drug.attributes.my_review.data}
+            review={drug.attributes.my_review}
             loadingHandler={loadingHandler}
             drugToPast={drugToPast}
             deleteDrug={deleteDrug}

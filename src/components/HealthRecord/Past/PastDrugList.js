@@ -137,12 +137,16 @@ const PastDrugList = ({ drugs, deleteDrug, loadingHandler }) => {
           content={
             targetDrug && (
               <>
-                {targetDrug.attributes.my_review.data.length ? (
+                {targetDrug.attributes.disease && (<MarginDiv><BulletText>
+                  <p>복용 이유: {targetDrug.attributes.disease.attributes.name}</p>
+                </BulletText></MarginDiv>)}
+
+                {targetDrug.attributes.my_review ? (
                   <MarginDiv>
                     <BulletText>
                       <p>내 리뷰</p>
                     </BulletText>
-                    <DrugReview my={true} review={targetDrug.attributes.my_review.data} />
+                    <DrugReview my={true} review={targetDrug.attributes.my_review} />
                   </MarginDiv>
                 ) : <EmptyReview>내가 남긴 리뷰가 없습니다.</EmptyReview>}
                 <FlexDiv>
