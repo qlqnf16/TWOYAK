@@ -51,8 +51,8 @@ const PastDrugList = ({ drugs, deleteDrug, loadingHandler }) => {
       name: drug.attributes.drug.data.attributes.name,
       from: drug.attributes.from,
       to: drug.attributes.to,
-      id: drug.attributes.past_drug_id
-      // disease: drug.disease
+      id: drug.attributes.past_drug_id,
+      disease: drug.attributes.disease ? drug.attributes.disease.attributes.name : '정보없음'
     };
 
     !monthCategory[from.format("YYYY-MM")]
@@ -72,26 +72,33 @@ const PastDrugList = ({ drugs, deleteDrug, loadingHandler }) => {
   });
 
   // 질환별 약품 분류
-  const categorizeByDisease = drugs => {
+  const categorizeByDisease = (drugs, key) => {
     const diseaseCategory = {};
     drugs.forEach(drug => {
       const addingData = {
-        name: drug.attributes.drug.data.attributes.name,
-        from: drug.attributes.from,
-        to: drug.attributes.to,
-        id: drug.attributes.past_drug_id,
-        disease: drug.attributes.disease
+        name: drug.name,
+        from: drug.from,
+        to: drug.to,
+        id: drug.id,
+        disease: drug.disease
       };
 
-      !diseaseCategory[drug.attributes.disease.attributes.name]
-        ? (diseaseCategory[drug.attributes.diseas.attributes.name] = [addingData])
-        : diseaseCategory[drug.attributes.disease.attributes.name].push(addingData);
+      !diseaseCategory[drug.disease]
+        ? (diseaseCategory[drug.disease] = [addingData])
+        : diseaseCategory[drug.disease].push(addingData);
     });
+    monthCategory[key] = diseaseCategory
   };
 
-  // monthCategory.forEach(drugs => {
-  //   categorizeByDisease(drugs)
-  // })
+  const months = Object.keys(monthCategory)
+    .sort()
+    .reverse();
+
+  months.forEach(month => {
+    categorizeByDisease(monthCategory[month], month)
+  })
+
+  console.log(monthCategory)
 
   // modal on
   const modalOn = async id => {
@@ -110,10 +117,6 @@ const PastDrugList = ({ drugs, deleteDrug, loadingHandler }) => {
     setShow(false);
   };
 
-  const months = Object.keys(monthCategory)
-    .sort()
-    .reverse();
-
   const deletePastDrug = async id => {
     await deleteDrug(id, true)
     setShow(false);
@@ -123,24 +126,23 @@ const PastDrugList = ({ drugs, deleteDrug, loadingHandler }) => {
   return (
     <div>
       {months.length > 0 &&
-        months.map(month => (
-          <PastDrug
-            key={month}
-            dateArray={month.split("-")}
-            monthCategory={monthCategory[month]}
-            modalOn={modalOn}
-          />
-        ))}
+        months.map(month =>
+          (
+            <PastDrug
+              key={month}
+              dateArray={month.split("-")}
+              monthCategory={monthCategory[month]}
+              modalOn={modalOn}
+            />
+          )
+        )
+      }
       {show && (
         <Modal
           title={targetDrug.attributes.drug.data.attributes.name.split("(")[0]}
           content={
             targetDrug && (
               <>
-                {targetDrug.attributes.disease && (<MarginDiv><BulletText>
-                  <p>복용 이유: {targetDrug.attributes.disease.attributes.name}</p>
-                </BulletText></MarginDiv>)}
-
                 {targetDrug.attributes.my_review ? (
                   <MarginDiv>
                     <BulletText>
