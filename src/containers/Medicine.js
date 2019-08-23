@@ -123,7 +123,11 @@ function Medicine({ match, history, location }) {
         sub_user_id: authState.subUserId
       }
     });
-    const getDrugReviews = axios.get(`drugs/${id}/drug_reviews`);
+    const getDrugReviews = axios.get(`drugs/${id}/drug_reviews`, {
+      headers: {
+        Authorization: `bearer ${authState.token}`
+      }
+    });
 
     try {
       let [{ data: drugData }, { data: drugReviews }] = await Promise.all([
@@ -313,7 +317,7 @@ function Medicine({ match, history, location }) {
         {
           watch_drug: { user_id: authState.userId, watch_drug_id: drug.id }
         },
-        { headers: { Authorization: authState.token } }
+        { headers: { Authorization: `bearer ${authState.token}` } }
       );
       setWatching(!watching);
     } catch (error) {
@@ -323,7 +327,11 @@ function Medicine({ match, history, location }) {
 
   // 리뷰 가져오기
   const fetchDrugReviews = async () => {
-    const { data } = await axios.get(`drugs/${drug.id}/drug_reviews`);
+    const { data } = await axios.get(`drugs/${drug.id}/drug_reviews`, {
+      headers: {
+        Authorization: `bearer ${authState.token}`
+      }
+    });
     setDrugReview(data.data)
   }
 
@@ -335,7 +343,7 @@ function Medicine({ match, history, location }) {
           method: "POST",
           url: `/drug_reviews/${id}/like`,
           headers: {
-            Authorization: authState.token
+            Authorization: `bearer ${authState.token}`
           }
         });
         fetchDrugReviews()

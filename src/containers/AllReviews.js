@@ -88,7 +88,11 @@ function AllReviews({ match }) {
         });
       }
       else {
-        result = await axios.get(`/reviews/${type}`);
+        result = await axios.get(`/reviews/${type}`, {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        });
       }
 
       setReviews(result.data.data);
@@ -122,7 +126,7 @@ function AllReviews({ match }) {
           method: "POST",
           url: `/drug_reviews/${id}/like`,
           headers: {
-            Authorization: authState.token
+            Authorization: `bearer ${authState.token}`
           }
         });
         getReviews(category.url)

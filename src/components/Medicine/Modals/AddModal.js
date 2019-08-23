@@ -89,7 +89,7 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
 
   const fetchDiseaseData = async () => {
     const { data } = await axios.get("autocomplete/disease", {
-      headers: { Authorization: authState.token }
+      headers: { Authorization: `bearer ${authState.token}` }
     });
     const payload = data.standard_diseases;
     dispatch({ type: "GET_DISEASES", payload: payload });
