@@ -320,7 +320,7 @@ function Medicine({ match, history, location }) {
             Authorization: authState.token
           }
         });
-        const { data } = await axios.get(`drugs/${id}/drug_reviews`);
+        const { data } = await axios.get(`drugs/${drug.id}/drug_reviews`);
         setDrugReview(data.data)
       } catch (err) {
         console.log(err)
