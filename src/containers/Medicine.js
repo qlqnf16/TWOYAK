@@ -99,12 +99,14 @@ function Medicine({ match, history, location }) {
         if (authState.token) {
           searchById(paramId);
           getDrugImg(paramId);
-          getCurrentDrugs()
         }
       } else {
         searchById(paramId);
         getDrugImg(paramId);
       }
+    }
+    if (authState.token) {
+      getCurrentDrugs()
     }
     return setDrugList(null);
   }, [paramId, authState]);
@@ -416,8 +418,10 @@ function Medicine({ match, history, location }) {
       </>
     );
   } else {
+
     return (
       <SearchContainer>
+
         {drugs && (
           <>
             <SearchInput

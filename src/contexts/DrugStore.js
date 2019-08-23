@@ -20,9 +20,16 @@ const DrugStore = props => {
     ]);
     dispatch({ type: "SET_INIT_DATA", payload: payload });
   };
+
   useEffect(() => {
-    fetchInitialData();
-  }, [authState]);
+    if (localStorage.jwt_token) {
+      if (authState.token) {
+        fetchInitialData()
+      }
+    } else {
+      fetchInitialData();
+    }
+  }, [authState.token]);
 
   return (
     <DrugContext.Provider value={{ state, dispatch }}>

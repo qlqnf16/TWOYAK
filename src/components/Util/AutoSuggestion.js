@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { breakpoints, BasicText } from "../UI/SharedStyles";
 import { ReactComponent as Erase } from "../../assets/images/erase.svg";
 import { ReactComponent as Add } from "../../assets/images/plus-in-search.svg";
+import axios from '../../apis'
 
 const Container = styled.div`
   display: flex;

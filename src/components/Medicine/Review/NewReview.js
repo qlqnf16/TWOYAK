@@ -69,9 +69,9 @@ const NewReview = React.memo(({ reviewSubmit, review, modalOff }) => {
   // 리뷰 수정 시
   useEffect(() => {
     if (review) {
-      setEfficacy(review.efficacy);
-      setDetail(review.body);
-      setAdverseEffects(review.adverse_effects);
+      setEfficacy(review.attributes.efficacy);
+      setDetail(review.attributes.body);
+      setAdverseEffects(review.meta.adverse_effects);
     }
   }, [review]);
 
@@ -96,7 +96,7 @@ const NewReview = React.memo(({ reviewSubmit, review, modalOff }) => {
     event.preventDefault();
     const adverseEffectIds = adverseEffects.map(effect => effect.id);
     if (review)
-      reviewSubmit("put", efficacy, adverseEffectIds, detail, review.id);
+      reviewSubmit("put", efficacy, adverseEffectIds, detail, review.id, review.meta.drug.id);
     else reviewSubmit("post", efficacy, adverseEffectIds, detail, null);
 
     // clear
@@ -163,11 +163,11 @@ const NewReview = React.memo(({ reviewSubmit, review, modalOff }) => {
             onClick={
               !efficacy
                 ? () => {
-                    showAlert();
-                  }
+                  showAlert();
+                }
                 : e => {
-                    finalReviewSubmit(e);
-                  }
+                  finalReviewSubmit(e);
+                }
             }
             disable={!efficacy}
           >
