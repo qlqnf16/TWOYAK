@@ -19,7 +19,7 @@ const HomeContainer = styled.div`
   color: var(--twoyak-black);
 `;
 
-const Camera = styled.input`
+const Camera = styled.div`
   position: fixed;
   bottom: 4rem;
   left: 1.4375rem;
@@ -82,6 +82,9 @@ function Home(props) {
         />
       ) : null}
       <RecommendedContents history={props.history} />
+      <Camera onClick={() => props.history.push("/capture")}>
+        <i className="fas fa-camera fa-3x" />
+      </Camera>
       <Footer history={props.history} />
       {tokenChange ? <Redirect to="/login" /> : null}
     </HomeContainer>
