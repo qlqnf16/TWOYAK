@@ -89,9 +89,10 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
 
   const fetchDiseaseData = async () => {
     const { data } = await axios.get("autocomplete/disease", {
-      headers: { Authorization: `bearer ${authState.token}` }
+      headers: { Authorization: `bearer ${authState.token}` },
+      params: { sub_user_id: authState.subUserId }
     });
-    const payload = data.standard_diseases;
+    const payload = data.my_diseases.concat(data.standard_diseases);
     dispatch({ type: "GET_DISEASES", payload: payload });
   };
 
@@ -99,12 +100,32 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
     setDisease(value);
   };
 
+  const addDisease = async value => {
+    try {
+      const response = await axios.post(`/user/${authState.subUserId}/diseases`, {
+        disease: {
+          name: value
+        }
+      }, {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        })
+      fetchDiseaseData()
+      setDisease({ id: response.data.id, name: response.data.name })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const addDrug = () => {
     const diseaseId = disease.id;
     const formattedFrom = from.format("YYYY-MM-DD");
     const formattedTo = to.format("YYYY-MM-DD");
     const memoToSend = memo
-    addCurrentDrug(drugId, { diseaseId, formattedFrom, formattedTo, memoToSend });
+    console.log(disease)
+    if (diseaseId) addCurrentDrug(drugId, { diseaseId, formattedFrom, formattedTo, memoToSend });
+    else alert('질병추가해라')
   };
 
   const selectionRange = {
@@ -132,6 +153,7 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
                 placeholderProp={"질환명 입력"}
                 searchKey="name"
                 inputChange={diseasesInputChange}
+                inputAdd={addDisease}
               />
             </AutosuggestStyleWrapper>
             <>

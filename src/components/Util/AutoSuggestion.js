@@ -45,6 +45,7 @@ const AutoSuggestion = ({
   addCurrentDrug,
   currentDrugs,
   inputChange,
+  inputAdd,
   submit
 }) => {
   const [value, setValue] = useState("");
@@ -71,20 +72,21 @@ const AutoSuggestion = ({
     const inputValue = deburr(value.trim()).toLowerCase();
     const inputLength = inputValue.length;
     let count = 0;
+    const suggestionList = suggestList.filter(suggestion => {
+      const keep =
+        count < 20 &&
+        suggestion[searchKey].toLowerCase().includes(inputValue);
+
+      if (keep) {
+        count += 1;
+      }
+
+      return keep;
+    })
 
     return inputLength === 0
       ? []
-      : suggestList.filter(suggestion => {
-        const keep =
-          count < 20 &&
-          suggestion[searchKey].toLowerCase().includes(inputValue);
-
-        if (keep) {
-          count += 1;
-        }
-
-        return keep;
-      });
+      : search === 'drug' ? suggestionList : [{ name: value }].concat(suggestionList);
   };
 
   const getSuggestionValue = suggestion => {
@@ -93,7 +95,10 @@ const AutoSuggestion = ({
 
   const onSuggestionSelected = (event, { suggestion }) => {
     if (search === "adverse_effect") inputChange(suggestion);
-    if (search === "disease") inputChange(suggestion);
+    if (search === "disease") {
+      suggestion.id ?
+        inputChange(suggestion) : inputAdd(suggestion.name)
+    }
     if (search === "drug") submit(suggestion.id);
   };
 
@@ -135,9 +140,23 @@ const AutoSuggestion = ({
     if (search === "drug") {
       inputChange(newValue);
     }
+
+    if (search === 'disease') {
+      // console.log(event.keyCode)
+      // inputChange(newValue)
+    }
   };
 
+  const onKeyDown = (event) => {
+    // console.log(event.keyCode)
+    if (event.keyCode === 13) {
+      console.log(value)
+      inputAdd(value)
+    }
+  }
+
   const onSuggestionsFetchRequested = ({ value }) => {
+    // console.log(value)
     setSuggestions(getSuggestions(value));
   };
 
@@ -148,7 +167,8 @@ const AutoSuggestion = ({
   const inputProps = {
     placeholder: placeholderProp,
     value,
-    onChange: onChange
+    onChange: onChange,
+    onKeyDown: onKeyDown
   };
 
   return (
@@ -161,7 +181,6 @@ const AutoSuggestion = ({
           getSuggestionValue={getSuggestionValue}
           renderSuggestion={renderSuggestion}
           inputProps={inputProps}
-          highlightFirstSuggestion={true}
           onSuggestionSelected={onSuggestionSelected}
         />
       </StyleWrapper>
