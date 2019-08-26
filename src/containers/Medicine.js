@@ -192,7 +192,7 @@ function Medicine({ match, history, location }) {
           }
         }
       );
-      const idList = data.map(d => d.current_drug_id);
+      const idList = data.data.map(d => d.attributes.current_drug_id);
       setCurrentDrugs(idList);
       // console.log(idList);
     } catch (error) {

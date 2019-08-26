@@ -77,20 +77,22 @@ function CurrentDrugs({ currentDrugs, history, medIcon, userName }) {
       </HeaderContainer>
       <div>
         {currentDrugs ? (
-          currentDrugs.map((i, k) => (
-            <CurrentDrugsDiv
-              key={k}
-              onClick={() => searchDrugHandler(i.current_drug_id)}
-            >
-              <ContentDot className="fas fa-circle" />
-              <DrugName>{i.drug_name.split("(")[0]}</DrugName>
-            </CurrentDrugsDiv>
-          ))
-        ) : (
-          <PressCard onClick={() => history.push("/medicine")}>
-            <AddButton src={addDash} />
-          </PressCard>
-        )}
+          <DrugsContainer>
+            {currentDrugs.map((i, k) => (
+              <CurrentDrugsDiv
+                key={k}
+                onClick={() => searchDrugHandler(i.attributes.current_drug_id)}
+              >
+                <ContentDot className="fas fa-circle" />
+                <DrugName>{i.attributes.drug.data.attributes.name.split("(")[0]}</DrugName>
+              </CurrentDrugsDiv>
+            ))}
+          </DrugsContainer>)
+          : (
+            <PressCard onClick={() => history.push("/medicine")}>
+              <AddButton src={addDash} />
+            </PressCard>
+          )}
       </div>
       <MoreInfo onClick={() => history.push("/health-record")}>
         자세히 보기
