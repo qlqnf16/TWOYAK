@@ -24,19 +24,26 @@ const Header = styled.div`
 const PressCard = styled(EmptyCard)`
   padding-top: 1rem;
   padding-bottom: 1rem;
-  margin: 1.5rem 0 0 0;
+  margin: 1.5rem 0;
   width: 100%;
+  border-width: 1px;
 `;
 
 const AddButton = styled.img`
   width: 2.25rem;
 `;
 
+const DrugsContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 12px 6px;
+  margin: 1.1rem 0;
+`
+
 const CurrentDrugsDiv = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 1.0625rem;
-  width: 50%;
+  overflow:hidden;
 `;
 
 const ContentDot = styled.div`
@@ -48,10 +55,13 @@ const ContentDot = styled.div`
 const DrugName = styled.div`
   font-size: 0.75rem;
   font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 `;
 
 const HomeDivider = styled(Divider)`
-  margin-top: 2.125rem;
+  margin-top:1rem;
 `;
 
 const HomeContent = styled.div`
@@ -60,7 +70,9 @@ const HomeContent = styled.div`
 `;
 
 const MoreInfo = styled.div`
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  text-align: right;
+  color: var(--twoyak-black);
 `;
 
 function CurrentDrugs({ currentDrugs, history, medIcon, userName }) {
@@ -75,8 +87,8 @@ function CurrentDrugs({ currentDrugs, history, medIcon, userName }) {
           <Header>{userName}님이 복용중인 약</Header>
         </div>
       </HeaderContainer>
-      <div>
-        {currentDrugs ? (
+      {currentDrugs ? (
+        <>
           <DrugsContainer>
             {currentDrugs.map((i, k) => (
               <CurrentDrugsDiv
@@ -88,15 +100,14 @@ function CurrentDrugs({ currentDrugs, history, medIcon, userName }) {
               </CurrentDrugsDiv>
             ))}
           </DrugsContainer>)
-          : (
-            <PressCard onClick={() => history.push("/medicine")}>
-              <AddButton src={addDash} />
-            </PressCard>
-          )}
-      </div>
-      <MoreInfo onClick={() => history.push("/health-record")}>
-        자세히 보기
-      </MoreInfo>
+              <MoreInfo onClick={() => history.push("/health-record")}>
+            자세히 보기
+      </MoreInfo></>)
+        : (
+          <PressCard onClick={() => history.push("/medicine")}>
+            <AddButton src={addDash} />
+          </PressCard>
+        )}
       <HomeDivider />
       <HomeContent>
         <img src={medIcon} alt="med-icon" />

@@ -9,6 +9,7 @@ import { Helmet } from "react-helmet";
 import Navbar from "./components/Navbars/Navbar";
 import Header from "./components/Navbars/Header";
 import Block from "./components/UI/Block";
+import Spinner from "./components/UI/Spinner";
 
 function App() {
   const switchRoutes = (
@@ -44,12 +45,12 @@ function App() {
             {window.innerWidth >= 960 ? (
               <Block />
             ) : (
-              <>
-                <Header />
-                <Navbar />
-                {switchRoutes}
-              </>
-            )}
+                <>
+                  <Header />
+                  <Navbar />
+                  {switchRoutes}
+                </>
+              )}
           </WatchStore>
         </DrugStore>
       </AuthStore>

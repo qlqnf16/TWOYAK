@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect, useContext } from "react";
+import React, { useReducer, useEffect, useContext, useState } from "react";
 import { drugReducer } from "./reducers";
 import axios from "../apis";
 import { AuthContext } from "./AuthStore";
@@ -11,6 +11,7 @@ const DrugStore = props => {
     adverse_effects: null,
     diseases: null
   });
+  const [loading, setLoading] = useState(false)
   const { state: authState } = useContext(AuthContext);
 
   const fetchInitialData = async () => {
@@ -32,7 +33,7 @@ const DrugStore = props => {
   }, [authState.token]);
 
   return (
-    <DrugContext.Provider value={{ state, dispatch }}>
+    <DrugContext.Provider value={{ state, dispatch, loading, setLoading }}>
       {props.children}
     </DrugContext.Provider>
   );

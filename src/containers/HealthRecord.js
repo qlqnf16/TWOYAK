@@ -96,7 +96,7 @@ function HealthRecord({ history }) {
       }
     } else {
       const { data } = await getInfos('/past_drugs');
-      setPastDrugs(data);
+      setPastDrugs(data.data);
     }
   };
 
@@ -182,7 +182,7 @@ function HealthRecord({ history }) {
           }
         }
       );
-      loadingHandler();
+      loadingHandler(true);
       setShowConfirm(false)
     } catch (error) {
       console.log(error);
