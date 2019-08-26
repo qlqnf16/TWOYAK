@@ -92,6 +92,7 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthStore";
 import styled from "styled-components";
+import Suggestions from "./Suggestions";
 
 const UserGeneralInfoContainer = styled.div`
   padding: 17px;
@@ -101,7 +102,6 @@ const SayHello = styled.div`
   font-size: 1rem;
   font-weight: 800;
   color: #474747;
-  margin-bottom: 2.25rem;
   display: flex;
   justify-content: space-between;
 `;
@@ -110,6 +110,7 @@ const GeneralInfo = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
+  margin-top: 2.25rem;
 `;
 
 const EachInfo = styled.div`
@@ -172,6 +173,7 @@ function UserGeneralInfo({
   return (
     <UserGeneralInfoContainer>
       <SayHello>{authState.userName} 님, 안녕하세요</SayHello>
+      <Suggestions />
       {generalInfo}
     </UserGeneralInfoContainer>
   );
