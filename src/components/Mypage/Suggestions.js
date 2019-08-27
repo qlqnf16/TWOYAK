@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import axios from "../../apis";
 import styled from "styled-components";
-import Modal from "../UI/Modal";
+import Modal from "../UI/Modals/Modal";
 import jwt_decode from "jwt-decode";
 import { AuthContext } from "../../contexts/AuthStore";
 import { BasicInput, BasicButton } from "../UI/SharedStyles";
