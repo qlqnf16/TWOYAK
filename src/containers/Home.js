@@ -33,7 +33,6 @@ function Home(props) {
   const [currentDrugs, setCurrentDrugs] = useState(null);
   const [tokenChange, setTokenChange] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [clickCamera, setClickCamera] = useState(false);
   const { state: authState, dispatch } = useContext(AuthContext);
 
   useEffect(() => {
@@ -67,7 +66,7 @@ function Home(props) {
           }
         });
     }
-  }, [authState.subUserId, authState.token]);
+  }, [authState.subUserId, authState.token, dispatch]);
 
   return (
     <HomeContainer>
@@ -82,9 +81,9 @@ function Home(props) {
         />
       ) : null}
       <RecommendedContents history={props.history} />
-      <Camera onClick={() => props.history.push("/capture")}>
+      {/* <Camera onClick={() => props.history.push("/capture")}>
         <i className="fas fa-camera fa-3x" />
-      </Camera>
+      </Camera> */}
       <Footer history={props.history} />
       {tokenChange ? <Redirect to="/login" /> : null}
     </HomeContainer>

@@ -145,6 +145,7 @@ import Modal from "../UI/Modal";
 const WatchDrugsContainer = styled.div`
   padding: 17px;
   min-height: 6.25rem;
+  margin-bottom: 70px;
 `;
 
 const HeartFillImg = styled(CloseImg)``;

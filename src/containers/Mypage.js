@@ -177,13 +177,13 @@ import UserGeneralInfo from "../components/Mypage/UserGeneralInfo";
 import Diseases from "../components/Mypage/Diseases";
 import WatchDrugs from "../components/Mypage/WatchDrugs";
 import Footer from "../components/Mypage/Footer";
-import ChangeUserModal from "../components/UI/Modal";
+import Modal from "../components/UI/Modal";
 import AddDash from "../assets/images/add-dash.svg";
 import ChangeUserIcon from "../assets/images/change-user-icon.svg";
 
 const MyPageContainer = styled.div`
   width: 100%;
-  padding: 20px;
+  padding: 20px 20px 0 20px;
   height: 100vh;
   position: fixed;
   top: 0;
@@ -200,7 +200,9 @@ const Divider = styled.div`
   background-color: var(--twoyak-blue);
 `;
 
-const ModalContents = styled.div``;
+const ModalContents = styled.div`
+  overflow: auto;
+`;
 
 const ModalMessage = styled.div`
   width: auto;
@@ -214,12 +216,29 @@ const AddIcon = styled.img`
   width: 3.125rem;
 `;
 
+const FooterZone = styled.div`
+  background-color: #f0f9ff;
+  position: fixed;
+  bottom: 0;
+  width: 150px;
+  z-index: 200;
+`;
+
+const Indicator = styled.div`
+  border-radius: 11px 11px 0 0;
+  background-color: var(--twoyak-blue);
+  color: #ffffff;
+  text-align: center;
+`;
+
 const ChangeFunction = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 1.875rem;
   padding-bottom: 1.875rem;
+  overflow: auto;
+  height: 500px;
 `;
 
 const ChangeUser = styled.img`
@@ -229,6 +248,8 @@ const ChangeUser = styled.img`
   z-index: 300;
 `;
 
+const ChangeUserModal = styled(Modal)``;
+
 function Mypage(props) {
   const [currentDrugsCount, setCurrentDrugsCount] = useState([]);
   const [drugReviewsCount, setDrugReviewsCount] = useState([]);
@@ -236,21 +257,20 @@ function Mypage(props) {
   const [familyMedHistoies, setFamilyMedHistories] = useState([]);
   const [watchDrugs, setWatchDrugs] = useState([]);
   const [changeUserModalShow, setChangeUserModalShow] = useState(false);
+  const [footerShow, setFooterShow] = useState(false);
 
-  const { state, dispatch } = useContext(AuthContext);
+  const { state: authState, dispatch } = useContext(AuthContext);
 
   useEffect(() => {
-    if (state.token) {
-      getUserInfo(state.subUserIndex);
-    }
-  }, [state.token, state.subUserIndex]);
+    getUserInfo(authState.subUserIndex);
+  }, [authState.token, authState.subUserIndex]);
 
   const getUserInfo = id => {
     axios({
       method: "GET",
       url: "/user/mypage/test",
       headers: {
-        Authorization: `Bearer ${state.token}`
+        Authorization: `Bearer ${authState.token}`
       }
     }).then(async response => {
       const payload = response.data;
@@ -274,9 +294,9 @@ function Mypage(props) {
   const modalContent = (
     <ModalContents>
       <ChangeFunction>
-        {state.subUsers
-          ? state.subUsers.map((i, k) =>
-              i.id !== state.subUserId ? (
+        {authState.subUsers
+          ? authState.subUsers.map((i, k) =>
+              i.id !== authState.subUserId ? (
                 <ModalMessage
                   key={k}
                   onClick={() => {
@@ -320,7 +340,12 @@ function Mypage(props) {
         alt="change-user"
         onClick={() => toggleChangeUserModalHandler()}
       />
-      <Footer routes={props} />
+      <FooterZone>
+        <Indicator onClick={() => setFooterShow(!footerShow)}>
+          {!footerShow ? "기타 열기" : "닫기"}
+        </Indicator>
+        {footerShow && <Footer routes={props} />}
+      </FooterZone>
       {changeUserModalShow ? (
         <ChangeUserModal
           modalOff={() => toggleChangeUserModalHandler()}

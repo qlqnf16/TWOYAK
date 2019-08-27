@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import Terms from "./Terms";
-import { ReactComponent as SearchArrow } from "../../assets/images/search-arrow.svg";
 
 const ModalContainer = styled.div`
   width: 100%;

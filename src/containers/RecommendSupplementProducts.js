@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+import ProductCard from "../components/RecommendSupplementProducts/ProductCard";
 import { Container, BasicButton, Line } from "../components/UI/SharedStyles";
 
 const Background = styled.div`
@@ -11,6 +12,8 @@ const Background = styled.div`
   top: 0;
   left: 0;
   z-index: -1;
+  overflow: auto;
+  padding-bottom: 100px;
 `;
 
 const RecommendProductContainer = styled(Container)`
@@ -55,7 +58,7 @@ function RecommendSupplementProducts(props) {
   return (
     <Background>
       <RecommendProductContainer>
-        <Title>선택된 건강기능식품 성분</Title>
+        <Title>추천 건강기능식품 성분</Title>
         <IngrWrapper>
           {recommendSupplementIngrs.map((i, k) => (
             <IngrButton
@@ -79,8 +82,11 @@ function RecommendSupplementProducts(props) {
           <EffectDescription>- 뼈의 형성과 유지에 필요</EffectDescription>
           <EffectDescription>- 골다골증발생 위험 감소</EffectDescription>
         </EffectWrapper>
+        <Divider />
+        {[0, 0, 0].map((i, k) => (
+          <ProductCard ranking={k + 1} rating={4.35} />
+        ))}
       </RecommendProductContainer>
-      <Divider />
     </Background>
   );
 }
