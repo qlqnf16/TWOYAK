@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { EmptyCard, Divider } from "../UI/SharedStyles";
+import Spinner from "../UI/Spinner";
 import addDash from "../../assets/images/add-dash.svg";
 import "@fortawesome/fontawesome-free/css/all.css";
 
@@ -75,7 +76,7 @@ const MoreInfo = styled.div`
   color: var(--twoyak-black);
 `;
 
-function CurrentDrugs({ currentDrugs, history, medIcon, userName }) {
+function CurrentDrugs({ currentDrugs, history, medIcon, userName, loading }) {
   const searchDrugHandler = drug_id => {
     history.push(`/medicine/${drug_id}`);
   };
@@ -87,7 +88,7 @@ function CurrentDrugs({ currentDrugs, history, medIcon, userName }) {
           <Header>{userName}님이 복용중인 약</Header>
         </div>
       </HeaderContainer>
-      {currentDrugs ? (
+      {loading ? (<Spinner /> : currentDrugs ? (
         <>
           <DrugsContainer>
             {currentDrugs.map((i, k) => (
