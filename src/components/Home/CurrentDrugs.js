@@ -88,7 +88,7 @@ function CurrentDrugs({ currentDrugs, history, medIcon, userName, loading }) {
           <Header>{userName}님이 복용중인 약</Header>
         </div>
       </HeaderContainer>
-      {loading ? (<Spinner /> : currentDrugs ? (
+      {loading ? (<Spinner />) : currentDrugs ? (
         <>
           <DrugsContainer>
             {currentDrugs.map((i, k) => (

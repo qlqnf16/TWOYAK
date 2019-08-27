@@ -3,7 +3,7 @@ import { AuthContext } from "../../contexts/AuthStore";
 import styled from "styled-components";
 import axios from "../../apis";
 import jwt_decode from "jwt-decode";
-import DropoutModal from "../UI/Modal";
+import DropoutModal from "../UI/Modals/Modal";
 import { BasicButton, BasicInput } from "../UI/SharedStyles";
 import Spinner from "../UI/Spinner";
 
@@ -151,8 +151,8 @@ function Footer({ routes }) {
         {dropoutLoading ? (
           <Spinner />
         ) : (
-          <BasicButton onClick={() => deleteUserHandler()}>탈퇴</BasicButton>
-        )}
+            <BasicButton onClick={() => deleteUserHandler()}>탈퇴</BasicButton>
+          )}
       </ButtonArea>
     </ModalContents>
   );

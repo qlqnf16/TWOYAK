@@ -161,10 +161,8 @@ const AutoSuggestion = ({
       if (event.keyCode === 13 && !suggestionSelected) {
         inputAdd(value)
       }
-
       suggestionSelected = false;
     }
-
   }
 
   const onSuggestionsFetchRequested = ({ value }) => {
