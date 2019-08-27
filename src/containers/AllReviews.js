@@ -79,9 +79,11 @@ function AllReviews({ match }) {
   const [updateTarget, setUpdateTarget] = useState()
 
   useEffect(() => {
-    if (match.params.my) getReviews('my_reviews')
+    if (match.params.my) {
+      if (authState.token) getReviews('my_reviews')
+    }
     else getReviews('recent');
-  }, []);
+  }, [authState]);
 
   const getReviews = async type => {
     try {

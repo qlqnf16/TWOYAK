@@ -150,7 +150,7 @@ function UserGeneralInfo({
     {
       label: "리뷰",
       value: drugReviewsCount,
-      src: "/all-reviews"
+      src: "/all-reviews/my"
     }
   ];
 
