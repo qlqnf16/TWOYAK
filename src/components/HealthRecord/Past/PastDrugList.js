@@ -4,7 +4,7 @@ import moment from "moment";
 
 import PastDrug from "./PastDrug";
 import DrugReview from "../../Medicine/Review/DrugReview";
-import Modal from "../../UI/Modal";
+import Modal from "../../UI/Modals/Modal";
 
 import styled from "styled-components";
 import { BulletText, BasicButton, FlexDiv } from "../../UI/SharedStyles";
@@ -44,15 +44,15 @@ const PastDrugList = ({ drugs, deleteDrug, loadingHandler }) => {
 
   // 월별 복용 약품 분류
   drugs.forEach(drug => {
-    const from = moment(drug.from);
-    const to = moment(drug.to);
+    const from = moment(drug.attributes.from);
+    const to = moment(drug.attributes.to);
     const difference = to.diff(from, "months");
     const addingData = {
-      name: drug.drug_name,
-      from: drug.from,
-      to: drug.to,
-      id: drug.past_drug_id
-      // disease: drug.disease
+      name: drug.attributes.drug.data.attributes.name,
+      from: drug.attributes.from,
+      to: drug.attributes.to,
+      id: drug.attributes.past_drug_id,
+      disease: drug.attributes.disease ? drug.attributes.disease.attributes.name : '정보없음'
     };
 
     !monthCategory[from.format("YYYY-MM")]
@@ -72,7 +72,7 @@ const PastDrugList = ({ drugs, deleteDrug, loadingHandler }) => {
   });
 
   // 질환별 약품 분류
-  const categorizeByDisease = drugs => {
+  const categorizeByDisease = (drugs, key) => {
     const diseaseCategory = {};
     drugs.forEach(drug => {
       const addingData = {
@@ -87,17 +87,22 @@ const PastDrugList = ({ drugs, deleteDrug, loadingHandler }) => {
         ? (diseaseCategory[drug.disease] = [addingData])
         : diseaseCategory[drug.disease].push(addingData);
     });
+    monthCategory[key] = diseaseCategory
   };
 
-  // monthCategory.forEach(drugs => {
-  //   categorizeByDisease(drugs)
-  // })
+  const months = Object.keys(monthCategory)
+    .sort()
+    .reverse();
+
+  months.forEach(month => {
+    categorizeByDisease(monthCategory[month], month)
+  })
 
   // modal on
   const modalOn = async id => {
     let target;
     drugs.forEach(d => {
-      if (d.past_drug_id === id) {
+      if (d.attributes.past_drug_id === id) {
         target = d;
       }
     });
@@ -110,10 +115,6 @@ const PastDrugList = ({ drugs, deleteDrug, loadingHandler }) => {
     setShow(false);
   };
 
-  const months = Object.keys(monthCategory)
-    .sort()
-    .reverse();
-
   const deletePastDrug = async id => {
     await deleteDrug(id, true)
     setShow(false);
@@ -123,31 +124,34 @@ const PastDrugList = ({ drugs, deleteDrug, loadingHandler }) => {
   return (
     <div>
       {months.length > 0 &&
-        months.map(month => (
-          <PastDrug
-            key={month}
-            dateArray={month.split("-")}
-            monthCategory={monthCategory[month]}
-            modalOn={modalOn}
-          />
-        ))}
+        months.map(month =>
+          (
+            <PastDrug
+              key={month}
+              dateArray={month.split("-")}
+              monthCategory={monthCategory[month]}
+              modalOn={modalOn}
+            />
+          )
+        )
+      }
       {show && (
         <Modal
-          title={targetDrug.drug_name.split("(")[0]}
+          title={targetDrug.attributes.drug.data.attributes.name.split("(")[0]}
           content={
             targetDrug && (
               <>
-                {targetDrug.my_review ? (
+                {targetDrug.attributes.my_review ? (
                   <MarginDiv>
                     <BulletText>
                       <p>내 리뷰</p>
                     </BulletText>
-                    <DrugReview my={true} review={targetDrug.my_review} />
+                    <DrugReview my={true} review={targetDrug.attributes.my_review} />
                   </MarginDiv>
                 ) : <EmptyReview>내가 남긴 리뷰가 없습니다.</EmptyReview>}
                 <FlexDiv>
                   <Button>
-                    <StyledLink to={`medicine/${targetDrug.past_drug_id}`}>
+                    <StyledLink to={`medicine/${targetDrug.attributes.past_drug_id}`}>
                       약 정보 보기
                   </StyledLink>
                   </Button>

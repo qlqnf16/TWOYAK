@@ -3,7 +3,7 @@ import { AuthContext } from "../../contexts/AuthStore";
 import styled from "styled-components";
 import axios from "../../apis";
 import jwt_decode from "jwt-decode";
-import DropoutModal from "../UI/Modal";
+import DropoutModal from "../UI/Modals/Modal";
 import { BasicButton, BasicInput } from "../UI/SharedStyles";
 
 const FooterContainer = styled.div``;
@@ -149,8 +149,8 @@ function Footer({ routes }) {
         {dropoutLoading ? (
           <div>실행 중</div>
         ) : (
-          <BasicButton onClick={() => deleteUserHandler()}>탈퇴</BasicButton>
-        )}
+            <BasicButton onClick={() => deleteUserHandler()}>탈퇴</BasicButton>
+          )}
       </ButtonArea>
     </ModalContents>
   );

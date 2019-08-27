@@ -134,7 +134,7 @@ export const BulletText = styled.li`
     display: inline;
     margin-left: -5px;
     font-size: 0.8rem;
-    font-weight: 800;
+    font-weight: 700;
   }
 `;
 

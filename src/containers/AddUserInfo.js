@@ -12,7 +12,7 @@ import Sex from "../components/AddUserInfo/Sex";
 import Health from "../components/AddUserInfo/Health";
 import Birthdate from "../components/AddUserInfo/Birthdate";
 
-import Modal from "../components/UI/Modal";
+import Modal from "../components/UI/Modals/Modal";
 import medIcon from "../assets/images/(white)med-icon.svg";
 import Nickname from "../components/AddUserInfo/Nickname";
 

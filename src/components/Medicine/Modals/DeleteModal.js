@@ -1,5 +1,5 @@
 import React from "react";
-import Modal from "../../UI/Modal";
+import Modal from "../../UI/Modals/Modal";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -26,20 +26,20 @@ const DeleteModal = ({
   deleteCurrentDrug,
   toPastDrug
 }) => (
-  <Modal
-    title="복용목록에서 제거하기"
-    content={
-      <Container>
-        <Button border onClick={toPastDrug}>
-          과거복용내역에 추가
+    <Modal
+      title="복용목록에서 제거하기"
+      content={
+        <Container>
+          <Button border onClick={toPastDrug}>
+            과거복용내역에 추가
         </Button>
-        <Button onClick={deleteCurrentDrug}>삭제하기</Button>
-      </Container>
-    }
-    modalOff={() => {
-      additionalModalToggle("delete");
-    }}
-  />
-);
+          <Button onClick={deleteCurrentDrug}>삭제하기</Button>
+        </Container>
+      }
+      modalOff={() => {
+        additionalModalToggle("delete");
+      }}
+    />
+  );
 
 export default DeleteModal;
