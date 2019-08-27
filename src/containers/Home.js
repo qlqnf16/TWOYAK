@@ -9,6 +9,7 @@ import RecommendedContents from "../components/Home/RecommendedContents";
 import medIcon from "../assets/images/med-icon.svg";
 import Warning from "../components/UI/Warning";
 import Footer from "../components/Home/Footer";
+import "@fortawesome/fontawesome-free/css/all.css";
 
 const HomeContainer = styled.div`
   width: 88%;
@@ -16,6 +17,16 @@ const HomeContainer = styled.div`
   padding-left: 0.5625rem;
   padding-right: 0.5625rem;
   color: var(--twoyak-black);
+`;
+
+const Camera = styled.div`
+  position: fixed;
+  bottom: 4rem;
+  left: 1.4375rem;
+  z-index: 300;
+  padding: 10px;
+  border-radius: 50%;
+  background-color: var(--twoyak-blue);
 `;
 
 function Home(props) {
@@ -55,7 +66,7 @@ function Home(props) {
           }
         });
     }
-  }, [authState.subUserId, authState.token]);
+  }, [authState.subUserId, authState.token, dispatch]);
 
   return (
     <HomeContainer>
@@ -70,6 +81,9 @@ function Home(props) {
         />
       ) : null}
       <RecommendedContents history={props.history} />
+      {/* <Camera onClick={() => props.history.push("/capture")}>
+        <i className="fas fa-camera fa-3x" />
+      </Camera> */}
       <Footer history={props.history} />
       {tokenChange ? <Redirect to="/login" /> : null}
     </HomeContainer>

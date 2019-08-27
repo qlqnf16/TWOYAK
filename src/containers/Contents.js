@@ -33,11 +33,6 @@ const ContentTitle = styled.div`
   margin-top: 1.625rem;
 `;
 
-const ContentImg = styled.img`
-  width: 100%;
-  margin-top: 1.625rem;
-`;
-
 const ContentParagraph = styled.div`
   margin: 2.125rem 0 0 0;
   text-align: left;

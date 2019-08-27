@@ -10,8 +10,10 @@ import AddUserInfo from "./containers/AddUserInfo";
 import Contents from "./containers/Contents";
 import Terms from "./containers/Terms";
 import FindPassword from "./containers/FindPassword";
-import RecommendSupplements from "./containers/RecommendSupplments";
+import RecommendSupplementIngrs from "./containers/RecommendSupplmentIngrs";
+import RecommendSupplementProducts from "./containers/RecommendSupplementProducts";
 import AboutUs from "./containers/AboutUs";
+import WebCamCapture from "./containers/WebCam";
 
 const routes = [
   {
@@ -92,14 +94,24 @@ const routes = [
     component: FindPassword
   },
   {
-    path: "/recommend-supplements",
+    path: "/recommend-supplement-ingrs/:ingrs",
+    name: "건강기능식품 성분 추천 페이지",
+    component: RecommendSupplementIngrs
+  },
+  {
+    path: "/recommend-supplement-products/:ingrs",
     name: "건강기능식품 추천 페이지",
-    component: RecommendSupplements
+    component: RecommendSupplementProducts
   },
   {
     path: "/about-us",
     name: "기업소개",
     component: AboutUs
+  },
+  {
+    path: "/capture",
+    name: "처방전 사진",
+    component: WebCamCapture
   }
 ];
 

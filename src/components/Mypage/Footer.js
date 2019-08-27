@@ -5,16 +5,8 @@ import axios from "../../apis";
 import jwt_decode from "jwt-decode";
 import DropoutModal from "../UI/Modals/Modal";
 import { BasicButton, BasicInput } from "../UI/SharedStyles";
-import Spinner from "../UI/Spinner";
 
-const FooterContainer = styled.div`
-  background-color: #ffffff;
-  position: fixed;
-  bottom: 1.4375rem;
-  height: 76px;
-  width: 50%;
-  z-index: 200;
-`;
+const FooterContainer = styled.div``;
 
 const ItemWrapper = styled.div`
   height: 100%;
@@ -87,6 +79,7 @@ function Footer({ routes }) {
       .post("/api/users/login", signinData)
       .then(response => {
         if (jwt_decode(response.data.auth_token).user.email === email) {
+          setDropoutLoading(true);
           axios
             .post(
               "/suggestions",
@@ -117,19 +110,24 @@ function Footer({ routes }) {
                     type: "SIGNOUT"
                   });
                   alert("회원탈퇴가 완료되었습니다.");
+                  routes.history.push("/");
                 })
                 .catch(error => {
+                  setDropoutLoading(false);
                   alert("회원탈퇴에서 에러가 발생하였습니다.");
                 })
             )
             .catch(error => {
+              setDropoutLoading(false);
               alert("에러가 발생하였습니다.");
             });
         } else {
+          setDropoutLoading(false);
           alert("비밀번호를 다시 확인해주세요.");
         }
       })
       .catch(error => {
+        setDropoutLoading(false);
         alert("에러가 발생하였습니다.");
       });
   };
@@ -149,7 +147,7 @@ function Footer({ routes }) {
       />
       <ButtonArea>
         {dropoutLoading ? (
-          <Spinner />
+          <div>실행 중</div>
         ) : (
             <BasicButton onClick={() => deleteUserHandler()}>탈퇴</BasicButton>
           )}

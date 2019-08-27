@@ -4,7 +4,6 @@ import { Redirect } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthStore";
 import styled from "styled-components";
 
-import Terms from "./Terms";
 import {
   Container,
   BasicButton,
@@ -40,10 +39,6 @@ const GoLoginMark = styled.div`
   font-size: 0.75rem;
   opacity: 0.39;
   margin-bottom: 1.3125rem;
-`;
-
-const SignupError = styled.div`
-  color: red;
 `;
 
 const TermsContainer = styled.div`
