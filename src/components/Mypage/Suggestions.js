@@ -15,10 +15,11 @@ const SuggestionButton = styled.button`
   width: 100%;
   height: 2rem;
   border-radius: 16px;
-  border: solid 1px var(--twoyak-blue);
+  border: solid 1px #00a6ff;
   text-align: center;
   background-color: #ffffff;
   font-weight: 800;
+  opacity: 0.6;
 `;
 
 const TextArea = styled.textarea`

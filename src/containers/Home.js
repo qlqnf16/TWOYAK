@@ -13,6 +13,7 @@ import "@fortawesome/fontawesome-free/css/all.css";
 
 const HomeContainer = styled.div`
   width: 88%;
+  max-width: 500px;
   margin: 90px auto 50px auto;
   padding-left: 0.5625rem;
   padding-right: 0.5625rem;

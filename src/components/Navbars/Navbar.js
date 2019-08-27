@@ -5,21 +5,24 @@ import { breakpoints } from "../UI/SharedStyles";
 
 const NavContainer = styled.div`
   width: 100%;
-  padding: 1.37rem;
+  padding: 1.37rem 4rem;
   display: flex;
   justify-content: start;
   align-items: center;
   background-image: linear-gradient(121deg, #00cfff, #00a2ff);
+  position: fixed;
+  bottom: 0;
+  justify-content: space-between;
+  height: 3rem;
+  z-index: 100;
   @media (max-width: ${breakpoints.medium}) {
-    position: fixed;
-    bottom: 0;
-    justify-content: space-between;
-    height: 3rem;
-    z-index: 100;
+    padding: 1.37rem;
   }
 `;
 
 const NavTransition = styled.div`
+  @media (max-width: ${breakpoints.medium}) {
+
   .active {
     visibility: visible;
     transition: all 200ms ease-in;
@@ -29,6 +32,7 @@ const NavTransition = styled.div`
     transition: all 200ms ease-out;
     transform: translate(0, 100%);
   }
+}
 `;
 
 const activeClassName = "nav-item-active";

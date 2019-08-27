@@ -193,6 +193,12 @@ const MyPageContainer = styled.div`
   overflow: auto;
 `;
 
+const Container = styled.div`
+  margin: 0 auto;
+  max-width: 500px;
+
+`
+
 const Divider = styled.div`
   width: 100%;
   height: 1px;
@@ -320,40 +326,42 @@ function Mypage(props) {
 
   return (
     <MyPageContainer>
-      <Topbar history={props.history} />
-      <UserGeneralInfo
-        currentDrugsCount={currentDrugsCount}
-        drugReviewsCount={drugReviewsCount}
-        myConversation={myConversation}
-        userChange={id => getUserInfo(id)}
-        history={props.history}
-      />
-      <Divider />
-      <Diseases
-        medHistory={familyMedHistoies}
-        historyChange={id => getUserInfo(id)}
-      />
-      <Divider />
-      <WatchDrugs watchDrugs={watchDrugs} watchChange={id => getUserInfo(id)} />
-      <ChangeUser
-        src={ChangeUserIcon}
-        alt="change-user"
-        onClick={() => toggleChangeUserModalHandler()}
-      />
-      <FooterZone>
-        <Indicator onClick={() => setFooterShow(!footerShow)}>
-          {!footerShow ? "기타 열기" : "닫기"}
-        </Indicator>
-        {footerShow && <Footer routes={props} />}
-      </FooterZone>
-      {changeUserModalShow ? (
-        <ChangeUserModal
-          modalOff={() => toggleChangeUserModalHandler()}
-          img
-          title="사용자 추가/변경"
-          content={modalContent}
+      <Container>
+        <Topbar history={props.history} />
+        <UserGeneralInfo
+          currentDrugsCount={currentDrugsCount}
+          drugReviewsCount={drugReviewsCount}
+          myConversation={myConversation}
+          userChange={id => getUserInfo(id)}
+          history={props.history}
         />
-      ) : null}
+        <Divider />
+        <Diseases
+          medHistory={familyMedHistoies}
+          historyChange={id => getUserInfo(id)}
+        />
+        <Divider />
+        <WatchDrugs watchDrugs={watchDrugs} watchChange={id => getUserInfo(id)} />
+        <ChangeUser
+          src={ChangeUserIcon}
+          alt="change-user"
+          onClick={() => toggleChangeUserModalHandler()}
+        />
+        <FooterZone>
+          <Indicator onClick={() => setFooterShow(!footerShow)}>
+            {!footerShow ? "기타 열기" : "닫기"}
+          </Indicator>
+          {footerShow && <Footer routes={props} />}
+        </FooterZone>
+        {changeUserModalShow ? (
+          <ChangeUserModal
+            modalOff={() => toggleChangeUserModalHandler()}
+            img
+            title="사용자 추가/변경"
+            content={modalContent}
+          />
+        ) : null}
+      </Container>
     </MyPageContainer>
   );
 }

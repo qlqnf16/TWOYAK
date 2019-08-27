@@ -16,6 +16,7 @@ const Backdrop = styled.div`
 
 const Container = styled.div`
   width: 73%;
+  max-width: 350px;
   position: fixed;
   top: 6.12rem;
   left: 0;
