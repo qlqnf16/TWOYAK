@@ -39,8 +39,8 @@ function Home(props) {
         }
       })
         .then(response => {
-          if (response.data.length > 0) {
-            setCurrentDrugs(response.data.splice(0, 4));
+          if (response.data.data.length > 0) {
+            setCurrentDrugs(response.data.data.splice(0, 4));
           }
           setLoading(false);
         })

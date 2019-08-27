@@ -3,7 +3,7 @@ import axios from "../../apis";
 import { AuthContext } from "../../contexts/AuthStore";
 import styled from "styled-components";
 
-import Modal from "../UI/Modal";
+import Modal from "../UI/Modals/Modal";
 import "@fortawesome/fontawesome-free/css/all.css";
 import close from "../../assets/images/close.svg";
 import medIcon from "../../assets/images/(white)med-icon.svg";

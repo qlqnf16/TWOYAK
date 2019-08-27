@@ -13,6 +13,7 @@ import DetailModal from "../components/Medicine/Drugs/DetailModal";
 import DrugReview from "../components/Medicine/Review/DrugReview";
 import AddModal from "../components/Medicine/Modals/AddModal";
 import DeleteModal from "../components/Medicine/Modals/DeleteModal";
+import NewReview from '../components/Medicine/Review/NewReview'
 
 import {
   Container,
@@ -21,7 +22,8 @@ import {
   RatingText,
   StyledRating
 } from "../components/UI/SharedStyles";
-import LoginModal from "../components/UI/LoginModal";
+import LoginModal from "../components/UI/Modals/LoginModal";
+import ConfirmModal from "../components/UI/Modals/ConfirmModal";
 
 const SearchContainer = styled.div`
   width: 100%;
@@ -73,6 +75,11 @@ function Medicine({ match, history, location }) {
   const [modal, setModal] = useState(false); // 의약품 상세정보 모달
   const [showMore, setShowMore] = useState(false); // 더보기 버튼
   const [showLogin, setShowLogin] = useState(false);
+
+  const [reviewModal, setReviewModal] = useState(false);
+  const [updateTarget, setUpdateTarget] = useState();
+  const [showConfirm, setShowConfirm] = useState(false)
+
   const [errorMessage, setErrorMessage] = useState();
 
   const { state } = useContext(DrugContext);
@@ -95,11 +102,18 @@ function Medicine({ match, history, location }) {
     setDrugList(null);
     setDrugimg(null);
     if (paramId) {
-      searchById(paramId);
-      getDrugImg(paramId);
+      if (localStorage.jwt_token) {
+        if (authState.token) {
+          searchById(paramId);
+          getDrugImg(paramId);
+        }
+      } else {
+        searchById(paramId);
+        getDrugImg(paramId);
+      }
     }
     if (authState.token) {
-      getCurrentDrugs();
+      getCurrentDrugs()
     }
     return setDrugList(null);
   }, [paramId, authState]);
@@ -111,7 +125,11 @@ function Medicine({ match, history, location }) {
         sub_user_id: authState.subUserId
       }
     });
-    const getDrugReviews = axios.get(`drugs/${id}/drug_reviews`);
+    const getDrugReviews = axios.get(`drugs/${id}/drug_reviews`, {
+      headers: {
+        Authorization: `bearer ${authState.token}`
+      }
+    });
 
     try {
       let [{ data: drugData }, { data: drugReviews }] = await Promise.all([
@@ -174,7 +192,7 @@ function Medicine({ match, history, location }) {
           }
         }
       );
-      const idList = data.map(d => d.current_drug_id);
+      const idList = data.data.map(d => d.attributes.current_drug_id);
       setCurrentDrugs(idList);
       // console.log(idList);
     } catch (error) {
@@ -192,7 +210,7 @@ function Medicine({ match, history, location }) {
         method: "POST",
         url: `user/${authState.subUserId}/${url}/${idParam}`,
         params: {
-          disease_ids: data.diseaseId,
+          disease_name: data.diseaseName,
           from: data.formattedFrom,
           to: data.formattedTo,
           memo: data.memoToSend
@@ -301,13 +319,23 @@ function Medicine({ match, history, location }) {
         {
           watch_drug: { user_id: authState.userId, watch_drug_id: drug.id }
         },
-        { headers: { Authorization: authState.token } }
+        { headers: { Authorization: `bearer ${authState.token}` } }
       );
       setWatching(!watching);
     } catch (error) {
       console.log(error);
     }
   };
+
+  // 리뷰 가져오기
+  const fetchDrugReviews = async () => {
+    const { data } = await axios.get(`drugs/${drug.id}/drug_reviews`, {
+      headers: {
+        Authorization: `bearer ${authState.token}`
+      }
+    });
+    setDrugReview(data.data)
+  }
 
   // 리뷰 좋아요 토글
   const toggleLike = async id => {
@@ -317,11 +345,10 @@ function Medicine({ match, history, location }) {
           method: "POST",
           url: `/drug_reviews/${id}/like`,
           headers: {
-            Authorization: authState.token
+            Authorization: `bearer ${authState.token}`
           }
         });
-        const { data } = await axios.get(`drugs/${id}/drug_reviews`);
-        setDrugReview(data.data)
+        fetchDrugReviews()
       } catch (err) {
         console.log(err)
       }
@@ -329,6 +356,59 @@ function Medicine({ match, history, location }) {
       setShowLogin(true)
     }
   };
+
+  // 리뷰 수정/삭제
+  // review update
+  const updateReview = async (method, efficacy, adverse_effect, detail, reviewId, drugId) => {
+    const data = {
+      user_id: authState.userId,
+      drug_id: drugId,
+      efficacy: efficacy,
+      body: detail,
+      adverse_effect_ids: adverse_effect
+    }
+    try {
+      await axios.put(
+        `drugs/${drugId}/drug_reviews/${reviewId}`,
+        { drug_review: data },
+        {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        }
+      );
+      setReviewModal(false);
+      fetchDrugReviews()
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // review delete
+  const deleteReview = async (reviewId, drugId) => {
+    try {
+      await axios.delete(`drugs/${drugId}/drug_reviews/${reviewId}`, {
+        headers: {
+          Authorization: `bearer ${authState.token}`
+        }
+      });
+      fetchDrugReviews()
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // DrugReview.js 리뷰 수정/삭제 버튼
+  const updateButton = review => {
+    setReviewModal(true);
+    setUpdateTarget(review);
+  };
+
+  const deleteButton = review => {
+    setShowConfirm(true);
+    setUpdateTarget(review)
+  }
+
 
   if (match.params.id) {
     return (
@@ -359,38 +439,39 @@ function Medicine({ match, history, location }) {
                 showLogin={() => setShowLogin(true)}
                 auth={!authState.token ? false : true}
               />
+              {drugReview && drugReview.length > 0 && (
+                <>
+                  <FlexDiv>
+                    <ReviewContainer>
+                      <BasicText>사용후기</BasicText>
+                      <RatingContainer>
+                        <Rating
+                          emptySymbol="fas fa-circle custom"
+                          fullSymbol="fas fa-circle custom full"
+                          fractions={2}
+                          initialRating={drug.drug_rating}
+                          readonly
+                        />
+                        <RatingText
+                          margin="0.5rem"
+                          opacity="0.5"
+                          size="0.7rem"
+                          bold
+                        >
+                          {drug.drug_rating.toFixed(1)}  / 5.0
+                    </RatingText>
+                      </RatingContainer>
+                    </ReviewContainer>
+                  </FlexDiv>
+                  {drugReview.map(review => (
+                    <DrugReview review={review} key={review.id} toggleLike={toggleLike} updateButton={updateButton} deleteButton={deleteButton} />
+                  ))}
+                </>
+              )}
             </>
           )}
           {errorMessage && <div>{errorMessage}</div>}
-          {drugReview && drugReview.length > 0 && (
-            <>
-              <FlexDiv>
-                <ReviewContainer>
-                  <BasicText>사용후기</BasicText>
-                  <RatingContainer>
-                    <Rating
-                      emptySymbol="fas fa-circle custom"
-                      fullSymbol="fas fa-circle custom full"
-                      fractions={2}
-                      initialRating={drug.drug_rating}
-                      readonly
-                    />
-                    <RatingText
-                      margin="0.5rem"
-                      opacity="0.5"
-                      size="0.7rem"
-                      bold
-                    >
-                      {drug.drug_rating.toFixed(1)}  / 5.0
-                    </RatingText>
-                  </RatingContainer>
-                </ReviewContainer>
-              </FlexDiv>
-              {drugReview.map(review => (
-                <DrugReview review={review} key={review.id} toggleLike={toggleLike} />
-              ))}
-            </>
-          )}
+
         </Container>
         {modal && <DetailModal item_seq={drug.item_seq} modalOff={modalOff} />}
         {addModal && (
@@ -407,11 +488,15 @@ function Medicine({ match, history, location }) {
             toPastDrug={toPastDrug}
           />
         )}
+        {reviewModal && <NewReview reviewSubmit={updateReview} review={updateTarget} modalOff={() => setReviewModal(false)} />}
+        {showConfirm && <ConfirmModal modalOff={() => { setShowConfirm(false) }} handleClick={() => { deleteReview(updateTarget.id, updateTarget.meta.drug.id) }} />}
       </>
     );
   } else {
+
     return (
       <SearchContainer>
+
         {drugs && (
           <>
             <SearchInput

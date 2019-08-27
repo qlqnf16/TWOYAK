@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { BasicInput } from "../UI/SharedStyles";
-import Modal from "../UI/Modal";
+import Modal from "../UI/Modals/Modal";
 import DatePicker from "../UI/DatePicker";
 import medIcon from "../../assets/images/(white)med-icon.svg";
 

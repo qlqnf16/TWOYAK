@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthStore";
 import axios from "../apis";
+import moment from 'moment'
 import styled from "styled-components";
 
 import CurrentDrugList from "../components/HealthRecord/Current/CurrentDrugList";
@@ -8,7 +9,8 @@ import PastDrugList from "../components/HealthRecord/Past/PastDrugList";
 import AddCard from "../components/HealthRecord/AddCard";
 import Warning from "../components/UI/Warning";
 import { BasicText, Line } from "../components/UI/SharedStyles";
-import LoginModal from "../components/UI/LoginModal";
+import LoginModal from "../components/UI/Modals/LoginModal";
+import ConfirmModal from "../components/UI/Modals/ConfirmModal";
 
 const Background = styled.div`
   width: 100%;
@@ -66,6 +68,8 @@ function HealthRecord({ history }) {
 
   const [showCurrent, setShowCurrent] = useState(true);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [deleteTarget, setDeleteTarget] = useState()
 
   useEffect(() => { }, [currentDrugs]);
 
@@ -81,11 +85,18 @@ function HealthRecord({ history }) {
 
   const loadingHandler = async (past) => {
     if (!past) {
-      const { data } = await getInfos(`/current_drugs`)
-      setCurrentDrugs(data)
+      const [{ data: current }, { data: dur }] = await Promise.all([getInfos(`/current_drugs`), getInfos('/analysis/get')])
+      setCurrentDrugs(current.data)
+      if (dur.duplicate || dur.interactions || dur.same_ingr) {
+        setDurInfo({
+          duplicate: dur.duplicate,
+          interactions: dur.interactions,
+          same_ingr: dur.same_ingr
+        });
+      }
     } else {
       const { data } = await getInfos('/past_drugs');
-      setPastDrugs(data);
+      setPastDrugs(data.data);
     }
   };
 
@@ -123,8 +134,10 @@ function HealthRecord({ history }) {
         getInfos("current_drugs"),
         getInfos("analysis/get")
       ]);
-      setCurrentDrugs(myCurrent);
-      setPastDrugs(myPast);
+      myCurrent.data.sort((a, b) => moment(a.attributes.from).isBefore(moment(b.attributes.from), 'date') ? 1 : -1)
+      myPast.data.sort((a, b) => moment(a.attributes.from).isAfter(moment(b.attributes.from), 'date') ? 1 : -1)
+      setCurrentDrugs(myCurrent.data);
+      setPastDrugs(myPast.data);
       if (myDur.duplicate || myDur.interactions || myDur.same_ingr) {
         setDurInfo({
           duplicate: myDur.duplicate,
@@ -169,13 +182,17 @@ function HealthRecord({ history }) {
           }
         }
       );
-      loadingHandler();
+      !past ? loadingHandler() : loadingHandler(true);
+      setShowConfirm(false)
     } catch (error) {
       console.log(error);
     }
   };
 
-
+  const deleteButton = (...drug) => {
+    setShowConfirm(true);
+    setDeleteTarget(drug)
+  }
 
   return (
     <>
@@ -209,7 +226,7 @@ function HealthRecord({ history }) {
               currentDrugs={currentDrugs}
               loadingHandler={loadingHandler}
               drugToPast={drugToPast}
-              deleteDrug={deleteDrug}
+              deleteDrug={deleteButton}
               durInfo={durInfo}
               subUserInfo={subUserInfo}
             />
@@ -223,6 +240,7 @@ function HealthRecord({ history }) {
           }
         />
       </Container>
+      {showConfirm && <ConfirmModal modalOff={() => { setShowConfirm(false) }} handleClick={() => { deleteDrug(...deleteTarget) }} />}
     </>
   );
 }

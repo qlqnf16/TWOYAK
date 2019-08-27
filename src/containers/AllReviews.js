@@ -6,14 +6,18 @@ import {
   Card,
   Line,
   FlexDiv,
-  BasicText
+  BasicText,
+  BasicButton
 } from "../components/UI/SharedStyles";
 import { AuthContext } from "../contexts/AuthStore";
 import DrugReview from "../components/Medicine/Review/DrugReview";
 import medIcon from "../assets/images/med-icon.svg";
 import { ReactComponent as Arrow } from "../assets/images/arrow.svg";
 import styled from "styled-components";
-import LoginModal from "../components/UI/LoginModal";
+import LoginModal from "../components/UI/Modals/LoginModal";
+import NewReview from "../components/Medicine/Review/NewReview";
+import Modal from "../components/UI/Modals/Modal";
+import ConfirmModal from "../components/UI/Modals/ConfirmModal";
 
 const Background = styled.div`
   width: 100%;
@@ -62,12 +66,17 @@ font-size: 0.875rem;
   text-decoration: none;
 `
 
+
+
 function AllReviews({ match }) {
   const { state: authState } = useContext(AuthContext);
   const [reviews, setReviews] = useState();
   const [category, setCategory] = useState({ name: "최신순", url: 'recent' });
   const [showFilter, setShowFilter] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [showNewReview, setShowNewReview] = useState(false);
+  const [updateTarget, setUpdateTarget] = useState()
 
   useEffect(() => {
     if (match.params.my) getReviews('my_reviews')
@@ -85,7 +94,11 @@ function AllReviews({ match }) {
         });
       }
       else {
-        result = await axios.get(`/reviews/${type}`);
+        result = await axios.get(`/reviews/${type}`, {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        });
       }
 
       setReviews(result.data.data);
@@ -119,7 +132,7 @@ function AllReviews({ match }) {
           method: "POST",
           url: `/drug_reviews/${id}/like`,
           headers: {
-            Authorization: authState.token
+            Authorization: `bearer ${authState.token}`
           }
         });
         getReviews(category.url)
@@ -129,6 +142,59 @@ function AllReviews({ match }) {
     } else {
       setShowLoginModal(true)
     }
+  };
+
+  // 리뷰 수정/삭제
+  // review update
+  const updateReview = async (method, efficacy, adverse_effect, detail, reviewId, drugId) => {
+    const data = {
+      user_id: authState.userId,
+      drug_id: drugId,
+      efficacy: efficacy,
+      body: detail,
+      adverse_effect_ids: adverse_effect
+    }
+    try {
+      await axios.put(
+        `drugs/${drugId}/drug_reviews/${reviewId}`,
+        { drug_review: data },
+        {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        }
+      );
+      setShowNewReview(false);
+      getReviews(category.url)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // review delete
+  const deleteReview = async (reviewId, drugId) => {
+    try {
+      await axios.delete(`drugs/${drugId}/drug_reviews/${reviewId}`, {
+        headers: {
+          Authorization: `bearer ${authState.token}`
+        }
+      });
+      setShowConfirm(false)
+      getReviews(category.url)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteButton = review => {
+    setShowConfirm(true);
+    setUpdateTarget(review)
+  }
+
+  // DrugReview.js 리뷰 수정하기 버튼
+  const updateButton = review => {
+    setShowNewReview(true);
+    setUpdateTarget(review);
   };
 
   return (
@@ -202,11 +268,18 @@ function AllReviews({ match }) {
                 <DrugReview
                   review={review}
                   toggleLike={toggleLike}
+                  deleteButton={deleteButton}
+                  deleteReview={deleteReview}
+                  updateButton={updateButton}
                 />
               </ReviewContainer>
             </ReviewCard>
           ))}
       </Container>
+      {showNewReview && <NewReview reviewSubmit={updateReview} review={updateTarget} modalOff={() => setShowNewReview(false)} />}
+      {showConfirm &&
+        <ConfirmModal modalOff={() => setShowConfirm(false)} handleClick={() => deleteReview(updateTarget.id, updateTarget.meta.drug.id)} />
+      }
       {showLoginModal && <LoginModal modalOff={() => setShowLoginModal(false)} />}
     </>
   );

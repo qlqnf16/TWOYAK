@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import styled from "styled-components";
 import { StyledRating, RatingText, BasicText } from "../../UI/SharedStyles";
@@ -6,6 +6,7 @@ import { ReactComponent as Edit } from "../../../assets/images/edit-review.svg";
 import { ReactComponent as Close } from "../../../assets/images/close.svg";
 import { ReactComponent as Like } from "../../../assets/images/like.svg";
 import "@fortawesome/fontawesome-free/css/all.css";
+import { AuthContext } from "../../../contexts/AuthStore";
 
 const Container = styled.div`
   width: 85%;
@@ -58,7 +59,10 @@ const EditIcon = styled(Edit)`
   color: var(--twoyak-black);
 `;
 
-const DrugReview = React.memo(({ my, review, deleteReview, updateButton, toggleLike }) => {
+const DrugReview = React.memo(({ review, deleteReview, deleteButton, updateButton, toggleLike }) => {
+  const { state: authState } = useContext(AuthContext)
+  let my = authState.userId === review.meta.user.id ? true : false;
+
   return (
     <Container>
       <Flex>
@@ -75,6 +79,12 @@ const DrugReview = React.memo(({ my, review, deleteReview, updateButton, toggleL
               {review.meta.user.age} {review.meta.user.sex === true ? "남" : "여"}
             </BasicText>
           )}
+          {my && updateButton && (
+            <FlexStart>
+              <EditIcon onClick={() => updateButton(review)} />
+              <Close onClick={() => deleteButton(review)} />
+            </FlexStart>
+          )}
         </FlexStart>
         <FlexStart>
           <BasicText bold size="0.7rem">
@@ -87,17 +97,11 @@ const DrugReview = React.memo(({ my, review, deleteReview, updateButton, toggleL
             }}
           />
         </FlexStart>
-        {my && updateButton && (
-          <FlexStart>
-            <EditIcon onClick={() => updateButton(review)} />
-            <Close onClick={() => deleteReview(review.attributes.id)} />
-          </FlexStart>
-        )}
       </Flex>
       <Bold>
         이상반응:{" "}
-        {review.adverse_effects && review.adverse_effects.length > 0
-          ? review.adverse_effects.map(effect => effect.symptom_name).join(", ")
+        {review.meta.adverse_effects && review.meta.adverse_effects.length > 0
+          ? review.meta.adverse_effects.map(effect => effect.symptom_name).join(", ")
           : "없음"}
       </Bold>
       <div>{review.attributes.body}</div>

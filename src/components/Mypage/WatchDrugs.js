@@ -17,7 +17,7 @@ import {
   ModalMessage,
   ButtonArea
 } from "./Diseases";
-import Modal from "../UI/Modal";
+import Modal from "../UI/Modals/Modal";
 
 const WatchDrugsContainer = styled.div`
   padding: 17px;

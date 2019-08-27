@@ -17,6 +17,7 @@ import {
   BulletText
 } from "../../UI/SharedStyles";
 import medIcon from "../../../assets/images/med-icon.svg";
+import ConfirmModal from "../../UI/Modals/ConfirmModal";
 
 const CloseIcon = styled(Close)`
   width: 1rem;
@@ -72,18 +73,19 @@ const CurrentDrug = ({
   deleteDrug
 }) => {
   const [show, setShow] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false)
   const [updateTarget, setUpdateTarget] = useState();
   const [message, setMessage] = useState([]);
   const { state: authState } = useContext(AuthContext);
 
   useEffect(() => {
     const loadMessage = () => {
-      if (drug.dur_info) {
+      if (drug.attributes.drug.data.attributes.dur_info) {
         const messageArray = [];
-        Object.keys(drug.dur_info).forEach(info => {
+        Object.keys(drug.attributes.drug.data.attributes.dur_info).forEach(info => {
           let infoVariable =
-            drug.dur_info[info] &&
-            drug.dur_info[info][0].description.split(" ");
+            drug.attributes.drug.data.attributes.dur_info[info] &&
+            drug.attributes.drug.data.attributes.dur_info[info][0].description.split(" ");
           switch (info) {
             case "age":
               messageArray.push(`${infoVariable.join("")} 안 돼요!`);
@@ -111,7 +113,7 @@ const CurrentDrug = ({
       }
     };
     loadMessage();
-  }, [drug.dur_info]);
+  }, [drug.attributes.drug.data.attributes.dur_info]);
 
   const newReviewToggle = () => {
     setShow(!show);
@@ -127,7 +129,7 @@ const CurrentDrug = ({
   ) => {
     const data = {
       user_id: authState.userId,
-      drug_id: drug.current_drug_id,
+      drug_id: drug.attributes.current_drug_id,
       efficacy: efficacy,
       body: detail,
       adverse_effect_ids: adverse_effect
@@ -183,6 +185,7 @@ const CurrentDrug = ({
           Authorization: `bearer ${authState.token}`
         }
       });
+      setShowConfirm(false)
       loadingHandler();
     } catch (error) {
       console.log(error);
@@ -195,118 +198,135 @@ const CurrentDrug = ({
     setUpdateTarget(review);
   };
 
+  const deleteButton = review => {
+    setShowConfirm(true);
+    setUpdateTarget(review)
+  }
+
   return (
-    <Card>
-      <CloseIcon
-        onClick={() => {
-          deleteDrug(drug.id);
-        }}
-      />
-      <FlexDiv justify="space-between">
-        <FlexDiv align="flex-start">
-          <img
-            src={medIcon}
-            alt="med-icon"
-            style={{ marginRight: "6px", marginTop: "5px" }}
-          />
-          <div style={{ width: typeof drug.drug_rating === "number" && "87%" }}>
-            <Title to={`/medicine/${drug.current_drug_id}`}>
-              {drug.drug_name.split("(")[0]}
-            </Title>
-            <Text>복용 시작일: {drug.from}</Text>
-          </div>
-        </FlexDiv>
-        <FlexDiv shrink="0">
-          {typeof drug.drug_rating === "number" ? (
-            <>
-              <Rating
-                emptySymbol="fas fa-circle  custom"
-                fullSymbol="fas fa-circle  custom full"
-                initialRating={drug.drug_rating}
-                readonly
-              />
-              <CustomRatingText>
-                {drug.drug_rating.toFixed(1)} / 5.0
+    <>
+      <Card>
+        <CloseIcon
+          onClick={() => {
+            deleteDrug(drug.id);
+          }}
+        />
+        <FlexDiv justify="space-between">
+          <FlexDiv align="flex-start">
+            <img
+              src={medIcon}
+              alt="med-icon"
+              style={{ marginRight: "6px", marginTop: "5px" }}
+            />
+            <div style={{ marginRight: '0.4rem' }}>
+              <Title to={`/medicine/${drug.attributes.current_drug_id}`}>
+                {drug.attributes.drug.data.attributes.name.split("(")[0]}
+              </Title>
+              <Text>복용 시작일: {drug.attributes.from}</Text>
+            </div>
+          </FlexDiv>
+          <FlexDiv shrink="0">
+            {typeof drug.attributes.drug.data.attributes.drug_rating === "number" ? (
+              <>
+                <Rating
+                  emptySymbol="fas fa-circle  custom"
+                  fullSymbol="fas fa-circle  custom full"
+                  initialRating={drug.attributes.drug.data.attributes.drug_rating}
+                  readonly
+                />
+                <CustomRatingText>
+                  {drug.attributes.drug.data.attributes.drug_rating.toFixed(1)} / 5.0
               </CustomRatingText>
+              </>
+            ) : (
+                ""
+              )}
+          </FlexDiv>
+        </FlexDiv>
+        {(drug.attributes.drug.data.attributes.dur_info || drug.attributes.memo || review) && <Line />}
+        {
+          show && (
+            <NewReview
+              reviewSubmit={reviewSubmitHandler}
+              drugId={drug.attributes.current_drug_id}
+              review={updateTarget}
+              modalOff={newReviewToggle}
+            />
+          )
+        }
+        {
+          drug.attributes.disease && (
+            <>
+              <BulletText>
+                <p>복용이유</p>
+              </BulletText>
+              <Content>{drug.attributes.disease.attributes.name}</Content>
+            </>
+          )
+        }
+        {
+          !Object.entries(drug.attributes.drug.data.attributes.dur_info).length ? (
+            ""
+          ) : (
+              <>
+                <BulletText>
+                  <p>안전정보</p>
+                </BulletText>
+                <Content>
+                  {message.map((m, key) => (
+                    <div key={key}>{m}</div>
+                  ))}
+                </Content>
+              </>
+            )
+        }
+        {
+          drug.attributes.memo && (
+            <>
+              <BulletText>
+                <p>메모</p>
+              </BulletText>
+              <Content>{drug.attributes.memo}</Content>
+            </>
+          )
+        }
+        {
+          review ? (
+            <>
+              <BulletText>
+                <p>내 리뷰</p>
+              </BulletText>
+              <DrugReview
+                review={review}
+                deleteButton={deleteButton}
+                updateButton={updateButton}
+              />
+              <BasicButton
+                opacity="0.6"
+                onClick={() => {
+                  drugToPast(drug.id);
+                }}
+              >
+                복용 종료
+          </BasicButton>
             </>
           ) : (
-              ""
-            )}
-        </FlexDiv>
-      </FlexDiv>
-      {(drug.dur_info || drug.memo || review) && <Line />}
-      {show && (
-        <NewReview
-          reviewSubmit={reviewSubmitHandler}
-          drugId={drug.current_drug_id}
-          review={updateTarget}
-          modalOff={newReviewToggle}
-        />
-      )}
-      {!!drug.disease && (
-        <>
-          <BulletText>
-            <p>복용이유</p>
-          </BulletText>
-          <Content>{drug.disease.name}</Content>
-        </>
-      )}
-      {!drug.dur_info ? (
-        ""
-      ) : (
-          <>
-            <BulletText>
-              <p>안전정보</p>
-            </BulletText>
-            <Content>
-              {message.map((m, key) => (
-                <div key={key}>{m}</div>
-              ))}
-            </Content>
-          </>
-        )}
-      {drug.memo && (
-        <>
-          <BulletText>
-            <p>메모</p>
-          </BulletText>
-          <Content>{drug.memo}</Content>
-        </>
-      )}
-      {review ? (
-        <>
-          <BulletText>
-            <p>내 리뷰</p>
-          </BulletText>
-          <DrugReview
-            my={true}
-            review={review}
-            deleteReview={deleteReview}
-            updateButton={updateButton}
-          />
-          <BasicButton
-            opacity="0.6"
-            onClick={() => {
-              drugToPast(drug.id);
-            }}
-          >
-            복용 종료
+              <ButtonContainer>
+                <BasicButton onClick={newReviewToggle}>리뷰 등록</BasicButton>
+                <BasicButton
+                  opacity="0.6"
+                  onClick={() => {
+                    drugToPast(drug.id);
+                  }}
+                >
+                  복용 종료
           </BasicButton>
-        </>
-      ) : (
-          <ButtonContainer>
-            <BasicButton onClick={newReviewToggle}>리뷰 등록</BasicButton>
-            <BasicButton
-              opacity="0.6"
-              onClick={() => {
-                drugToPast(drug.id);
-              }}
-            >
-              복용 종료
-          </BasicButton>
-          </ButtonContainer>
-        )}
-    </Card>
+              </ButtonContainer>
+            )
+        }
+      </Card >
+      {showConfirm && <ConfirmModal modalOff={() => setShowConfirm(false)} handleClick={() => deleteReview(updateTarget.id, updateTarget.meta.drug.id)} />}
+    </>
   );
 };
 

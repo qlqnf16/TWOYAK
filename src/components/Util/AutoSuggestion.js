@@ -37,6 +37,11 @@ const ItemContainer = styled.div`
   text-overflow: ellipsis;
 `;
 
+const AddSmall = styled(Add)`
+  width: 15px;
+  height: 15px;
+`
+
 const AutoSuggestion = ({
   search,
   searchKey,
@@ -44,6 +49,7 @@ const AutoSuggestion = ({
   addCurrentDrug,
   currentDrugs,
   inputChange,
+  inputAdd,
   submit
 }) => {
   const [value, setValue] = useState("");
@@ -70,30 +76,27 @@ const AutoSuggestion = ({
     const inputValue = deburr(value.trim()).toLowerCase();
     const inputLength = inputValue.length;
     let count = 0;
+    const suggestionList = suggestList.filter(suggestion => {
+      const keep =
+        count < 20 &&
+        suggestion[searchKey].replace(/\s/g, '').includes(inputValue);
+      if (keep) {
+        count += 1;
+      }
+
+      return keep;
+    })
+    const basicInput = search === 'adverse_effect' ? [{ symptom_name: value }] : [{ name: value }]
 
     return inputLength === 0
       ? []
-      : suggestList.filter(suggestion => {
-        const keep =
-          count < 20 &&
-          suggestion[searchKey].toLowerCase().includes(inputValue);
-
-        if (keep) {
-          count += 1;
-        }
-
-        return keep;
-      });
+      : search === 'drug' || suggestionList.length === 1 ?
+        suggestionList :
+        basicInput.concat(suggestionList);
   };
 
   const getSuggestionValue = suggestion => {
     return suggestion[searchKey];
-  };
-
-  const onSuggestionSelected = (event, { suggestion }) => {
-    if (search === "adverse_effect") inputChange(suggestion);
-    if (search === "disease") inputChange(suggestion);
-    if (search === "drug") submit(suggestion.id);
   };
 
   const renderSuggestion = (suggestion, { query, isHighlited }) => {
@@ -125,8 +128,22 @@ const AutoSuggestion = ({
                 }}
               />
             ))}
+        {search === 'adverse_effect' && <AddSmall />}
       </RecommendContainer>
     );
+  };
+
+  let suggestionSelected = false;
+
+  const onSuggestionSelected = (event, { suggestion }) => {
+    suggestionSelected = true;
+    if (search === "adverse_effect")
+      inputChange(suggestion);
+    if (search === "disease") {
+      suggestion.id ?
+        inputChange(suggestion.name) : inputAdd(suggestion.name)
+    }
+    if (search === "drug") submit(suggestion.id);
   };
 
   const onChange = (event, { newValue }) => {
@@ -134,7 +151,21 @@ const AutoSuggestion = ({
     if (search === "drug") {
       inputChange(newValue);
     }
+    if (search === 'disease') {
+      inputChange(newValue)
+    }
   };
+
+  const onKeyDown = (event) => {
+    if (search !== 'drug') {
+      if (event.keyCode === 13 && !suggestionSelected) {
+        inputAdd(value)
+      }
+
+      suggestionSelected = false;
+    }
+
+  }
 
   const onSuggestionsFetchRequested = ({ value }) => {
     setSuggestions(getSuggestions(value));
@@ -147,7 +178,8 @@ const AutoSuggestion = ({
   const inputProps = {
     placeholder: placeholderProp,
     value,
-    onChange: onChange
+    onChange: onChange,
+    onKeyDown: onKeyDown
   };
 
   return (
@@ -160,8 +192,8 @@ const AutoSuggestion = ({
           getSuggestionValue={getSuggestionValue}
           renderSuggestion={renderSuggestion}
           inputProps={inputProps}
-          highlightFirstSuggestion={true}
           onSuggestionSelected={onSuggestionSelected}
+        // highlightFirstSuggestion={search === 'drug' ? false : true}
         />
       </StyleWrapper>
       {value && (
