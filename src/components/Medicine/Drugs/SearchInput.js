@@ -84,13 +84,19 @@ const Button = styled(BasicButton)`
   }
 `;
 
+const ErrorMessage = styled.div`
+  margin-top: 4rem;
+  text-align: center;
+`
+
 const SearchInput = ({
   searchTerms,
   searchById,
   currentDrugs,
   addCurrentDrug,
   inputChange,
-  goBack
+  goBack,
+  errorMessage
 }) => {
   const myInput = (
     <Form onSubmit={searchTerms}>
@@ -108,7 +114,12 @@ const SearchInput = ({
       </StyleWrapper>
     </Form>
   );
-  return myInput;
+  return (
+    <>
+      {myInput}
+      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+    </>
+  );
 };
 
 export default SearchInput;

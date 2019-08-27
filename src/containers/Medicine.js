@@ -101,6 +101,7 @@ function Medicine({ match, history, location }) {
     setDrug(null);
     setDrugList(null);
     setDrugimg(null);
+    setErrorMessage(null)
     if (paramId) {
       if (localStorage.jwt_token) {
         if (authState.token) {
@@ -470,7 +471,7 @@ function Medicine({ match, history, location }) {
               )}
             </>
           )}
-          {errorMessage && <div>{errorMessage}</div>}
+
 
         </Container>
         {modal && <DetailModal item_seq={drug.item_seq} modalOff={modalOff} />}
@@ -507,6 +508,7 @@ function Medicine({ match, history, location }) {
               searchById={moveById}
               currentDrugs={currentDrugs}
               addCurrentDrug={additionalModalToggle}
+              errorMessage={errorMessage}
             />{" "}
             {drugList && (
               <ItemList
