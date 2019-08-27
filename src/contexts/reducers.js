@@ -5,14 +5,19 @@ export const drugReducer = (state, { type, payload }) => {
   switch (type) {
     case "SET_INIT_DATA":
       return {
-        drugs: payload[0].data,
-        adverse_effects: payload[1].data
+        ...state,
+        drugs: payload
       };
     case "GET_DISEASES":
       return {
         ...state,
         diseases: payload
       };
+    case "GET_ADVERSE_EFFECTS":
+      return {
+        ...state,
+        adverse_effects: payload
+      }
     default:
       break;
   }

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import axios from '../../../apis'
 import styled from "styled-components";
 import AutoSuggestion from "../../Util/AutoSuggestion";
 import RemovableButton from "../../UI/RemovableButton";
@@ -13,6 +14,8 @@ import {
 import medIcon from "../../../assets/images/(white)med-icon.svg";
 import "@fortawesome/fontawesome-free/css/all.css";
 import Modal from "../../UI/Modals/Modal";
+import { AuthContext } from "../../../contexts/AuthStore";
+import { DrugContext } from "../../../contexts/DrugStore";
 
 const Container = styled.div`
   max-height: 75vh;
@@ -45,7 +48,7 @@ const CustomTextarea = styled.textarea`
   width: 100%;
   height: 4.825rem;
   resize: none;
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   color: var(--twoyak-black);
   opacity: 0.7;
   padding: 1.25rem;
@@ -66,6 +69,12 @@ const NewReview = React.memo(({ reviewSubmit, review, modalOff }) => {
   const [detail, setDetail] = useState();
   const [clicked, setClicked] = useState(false);
 
+  const { state: authState } = useContext(AuthContext)
+  const { state: drugState, dispatch } = useContext(DrugContext)
+
+  useEffect(() => {
+    fetchAdverseEffects()
+  }, [])
   // 리뷰 수정 시
   useEffect(() => {
     if (review) {
@@ -75,10 +84,43 @@ const NewReview = React.memo(({ reviewSubmit, review, modalOff }) => {
     }
   }, [review]);
 
-  const adverseEffectInputChange = value => {
-    if (adverseEffects.indexOf(value) === -1)
-      setAdverseEffects(adverseEffects.concat(value));
+  // 수정 필
+  const fetchAdverseEffects = async () => {
+    try {
+      const { data } = await axios.get('/autocomplete/adverse_effect', {
+        headers: { Authorization: `bearer ${authState.token}` },
+      })
+      const payload = data.my_adverse_effects.concat(data.standard_adverse_effects)
+      dispatch({ type: "GET_ADVERSE_EFFECTS", payload: payload });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const adverseEffectInputChange = async value => {
+    if (value.id) {
+      if (adverseEffects.findIndex(e => e.id === value.id) === -1)
+        setAdverseEffects(adverseEffects.concat(value));
+    }
   };
+
+  // 수정 필
+  const addAdverseEffect = async value => {
+    try {
+      const { data } = await axios.post(`/adverse_effects`, {
+        adverse_effect: {
+          symptom_name: value
+        }
+      }, {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        })
+      adverseEffectInputChange(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const adverseEffectSubmit = event => {
     event.preventDefault();
@@ -141,6 +183,7 @@ const NewReview = React.memo(({ reviewSubmit, review, modalOff }) => {
                 searchKey="symptom_name"
                 placeholderProp="느끼신 증상을 입력하세요"
                 inputChange={adverseEffectInputChange}
+                inputAdd={addAdverseEffect}
               />
             </AutosuggestStyleWrapper>
           </Form>

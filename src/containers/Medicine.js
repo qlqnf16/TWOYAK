@@ -210,7 +210,7 @@ function Medicine({ match, history, location }) {
         method: "POST",
         url: `user/${authState.subUserId}/${url}/${idParam}`,
         params: {
-          disease_ids: data.diseaseId,
+          disease_name: data.diseaseName,
           from: data.formattedFrom,
           to: data.formattedTo,
           memo: data.memoToSend

@@ -74,7 +74,7 @@ const StyledDateRange = styled(DateRange)`
 `;
 
 const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
-  const [disease, setDisease] = useState([]);
+  const [disease, setDisease] = useState();
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [from, setFrom] = useState(moment());
   const [to, setTo] = useState(moment());
@@ -92,7 +92,7 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
       headers: { Authorization: `bearer ${authState.token}` },
       params: { sub_user_id: authState.subUserId }
     });
-    const payload = data.my_diseases.concat(data.standard_diseases);
+    const payload = data.my_disease ? data.my_diseases.concat(data.standard_diseases) : data.standard_diseases;
     dispatch({ type: "GET_DISEASES", payload: payload });
   };
 
@@ -119,12 +119,12 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
   }
 
   const addDrug = () => {
-    const diseaseId = disease.id;
+    const diseaseName = disease.name ? disease.name : disease;
     const formattedFrom = from.format("YYYY-MM-DD");
     const formattedTo = to.format("YYYY-MM-DD");
     const memoToSend = memo
     console.log(disease)
-    if (diseaseId) addCurrentDrug(drugId, { diseaseId, formattedFrom, formattedTo, memoToSend });
+    if (disease) addCurrentDrug(drugId, { diseaseName, formattedFrom, formattedTo, memoToSend });
     else alert('질병추가해라')
   };
 

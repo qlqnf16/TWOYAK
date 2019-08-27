@@ -182,7 +182,7 @@ function HealthRecord({ history }) {
           }
         }
       );
-      loadingHandler(true);
+      !past ? loadingHandler() : loadingHandler(true);
       setShowConfirm(false)
     } catch (error) {
       console.log(error);

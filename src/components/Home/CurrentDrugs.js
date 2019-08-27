@@ -99,8 +99,8 @@ function CurrentDrugs({ currentDrugs, history, medIcon, userName }) {
                 <DrugName>{i.attributes.drug.data.attributes.name.split("(")[0]}</DrugName>
               </CurrentDrugsDiv>
             ))}
-          </DrugsContainer>)
-              <MoreInfo onClick={() => history.push("/health-record")}>
+          </DrugsContainer>
+          <MoreInfo onClick={() => history.push("/health-record")}>
             자세히 보기
       </MoreInfo></>)
         : (

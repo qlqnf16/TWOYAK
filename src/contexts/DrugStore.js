@@ -15,10 +15,7 @@ const DrugStore = props => {
   const { state: authState } = useContext(AuthContext);
 
   const fetchInitialData = async () => {
-    const payload = await Promise.all([
-      axios.get("autocomplete/drug"),
-      axios.get("autocomplete/adverse_effect")
-    ]);
+    const { data: payload } = await axios.get("autocomplete/drug")
     dispatch({ type: "SET_INIT_DATA", payload: payload });
   };
 

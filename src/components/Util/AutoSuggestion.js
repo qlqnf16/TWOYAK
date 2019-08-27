@@ -8,7 +8,6 @@ import styled from "styled-components";
 import { breakpoints, BasicText } from "../UI/SharedStyles";
 import { ReactComponent as Erase } from "../../assets/images/erase.svg";
 import { ReactComponent as Add } from "../../assets/images/plus-in-search.svg";
-import axios from '../../apis'
 
 const Container = styled.div`
   display: flex;
@@ -37,6 +36,11 @@ const ItemContainer = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
 `;
+
+const AddSmall = styled(Add)`
+  width: 15px;
+  height: 15px;
+`
 
 const AutoSuggestion = ({
   search,
@@ -75,31 +79,24 @@ const AutoSuggestion = ({
     const suggestionList = suggestList.filter(suggestion => {
       const keep =
         count < 20 &&
-        suggestion[searchKey].toLowerCase().includes(inputValue);
-
+        suggestion[searchKey].replace(/\s/g, '').includes(inputValue);
       if (keep) {
         count += 1;
       }
 
       return keep;
     })
+    const basicInput = search === 'adverse_effect' ? [{ symptom_name: value }] : [{ name: value }]
 
     return inputLength === 0
       ? []
-      : search === 'drug' ? suggestionList : [{ name: value }].concat(suggestionList);
+      : search === 'drug' || suggestionList.length === 1 ?
+        suggestionList :
+        basicInput.concat(suggestionList);
   };
 
   const getSuggestionValue = suggestion => {
     return suggestion[searchKey];
-  };
-
-  const onSuggestionSelected = (event, { suggestion }) => {
-    if (search === "adverse_effect") inputChange(suggestion);
-    if (search === "disease") {
-      suggestion.id ?
-        inputChange(suggestion) : inputAdd(suggestion.name)
-    }
-    if (search === "drug") submit(suggestion.id);
   };
 
   const renderSuggestion = (suggestion, { query, isHighlited }) => {
@@ -131,8 +128,22 @@ const AutoSuggestion = ({
                 }}
               />
             ))}
+        {search === 'adverse_effect' && <AddSmall />}
       </RecommendContainer>
     );
+  };
+
+  let suggestionSelected = false;
+
+  const onSuggestionSelected = (event, { suggestion }) => {
+    suggestionSelected = true;
+    if (search === "adverse_effect")
+      inputChange(suggestion);
+    if (search === "disease") {
+      suggestion.id ?
+        inputChange(suggestion.name) : inputAdd(suggestion.name)
+    }
+    if (search === "drug") submit(suggestion.id);
   };
 
   const onChange = (event, { newValue }) => {
@@ -140,23 +151,23 @@ const AutoSuggestion = ({
     if (search === "drug") {
       inputChange(newValue);
     }
-
     if (search === 'disease') {
-      // console.log(event.keyCode)
-      // inputChange(newValue)
+      inputChange(newValue)
     }
   };
 
   const onKeyDown = (event) => {
-    // console.log(event.keyCode)
-    if (event.keyCode === 13) {
-      console.log(value)
-      inputAdd(value)
+    if (search === 'adverse_effect') {
+      if (event.keyCode === 13 && !suggestionSelected) {
+        inputAdd(value)
+      }
+
+      suggestionSelected = false;
     }
+
   }
 
   const onSuggestionsFetchRequested = ({ value }) => {
-    // console.log(value)
     setSuggestions(getSuggestions(value));
   };
 
@@ -182,6 +193,7 @@ const AutoSuggestion = ({
           renderSuggestion={renderSuggestion}
           inputProps={inputProps}
           onSuggestionSelected={onSuggestionSelected}
+        // highlightFirstSuggestion={search === 'drug' ? false : true}
         />
       </StyleWrapper>
       {value && (
