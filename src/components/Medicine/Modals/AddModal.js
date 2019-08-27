@@ -92,7 +92,7 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
       headers: { Authorization: `bearer ${authState.token}` },
       params: { sub_user_id: authState.subUserId }
     });
-    const payload = data.my_disease ? data.my_diseases.concat(data.standard_diseases) : data.standard_diseases;
+    const payload = data.my_diseases ? data.my_diseases.concat(data.standard_diseases) : data.standard_diseases;
     dispatch({ type: "GET_DISEASES", payload: payload });
   };
 

@@ -157,7 +157,7 @@ const AutoSuggestion = ({
   };
 
   const onKeyDown = (event) => {
-    if (search === 'adverse_effect') {
+    if (search !== 'drug') {
       if (event.keyCode === 13 && !suggestionSelected) {
         inputAdd(value)
       }
