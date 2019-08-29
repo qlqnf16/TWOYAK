@@ -128,7 +128,7 @@ const SearchResult = React.memo(
     const drugDetail = drug.package_insert
       ? JSON.parse(
         JSON.stringify(drug.package_insert.DRB_ITEM).replace(
-          /&nbsp;|&amp;|&lt;|&gt;|u0026nbsp;|'\"'|(<.*?>)/gi,
+          /&nbsp;|&#8226|&amp;|&lt;|&gt;|u0026nbsp;|'\"'|(<.*?>)/gi,
           ""
         )
       )
@@ -163,9 +163,11 @@ const SearchResult = React.memo(
           }
         } else {
           for (let i = 0; i < SECTION.length; i++) {
-            if (!SECTION[i].ARTICLE.length) {
-              pushValidItem(title, SECTION[i].ARTICLE.title);
-              pushValidItem(PARAGRAPH, SECTION[i].ARTICLE.PARAGRAPH);
+            if (!SECTION[i].ARTICLE || !SECTION[i].ARTICLE.length) {
+              if (SECTION[i].ARTICLE) {
+                pushValidItem(title, SECTION[i].ARTICLE.title);
+                pushValidItem(PARAGRAPH, SECTION[i].ARTICLE.PARAGRAPH);
+              }
             } else {
               for (let j = 0; j < SECTION[i].ARTICLE.length; j++) {
                 pushValidItem(title, SECTION[i].ARTICLE[j].title);

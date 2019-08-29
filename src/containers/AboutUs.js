@@ -1,18 +1,23 @@
 import React from "react";
 import styled from "styled-components";
 
-import AboutUsImg from "../assets/images/about-us.png";
+import aboutUsImg from "../assets/images/about-us.png";
 
-const AboutUsImgContainer = styled.img`
+const Container = styled.div`
+  text-align: center;
+`
+
+const AboutUsImg = styled.img`
   margin-top: 4.375rem;
   width: 100%;
+  max-width: 550px;
 `;
 
 function AboutUs() {
   return (
-    <div>
-      <AboutUsImgContainer src={AboutUsImg} alt="기업소개" />
-    </div>
+    <Container>
+      <AboutUsImg src={aboutUsImg} alt="기업소개" />
+    </Container>
   );
 }
 
