@@ -23,6 +23,12 @@ const AddIcon = styled.img`
   width: 3.125rem;
 `;
 
+const Info = styled.div`
+  font-size: 0.75rem;
+  opacity: 0.6;
+  margin-top: 1rem;
+`
+
 const ChangeFunction = styled.div`
   display: flex;
   flex-direction: column;
@@ -58,6 +64,9 @@ const ChangeUser = ({ history, getUserInfo }) => {
 
   const modalContent = (
     <ModalContents>
+      <Info>
+        두 명 이상의 복용 내역을 분리해 더 편하게 관리해보세요. (예: 부모님, 자녀 등)
+      </Info>
       <ChangeFunction>
         {authState.subUsers
           ? authState.subUsers.map((i, k) =>
