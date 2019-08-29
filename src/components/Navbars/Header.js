@@ -3,10 +3,11 @@ import { NavLink } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthStore";
 import search from "../../assets/images/(white)search-icon.svg";
 import user from "../../assets/images/(white)user-icon.svg";
+import { breakpoints } from '../UI/SharedStyles'
 
 import styled from "styled-components";
 
-const HeaderContainer = styled.div`
+const HeaderBackground = styled.div`
   width: 100%;
   position: fixed;
   z-index: 100;
@@ -14,9 +15,19 @@ const HeaderContainer = styled.div`
   padding: 20px;
   background-image: linear-gradient(121deg, #00cfff, #00a2ff);
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 `;
+
+const HeaderContainer = styled.div`
+  width: 500px;
+  @media (max-width: ${breakpoints.medium}) {
+    width: 100%
+  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;  
+`
 
 const StyledNavLink = styled(NavLink)`
   color: white;
@@ -28,15 +39,17 @@ const StyledNavLink = styled(NavLink)`
 const Header = () => {
   const { state: authState } = useContext(AuthContext);
   return (
-    <HeaderContainer>
-      <NavLink to="/medicine">
-        <img src={search} alt="search-icon" />
-      </NavLink>
-      <StyledNavLink to="/">투약</StyledNavLink>
-      <StyledNavLink to={authState.token ? "/mypage" : "/login"}>
-        <img src={user} alt="user-icon" />
-      </StyledNavLink>
-    </HeaderContainer>
+    <HeaderBackground>
+      <HeaderContainer>
+        <NavLink to="/medicine">
+          <img src={search} alt="search-icon" />
+        </NavLink>
+        <StyledNavLink to="/">투약</StyledNavLink>
+        <StyledNavLink to={authState.token ? "/mypage" : "/login"}>
+          <img src={user} alt="user-icon" />
+        </StyledNavLink>
+      </HeaderContainer>
+    </HeaderBackground>
   );
 };
 
