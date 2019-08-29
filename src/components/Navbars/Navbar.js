@@ -17,7 +17,7 @@ const NavBackground = styled.div`
 `;
 
 const NavContainer = styled.div`
-  width: 500px;
+  width: 700px;
   @media (max-width: ${breakpoints.medium}) {
     width: 100%;
   }
