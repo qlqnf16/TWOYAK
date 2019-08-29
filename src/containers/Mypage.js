@@ -177,9 +177,6 @@ import UserGeneralInfo from "../components/Mypage/UserGeneralInfo";
 import Diseases from "../components/Mypage/Diseases";
 import WatchDrugs from "../components/Mypage/WatchDrugs";
 import Footer from "../components/Mypage/Footer";
-import Modal from "../components/UI/Modals/Modal";
-import AddDash from "../assets/images/add-dash.svg";
-import ChangeUserIcon from "../assets/images/change-user-icon.svg";
 
 const MyPageContainer = styled.div`
   width: 100%;
@@ -193,27 +190,17 @@ const MyPageContainer = styled.div`
   overflow: auto;
 `;
 
+const Container = styled.div`
+  margin: 0 auto;
+  max-width: 500px;
+  position: relative;
+`
+
 const Divider = styled.div`
   width: 100%;
   height: 1px;
   opacity: 0.1;
   background-color: var(--twoyak-blue);
-`;
-
-const ModalContents = styled.div`
-  overflow: auto;
-`;
-
-const ModalMessage = styled.div`
-  width: auto;
-  font-size: 0.875rem;
-  font-weight: 800;
-  color: #474747;
-  margin-bottom: 38px;
-`;
-
-const AddIcon = styled.img`
-  width: 3.125rem;
 `;
 
 const FooterZone = styled.div`
@@ -230,25 +217,6 @@ const Indicator = styled.div`
   color: #ffffff;
   text-align: center;
 `;
-
-const ChangeFunction = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 1.875rem;
-  padding-bottom: 1.875rem;
-  overflow: auto;
-  height: 500px;
-`;
-
-const ChangeUser = styled.img`
-  position: fixed;
-  bottom: 1.4375rem;
-  right: 1.4375rem;
-  z-index: 300;
-`;
-
-const ChangeUserModal = styled(Modal)``;
 
 function Mypage(props) {
   const [currentDrugsCount, setCurrentDrugsCount] = useState([]);
@@ -287,73 +255,31 @@ function Mypage(props) {
     });
   };
 
-  const toggleChangeUserModalHandler = () => {
-    setChangeUserModalShow(!changeUserModalShow);
-  };
-
-  const modalContent = (
-    <ModalContents>
-      <ChangeFunction>
-        {authState.subUsers
-          ? authState.subUsers.map((i, k) =>
-            i.id !== authState.subUserId ? (
-              <ModalMessage
-                key={k}
-                onClick={() => {
-                  getUserInfo(k);
-                  toggleChangeUserModalHandler();
-                }}
-              >
-                {i.user_name}
-              </ModalMessage>
-            ) : null
-          )
-          : null}
-        <AddIcon
-          src={AddDash}
-          alt="add-users"
-          onClick={() => props.history.push("/add-sub-user")}
-        />
-      </ChangeFunction>
-    </ModalContents>
-  );
-
   return (
     <MyPageContainer>
-      <Topbar history={props.history} />
-      <UserGeneralInfo
-        currentDrugsCount={currentDrugsCount}
-        drugReviewsCount={drugReviewsCount}
-        myConversation={myConversation}
-        userChange={id => getUserInfo(id)}
-        history={props.history}
-      />
-      <Divider />
-      <Diseases
-        medHistory={familyMedHistoies}
-        historyChange={id => getUserInfo(id)}
-      />
-      <Divider />
-      <WatchDrugs watchDrugs={watchDrugs} watchChange={id => getUserInfo(id)} />
-      <ChangeUser
-        src={ChangeUserIcon}
-        alt="change-user"
-        onClick={() => toggleChangeUserModalHandler()}
-      />
-      <FooterZone>
-        <Indicator onClick={() => setFooterShow(!footerShow)}>
-          {!footerShow ? "기타 열기" : "닫기"}
-        </Indicator>
-        {footerShow && <Footer routes={props} />}
-      </FooterZone>
-      {changeUserModalShow ? (
-        <ChangeUserModal
-          modalOff={() => toggleChangeUserModalHandler()}
-          img
-          title="사용자 추가/변경"
-          content={modalContent}
+      <Container>
+        <Topbar history={props.history} />
+        <UserGeneralInfo
+          currentDrugsCount={currentDrugsCount}
+          drugReviewsCount={drugReviewsCount}
+          myConversation={myConversation}
+          userChange={id => getUserInfo(id)}
+          history={props.history}
         />
-      ) : null}
+        <Divider />
+        <Diseases
+          medHistory={familyMedHistoies}
+          historyChange={id => getUserInfo(id)}
+        />
+        <Divider />
+        <WatchDrugs watchDrugs={watchDrugs} watchChange={id => getUserInfo(id)} />
+        <FooterZone>
+          <Indicator onClick={() => setFooterShow(!footerShow)}>
+            {!footerShow ? "기타 열기" : "닫기"}
+          </Indicator>
+          {footerShow && <Footer routes={props} />}
+        </FooterZone>
+      </Container>
     </MyPageContainer>
   );
 }

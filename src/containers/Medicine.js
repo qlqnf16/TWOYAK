@@ -25,7 +25,7 @@ import {
 import LoginModal from "../components/UI/Modals/LoginModal";
 import ConfirmModal from "../components/UI/Modals/ConfirmModal";
 
-const SearchContainer = styled.div`
+const SearchBackground = styled.div`
   width: 100%;
   padding: 20px;
   height: 100vh;
@@ -35,6 +35,11 @@ const SearchContainer = styled.div`
   z-index: 200;
   background-color: white;
 `;
+
+const SearchContainer = styled.div`
+max-width: 500px;
+margin: 0 auto;
+`
 
 const ReviewContainer = styled.div`
   position: relative;
@@ -102,6 +107,7 @@ function Medicine({ match, history, location }) {
     setDrugList(null);
     setDrugimg(null);
     setErrorMessage(null)
+    setDrugReview(null)
     if (paramId) {
       if (localStorage.jwt_token) {
         if (authState.token) {
@@ -415,17 +421,7 @@ function Medicine({ match, history, location }) {
     return (
       <>
         <Container preventScroll={addModal || deleteModal}>
-          {/* desktop 화면 */}
-          {window.innerWidth >= 960 && drugs && (
-            <SearchInput
-              searchTerms={searchByTerms}
-              inputChange={searchTermChange}
-              currentDrugs={currentDrugs}
-              additionalModalToggle={additionalModalToggle}
-            />
-          )}
           {showLogin && <LoginModal modalOff={() => setShowLogin(false)} />}
-
           {drug && (
             <>
               <SearchResult
@@ -496,37 +492,40 @@ function Medicine({ match, history, location }) {
   } else {
 
     return (
-      <SearchContainer>
+      <SearchBackground>
+        <SearchContainer>
 
-        {drugs && (
-          <>
-            <SearchInput
-              goBack={goBack}
-              term={term}
-              searchTerms={searchByTerms}
-              inputChange={searchTermChange}
-              searchById={moveById}
-              currentDrugs={currentDrugs}
-              addCurrentDrug={additionalModalToggle}
-              errorMessage={errorMessage}
-            />{" "}
-            {drugList && (
-              <ItemList
-                drug_list={drugList}
+
+          {drugs && (
+            <>
+              <SearchInput
+                goBack={goBack}
                 term={term}
-                addCurrentDrug={additionalModalToggle}
+                searchTerms={searchByTerms}
+                inputChange={searchTermChange}
+                searchById={moveById}
                 currentDrugs={currentDrugs}
-              />
-            )}
-            {addModal && (
-              <AddModal
-                additionalModalToggle={additionalModalToggle}
-                addCurrentDrug={addCurrentDrug}
-              />
-            )}
-          </>
-        )}
-      </SearchContainer>
+                addCurrentDrug={additionalModalToggle}
+                errorMessage={errorMessage}
+              />{" "}
+              {drugList && (
+                <ItemList
+                  drug_list={drugList}
+                  term={term}
+                  addCurrentDrug={additionalModalToggle}
+                  currentDrugs={currentDrugs}
+                />
+              )}
+              {addModal && (
+                <AddModal
+                  additionalModalToggle={additionalModalToggle}
+                  addCurrentDrug={addCurrentDrug}
+                />
+              )}
+            </>
+          )}
+        </SearchContainer>
+      </SearchBackground>
     );
   }
 }

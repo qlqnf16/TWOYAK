@@ -42,15 +42,15 @@ function App() {
       <AuthStore>
         <DrugStore>
           <WatchStore>
-            {window.innerWidth >= 960 ? (
+            {/* {window.innerWidth >= 960 ? (
               <Block />
             ) : (
-                <>
-                  <Header />
-                  <Navbar />
-                  {switchRoutes}
-                </>
-              )}
+                <> */}
+            <Header />
+            <Navbar />
+            {switchRoutes}
+            {/* </>
+              )} */}
           </WatchStore>
         </DrugStore>
       </AuthStore>
