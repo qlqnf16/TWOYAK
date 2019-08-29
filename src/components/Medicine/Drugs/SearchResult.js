@@ -12,11 +12,11 @@ const Container = styled.div`
   width: 100%;
   margin-bottom: 1rem;
 
-  @media (max-width: ${breakpoints.medium}) {
+  /* @media (max-width: ${breakpoints.medium}) { */
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  }
+  /* } */
 `;
 
 const InfoContainer = styled.div`
@@ -104,6 +104,13 @@ const ShowMoreButton = styled.div`
   text-align: right;
   color: var(--twoyak-blue);
 `;
+
+const StyledWrapper = styled.div`
+  @media (min-width: ${breakpoints.medium}) {
+    width: 86%;
+    margin-bottom: 1rem;
+  }
+`
 
 const SearchResult = React.memo(
   ({
@@ -194,7 +201,9 @@ const SearchResult = React.memo(
 
     return (
       <Container>
-        <Warning />
+        <StyledWrapper>
+          <Warning />
+        </StyledWrapper>
         <InfoContainer>
           <ItemName>{drug.name.split("(")[0]}</ItemName>
           <IconContainer>
