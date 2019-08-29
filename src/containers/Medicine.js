@@ -107,6 +107,7 @@ function Medicine({ match, history, location }) {
     setDrugList(null);
     setDrugimg(null);
     setErrorMessage(null)
+    setDrugReview(null)
     if (paramId) {
       if (localStorage.jwt_token) {
         if (authState.token) {
@@ -420,17 +421,7 @@ function Medicine({ match, history, location }) {
     return (
       <>
         <Container preventScroll={addModal || deleteModal}>
-          {/* desktop 화면 */}
-          {/* {window.innerWidth >= 960 && drugs && (
-            <SearchInput
-              searchTerms={searchByTerms}
-              inputChange={searchTermChange}
-              currentDrugs={currentDrugs}
-              additionalModalToggle={additionalModalToggle}
-            />
-          )} */}
           {showLogin && <LoginModal modalOff={() => setShowLogin(false)} />}
-
           {drug && (
             <>
               <SearchResult
