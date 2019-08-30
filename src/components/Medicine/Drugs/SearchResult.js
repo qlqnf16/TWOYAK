@@ -116,7 +116,7 @@ const StyledWrapper = styled.div`
 
 const SearchResult = React.memo(
   ({
-    drug, drugImg, modalOn,
+    drug, drugImg, durInfo, modalOn,
     showMore, toggleShowMore, watching,
     showLogin, toggleWatching,
     additionalModalToggle, auth, moveTo
@@ -252,11 +252,11 @@ const SearchResult = React.memo(
                     ` (${drug.ingr_eng_name.slice(1, -1)})`}
                 </Benefit>
               </TextContainer>
-              {drug.dur_info && !!Object.entries(drug.dur_info).length && (
+              {durInfo || (drug.dur_info && !!Object.entries(drug.dur_info).length) ? (
                 <TextContainer>
-                  <DurInfo dur={drug.dur_info} />
+                  <DurInfo dur={drug.dur_info} interaction={durInfo} />
                 </TextContainer>
-              )}
+              ) : ''}
               {!!drug.interactions.length && (
                 <TextContainer>
                   <SupplementInfo supplements={drug.interactions} moveTo={moveTo} />
