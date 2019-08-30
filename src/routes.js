@@ -14,6 +14,7 @@ import RecommendSupplementIngrs from "./containers/RecommendSupplmentIngrs";
 import RecommendSupplementProducts from "./containers/RecommendSupplementProducts";
 import AboutUs from "./containers/AboutUs";
 import WebCamCapture from "./containers/WebCam";
+import ServiceTutorial from "./containers/ServiceTutorial";
 
 const routes = [
   {
@@ -112,6 +113,11 @@ const routes = [
     path: "/capture",
     name: "처방전 사진",
     component: WebCamCapture
+  },
+  {
+    path: "/service-tutorial",
+    name: "튜토리얼",
+    component: ServiceTutorial
   }
 ];
 

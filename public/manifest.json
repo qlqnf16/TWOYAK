@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "투약",
+  "name": "투약 - 의약품 복용 이력과 안전 정보를 한눈에!",
   "icons": [
     {
       "src": "favicon.ico",

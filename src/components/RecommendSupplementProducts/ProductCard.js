@@ -14,6 +14,10 @@ const Card = styled.div`
   margin-bottom: 1.375rem;
 `;
 
+const Link = styled.a`
+  text-decoration: none;
+`;
+
 const Header = styled.div`
   display: flex;
   padding: 0.8125rem;
@@ -26,7 +30,9 @@ const Ranking = styled.div`
   color: var(--twoyak-blue);
 `;
 
-const RatingContainer = styled.div``;
+const RatingContainer = styled.div`
+  display: flex;
+`;
 
 const Rating = styled(StyledRating)`
   margin: 0 -2px;
@@ -36,15 +42,23 @@ const Rating = styled(StyledRating)`
   }
 `;
 
+const ReviewCount = styled.div`
+  font-size: 0.7rem;
+  margin-left: 8px;
+  color: #474747;
+`;
+
 const Product = styled.div`
   display: flex;
   justify-content: space-around;
   padding-bottom: 0.75rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 `;
 
 const ProductImg = styled.img`
   width: 5.9375rem;
-  height: 5.375rem;
+  height: 6rem;
 `;
 
 const DescriptionWrapper = styled.div``;
@@ -58,6 +72,8 @@ const ProductName = styled.div`
   font-size: 0.6875rem;
   font-weight: 800;
   color: #474747;
+  height: 2rem;
+  overflow: hidden;
 `;
 
 const Price = styled.div`
@@ -88,36 +104,41 @@ const Icon = styled.img`
 function ProductCard(props) {
   return (
     <Card>
-      <Header>
-        <Ranking>{props.ranking}위</Ranking>
-        <RatingContainer>
-          <Rating
-            emptySymbol="fas fa-circle custom"
-            fullSymbol="fas fa-circle custom full"
-            fractions={2}
-            initialRating={props.rating}
-            readonly
-          />
-          <RatingText margin="0.5rem" opacity="0.5" size="0.7rem" bold>
-            {props.rating.toFixed(1)} / 5.0
-          </RatingText>
-        </RatingContainer>
-      </Header>
-      <Product>
-        <ProductImg
-          src="https://s3.images-iherb.com/mrm/mrm23105/w/14.jpg"
-          alt="product-img"
-        />
-        <DescriptionWrapper>
-          <Manufacturer>엠알엠</Manufacturer>
-          <ProductName>비건 비타민 D3 5,000 IU 배지캡슐, 60정</ProductName>
-          <Price>12,600원</Price>
-          <Etc>
-            <Effect>면역력 강화</Effect>
-            <Icon src={emptyHeart} alt="interesting product" />
-          </Etc>
-        </DescriptionWrapper>
-      </Product>
+      <Link
+        href={
+          "https://prf.hn/click/camref:1101l4PEu/destination:" +
+          props.productURL
+        }
+      >
+        <Header>
+          <Ranking>{props.ranking}위</Ranking>
+          <RatingContainer>
+            <Rating
+              emptySymbol="fas fa-circle custom"
+              fullSymbol="fas fa-circle custom full"
+              fractions={2}
+              initialRating={props.rating}
+              readonly
+            />
+            <RatingText margin="0.5rem" opacity="0.5" size="0.7rem" bold>
+              {props.rating.toFixed(1)} / 5.0
+            </RatingText>
+            <ReviewCount>({props.reviewCount})</ReviewCount>
+          </RatingContainer>
+        </Header>
+        <Product>
+          <ProductImg src={props.src} alt="product-img" />
+          <DescriptionWrapper>
+            <Manufacturer>제조사 자리</Manufacturer>
+            <ProductName>{props.name}</ProductName>
+            <Price>가격 데이터 자리</Price>
+            <Etc>
+              <Effect>효능 데이터 자리</Effect>
+              <Icon src={emptyHeart} alt="interesting product" />
+            </Etc>
+          </DescriptionWrapper>
+        </Product>
+      </Link>
     </Card>
   );
 }

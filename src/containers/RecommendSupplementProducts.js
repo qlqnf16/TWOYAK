@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "../apis";
 import styled from "styled-components";
 
 import ProductCard from "../components/RecommendSupplementProducts/ProductCard";
@@ -54,6 +55,18 @@ const Divider = styled(Line)`
 function RecommendSupplementProducts(props) {
   const recommendSupplementIngrs = props.match.params.ingrs.split("&");
   const [selectedIngrIndex, setSelectedIngrIndex] = useState(0);
+  const [recommendedProducts, setRecommendedProducts] = useState([]);
+
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url: "http://52.79.228.195/supplements?page=2&supplement_ingr_id=12"
+    })
+      .then(response => {
+        setRecommendedProducts(response.data.data);
+      })
+      .catch(error => alert(error.response.data.errors[0]));
+  }, []);
 
   return (
     <Background>
@@ -83,8 +96,19 @@ function RecommendSupplementProducts(props) {
           <EffectDescription>- 골다골증발생 위험 감소</EffectDescription>
         </EffectWrapper>
         <Divider />
-        {[0, 0, 0].map((i, k) => (
-          <ProductCard ranking={k + 1} rating={4.35} />
+        {recommendedProducts.map((i, k) => (
+          <ProductCard
+            key={k}
+            name={i.attributes.name}
+            src={i.attributes.photo_url}
+            productURL={i.attributes.product_url}
+            rating={i.attributes.rating}
+            reviewCount={i.attributes.shoppingmall_reviews}
+            ranking={
+              JSON.parse(i.attributes.rankings).data[0].attributes.ranking
+            }
+            rating={4.35}
+          />
         ))}
       </RecommendProductContainer>
     </Background>

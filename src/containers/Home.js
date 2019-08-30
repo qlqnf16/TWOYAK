@@ -36,10 +36,6 @@ function Home(props) {
   const { state: authState, dispatch } = useContext(AuthContext);
 
   useEffect(() => {
-    dispatch({
-      type: "SET_AUTH_REDIRECT_PATH",
-      path: null
-    });
     if (authState.subUserId) {
       setLoading(true);
       axios({
@@ -60,7 +56,11 @@ function Home(props) {
             await dispatch({
               type: "SIGNOUT"
             });
-            alert(error.response.data.errors[0]);
+            alert(
+              error.response.data.errors[0] === "Not Authenticated"
+                ? "회원정보가 수정되었습니다."
+                : null
+            );
             setTokenChange(true);
             setLoading(false);
           }
