@@ -45,7 +45,6 @@ const SupplementInfo = ({ supplements, moveTo }) => {
     moveTo(ids.join('&'), names.join('&'))
   }
 
-
   return (
     <>
       <Title>똑똑하게 복용하기</Title>

@@ -24,6 +24,12 @@ const DurInfo = ({ dur }) => {
   return (
     <>
       <Title>안전정보</Title>
+      {dur.stop_usage && (
+        <>
+          <SubTitle>사용(급여) 중지된 약품입니다</SubTitle>
+          <Text bold>{dur.stop_usage[0].description}</Text>
+        </>
+      )}
       {(dur.pregnancy || dur.elder || dur.age) && <SubTitle>이런 분들은 드실 때 주의해야 해요!</SubTitle>}
       {Object.keys(dur).map(key => {
         let content
@@ -40,7 +46,7 @@ const DurInfo = ({ dur }) => {
           default:
             break;
         }
-        return (<Text>{content}</Text>)
+        return (<Text key={key}>{content}</Text>)
       }
       )}
     </>
