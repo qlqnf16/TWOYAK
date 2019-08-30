@@ -416,6 +416,11 @@ function Medicine({ match, history, location }) {
     setUpdateTarget(review)
   }
 
+  // moveToRecommendSupplement
+  const moveToRecommendSupplement = (ids, names) => {
+    history.push(`/recommend-supplement-products/${ids}/${names}`)
+  }
+
 
   if (match.params.id) {
     return (
@@ -435,6 +440,7 @@ function Medicine({ match, history, location }) {
                 additionalModalToggle={additionalModalToggle}
                 showLogin={() => setShowLogin(true)}
                 auth={!authState.token ? false : true}
+                moveTo={moveToRecommendSupplement}
               />
               {drugReview && drugReview.length > 0 && (
                 <>

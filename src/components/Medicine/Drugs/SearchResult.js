@@ -116,16 +116,10 @@ const StyledWrapper = styled.div`
 
 const SearchResult = React.memo(
   ({
-    drug,
-    drugImg,
-    modalOn,
-    showMore,
-    toggleShowMore,
-    watching,
-    showLogin,
-    toggleWatching,
-    additionalModalToggle,
-    auth
+    drug, drugImg, modalOn,
+    showMore, toggleShowMore, watching,
+    showLogin, toggleWatching,
+    additionalModalToggle, auth, moveTo
   }) => {
     const drugDetail = drug.package_insert
       ? JSON.parse(
@@ -265,7 +259,7 @@ const SearchResult = React.memo(
               )}
               {!!drug.interactions.length && (
                 <TextContainer>
-                  <SupplementInfo supplements={drug.interactions} />
+                  <SupplementInfo supplements={drug.interactions} moveTo={moveTo} />
                 </TextContainer>
               )}
             </>
