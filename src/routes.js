@@ -100,7 +100,7 @@ const routes = [
     component: RecommendSupplementIngrs
   },
   {
-    path: "/recommend-supplement-products/:ingrs",
+    path: "/recommend-supplement-products/:ingrs_ids/:ingr_names",
     name: "건강기능식품 추천 페이지",
     component: RecommendSupplementProducts
   },

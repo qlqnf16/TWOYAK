@@ -77,7 +77,7 @@ const ProductName = styled.div`
 `;
 
 const Price = styled.div`
-  font-size: 0.6875rem;
+  font-size: 1rem;
   color: #474747;
 `;
 
@@ -103,42 +103,52 @@ const Icon = styled.img`
 
 function ProductCard(props) {
   return (
-    <Card>
-      <Link
+    <Card
+      onClick={() =>
+        window.open(
+          "https://prf.hn/click/camref:1101l4PEu/destination:" +
+            props.productURL,
+          "_blank"
+        )
+      }
+    >
+      {/* <Link
         href={
           "https://prf.hn/click/camref:1101l4PEu/destination:" +
           props.productURL
         }
-      >
-        <Header>
-          <Ranking>{props.ranking}위</Ranking>
-          <RatingContainer>
-            <Rating
-              emptySymbol="fas fa-circle custom"
-              fullSymbol="fas fa-circle custom full"
-              fractions={2}
-              initialRating={props.rating}
-              readonly
-            />
-            <RatingText margin="0.5rem" opacity="0.5" size="0.7rem" bold>
-              {props.rating.toFixed(1)} / 5.0
-            </RatingText>
-            <ReviewCount>({props.reviewCount})</ReviewCount>
-          </RatingContainer>
-        </Header>
-        <Product>
-          <ProductImg src={props.src} alt="product-img" />
-          <DescriptionWrapper>
-            <Manufacturer>제조사 자리</Manufacturer>
-            <ProductName>{props.name}</ProductName>
-            <Price>가격 데이터 자리</Price>
-            <Etc>
-              <Effect>효능 데이터 자리</Effect>
-              <Icon src={emptyHeart} alt="interesting product" />
-            </Etc>
-          </DescriptionWrapper>
-        </Product>
-      </Link>
+      > */}
+      <Header>
+        <Ranking>{props.ranking}위</Ranking>
+        <RatingContainer>
+          <Rating
+            emptySymbol="fas fa-circle custom"
+            fullSymbol="fas fa-circle custom full"
+            fractions={2}
+            initialRating={props.rating}
+            readonly
+          />
+          <RatingText margin="0.5rem" opacity="0.5" size="0.7rem" bold>
+            {props.rating && props.rating.toFixed(1)} / 5.0
+          </RatingText>
+          <ReviewCount>({props.reviewCount})</ReviewCount>
+        </RatingContainer>
+      </Header>
+      <Product>
+        <ProductImg src={props.src} alt="product-img" />
+        <DescriptionWrapper>
+          <Manufacturer>{props.manufacturer}</Manufacturer>
+          <ProductName>{props.name}</ProductName>
+          <Price>
+            {props.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원
+          </Price>
+          <Etc>
+            <Effect>효능 데이터 자리</Effect>
+            <Icon src={emptyHeart} alt="interesting product" />
+          </Etc>
+        </DescriptionWrapper>
+      </Product>
+      {/* </Link> */}
     </Card>
   );
 }
