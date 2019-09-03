@@ -6,7 +6,13 @@ import jwt_decode from "jwt-decode";
 import DropoutModal from "../UI/Modals/Modal";
 import { BasicButton, BasicInput } from "../UI/SharedStyles";
 
-const FooterContainer = styled.div``;
+const FooterContainer = styled.div`
+  background-color: #ffffff;
+  position: fixed;
+  bottom: 0;
+  width: 150px;
+  z-index: 200;
+`;
 
 const ItemWrapper = styled.div`
   height: 100%;
@@ -149,8 +155,8 @@ function Footer({ routes }) {
         {dropoutLoading ? (
           <div>실행 중</div>
         ) : (
-            <BasicButton onClick={() => deleteUserHandler()}>탈퇴</BasicButton>
-          )}
+          <BasicButton onClick={() => deleteUserHandler()}>탈퇴</BasicButton>
+        )}
       </ButtonArea>
     </ModalContents>
   );

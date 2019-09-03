@@ -201,31 +201,77 @@ const Divider = styled.div`
   height: 1px;
   opacity: 0.1;
   background-color: var(--twoyak-blue);
+  margin-top: 1.3125rem;
 `;
 
-const FooterZone = styled.div`
-  background-color: #f0f9ff;
-  position: fixed;
-  bottom: 0;
-  width: 150px;
-  z-index: 200;
+const ModalContents = styled.div`
+  overflow: auto;
+`;
+
+const ModalMessage = styled.div`
+  width: 95%;
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: #474747;
+  margin-bottom: 38px;
+`;
+
+const AddIcon = styled.img`
+  width: 3.125rem;
 `;
 
 const Indicator = styled.div`
-  border-radius: 11px 11px 0 0;
-  background-color: var(--twoyak-blue);
-  color: #ffffff;
-  text-align: center;
+  font-size: 0.6875rem;
+  color: #474747;
+  opacity: 0.7;
+  margin-top: 4px;
+`;
+
+const ChangeFunction = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 1.875rem;
+  padding-bottom: 1.875rem;
+  overflow: auto;
+  height: 500px;
+`;
+
+const ChangeUser = styled.img`
+  position: fixed;
+  bottom: 1.4375rem;
+  right: 1.4375rem;
+  z-index: 300;
+`;
+
+const ChangeUserModal = styled(Modal)``;
+
+const SubUser = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+`;
+
+const SubUserName = styled.div``;
+
+const SubUserDrugCount = styled.div`
+  display: flex;
+`;
+
+const DrugCount = styled.div`
+  color: var(--twoyak-blue);
+  font-size: 0.875rem;
+  margin-left: 4px;
 `;
 
 function Mypage(props) {
+  const [payload, setPayload] = useState([]);
   const [currentDrugsCount, setCurrentDrugsCount] = useState([]);
   const [drugReviewsCount, setDrugReviewsCount] = useState([]);
   const [myConversation] = useState([]);
   const [familyMedHistoies, setFamilyMedHistories] = useState([]);
   const [watchDrugs, setWatchDrugs] = useState([]);
   const [changeUserModalShow, setChangeUserModalShow] = useState(false);
-  const [footerShow, setFooterShow] = useState(false);
 
   const { state: authState, dispatch } = useContext(AuthContext);
 
@@ -252,24 +298,77 @@ function Mypage(props) {
       setDrugReviewsCount(payload.data.meta.drug_reviews_count);
       setFamilyMedHistories(payload.included[id].meta.family_med_histories);
       setWatchDrugs(payload.data.meta.watch_drugs);
+      setPayload(payload.included);
     });
   };
 
+  const toggleChangeUserModalHandler = () => {
+    setChangeUserModalShow(!changeUserModalShow);
+  };
+
+  const modalContent = (
+    <ModalContents>
+      <ChangeFunction>
+        {authState.subUsers
+          ? payload.map((i, k) =>
+              Number(i.id) !== authState.subUserId ? (
+                <ModalMessage
+                  key={k}
+                  onClick={() => {
+                    getUserInfo(k);
+                    toggleChangeUserModalHandler();
+                  }}
+                >
+                  <SubUser>
+                    <SubUserName>{i.attributes.user_name}</SubUserName>
+                    <SubUserDrugCount>
+                      <Indicator>복용 중인 약</Indicator>
+                      <DrugCount>{i.meta.current_drugs_count}</DrugCount>
+                    </SubUserDrugCount>
+                  </SubUser>
+                  <Divider />
+                </ModalMessage>
+              ) : null
+            )
+          : null}
+        <AddIcon
+          src={AddDash}
+          alt="add-users"
+          onClick={() => props.history.push("/add-sub-user")}
+        />
+      </ChangeFunction>
+    </ModalContents>
+  );
+
   return (
     <MyPageContainer>
-      <Container>
-        <Topbar history={props.history} />
-        <UserGeneralInfo
-          currentDrugsCount={currentDrugsCount}
-          drugReviewsCount={drugReviewsCount}
-          myConversation={myConversation}
-          userChange={id => getUserInfo(id)}
-          history={props.history}
-        />
-        <Divider />
-        <Diseases
-          medHistory={familyMedHistoies}
-          historyChange={id => getUserInfo(id)}
+      <Topbar history={props.history} />
+      <UserGeneralInfo
+        currentDrugsCount={currentDrugsCount}
+        drugReviewsCount={drugReviewsCount}
+        myConversation={myConversation}
+        userChange={id => getUserInfo(id)}
+        history={props.history}
+      />
+      <Divider />
+      <Diseases
+        medHistory={familyMedHistoies}
+        historyChange={id => getUserInfo(id)}
+      />
+      <Divider />
+      <WatchDrugs watchDrugs={watchDrugs} watchChange={id => getUserInfo(id)} />
+      <ChangeUser
+        src={ChangeUserIcon}
+        alt="change-user"
+        onClick={() => toggleChangeUserModalHandler()}
+      />
+      <Footer routes={props} />
+      {changeUserModalShow ? (
+        <ChangeUserModal
+          modalOff={() => toggleChangeUserModalHandler()}
+          img
+          title="사용자 추가/변경"
+          content={modalContent}
         />
         <Divider />
         <WatchDrugs watchDrugs={watchDrugs} watchChange={id => getUserInfo(id)} />

@@ -20,6 +20,7 @@ function WatchStore(props) {
         });
       }
     }
+    localStorage.removeItem("tutorial-show");
     AutoLogin();
   }, [dispatch]);
 

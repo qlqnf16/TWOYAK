@@ -45,6 +45,7 @@ function Topbar(props) {
             dispatch({
               type: "SIGNOUT"
             });
+            props.history.push("/login");
           }}
         >
           로그아웃하기
