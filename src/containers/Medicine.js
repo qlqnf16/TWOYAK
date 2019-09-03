@@ -72,6 +72,7 @@ function Medicine({ match, history, location }) {
   const [drugList, setDrugList] = useState(null);
   const [drugReview, setDrugReview] = useState(null);
   const [currentDrugs, setCurrentDrugs] = useState([]);
+  const [durInfo, setDurInfo] = useState()
   const [watching, setWatching] = useState(false);
 
   const [addModal, setAddModal] = useState(false); // 약품 추가 모달
@@ -113,6 +114,7 @@ function Medicine({ match, history, location }) {
         if (authState.token) {
           searchById(paramId);
           getDrugImg(paramId);
+          getDurInfo(paramId)
         }
       } else {
         searchById(paramId);
@@ -182,6 +184,49 @@ function Medicine({ match, history, location }) {
       console.log(error);
     }
   };
+
+  // dur_info 상호작용 검색
+  const getDurInfo = async id => {
+    try {
+      const { data } = await axios.get(`drugs/${id}/dur_check`, {
+        headers: {
+          Authorization: authState.token
+        },
+        params: {
+          sub_user_id: authState.subUserId
+        }
+      })
+
+      const regexr = string => (
+        string.split('(')[0].replace(/\w/g, '')
+      )
+
+      const searchName = regexr(data.drug_searched)
+      const tempDurInfo = {}
+      console.log(data.dur_info)
+      for (let key of Object.keys(data.dur_info)) {
+        data.dur_info[key].forEach(com => {
+          const names = com.name
+          for (let i = 0; i < 2; i++) {
+            if (regexr(names[i]) === searchName) {
+              names.splice(i, 1)
+              const drugName = regexr(names[0])
+              if (key === 'interactions') {
+                tempDurInfo[drugName] ? tempDurInfo[drugName].push([key, com.description]) : tempDurInfo[drugName] = [[key, com.description]]
+              } else {
+                tempDurInfo[drugName] ? tempDurInfo[drugName].push(key) : tempDurInfo[drugName] = [key]
+              }
+              break;
+            }
+          }
+        })
+      }
+
+      setDurInfo(tempDurInfo)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   // 검색어 inputChangeHandler
   const searchTermChange = value => {
@@ -416,6 +461,11 @@ function Medicine({ match, history, location }) {
     setUpdateTarget(review)
   }
 
+  // moveToRecommendSupplement
+  const moveToRecommendSupplement = (ids, names) => {
+    history.push(`/recommend-supplement-products/${ids}/${names}`)
+  }
+
 
   if (match.params.id) {
     return (
@@ -435,6 +485,8 @@ function Medicine({ match, history, location }) {
                 additionalModalToggle={additionalModalToggle}
                 showLogin={() => setShowLogin(true)}
                 auth={!authState.token ? false : true}
+                moveTo={moveToRecommendSupplement}
+                durInfo={durInfo}
               />
               {drugReview && drugReview.length > 0 && (
                 <>
