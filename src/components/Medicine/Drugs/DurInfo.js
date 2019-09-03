@@ -43,31 +43,35 @@ const DurInfo = ({ dur, interaction }) => {
           })}
         </>
       )}
-      {dur.stop_usage && (
+      {dur && dur.stop_usage ? (
         <>
           <SubTitle>사용(급여) 중지된 약품입니다</SubTitle>
           <Text bold>{dur.stop_usage[0].description}</Text>
         </>
-      )}
-      {(dur.pregnancy || dur.elder || dur.age) && <SubTitle>이런 분들은 드실 때 주의해야 해요!</SubTitle>}
-      {Object.keys(dur).map(key => {
-        let content
-        switch (key) {
-          case 'pregnancy':
-            content = '임산부'
-            break;
-          case 'elder':
-            content = '65세 이상 고령자'
-            break;
-          case 'age':
-            content = dur[key][0].description
-            break;
-          default:
-            break;
-        }
-        return (<Text key={key}>{content}</Text>)
-      }
-      )}
+      ) : ''}
+      {dur && (dur.pregnancy || dur.elder || dur.age) ?
+        <>
+          <SubTitle>이런 분들은 드실 때 주의해야 해요!</SubTitle>
+          {Object.keys(dur).map(key => {
+            let content
+            switch (key) {
+              case 'pregnancy':
+                content = '임산부'
+                break;
+              case 'elder':
+                content = '65세 이상 고령자'
+                break;
+              case 'age':
+                content = dur[key][0].description
+                break;
+              default:
+                break;
+            }
+            return (<Text key={key}>{content}</Text>)
+          }
+          )}
+        </>
+        : ''}
     </>
   )
 }
