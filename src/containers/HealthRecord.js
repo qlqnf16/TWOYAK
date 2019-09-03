@@ -24,6 +24,8 @@ const Background = styled.div`
 
 const Container = styled.div`
   padding-top: 83px;
+  max-width: 500px;
+  margin: 0 auto 4rem auto;
 `;
 
 const NavContainer = styled.div`

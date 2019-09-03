@@ -177,9 +177,6 @@ import UserGeneralInfo from "../components/Mypage/UserGeneralInfo";
 import Diseases from "../components/Mypage/Diseases";
 import WatchDrugs from "../components/Mypage/WatchDrugs";
 import Footer from "../components/Mypage/Footer";
-import Modal from "../components/UI/Modals/Modal";
-import AddDash from "../assets/images/add-dash.svg";
-import ChangeUserIcon from "../assets/images/change-user-icon.svg";
 
 const MyPageContainer = styled.div`
   width: 100%;
@@ -192,6 +189,12 @@ const MyPageContainer = styled.div`
   background-color: white;
   overflow: auto;
 `;
+
+const Container = styled.div`
+  margin: 0 auto;
+  max-width: 500px;
+  position: relative;
+`
 
 const Divider = styled.div`
   width: 100%;
@@ -367,7 +370,15 @@ function Mypage(props) {
           title="사용자 추가/변경"
           content={modalContent}
         />
-      ) : null}
+        <Divider />
+        <WatchDrugs watchDrugs={watchDrugs} watchChange={id => getUserInfo(id)} />
+        <FooterZone>
+          <Indicator onClick={() => setFooterShow(!footerShow)}>
+            {!footerShow ? "기타 열기" : "닫기"}
+          </Indicator>
+          {footerShow && <Footer routes={props} />}
+        </FooterZone>
+      </Container>
     </MyPageContainer>
   );
 }

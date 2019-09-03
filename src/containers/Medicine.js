@@ -25,7 +25,7 @@ import {
 import LoginModal from "../components/UI/Modals/LoginModal";
 import ConfirmModal from "../components/UI/Modals/ConfirmModal";
 
-const SearchContainer = styled.div`
+const SearchBackground = styled.div`
   width: 100%;
   padding: 20px;
   height: 100vh;
@@ -35,6 +35,11 @@ const SearchContainer = styled.div`
   z-index: 200;
   background-color: white;
 `;
+
+const SearchContainer = styled.div`
+max-width: 500px;
+margin: 0 auto;
+`
 
 const ReviewContainer = styled.div`
   position: relative;
@@ -67,6 +72,7 @@ function Medicine({ match, history, location }) {
   const [drugList, setDrugList] = useState(null);
   const [drugReview, setDrugReview] = useState(null);
   const [currentDrugs, setCurrentDrugs] = useState([]);
+  const [durInfo, setDurInfo] = useState()
   const [watching, setWatching] = useState(false);
 
   const [addModal, setAddModal] = useState(false); // 약품 추가 모달
@@ -102,11 +108,13 @@ function Medicine({ match, history, location }) {
     setDrugList(null);
     setDrugimg(null);
     setErrorMessage(null)
+    setDrugReview(null)
     if (paramId) {
       if (localStorage.jwt_token) {
         if (authState.token) {
           searchById(paramId);
           getDrugImg(paramId);
+          getDurInfo(paramId)
         }
       } else {
         searchById(paramId);
@@ -176,6 +184,49 @@ function Medicine({ match, history, location }) {
       console.log(error);
     }
   };
+
+  // dur_info 상호작용 검색
+  const getDurInfo = async id => {
+    try {
+      const { data } = await axios.get(`drugs/${id}/dur_check`, {
+        headers: {
+          Authorization: authState.token
+        },
+        params: {
+          sub_user_id: authState.subUserId
+        }
+      })
+
+      const regexr = string => (
+        string.split('(')[0].replace(/\w/g, '')
+      )
+
+      const searchName = regexr(data.drug_searched)
+      const tempDurInfo = {}
+      console.log(data.dur_info)
+      for (let key of Object.keys(data.dur_info)) {
+        data.dur_info[key].forEach(com => {
+          const names = com.name
+          for (let i = 0; i < 2; i++) {
+            if (regexr(names[i]) === searchName) {
+              names.splice(i, 1)
+              const drugName = regexr(names[0])
+              if (key === 'interactions') {
+                tempDurInfo[drugName] ? tempDurInfo[drugName].push([key, com.description]) : tempDurInfo[drugName] = [[key, com.description]]
+              } else {
+                tempDurInfo[drugName] ? tempDurInfo[drugName].push(key) : tempDurInfo[drugName] = [key]
+              }
+              break;
+            }
+          }
+        })
+      }
+
+      setDurInfo(tempDurInfo)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   // 검색어 inputChangeHandler
   const searchTermChange = value => {
@@ -410,22 +461,17 @@ function Medicine({ match, history, location }) {
     setUpdateTarget(review)
   }
 
+  // moveToRecommendSupplement
+  const moveToRecommendSupplement = (ids, names) => {
+    history.push(`/recommend-supplement-products/${ids}/${names}`)
+  }
+
 
   if (match.params.id) {
     return (
       <>
         <Container preventScroll={addModal || deleteModal}>
-          {/* desktop 화면 */}
-          {window.innerWidth >= 960 && drugs && (
-            <SearchInput
-              searchTerms={searchByTerms}
-              inputChange={searchTermChange}
-              currentDrugs={currentDrugs}
-              additionalModalToggle={additionalModalToggle}
-            />
-          )}
           {showLogin && <LoginModal modalOff={() => setShowLogin(false)} />}
-
           {drug && (
             <>
               <SearchResult
@@ -439,6 +485,8 @@ function Medicine({ match, history, location }) {
                 additionalModalToggle={additionalModalToggle}
                 showLogin={() => setShowLogin(true)}
                 auth={!authState.token ? false : true}
+                moveTo={moveToRecommendSupplement}
+                durInfo={durInfo}
               />
               {drugReview && drugReview.length > 0 && (
                 <>
@@ -496,37 +544,40 @@ function Medicine({ match, history, location }) {
   } else {
 
     return (
-      <SearchContainer>
+      <SearchBackground>
+        <SearchContainer>
 
-        {drugs && (
-          <>
-            <SearchInput
-              goBack={goBack}
-              term={term}
-              searchTerms={searchByTerms}
-              inputChange={searchTermChange}
-              searchById={moveById}
-              currentDrugs={currentDrugs}
-              addCurrentDrug={additionalModalToggle}
-              errorMessage={errorMessage}
-            />{" "}
-            {drugList && (
-              <ItemList
-                drug_list={drugList}
+
+          {drugs && (
+            <>
+              <SearchInput
+                goBack={goBack}
                 term={term}
-                addCurrentDrug={additionalModalToggle}
+                searchTerms={searchByTerms}
+                inputChange={searchTermChange}
+                searchById={moveById}
                 currentDrugs={currentDrugs}
-              />
-            )}
-            {addModal && (
-              <AddModal
-                additionalModalToggle={additionalModalToggle}
-                addCurrentDrug={addCurrentDrug}
-              />
-            )}
-          </>
-        )}
-      </SearchContainer>
+                addCurrentDrug={additionalModalToggle}
+                errorMessage={errorMessage}
+              />{" "}
+              {drugList && (
+                <ItemList
+                  drug_list={drugList}
+                  term={term}
+                  addCurrentDrug={additionalModalToggle}
+                  currentDrugs={currentDrugs}
+                />
+              )}
+              {addModal && (
+                <AddModal
+                  additionalModalToggle={additionalModalToggle}
+                  addCurrentDrug={addCurrentDrug}
+                />
+              )}
+            </>
+          )}
+        </SearchContainer>
+      </SearchBackground>
     );
   }
 }

@@ -11,23 +11,19 @@ export const breakpoints = {
 
 export const Container = styled.div`
   width: 95%;
+  max-width: 500px;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   margin: 70px auto 120px auto;
-  ${props => (props.preventScroll ? `position: fixed; overflow-y: hidden` : "")}
-
-  @media (min-width: ${breakpoints.medium}) {
-    margin: 25vh auto;
-    width: 80%;
-  }
-  @media (min-width: ${breakpoints.large}) {
-    width: 70%;
-  }
-  @media (min-width: ${breakpoints.extraLarge}) {
-    width: 55%;
-  }
+  ${props => (props.preventScroll ? `
+    position: fixed; 
+    overflow-y: hidden; 
+    left: 50%; 
+    transform: translate(-50%, 0);
+  ` : "")}
 `;
 
 export const FlexDiv = styled.div`

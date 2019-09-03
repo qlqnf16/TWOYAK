@@ -93,6 +93,8 @@ import React, { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthStore";
 import styled from "styled-components";
 import Suggestions from "./Suggestions";
+import ChangeUser from "./ChangeUser";
+import { FlexDiv } from "../UI/SharedStyles";
 
 const UserGeneralInfoContainer = styled.div`
   padding: 17px;
@@ -131,6 +133,10 @@ const InfoIndex = styled.div`
   font-size: 0.6875rem;
   color: #474747;
 `;
+
+const ButtonContainer = styled(FlexDiv)`
+  margin-top: 1.375rem;
+`
 
 function UserGeneralInfo({
   currentDrugsCount,
@@ -173,7 +179,10 @@ function UserGeneralInfo({
   return (
     <UserGeneralInfoContainer>
       <SayHello>{authState.userName} 님, 안녕하세요</SayHello>
-      <Suggestions />
+      <ButtonContainer>
+        <Suggestions />
+        <ChangeUser getUserInfo={userChange} />
+      </ButtonContainer>
       {generalInfo}
     </UserGeneralInfoContainer>
   );

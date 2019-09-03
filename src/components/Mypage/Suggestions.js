@@ -6,19 +6,13 @@ import jwt_decode from "jwt-decode";
 import { AuthContext } from "../../contexts/AuthStore";
 import { BasicInput, BasicButton } from "../UI/SharedStyles";
 
-const SuggestionsContainer = styled.div`
-  margin-top: 1.375rem;
-  width: 11.125rem;
-`;
-
-const SuggestionButton = styled.button`
-  width: 100%;
-  height: 2rem;
-  border-radius: 16px;
-  border: solid 1px var(--twoyak-blue);
-  text-align: center;
+const SuggestionButton = styled(BasicButton)`
+    border: solid 1px #00a6ff99;
   background-color: #ffffff;
-  font-weight: 800;
+  color: var(--twoyak-black);
+  padding: 0.3rem 1rem;
+  font-weight: 700;
+  margin: 0;
 `;
 
 const TextArea = styled.textarea`
@@ -133,7 +127,7 @@ function Suggestions() {
   ) : null;
 
   return (
-    <SuggestionsContainer>
+    <>
       <SuggestionButton onClick={() => setSuggestionModalShow(true)}>
         건의하기 및 오류신고
       </SuggestionButton>
@@ -145,7 +139,7 @@ function Suggestions() {
           content={suggestionModalContent}
         />
       ) : null}
-    </SuggestionsContainer>
+    </>
   );
 }
 

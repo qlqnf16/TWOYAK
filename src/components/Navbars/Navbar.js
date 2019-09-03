@@ -3,31 +3,41 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { breakpoints } from "../UI/SharedStyles";
 
-const NavContainer = styled.div`
+const NavBackground = styled.div`
   width: 100%;
-  padding: 1.37rem;
-  display: flex;
-  justify-content: start;
-  align-items: center;
   background-image: linear-gradient(121deg, #00cfff, #00a2ff);
-  @media (max-width: ${breakpoints.medium}) {
-    position: fixed;
-    bottom: 0;
-    justify-content: space-between;
-    height: 3rem;
-    z-index: 100;
-  }
+  position: fixed;
+  bottom: 0;
+  justify-content: space-between;
+  height: 3rem;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
-const NavTransition = styled.div`
-  .active {
-    visibility: visible;
-    transition: all 200ms ease-in;
+const NavContainer = styled.div`
+  width: 700px;
+  @media (max-width: ${breakpoints.medium}) {
+    width: 100%;
   }
-  .hidden {
-    visibility: hidden;
-    transition: all 200ms ease-out;
-    transform: translate(0, 100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.37rem 0.6rem;
+`
+
+const NavTransition = styled.div`
+  @media (max-width: ${breakpoints.medium}) {
+    .active {
+      visibility: visible;
+      transition: all 200ms ease-in;
+    }
+    .hidden {
+      visibility: hidden;
+      transition: all 200ms ease-out;
+      transform: translate(0, 100%);
+    }
   }
 `;
 
@@ -62,13 +72,15 @@ const Navbar = () => {
 
   return (
     <NavTransition>
-      <NavContainer className={show ? "active" : "hidden"}>
-        <StyledNavLink exact to="/">
-          홈
+      <NavBackground className={show ? "active" : "hidden"}>
+        <NavContainer>
+          <StyledNavLink exact to="/">
+            홈
         </StyledNavLink>
-        <StyledNavLink to="/health-record">복용내역</StyledNavLink>
-        <StyledNavLink to="/all-reviews">리뷰 모아보기</StyledNavLink>
-      </NavContainer>
+          <StyledNavLink to="/health-record">복용내역</StyledNavLink>
+          <StyledNavLink to="/all-reviews">리뷰 모아보기</StyledNavLink>
+        </NavContainer>
+      </NavBackground>
     </NavTransition>
   );
 };

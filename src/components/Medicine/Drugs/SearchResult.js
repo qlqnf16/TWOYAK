@@ -4,6 +4,8 @@ import { breakpoints, BasicButton, BasicText } from "../../UI/SharedStyles";
 import Warning from "../../UI/Warning";
 import emptyHeart from "../../../assets/images/heart-none.svg";
 import fullHeart from "../../../assets/images/heart-fill.svg";
+import DurInfo from "./DurInfo";
+import SupplementInfo from "./SupplementInfo";
 
 const Container = styled.div`
   display: flex;
@@ -12,11 +14,11 @@ const Container = styled.div`
   width: 100%;
   margin-bottom: 1rem;
 
-  @media (max-width: ${breakpoints.medium}) {
+  /* @media (max-width: ${breakpoints.medium}) { */
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  }
+  /* } */
 `;
 
 const InfoContainer = styled.div`
@@ -105,23 +107,24 @@ const ShowMoreButton = styled.div`
   color: var(--twoyak-blue);
 `;
 
+const StyledWrapper = styled.div`
+  @media (min-width: ${breakpoints.medium}) {
+    width: 86%;
+    margin-bottom: 1rem;
+  }
+`
+
 const SearchResult = React.memo(
   ({
-    drug,
-    drugImg,
-    modalOn,
-    showMore,
-    toggleShowMore,
-    watching,
-    showLogin,
-    toggleWatching,
-    additionalModalToggle,
-    auth
+    drug, drugImg, durInfo, modalOn,
+    showMore, toggleShowMore, watching,
+    showLogin, toggleWatching,
+    additionalModalToggle, auth, moveTo
   }) => {
     const drugDetail = drug.package_insert
       ? JSON.parse(
         JSON.stringify(drug.package_insert.DRB_ITEM).replace(
-          /&nbsp;|&amp;|&lt;|&gt;|u0026nbsp;|'\"'|(<.*?>)/gi,
+          /&nbsp;|&#8226|&amp;|&lt;|&gt;|u0026nbsp;|'\"'|(<.*?>)/gi,
           ""
         )
       )
@@ -156,9 +159,11 @@ const SearchResult = React.memo(
           }
         } else {
           for (let i = 0; i < SECTION.length; i++) {
-            if (!SECTION[i].ARTICLE.length) {
-              pushValidItem(title, SECTION[i].ARTICLE.title);
-              pushValidItem(PARAGRAPH, SECTION[i].ARTICLE.PARAGRAPH);
+            if (!SECTION[i].ARTICLE || !SECTION[i].ARTICLE.length) {
+              if (SECTION[i].ARTICLE) {
+                pushValidItem(title, SECTION[i].ARTICLE.title);
+                pushValidItem(PARAGRAPH, SECTION[i].ARTICLE.PARAGRAPH);
+              }
             } else {
               for (let j = 0; j < SECTION[i].ARTICLE.length; j++) {
                 pushValidItem(title, SECTION[i].ARTICLE[j].title);
@@ -186,15 +191,11 @@ const SearchResult = React.memo(
 
     const ingrKo = new Set(drug.ingr_kor_name);
 
-    const durInfo = [];
-    const dur = !drug.dur_info ? {} : drug.dur_info;
-    if (dur.pregnancy) durInfo.push("임산부");
-    else if (dur.age) durInfo.push(dur.age[0].description);
-    else if (dur.elder) durInfo.push("65세 이상 고령자");
-
     return (
       <Container>
-        <Warning />
+        <StyledWrapper>
+          <Warning />
+        </StyledWrapper>
         <InfoContainer>
           <ItemName>{drug.name.split("(")[0]}</ItemName>
           <IconContainer>
@@ -251,19 +252,14 @@ const SearchResult = React.memo(
                     ` (${drug.ingr_eng_name.slice(1, -1)})`}
                 </Benefit>
               </TextContainer>
-              {dur.excluded && (
+              {durInfo || (drug.dur_info && !!Object.entries(drug.dur_info).length) ? (
                 <TextContainer>
-                  <Text bold>복용 중지된 의약품입니다!</Text>
+                  <DurInfo dur={drug.dur_info} interaction={durInfo} />
                 </TextContainer>
-              )}
-              {dur.length > 0 && (
+              ) : ''}
+              {!!drug.interactions.length && (
                 <TextContainer>
-                  <Text bold>이런 분들은 드실 때 주의해야 해요!</Text>
-                  {durInfo.map(d => (
-                    <BasicText size="0.75rem" bold key={d}>
-                      {d}
-                    </BasicText>
-                  ))}
+                  <SupplementInfo supplements={drug.interactions} moveTo={moveTo} />
                 </TextContainer>
               )}
             </>
