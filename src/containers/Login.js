@@ -120,6 +120,7 @@ function Login(props) {
         });
       })
       .catch(error => {
+        console.log(error);
         dispatch({
           type: "SIGNIN_FAIL",
           error: error.response.data.errors
@@ -164,7 +165,9 @@ function Login(props) {
           {state.error
             ? state.error
                 .split(".")
-                .map((i, k) => <LoginErrorMessage key={k}>{i}</LoginErrorMessage>)
+                .map((i, k) => (
+                  <LoginErrorMessage key={k}>{i}</LoginErrorMessage>
+                ))
             : null}
           <CustomButton onClick={() => signinActionHandler()}>
             로그인

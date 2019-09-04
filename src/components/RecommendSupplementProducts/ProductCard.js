@@ -61,7 +61,9 @@ const ProductImg = styled.img`
   height: 6rem;
 `;
 
-const DescriptionWrapper = styled.div``;
+const DescriptionWrapper = styled.div`
+  width: 80%;
+`;
 
 const Manufacturer = styled.div`
   font-size: 0.6875rem;
@@ -131,7 +133,9 @@ function ProductCard(props) {
           <RatingText margin="0.5rem" opacity="0.5" size="0.7rem" bold>
             {props.rating && props.rating.toFixed(1)} / 5.0
           </RatingText>
-          <ReviewCount>({props.reviewCount})</ReviewCount>
+          <ReviewCount>
+            ({props.reviewCount ? props.reviewCount : 0})
+          </ReviewCount>
         </RatingContainer>
       </Header>
       <Product>
@@ -140,12 +144,14 @@ function ProductCard(props) {
           <Manufacturer>{props.manufacturer}</Manufacturer>
           <ProductName>{props.name}</ProductName>
           <Price>
-            {props.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원
+            {props.price === -1
+              ? null
+              : props.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                "원"}
           </Price>
-          <Etc>
-            <Effect>효능 데이터 자리</Effect>
+          {/* <Etc>
             <Icon src={emptyHeart} alt="interesting product" />
-          </Etc>
+          </Etc> */}
         </DescriptionWrapper>
       </Product>
       {/* </Link> */}

@@ -3,8 +3,14 @@ import axios from "../apis";
 import styled from "styled-components";
 
 import ProductCard from "../components/RecommendSupplementProducts/ProductCard";
-import { Container, BasicButton, Line } from "../components/UI/SharedStyles";
+import {
+  Container,
+  BasicButton,
+  Line,
+  BasicText
+} from "../components/UI/SharedStyles";
 import Spinner from "../components/UI/Spinner";
+import { ReactComponent as Arrow } from "../assets/images/arrow.svg";
 
 const Background = styled.div`
   width: 100%;
@@ -20,7 +26,7 @@ const Background = styled.div`
 
 const RecommendProductContainer = styled(Container)`
   display: block;
-  margin-bottom: 0;
+  padding-bottom: 0;
 `;
 
 const IngrWrapper = styled.div``;
@@ -56,6 +62,7 @@ const Divider = styled(Line)`
 const PageNation = styled.div`
   display: flex;
   justify-content: space-evenly;
+  margin-bottom: 100px;
 `;
 
 const PageNumberClicked = styled.div`
@@ -71,23 +78,47 @@ const PageNumberUnclicked = styled.div`
   color: var(--twoyak-black);
 `;
 
+const FilterContainer = styled.div`
+  margin: 1rem;
+  align-self: flex-start;
+  position: relative;
+`;
+
+const Filters = styled.div`
+  position: absolute;
+  top: 1.7rem;
+  left: 0;
+  width: 4rem;
+  z-index: 50;
+  padding-left: 0.4rem;
+  border-radius: 5px;
+  border: solid 1px #00a2ff;
+  background-color: #ffffff;
+`;
+
+const ArrowIcon = styled(Arrow)`
+  margin-left: 0.5rem;
+`;
+
 function RecommendSupplementProducts(props) {
   const recommendSupplementIngrsIds = props.match.params.ingrs_ids.split("&");
   const recommendSupplementIngrsNames = props.match.params.ingr_names.split(
     "&"
   );
+  const [shoppingSite, setShoppingSite] = useState("iherb");
   const [benefits, setBenefits] = useState([]);
   const [selectedIngrIndex, setSelectedIngrIndex] = useState(0);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
   const [pagenationArray, setPagenationArray] = useState(null);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
 
   useEffect(() => {
     setLoading(true);
     axios({
       method: "GET",
-      url: `/supplements?page=${page}&supplement_ingr_id=${recommendSupplementIngrsIds[selectedIngrIndex]}&shopping_site=iherb`
+      url: `/supplements?page=${page}&supplement_ingr_id=${recommendSupplementIngrsIds[selectedIngrIndex]}&shopping_site=${shoppingSite}`
     })
       .then(async response => {
         console.log(response);
@@ -116,7 +147,7 @@ function RecommendSupplementProducts(props) {
         })
         .catch(error => alert(error.response.data.errors[0]));
     });
-  }, [page, selectedIngrIndex]);
+  }, [page, selectedIngrIndex, shoppingSite]);
 
   console.log(pagenationArray);
 
@@ -150,6 +181,36 @@ function RecommendSupplementProducts(props) {
             ))}
         </EffectWrapper>
         <Divider />
+        <FilterContainer onClick={() => setShowFilter(!showFilter)}>
+          <BasicText size="0.75rem" color="var(--twoyak-blue)">
+            {shoppingSite === "iherb" ? "아이허브 랭킹" : "쿠팡 랭킹"}
+          </BasicText>
+          <ArrowIcon />
+          {showFilter && (
+            <Filters>
+              <BasicText
+                size="0.7rem"
+                bold
+                onClick={() => setShoppingSite("iherb")}
+              >
+                아이허브
+              </BasicText>
+              <BasicText
+                size="0.7rem"
+                bold
+                onClick={() => setShoppingSite("coupang")}
+              >
+                쿠팡
+              </BasicText>
+            </Filters>
+          )}
+          <BasicText
+            size="0.5rem"
+            style={{ marginLeft: "0.5rem", color: "#474747" }}
+          >
+            가격 정보는 실제와 차이가 날 수 있습니다.
+          </BasicText>
+        </FilterContainer>
         {loading ? (
           <Spinner />
         ) : (

@@ -17,7 +17,7 @@ export const drugReducer = (state, { type, payload }) => {
       return {
         ...state,
         adverse_effects: payload
-      }
+      };
     default:
       break;
   }
