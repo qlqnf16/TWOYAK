@@ -39,12 +39,12 @@ const DrugsContainer = styled.div`
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 12px 6px;
   margin: 1.1rem 0;
-`
+`;
 
 const CurrentDrugsDiv = styled.div`
   display: flex;
   align-items: center;
-  overflow:hidden;
+  overflow: hidden;
 `;
 
 const ContentDot = styled.div`
@@ -62,7 +62,7 @@ const DrugName = styled.div`
 `;
 
 const HomeDivider = styled(Divider)`
-  margin-top:1rem;
+  margin-top: 1rem;
 `;
 
 const HomeContent = styled.div`
@@ -88,7 +88,9 @@ function CurrentDrugs({ currentDrugs, history, medIcon, userName, loading }) {
           <Header>{userName}님이 복용중인 약</Header>
         </div>
       </HeaderContainer>
-      {loading ? (<Spinner />) : currentDrugs ? (
+      {loading ? (
+        <Spinner />
+      ) : currentDrugs ? (
         <>
           <DrugsContainer>
             {currentDrugs.map((i, k) => (
@@ -97,23 +99,22 @@ function CurrentDrugs({ currentDrugs, history, medIcon, userName, loading }) {
                 onClick={() => searchDrugHandler(i.attributes.current_drug_id)}
               >
                 <ContentDot className="fas fa-circle" />
-                <DrugName>{i.attributes.drug.data.attributes.name.split("(")[0]}</DrugName>
+                <DrugName>
+                  {i.attributes.drug.data.attributes.name.split("(")[0]}
+                </DrugName>
               </CurrentDrugsDiv>
             ))}
           </DrugsContainer>
           <MoreInfo onClick={() => history.push("/health-record")}>
             자세히 보기
-      </MoreInfo></>)
-        : (
-          <PressCard onClick={() => history.push("/medicine")}>
-            <AddButton src={addDash} />
-          </PressCard>
-        )}
+          </MoreInfo>
+        </>
+      ) : (
+        <PressCard onClick={() => history.push("/medicine")}>
+          <AddButton src={addDash} />
+        </PressCard>
+      )}
       <HomeDivider />
-      <HomeContent>
-        <img src={medIcon} alt="med-icon" />
-        <Header>투약이 추천하는 컨텐츠</Header>
-      </HomeContent>
     </CurrentDrugsContainer>
   );
 }

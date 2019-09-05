@@ -63,6 +63,7 @@ const ProductImg = styled.img`
 
 const DescriptionWrapper = styled.div`
   width: 80%;
+  margin-left: 15px;
 `;
 
 const Manufacturer = styled.div`
@@ -108,18 +109,14 @@ function ProductCard(props) {
     <Card
       onClick={() =>
         window.open(
-          "https://prf.hn/click/camref:1101l4PEu/destination:" +
-            props.productURL,
+          props.supplier === "iherb"
+            ? "https://prf.hn/click/camref:1101l4PEu/destination:" +
+                props.productURL
+            : props.productURL,
           "_blank"
         )
       }
     >
-      {/* <Link
-        href={
-          "https://prf.hn/click/camref:1101l4PEu/destination:" +
-          props.productURL
-        }
-      > */}
       <Header>
         <Ranking>{props.ranking}위</Ranking>
         <RatingContainer>
@@ -144,7 +141,7 @@ function ProductCard(props) {
           <Manufacturer>{props.manufacturer}</Manufacturer>
           <ProductName>{props.name}</ProductName>
           <Price>
-            {props.price === -1
+            {props.price === -1 || !props.price
               ? null
               : props.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
                 "원"}
@@ -154,7 +151,6 @@ function ProductCard(props) {
           </Etc> */}
         </DescriptionWrapper>
       </Product>
-      {/* </Link> */}
     </Card>
   );
 }

@@ -68,7 +68,6 @@ function Home(props) {
         });
     }
   }, [authState.subUserId, authState.token, dispatch]);
-
   return (
     <HomeContainer>
       <Warning />
@@ -82,9 +81,6 @@ function Home(props) {
         />
       ) : null}
       <RecommendedContents history={props.history} />
-      {/* <Camera onClick={() => props.history.push("/capture")}>
-        <i className="fas fa-camera fa-3x" />
-      </Camera> */}
       <Footer history={props.history} />
       {tokenChange ? <Redirect to="/login" /> : null}
     </HomeContainer>
