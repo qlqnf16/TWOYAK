@@ -10,6 +10,7 @@ import medIcon from "../assets/images/med-icon.svg";
 import Warning from "../components/UI/Warning";
 import Footer from "../components/Home/Footer";
 import "@fortawesome/fontawesome-free/css/all.css";
+import HMACGenerator from "../components/RecommendSupplementProducts/HMACGenerator";
 
 const HomeContainer = styled.div`
   width: 88%;
@@ -70,6 +71,12 @@ function Home(props) {
   }, [authState.subUserId, authState.token, dispatch]);
   return (
     <HomeContainer>
+      <HMACGenerator
+        method="POST"
+        url={
+          "https://www.coupang.com/vp/products/394035?itemId=1016006&vendorItemId=3156519262&sourceType=CATEGORY&categoryId=310533&isAddedCart="
+        }
+      />
       <Warning />
       {authState.token ? (
         <CurrentDrugs
