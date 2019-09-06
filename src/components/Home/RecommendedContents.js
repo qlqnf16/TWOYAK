@@ -88,7 +88,7 @@ function RecommendedContents({ history }) {
       >
         이런 영양제는 어떤가요?
       </GoSupplementButton>
-      <PreliminaryAdContainer
+      {/* <PreliminaryAdContainer
         onClick={() => window.open("https://coupa.ng/biJr2B", "_blank")}
       >
         <PreliminaryAd src="//thumbnail12.coupangcdn.com/thumbnails/remote/492x492ex/image/vendor_inventory/images/2019/03/20/10/4/a7bfddac-040b-4fdc-b174-6156b491917a.jpg" />
@@ -97,7 +97,7 @@ function RecommendedContents({ history }) {
           <ProductName>Now Foods 비타민 C 크리스탈 아스코르브산</ProductName>
           <Price>할인가: 7,940</Price>
         </div>
-      </PreliminaryAdContainer>
+      </PreliminaryAdContainer> */}
       <ContentsContainer>
         {thumbnail.map((i, k) => (
           <ThumbnailContainer key={k} onClick={() => showContentHandler(k)}>

@@ -80,7 +80,7 @@ const PageNumberUnclicked = styled.div`
 `;
 
 const FilterContainer = styled.div`
-  margin: 1rem;
+  margin: 1rem 0.3rem 1rem 0.3rem;
   align-self: flex-start;
   position: relative;
 `;
@@ -89,12 +89,17 @@ const Filters = styled.div`
   position: absolute;
   top: 1.7rem;
   left: 0;
-  width: 4rem;
+  width: auto;
+  height: 4rem;
   z-index: 50;
   padding-left: 0.4rem;
   border-radius: 5px;
   border: solid 1px #00a2ff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   background-color: #ffffff;
+  padding: 5px;
 `;
 
 const ArrowIcon = styled(Arrow)`
@@ -342,7 +347,9 @@ function RecommendSupplementProducts(props) {
         <Divider />
         <FilterContainer onClick={() => setShowFilter(!showFilter)}>
           <BasicText size="0.75rem" color="var(--twoyak-blue)">
-            {shoppingSite === "iherb" ? "아이허브 랭킹" : "쿠팡 랭킹"}
+            {shoppingSite === "iherb"
+              ? "아이허브 판매량 순위"
+              : "쿠팡 판매량 순위"}
           </BasicText>
           <ArrowIcon />
           {showFilter && (
@@ -352,14 +359,14 @@ function RecommendSupplementProducts(props) {
                 bold
                 onClick={() => setShoppingSite("iherb")}
               >
-                아이허브
+                아이허브 판매량 순위
               </BasicText>
               <BasicText
                 size="0.7rem"
                 bold
                 onClick={() => setShoppingSite("coupang")}
               >
-                쿠팡
+                쿠팡 판매량 순위
               </BasicText>
             </Filters>
           )}

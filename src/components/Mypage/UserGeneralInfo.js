@@ -136,7 +136,7 @@ const InfoIndex = styled.div`
 
 const ButtonContainer = styled(FlexDiv)`
   margin-top: 1.375rem;
-`
+`;
 
 function UserGeneralInfo({
   currentDrugsCount,
@@ -181,7 +181,6 @@ function UserGeneralInfo({
       <SayHello>{authState.userName} 님, 안녕하세요</SayHello>
       <ButtonContainer>
         <Suggestions />
-        <ChangeUser getUserInfo={userChange} />
       </ButtonContainer>
       {generalInfo}
     </UserGeneralInfoContainer>
