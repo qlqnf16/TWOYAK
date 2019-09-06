@@ -25,7 +25,7 @@ function HomeFooter(props) {
         <EachItem onClick={() => props.history.push("/about-us")}>
           <strong>회사소개</strong>
         </EachItem>
-        <EachItem>© 2019 by JDJ Inc. Proudly caring your health</EachItem>
+        <EachItem>© 2019 by JDJ Inc. Proudly caring for your health</EachItem>
       </ItemWrapper>
     </HomeFooterContainer>
   );

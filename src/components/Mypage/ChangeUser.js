@@ -1,11 +1,10 @@
-import React, { useState, useContext } from 'react'
-import styled from 'styled-components'
-import Modal from '../UI/Modals/Modal'
-import { AuthContext } from '../../contexts/AuthStore';
+import React, { useState, useContext } from "react";
+import styled from "styled-components";
+import Modal from "../UI/Modals/Modal";
+import { AuthContext } from "../../contexts/AuthStore";
 import AddDash from "../../assets/images/add-dash.svg";
 import ChangeUserIcon from "../../assets/images/change-user-icon.svg";
-import { BasicButton } from '../UI/SharedStyles';
-
+import { BasicButton } from "../UI/SharedStyles";
 
 const ModalContents = styled.div`
   overflow: auto;
@@ -27,7 +26,7 @@ const Info = styled.div`
   font-size: 0.75rem;
   opacity: 0.6;
   margin-top: 1rem;
-`
+`;
 
 const ChangeFunction = styled.div`
   display: flex;
@@ -40,10 +39,10 @@ const ChangeFunction = styled.div`
 `;
 
 const ChangeUserIconButton = styled.img`
-  position: fixed;
+  /* position: fixed;
   bottom: 1.4375rem;
   right: 1.4375rem;
-  z-index: 300;
+  z-index: 300; */
 `;
 
 const ChangeUserTextButton = styled(BasicButton)`
@@ -52,11 +51,11 @@ const ChangeUserTextButton = styled(BasicButton)`
   color: var(--twoyak-black);
   padding: 0.3rem 1rem;
   font-weight: 700;
-`
+`;
 
 const ChangeUser = ({ history, getUserInfo }) => {
-  const [changeUserModalShow, setChangeUserModalShow] = useState()
-  const { state: authState } = useContext(AuthContext)
+  const [changeUserModalShow, setChangeUserModalShow] = useState();
+  const { state: authState } = useContext(AuthContext);
 
   const toggleChangeUserModalHandler = () => {
     setChangeUserModalShow(!changeUserModalShow);
@@ -65,23 +64,24 @@ const ChangeUser = ({ history, getUserInfo }) => {
   const modalContent = (
     <ModalContents>
       <Info>
-        두 명 이상의 복용 내역을 분리해 더 편하게 관리해보세요. (예: 부모님, 자녀 등)
+        두 명 이상의 복용 내역을 분리해 더 편하게 관리해보세요. (예: 부모님,
+        자녀 등)
       </Info>
       <ChangeFunction>
         {authState.subUsers
           ? authState.subUsers.map((i, k) =>
-            i.id !== authState.subUserId ? (
-              <ModalMessage
-                key={k}
-                onClick={() => {
-                  getUserInfo(k);
-                  toggleChangeUserModalHandler();
-                }}
-              >
-                {i.user_name}
-              </ModalMessage>
-            ) : null
-          )
+              i.id !== authState.subUserId ? (
+                <ModalMessage
+                  key={k}
+                  onClick={() => {
+                    getUserInfo(k);
+                    toggleChangeUserModalHandler();
+                  }}
+                >
+                  {i.user_name}
+                </ModalMessage>
+              ) : null
+            )
           : null}
         <AddIcon
           src={AddDash}
@@ -95,16 +95,16 @@ const ChangeUser = ({ history, getUserInfo }) => {
   return (
     <>
       {window.innerWidth >= 960 ? (
-        <ChangeUserTextButton
-          onClick={() => toggleChangeUserModalHandler()}
-        >
+        <ChangeUserTextButton onClick={() => toggleChangeUserModalHandler()}>
           사용자 추가 및 변경
-        </ChangeUserTextButton>) :
-        (<ChangeUserIconButton
+        </ChangeUserTextButton>
+      ) : (
+        <ChangeUserIconButton
           src={ChangeUserIcon}
           alt="change-user"
           onClick={() => toggleChangeUserModalHandler()}
-        />)}
+        />
+      )}
       {changeUserModalShow ? (
         <Modal
           modalOff={() => toggleChangeUserModalHandler()}
@@ -114,7 +114,7 @@ const ChangeUser = ({ history, getUserInfo }) => {
         />
       ) : null}
     </>
-  )
-}
+  );
+};
 
-export default ChangeUser
+export default ChangeUser;

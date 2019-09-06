@@ -5,13 +5,17 @@ import axios from "../../apis";
 import jwt_decode from "jwt-decode";
 import DropoutModal from "../UI/Modals/Modal";
 import { BasicButton, BasicInput } from "../UI/SharedStyles";
+import ChangeUserIcon from "../../assets/images/change-user-icon.svg";
 
 const FooterContainer = styled.div`
   background-color: #ffffff;
   position: fixed;
   bottom: 0;
-  width: 150px;
+  width: 90%;
+  max-width: 500px;
   z-index: 200;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const ItemWrapper = styled.div`
@@ -55,7 +59,11 @@ const TextArea = styled.textarea`
   margin-top: 1rem;
 `;
 
-function Footer({ routes }) {
+const ChangeUser = styled.img`
+  z-index: 300;
+`;
+
+function Footer({ routes, changeUser }) {
   const [dropoutModalShow, setDropoutModalShow] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [suggestion, setSuggestion] = useState("");
@@ -171,6 +179,11 @@ function Footer({ routes }) {
         </EachItem>
         <EachItem onClick={() => setDropoutModalShow(true)}>탈퇴하기</EachItem>
       </ItemWrapper>
+      <ChangeUser
+        src={ChangeUserIcon}
+        alt="change-user"
+        onClick={() => changeUser()}
+      />
       {dropoutModalShow ? (
         <DropoutModal
           modalOff={() => setDropoutModalShow(false)}

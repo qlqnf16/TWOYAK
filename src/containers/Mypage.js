@@ -179,7 +179,6 @@ import WatchDrugs from "../components/Mypage/WatchDrugs";
 import Footer from "../components/Mypage/Footer";
 import Modal from "../components/UI/Modals/Modal";
 import AddDash from "../assets/images/add-dash.svg";
-import ChangeUserIcon from "../assets/images/change-user-icon.svg";
 
 const MyPageContainer = styled.div`
   width: 100%;
@@ -238,13 +237,6 @@ const ChangeFunction = styled.div`
   padding-bottom: 1.875rem;
   overflow: auto;
   height: 500px;
-`;
-
-const ChangeUser = styled.img`
-  position: fixed;
-  bottom: 1.4375rem;
-  right: 1.4375rem;
-  z-index: 300;
 `;
 
 const ChangeUserModal = styled(Modal)``;
@@ -345,35 +337,38 @@ function Mypage(props) {
 
   return (
     <MyPageContainer>
-      <Topbar history={props.history} />
-      <UserGeneralInfo
-        currentDrugsCount={currentDrugsCount}
-        drugReviewsCount={drugReviewsCount}
-        myConversation={myConversation}
-        userChange={id => getUserInfo(id)}
-        history={props.history}
-      />
-      <Divider />
-      <Diseases
-        medHistory={familyMedHistoies}
-        historyChange={id => getUserInfo(id)}
-      />
-      <Divider />
-      <WatchDrugs watchDrugs={watchDrugs} watchChange={id => getUserInfo(id)} />
-      <ChangeUser
-        src={ChangeUserIcon}
-        alt="change-user"
-        onClick={() => toggleChangeUserModalHandler()}
-      />
-      <Footer routes={props} />
-      {changeUserModalShow ? (
-        <ChangeUserModal
-          modalOff={() => toggleChangeUserModalHandler()}
-          img
-          title="사용자 추가/변경"
-          content={modalContent}
+      <Container>
+        <Topbar history={props.history} />
+        <UserGeneralInfo
+          currentDrugsCount={currentDrugsCount}
+          drugReviewsCount={drugReviewsCount}
+          myConversation={myConversation}
+          userChange={id => getUserInfo(id)}
+          history={props.history}
         />
-      ) : null}
+        <Divider />
+        <Diseases
+          medHistory={familyMedHistoies}
+          historyChange={id => getUserInfo(id)}
+        />
+        <Divider />
+        <WatchDrugs
+          watchDrugs={watchDrugs}
+          watchChange={id => getUserInfo(id)}
+        />
+        <Footer
+          routes={props}
+          changeUser={() => toggleChangeUserModalHandler()}
+        />
+        {changeUserModalShow ? (
+          <ChangeUserModal
+            modalOff={() => toggleChangeUserModalHandler()}
+            img
+            title="사용자 추가/변경"
+            content={modalContent}
+          />
+        ) : null}
+      </Container>
     </MyPageContainer>
   );
 }

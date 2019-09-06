@@ -64,7 +64,6 @@ const RecommendProductButton = styled(BasicButton)`
 `;
 
 function RecommendSupplements(props) {
-  const supplementIngrs = props.match.params.ingrs.split("&");
   console.log(props);
   return (
     <RecommendSupplementsContainer>
@@ -74,12 +73,12 @@ function RecommendSupplements(props) {
         onClick={() => props.history.goBack()}
       />
       <RecommendSupplementsHeader>추천 건강기능식품</RecommendSupplementsHeader>
-      {supplementIngrs.map((i, k) => (
+      {/* {supplementIngrs.map((i, k) => (
         <RecommendSupplementIngrWrapper key={k}>
           <RecommendSupplementIngr>{i}</RecommendSupplementIngr>
           <DetailButton>자세히 보기</DetailButton>
         </RecommendSupplementIngrWrapper>
-      ))}
+      ))} */}
       <RecommendProductButton
         onClick={() =>
           props.history.push(

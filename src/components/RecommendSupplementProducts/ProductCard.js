@@ -61,7 +61,10 @@ const ProductImg = styled.img`
   height: 6rem;
 `;
 
-const DescriptionWrapper = styled.div``;
+const DescriptionWrapper = styled.div`
+  width: 80%;
+  margin-left: 15px;
+`;
 
 const Manufacturer = styled.div`
   font-size: 0.6875rem;
@@ -106,18 +109,14 @@ function ProductCard(props) {
     <Card
       onClick={() =>
         window.open(
-          "https://prf.hn/click/camref:1101l4PEu/destination:" +
-            props.productURL,
+          props.supplier === "iherb"
+            ? "https://prf.hn/click/camref:1101l4PEu/destination:" +
+                props.productURL
+            : props.productURL,
           "_blank"
         )
       }
     >
-      {/* <Link
-        href={
-          "https://prf.hn/click/camref:1101l4PEu/destination:" +
-          props.productURL
-        }
-      > */}
       <Header>
         <Ranking>{props.ranking}위</Ranking>
         <RatingContainer>
@@ -131,7 +130,9 @@ function ProductCard(props) {
           <RatingText margin="0.5rem" opacity="0.5" size="0.7rem" bold>
             {props.rating && props.rating.toFixed(1)} / 5.0
           </RatingText>
-          <ReviewCount>({props.reviewCount})</ReviewCount>
+          <ReviewCount>
+            ({props.reviewCount ? props.reviewCount : 0})
+          </ReviewCount>
         </RatingContainer>
       </Header>
       <Product>
@@ -140,15 +141,16 @@ function ProductCard(props) {
           <Manufacturer>{props.manufacturer}</Manufacturer>
           <ProductName>{props.name}</ProductName>
           <Price>
-            {props.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}원
+            {props.price === -1 || !props.price
+              ? null
+              : props.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                "원"}
           </Price>
-          <Etc>
-            <Effect>효능 데이터 자리</Effect>
+          {/* <Etc>
             <Icon src={emptyHeart} alt="interesting product" />
-          </Etc>
+          </Etc> */}
         </DescriptionWrapper>
       </Product>
-      {/* </Link> */}
     </Card>
   );
 }
