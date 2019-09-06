@@ -12,7 +12,7 @@ const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: 10rem;
 
   /* @media (max-width: ${breakpoints.medium}) { */
     flex-direction: column;
