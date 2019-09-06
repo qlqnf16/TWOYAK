@@ -222,7 +222,8 @@ function Medicine({ match, history, location }) {
         })
       }
 
-      setDurInfo(tempDurInfo)
+      Object.entries(tempDurInfo).length > 0 ?
+        setDurInfo(tempDurInfo) : setDurInfo(null)
     } catch (error) {
       console.log(error)
     }
