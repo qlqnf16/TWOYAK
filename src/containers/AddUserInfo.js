@@ -26,6 +26,7 @@ const SubmitButton = styled(BasicButton)`
   width: 6.8125rem;
   height: 3rem;
   text-align: center;
+  margin-right: 1rem;
 `;
 
 const SkipButton = styled(SubmitButton)`
@@ -48,7 +49,6 @@ const ModalContents = styled.div`
 `;
 
 const ModalMessage = styled.div`
-  width: 12.75rem;
   font-size: 0.875rem;
   font-weight: 800;
   color: #474747;
@@ -103,13 +103,13 @@ function AddSubUser(props) {
       }
     }
   }, [
-    props.match.path,
-    props.match.params,
-    state.subUserId,
-    state.token,
-    state.subUserIndex,
-    dispatch
-  ]);
+      props.match.path,
+      props.match.params,
+      state.subUserId,
+      state.token,
+      state.subUserIndex,
+      dispatch
+    ]);
 
   const getUserInfo = () => {
     axios({
@@ -233,7 +233,7 @@ function AddSubUser(props) {
         <SubmitButton onClick={() => toggleSkipAddInfoHandler()}>
           돌아가기
         </SubmitButton>
-        <SkipButton onClick={() => props.history.push("/")}>
+        <SkipButton onClick={() => props.match.path === "/edit-info" ? props.history.push("/mypage") : props.history.push('/')}>
           {props.match.path === "/edit-info" ? "닫기" : "건너뛰기"}
         </SkipButton>
       </div>
