@@ -264,21 +264,21 @@ const CurrentDrug = ({
             </>
           )
         }
-        {
+        {drug.attributes.drug.data.attributes.dur_info &&
           !Object.entries(drug.attributes.drug.data.attributes.dur_info).length ? (
             ""
           ) : (
-              <>
-                <BulletText>
-                  <p>안전정보</p>
-                </BulletText>
-                <Content>
-                  {message.map((m, key) => (
-                    <div key={key}>{m}</div>
-                  ))}
-                </Content>
-              </>
-            )
+            <>
+              <BulletText>
+                <p>안전정보</p>
+              </BulletText>
+              <Content>
+                {message.map((m, key) => (
+                  <div key={key}>{m}</div>
+                ))}
+              </Content>
+            </>
+          )
         }
         {
           drug.attributes.memo && (
