@@ -71,12 +71,12 @@ function Home(props) {
   }, [authState.subUserId, authState.token, dispatch]);
   return (
     <HomeContainer>
-      <HMACGenerator
+      {/* <HMACGenerator
         method="POST"
         url={
           "https://www.coupang.com/vp/products/394035?itemId=1016006&vendorItemId=3156519262&sourceType=CATEGORY&categoryId=310533&isAddedCart="
         }
-      />
+      /> */}
       <Warning />
       {authState.token ? (
         <CurrentDrugs
