@@ -16,9 +16,24 @@ const SubTitle = styled(BasicText)`
 `
 
 const Text = styled(BasicText)`
+  display: inline-flex;
+  align-items: center;
   font-size: 0.75rem;
   margin-right: 1rem;
   font-weight: normal;
+`
+
+const HeadIcon = styled.div`
+  border-radius: 100%;
+  border: 0.4px solid var(--twoyak-blue);
+  color: var(--twoyak-blue);
+  width: 10px;
+  line-height: 10px;
+  height: 10px;
+  text-align: center;
+  font-size: 9px;
+  vertical-align: middle;
+  margin-left: 1.5px;
 `
 
 const Button = styled(BasicButton)`
@@ -48,9 +63,12 @@ const SupplementInfo = ({ supplements, moveTo }) => {
   return (
     <>
       <Title>똑똑하게 복용하기</Title>
-      <SubTitle>함께 복용하면 도움이 될 수 있는 성분</SubTitle>
+      <SubTitle>함께 복용하면 도움이 될 수 있는 영양성분</SubTitle>
       {supplements.map(supplement => (
-        <Text key={supplement.id} onClick={() => { detailToggleHandler(supplement) }}>{supplement.more_info.ingr_name}</Text>
+        <Text key={supplement.id} onClick={() => { detailToggleHandler(supplement) }}>
+          {supplement.more_info.ingr_name}
+          <HeadIcon>?</HeadIcon>
+        </Text>
       ))}
       <Button onClick={() => { moveToRecommend() }}>관련 건강기능식품 보러가기</Button>
 

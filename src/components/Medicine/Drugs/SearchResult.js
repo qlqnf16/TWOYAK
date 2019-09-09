@@ -58,6 +58,10 @@ const ImgContainer = styled.div`
   border: solid 1px #979797;
   margin-top: 0.62rem;
   margin-bottom: 1rem;
+  background-color: rgba(0,0,0,0.03);
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--twoyak-black);
 `;
 
 const Img = styled.img`
@@ -68,10 +72,16 @@ const Img = styled.img`
   max-width: 100%;
 `;
 
-const Button = styled(BasicButton)`
+const Button = styled.a`
   font-size: 0.75rem;
   opacity: 0.5;
-  margin-top: 1rem;
+  border-radius: 1.5rem;
+  background-color: #00a2ff;
+  padding: 0.5rem 1.3rem;
+  color: white;
+  font-weight: 800;
+  margin: 1rem auto 0 auto;
+  text-decoration: none;
 `;
 
 const AddButton = styled(BasicButton)`
@@ -116,9 +126,9 @@ const StyledWrapper = styled.div`
 
 const SearchResult = React.memo(
   ({
-    drug, drugImg, durInfo, modalOn,
+    drug, drugImg, durInfo,
     showMore, toggleShowMore, watching,
-    showLogin, toggleWatching,
+    showLogin, toggleWatching, history,
     additionalModalToggle, auth, moveTo
   }) => {
     const drugDetail = drug.package_insert
@@ -210,17 +220,17 @@ const SearchResult = React.memo(
                 />
               )}
           </IconContainer>
-          {drugImg && (
-            <ImgContainer>
-              <Img src={drugImg} alt={drug.name} />
-            </ImgContainer>
-          )}
+          <ImgContainer>
+            {drugImg ?
+              drugImg === 'x' ? '의약품 사진이 없습니다. ' :
+                <Img src={drugImg} alt={drug.name} /> :
+              '로딩중..'}
+          </ImgContainer>
           {drugDetail && (
             <>
               <Button
-                onClick={() => {
-                  modalOn();
-                }}
+                href={`https://nedrug.mfds.go.kr/pbp/CCBBB01/getItemDetail?itemSeq=${drug.item_seq}`}
+                target="_blank"
               >
                 설명서 보기
               </Button>
