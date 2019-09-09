@@ -19,6 +19,7 @@ const EachItem = styled.div`
 
 const Copyright = styled.div`
   text-align: right;
+  font-size: 0.75rem;
 `;
 
 function HomeFooter(props) {
