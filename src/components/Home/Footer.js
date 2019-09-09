@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Divider } from "../../components/UI/SharedStyles";
-
 const HomeFooterContainer = styled.div`
   margin-top: 2.125rem;
 `;
@@ -17,6 +15,18 @@ const EachItem = styled.div`
   font-size: 0.75rem;
 `;
 
+const Copyright = styled.div`
+  text-align: right;
+  font-size: 0.75rem;
+`;
+
+const Divider = styled.div`
+  width: 100%;
+  height: 1px;
+  opacity: 0.5;
+  background-color: var(--twoyak-blue);
+`;
+
 function HomeFooter(props) {
   return (
     <HomeFooterContainer>
@@ -25,8 +35,8 @@ function HomeFooter(props) {
         <EachItem onClick={() => props.history.push("/about-us")}>
           <strong>회사소개</strong>
         </EachItem>
-        <EachItem>© 2019 by JDJ Inc. Proudly caring for your health</EachItem>
       </ItemWrapper>
+      <Copyright>© 2019 by JDJ Inc. Proudly caring for your health</Copyright>
     </HomeFooterContainer>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "../apis";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 import ProductCard from "../components/RecommendSupplementProducts/ProductCard";
 import {
@@ -30,8 +30,6 @@ const RecommendProductContainer = styled(Container)`
   padding-bottom: 0;
 `;
 
-const IngrWrapper = styled.div``;
-
 const Title = styled.div`
   padding-top: 1rem;
   font-size: 1.125rem;
@@ -40,12 +38,15 @@ const Title = styled.div`
 `;
 
 const IngrButton = styled(BasicButton)`
-  margin-right: 1rem;
-  margin-top: 0.8125rem;
+  margin: 0.8125rem 0 0 0;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 const EffectWrapper = styled.div`
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 `;
 
 const EffectDescription = styled.div`
@@ -63,7 +64,7 @@ const Divider = styled(Line)`
 const PageNation = styled.div`
   display: flex;
   justify-content: space-evenly;
-  margin-bottom: 100px;
+  padding-bottom: 100px;
 `;
 
 const PageNumberClicked = styled.div`
@@ -109,6 +110,12 @@ const ArrowIcon = styled(Arrow)`
 const SelectIngrTypeContainer = styled.div`
   width: 100%;
   max-width: 500px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  @media (max-width: 500px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  grid-gap: 0 1rem;
 `;
 
 const IngrTypeSelector = styled.div`
@@ -127,13 +134,19 @@ const IngrTypeSelector = styled.div`
 
 const Filter = styled.div``;
 
+const move = keyframes`
+  0% {top: 0}
+  100% {top: 110px}
+`;
+
 const IngrTypeArea = styled.div`
   width: 100%;
   position: fixed;
-  top: 110px;
+  display: ${({ show }) => (show ? "block" : "none")};
   left: 0;
-  z-index: 400;
+  z-index: 300;
   background-color: #ffffff;
+  animation: ${move} 0.5s linear;
 `;
 
 const IngrType = styled.div`
@@ -266,31 +279,29 @@ function RecommendSupplementProducts(props) {
           <Filter>{type}</Filter>
           <ArrowIcon />
         </IngrTypeSelector>
-        {showTypeFilter && (
-          <IngrTypeArea>
-            <IngrType
-              onClick={() => {
-                changeSupplementHandler("vitamin");
-              }}
-            >
-              비타민
-            </IngrType>
-            <IngrType
-              onClick={() => {
-                changeSupplementHandler("mineral");
-              }}
-            >
-              미네랄
-            </IngrType>
-            <IngrType
-              onClick={() => {
-                changeSupplementHandler("nutrient");
-              }}
-            >
-              영양제
-            </IngrType>
-          </IngrTypeArea>
-        )}
+        <IngrTypeArea show={showTypeFilter}>
+          <IngrType
+            onClick={() => {
+              changeSupplementHandler("vitamin");
+            }}
+          >
+            비타민
+          </IngrType>
+          <IngrType
+            onClick={() => {
+              changeSupplementHandler("mineral");
+            }}
+          >
+            미네랄
+          </IngrType>
+          <IngrType
+            onClick={() => {
+              changeSupplementHandler("nutrient");
+            }}
+          >
+            영양제
+          </IngrType>
+        </IngrTypeArea>
         {recommendSupplementIngrsNames.map((i, k) => (
           <IngrButton
             style={
@@ -309,7 +320,7 @@ function RecommendSupplementProducts(props) {
     );
   } else {
     RecommendIngrs = (
-      <IngrWrapper>
+      <>
         {recommendSupplementIngrsNames.map((i, k) => (
           <IngrButton
             style={
@@ -324,7 +335,7 @@ function RecommendSupplementProducts(props) {
             {i}
           </IngrButton>
         ))}
-      </IngrWrapper>
+      </>
     );
   }
 
