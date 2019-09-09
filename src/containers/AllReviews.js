@@ -11,7 +11,7 @@ import {
 } from "../components/UI/SharedStyles";
 import { AuthContext } from "../contexts/AuthStore";
 import DrugReview from "../components/Medicine/Review/DrugReview";
-import medIcon from "../assets/images/med-icon.svg";
+import { ReactComponent as Med } from "../assets/images/med-icon.svg";
 import { ReactComponent as Arrow } from "../assets/images/arrow.svg";
 import styled from "styled-components";
 import LoginModal from "../components/UI/Modals/LoginModal";
@@ -30,6 +30,7 @@ const Background = styled.div`
 `;
 
 const ReviewCard = styled(Card)`
+  display: block;
   padding: 1.4rem 1rem;
 `;
 
@@ -58,6 +59,11 @@ const Filters = styled.div`
 const ArrowIcon = styled(Arrow)`
   margin-left: 0.5rem;
 `;
+
+const MedIcon = styled(Med)`
+  margin-right: 6px;
+  margin-top: 5px;
+`
 
 const ReviewTitle = styled(Link)`
 font-size: 0.875rem;
@@ -258,11 +264,7 @@ function AllReviews({ match }) {
           reviews.map(review => (
             <ReviewCard key={review.id}>
               <FlexDiv align="flex-start">
-                <img
-                  src={medIcon}
-                  alt="med-icon"
-                  style={{ marginRight: "6px", marginTop: "5px" }}
-                />
+                <MedIcon />
                 <ReviewTitle to={`/medicine/${review.meta.drug.id}`}>{review.meta.drug.name.split("(")[0]}</ReviewTitle>
               </FlexDiv>
               <Line />
