@@ -60,7 +60,7 @@ const Navbar = () => {
 
   const handleScroll = () => {
     setPrevScrollPos(document.body.getBoundingClientRect().top);
-    setShow(document.body.getBoundingClientRect().top > prevScrollPos);
+    setShow(document.body.getBoundingClientRect().top > prevScrollPos || window.pageYOffset === 0);
   };
 
   useEffect(() => {
