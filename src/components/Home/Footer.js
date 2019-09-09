@@ -17,6 +17,10 @@ const EachItem = styled.div`
   font-size: 0.75rem;
 `;
 
+const Copyright = styled.div`
+  text-align: right;
+`;
+
 function HomeFooter(props) {
   return (
     <HomeFooterContainer>
@@ -25,8 +29,8 @@ function HomeFooter(props) {
         <EachItem onClick={() => props.history.push("/about-us")}>
           <strong>회사소개</strong>
         </EachItem>
-        <EachItem>© 2019 by JDJ Inc. Proudly caring for your health</EachItem>
       </ItemWrapper>
+      <Copyright>© 2019 by JDJ Inc. Proudly caring for your health</Copyright>
     </HomeFooterContainer>
   );
 }
