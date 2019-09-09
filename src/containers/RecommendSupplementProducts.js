@@ -64,7 +64,7 @@ const Divider = styled(Line)`
 const PageNation = styled.div`
   display: flex;
   justify-content: space-evenly;
-  padding-bottom: 100px;
+  padding-bottom: 300px;
 `;
 
 const PageNumberClicked = styled.div`
