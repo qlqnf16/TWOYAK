@@ -9,7 +9,6 @@ import { AuthContext } from "../contexts/AuthStore";
 import SearchInput from "../components/Medicine/Drugs/SearchInput";
 import SearchResult from "../components/Medicine/Drugs/SearchResult";
 import ItemList from "../components/Medicine/Drugs/ItemList";
-import DetailModal from "../components/Medicine/Drugs/DetailModal";
 import DrugReview from "../components/Medicine/Review/DrugReview";
 import AddModal from "../components/Medicine/Modals/AddModal";
 import DeleteModal from "../components/Medicine/Modals/DeleteModal";
@@ -78,7 +77,6 @@ function Medicine({ match, history, location }) {
   const [addModal, setAddModal] = useState(false); // 약품 추가 모달
   const [deleteModal, setDeleteModal] = useState(false); // 약품 제거 모달
   const [drugId, setDrugId] = useState()
-  const [modal, setModal] = useState(false); // 의약품 상세정보 모달
   const [showMore, setShowMore] = useState(false); // 더보기 버튼
   const [showLogin, setShowLogin] = useState(false);
 
@@ -341,14 +339,6 @@ function Medicine({ match, history, location }) {
 
   };
 
-  // searchResult 상세정보 modal toggle
-  const modalOn = () => {
-    setModal(true);
-  };
-  const modalOff = () => {
-    setModal(false);
-  };
-
   // 뒤로가기
   const goBack = () => {
     history.goBack();
@@ -478,7 +468,6 @@ function Medicine({ match, history, location }) {
               <SearchResult
                 drug={drug}
                 drugImg={drugimg}
-                modalOn={modalOn}
                 showMore={showMore}
                 watching={watching}
                 toggleShowMore={toggleShowMore}
@@ -488,6 +477,7 @@ function Medicine({ match, history, location }) {
                 auth={!authState.token ? false : true}
                 moveTo={moveToRecommendSupplement}
                 durInfo={durInfo}
+                history={history}
               />
               {drugReview && drugReview.length > 0 && (
                 <>
@@ -523,7 +513,6 @@ function Medicine({ match, history, location }) {
 
 
         </Container>
-        {modal && <DetailModal item_seq={drug.item_seq} modalOff={modalOff} />}
         {addModal && (
           <AddModal
             additionalModalToggle={additionalModalToggle}

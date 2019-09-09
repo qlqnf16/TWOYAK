@@ -68,10 +68,16 @@ const Img = styled.img`
   max-width: 100%;
 `;
 
-const Button = styled(BasicButton)`
+const Button = styled.a`
   font-size: 0.75rem;
   opacity: 0.5;
-  margin-top: 1rem;
+  border-radius: 1.5rem;
+  background-color: #00a2ff;
+  padding: 0.5rem 1.3rem;
+  color: white;
+  font-weight: 800;
+  margin: 1rem auto 0 auto;
+  text-decoration: none;
 `;
 
 const AddButton = styled(BasicButton)`
@@ -116,9 +122,9 @@ const StyledWrapper = styled.div`
 
 const SearchResult = React.memo(
   ({
-    drug, drugImg, durInfo, modalOn,
+    drug, drugImg, durInfo,
     showMore, toggleShowMore, watching,
-    showLogin, toggleWatching,
+    showLogin, toggleWatching, history,
     additionalModalToggle, auth, moveTo
   }) => {
     const drugDetail = drug.package_insert
@@ -218,9 +224,8 @@ const SearchResult = React.memo(
           {drugDetail && (
             <>
               <Button
-                onClick={() => {
-                  modalOn();
-                }}
+                href={`https://nedrug.mfds.go.kr/pbp/CCBBB01/getItemDetail?itemSeq=${drug.item_seq}`}
+                target="_blank"
               >
                 설명서 보기
               </Button>
