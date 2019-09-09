@@ -13,6 +13,7 @@ const ItemWrapper = styled.div`
 
 const EachItem = styled.div`
   font-size: 0.75rem;
+  text-align: right;
 `;
 
 const Copyright = styled.div`
