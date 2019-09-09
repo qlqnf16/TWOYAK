@@ -383,7 +383,11 @@ function RecommendSupplementProducts(props) {
           )}
           <BasicText
             size="0.5rem"
-            style={{ marginLeft: "0.5rem", color: "#474747" }}
+            style={{
+              fontSize: "0.4rem",
+              marginLeft: "0.5rem",
+              color: "#474747"
+            }}
           >
             가격 정보는 실제와 차이가 날 수 있습니다.
           </BasicText>
