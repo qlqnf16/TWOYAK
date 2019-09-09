@@ -58,6 +58,10 @@ const ImgContainer = styled.div`
   border: solid 1px #979797;
   margin-top: 0.62rem;
   margin-bottom: 1rem;
+  background-color: rgba(0,0,0,0.03);
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--twoyak-black);
 `;
 
 const Img = styled.img`
@@ -216,11 +220,12 @@ const SearchResult = React.memo(
                 />
               )}
           </IconContainer>
-          {drugImg && (
-            <ImgContainer>
-              <Img src={drugImg} alt={drug.name} />
-            </ImgContainer>
-          )}
+          <ImgContainer>
+            {drugImg ?
+              drugImg === 'x' ? '의약품 사진이 없습니다. ' :
+                <Img src={drugImg} alt={drug.name} /> :
+              '로딩중..'}
+          </ImgContainer>
           {drugDetail && (
             <>
               <Button

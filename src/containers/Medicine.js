@@ -177,7 +177,7 @@ function Medicine({ match, history, location }) {
   const getDrugImg = async id => {
     try {
       const { data } = await axios.get(`drugs/${id}/pics`);
-      setDrugimg(data.pics[0]);
+      data.pics.length ? setDrugimg(data.pics[0]) : setDrugimg('x');
     } catch (error) {
       console.log(error);
     }
