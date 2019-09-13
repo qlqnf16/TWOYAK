@@ -175,11 +175,26 @@ function Medicine({ match, history, location }) {
 
   // id로 이미지 url 가져오기
   const getDrugImg = async id => {
-    try {
-      const { data } = await axios.get(`drugs/${id}/pics`);
-      data.pics.length ? setDrugimg(data.pics[0]) : setDrugimg('x');
-    } catch (error) {
-      console.log(error);
+    let imageObject = {}
+    let imgUrl
+    if (localStorage['drugImg']) {
+      imageObject = JSON.parse(localStorage['drugImg'])
+      imgUrl = imageObject[id]
+    }
+
+    if (imgUrl) {
+      setDrugimg(imgUrl)
+    } else {
+      try {
+        const { data } = await axios.get(`drugs/${id}/pics`);
+        localStorage["drugImg"] =
+          data.pics.length ?
+            JSON.stringify({ ...imageObject, [id]: data.pics[0] }) :
+            JSON.stringify({ ...imageObject, [id]: 'x' })
+        data.pics.length ? setDrugimg(data.pics[0]) : setDrugimg('x');
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
