@@ -49,7 +49,8 @@ const ItemName = styled.div`
 
 const ImgContainer = styled.div`
   width: 40%;
-  height: 109px;
+  height: fit-content;
+  min-height: 109px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -67,9 +68,9 @@ const ImgContainer = styled.div`
 const Img = styled.img`
   object-fit: cover;
   width: 100%;
-  height: 100%;
-  max-height: 109px;
+  height: auto;
   max-width: 100%;
+  max-height: 300px;
 `;
 
 const Button = styled.a`
