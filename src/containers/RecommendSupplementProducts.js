@@ -197,18 +197,19 @@ function RecommendSupplementProducts(props) {
     setRecommendSupplementsIngrsNames
   ] = useState(
     props.match.path === "/recommend-all-supplements/:type"
-      ? props.match.params.type === "minerals"
-        ? mineralIngrNames
+      ? props.match.params.type === "vitamins"
+        ? vitaminIngrNames
         : props.match.params.type === "minerals"
         ? mineralIngrNames
         : nutrientIngrNames
       : props.match.params.ingr_names.split("&")
   );
-  const [shoppingSite, setShoppingSite] = useState("iherb");
+  const [shoppingSite, setShoppingSite] = useState("coupang");
   const [benefits, setBenefits] = useState([]);
   const [selectedIngrIndex, setSelectedIngrIndex] = useState(0);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
   const [pagenationArray, setPagenationArray] = useState(null);
+  const [pagenationNumber, setPagenationNumber] = useState(null);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
@@ -231,17 +232,20 @@ function RecommendSupplementProducts(props) {
     })
       .then(async response => {
         setRecommendedProducts(response.data.data);
-        let tempPagenation = [];
-        if (Number(response.headers["total-count"]) % 12 === 0) {
-          tempPagenation = new Array(
-            Number(response.headers["total-count"]) / 12
-          ).fill();
-        } else {
-          tempPagenation = new Array(
-            parseInt(Number(response.headers["total-count"]) / 12) + 1
-          ).fill();
+        setPagenationNumber(response.headers["total-count"]);
+        if (pagenationNumber !== response.headers["total-count"]) {
+          let tempPagenation = [];
+          if (Number(response.headers["total-count"]) % 12 === 0) {
+            tempPagenation = new Array(
+              Number(response.headers["total-count"]) / 12
+            ).fill();
+          } else {
+            tempPagenation = new Array(
+              parseInt(Number(response.headers["total-count"]) / 12) + 1
+            ).fill();
+          }
+          setPagenationArray(tempPagenation);
         }
-        setPagenationArray(tempPagenation);
         setLoading(false);
       })
       .catch(error => alert(error.response.data.errors[0]));
@@ -258,8 +262,6 @@ function RecommendSupplementProducts(props) {
         .catch(error => alert(error.response.data.errors[0]));
     });
   }, [page, recommendSupplementIngrsIds, selectedIngrIndex, shoppingSite]);
-
-  console.log(pagenationArray);
 
   const changeSupplementHandler = type => {
     switch (type) {
@@ -436,16 +438,17 @@ function RecommendSupplementProducts(props) {
           ))
         )}
         <PageNation>
-          {pagenationArray &&
-            pagenationArray.map((i, k) =>
-              k + 1 === page ? (
-                <PageNumberClicked key={k}>{k + 1}</PageNumberClicked>
-              ) : (
-                <PageNumberUnclicked key={k} onClick={() => setPage(k + 1)}>
-                  {k + 1}
-                </PageNumberUnclicked>
+          {pagenationArray
+            ? pagenationArray.map((i, k) =>
+                k + 1 === page ? (
+                  <PageNumberClicked key={k}>{k + 1}</PageNumberClicked>
+                ) : (
+                  <PageNumberUnclicked key={k} onClick={() => setPage(k + 1)}>
+                    {k + 1}
+                  </PageNumberUnclicked>
+                )
               )
-            )}
+            : null}
         </PageNation>
       </RecommendProductContainer>
     </Background>

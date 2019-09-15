@@ -3,7 +3,7 @@ import moment from "moment";
 
 function HMACGenerator(method, url, secretKey, accessKey) {
   const parts = url.split(/\?/);
-  const [path, query = " "] = parts;
+  const [path, query = ""] = parts;
   const datetime = moment.utc().format("YYMMDD[T]HHmmss[Z]");
   const message = datetime + method + path + query;
   const signature = CryptoJS.HmacSHA256(message, secretKey).toString(

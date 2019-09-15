@@ -33,7 +33,7 @@ const DiseaseName = styled.div`
   font-size: 1rem;
   font-weight: 700;
   color: var(--twoyak-black);
-`
+`;
 
 const DateContainer = styled.div`
   width: 100%;
@@ -64,7 +64,7 @@ const Bullet = styled(BulletText)`
 `;
 
 const PastDrug = ({ dateArray, monthCategory, modalOn }) => {
-  const diseases = Object.keys(monthCategory)
+  const diseases = Object.keys(monthCategory);
   const drugs = diseases.map(disease => {
     return (
       <>
@@ -72,20 +72,34 @@ const PastDrug = ({ dateArray, monthCategory, modalOn }) => {
         {monthCategory[disease].map(drug => (
           <Flex key={drug.name}>
             <Bullet>
-              <p onClick={() => { modalOn(drug.id) }} >
+              <p
+                onClick={() => {
+                  modalOn(drug.id);
+                }}
+              >
                 {drug.name}
               </p>
             </Bullet>
             <Text>
-              {drug.from ? drug.from.slice(5).split("-").join("/") : null}
+              {drug.from
+                ? drug.from
+                    .slice(5)
+                    .split("-")
+                    .join("/")
+                : null}
               {` ~ `}
-              {drug.to ? drug.to.slice(5).split("-").join("/") : null}
+              {drug.to
+                ? drug.to
+                    .slice(5)
+                    .split("-")
+                    .join("/")
+                : null}
             </Text>
           </Flex>
         ))}
       </>
-    )
-  })
+    );
+  });
 
   return (
     <PastCard>
@@ -95,13 +109,11 @@ const PastDrug = ({ dateArray, monthCategory, modalOn }) => {
           <div>{parseInt(dateArray[1])}월</div>
         </DateContainer>
       ) : (
-          <DateContainer>기록하지 않음</DateContainer>
-        )}
+        <DateContainer>기록하지 않음</DateContainer>
+      )}
 
       <Line />
-      <DrugsContainer>
-        {drugs}
-      </DrugsContainer>
+      <DrugsContainer>{drugs}</DrugsContainer>
     </PastCard>
   );
 };
