@@ -204,7 +204,7 @@ function RecommendSupplementProducts(props) {
         : nutrientIngrNames
       : props.match.params.ingr_names.split("&")
   );
-  const [shoppingSite, setShoppingSite] = useState("coupang");
+  const [shoppingSite, setShoppingSite] = useState("iherb");
   const [benefits, setBenefits] = useState([]);
   const [selectedIngrIndex, setSelectedIngrIndex] = useState(0);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
