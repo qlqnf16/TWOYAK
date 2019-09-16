@@ -63,13 +63,13 @@ const ItemList = ({ drug_list, term, addCurrentDrug, currentDrugs }) => {
           복용중
         </BasicText>
       ) : (
-        <Add
-          onClick={e => {
-            e.stopPropagation();
-            addCurrentDrug(item.current_drug_id);
-          }}
-        />
-      )}
+          <Add
+            onClick={e => {
+              e.stopPropagation();
+              addCurrentDrug(item.current_drug_id);
+            }}
+          />
+        )}
     </Flex>
   ));
 
@@ -79,7 +79,7 @@ const ItemList = ({ drug_list, term, addCurrentDrug, currentDrugs }) => {
         <BlueSpan>'{term}'</BlueSpan>
         {!drug_list.length
           ? "에 대한 검색결과가 없습니다."
-          : "과/와 유사한 의약품 목록입니다."}
+          : "과/와 이름이 유사한 의약품 목록입니다."}
       </Title>
       {!drug_list.length && (
         <>

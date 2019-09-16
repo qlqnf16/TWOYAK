@@ -11,6 +11,7 @@ import Warning from "../components/UI/Warning";
 import { BasicText, Line } from "../components/UI/SharedStyles";
 import LoginModal from "../components/UI/Modals/LoginModal";
 import ConfirmModal from "../components/UI/Modals/ConfirmModal";
+import Spinner from "../components/UI/Spinner";
 
 const Background = styled.div`
   width: 100%;
@@ -223,7 +224,7 @@ function HealthRecord({ history }) {
           <TopLine />
         </UserContainer>
         {showCurrent
-          ? currentDrugs && (
+          ? currentDrugs ? (
             <CurrentDrugList
               currentDrugs={currentDrugs}
               loadingHandler={loadingHandler}
@@ -232,7 +233,7 @@ function HealthRecord({ history }) {
               durInfo={durInfo}
               subUserInfo={subUserInfo}
             />
-          )
+          ) : <Spinner />
           : pastDrugs && <PastDrugList drugs={pastDrugs} deleteDrug={deleteDrug} loadingHandler={loadingHandler} />}
         <AddCard
           text={

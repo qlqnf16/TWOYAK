@@ -173,8 +173,8 @@ function Medicine({ match, history, location }) {
     }
   };
 
-  // id로 이미지 url 가져오기
-  const getDrugImg = async id => {
+  // img URL이 storage에 있으면 url 반환, 그렇지 않으면 false 반환
+  const checkIfImgInStorage = id => {
     let imageObject = {}
     let imgUrl
     if (localStorage['drugImg']) {
@@ -182,6 +182,12 @@ function Medicine({ match, history, location }) {
       imgUrl = imageObject[id]
     }
 
+    return imgUrl ? [imageObject, imgUrl] : [imageObject, false]
+  }
+
+  // id로 이미지 url 가져오기
+  const getDrugImg = async id => {
+    const [imageObject, imgUrl] = checkIfImgInStorage(id)
     if (imgUrl) {
       setDrugimg(imgUrl)
     } else {
