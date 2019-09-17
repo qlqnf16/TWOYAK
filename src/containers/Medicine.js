@@ -23,6 +23,7 @@ import {
 } from "../components/UI/SharedStyles";
 import LoginModal from "../components/UI/Modals/LoginModal";
 import ConfirmModal from "../components/UI/Modals/ConfirmModal";
+import Spinner from "../components/UI/Spinner";
 
 const SearchBackground = styled.div`
   width: 100%;
@@ -43,6 +44,7 @@ margin: 0 auto;
 const ReviewContainer = styled.div`
   position: relative;
   width: fit-content;
+  margin: 0 auto;
 `;
 
 const RatingContainer = styled.div`
@@ -173,7 +175,7 @@ function Medicine({ match, history, location }) {
     }
   };
 
-  // img URL이 storage에 있으면 url 반환, 그렇지 않으면 false 반환
+  // img URL이 storage에 있는지 체크
   const checkIfImgInStorage = id => {
     let imageObject = {}
     let imgUrl
@@ -484,7 +486,7 @@ function Medicine({ match, history, location }) {
       <>
         <Container preventScroll={addModal || deleteModal}>
           {showLogin && <LoginModal modalOff={() => setShowLogin(false)} />}
-          {drug && (
+          {drug ? (
             <>
               <SearchResult
                 drug={drug}
@@ -504,7 +506,7 @@ function Medicine({ match, history, location }) {
                 <>
                   <FlexDiv>
                     <ReviewContainer>
-                      <BasicText>사용후기</BasicText>
+                      <BasicText size='1.1rem'>사용후기</BasicText>
                       <RatingContainer>
                         <Rating
                           emptySymbol="fas fa-circle custom"
@@ -530,7 +532,7 @@ function Medicine({ match, history, location }) {
                 </>
               )}
             </>
-          )}
+          ) : <Spinner />}
 
 
         </Container>

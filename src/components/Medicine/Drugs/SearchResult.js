@@ -6,13 +6,14 @@ import emptyHeart from "../../../assets/images/heart-none.svg";
 import fullHeart from "../../../assets/images/heart-fill.svg";
 import DurInfo from "./DurInfo";
 import SupplementInfo from "./SupplementInfo";
+import Spinner from "../../UI/Spinner";
 
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 10rem;
+  margin-bottom: 4rem;
 
   /* @media (max-width: ${breakpoints.medium}) { */
     flex-direction: column;
@@ -88,6 +89,7 @@ const Button = styled.a`
 const AddButton = styled(BasicButton)`
   position: fixed;
   bottom: 70px;
+  z-index: 100;
 `;
 
 const TextContainer = styled.div`
@@ -96,6 +98,7 @@ const TextContainer = styled.div`
   border-bottom: 1px solid #00a2ff40;
   margin-bottom: 1rem 0;
   padding: 1rem 0;
+  text-align: justify;
 `;
 
 const Text = styled.div`
@@ -225,7 +228,7 @@ const SearchResult = React.memo(
             {drugImg ?
               drugImg === 'x' ? '의약품 사진이 없습니다. ' :
                 <Img src={drugImg} alt={drug.name} /> :
-              '로딩중..'}
+              <Spinner />}
           </ImgContainer>
           {drugDetail && (
             <>

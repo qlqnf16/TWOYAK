@@ -52,7 +52,12 @@ const CustomRatingText = styled(RatingText)`
 const Bold = styled.div`
   font-weight: bold;
   margin-bottom: 0.65rem;
+  text-align: left;
 `;
+
+const Text = styled.div`
+  text-align: left;
+`
 
 const EditIcon = styled(Edit)`
   margin-right: 10px;
@@ -104,7 +109,7 @@ const DrugReview = React.memo(({ review, deleteReview, deleteButton, updateButto
           ? review.meta.adverse_effects.map(effect => effect.symptom_name).join(", ")
           : "없음"}
       </Bold>
-      <div>{review.attributes.body}</div>
+      <Text>{review.attributes.body}</Text>
     </Container>
   );
 });
