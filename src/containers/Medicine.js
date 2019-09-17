@@ -23,6 +23,7 @@ import {
 } from "../components/UI/SharedStyles";
 import LoginModal from "../components/UI/Modals/LoginModal";
 import ConfirmModal from "../components/UI/Modals/ConfirmModal";
+import Spinner from "../components/UI/Spinner";
 
 const SearchBackground = styled.div`
   width: 100%;
@@ -43,6 +44,7 @@ margin: 0 auto;
 const ReviewContainer = styled.div`
   position: relative;
   width: fit-content;
+  margin: 0 auto;
 `;
 
 const RatingContainer = styled.div`
@@ -173,13 +175,34 @@ function Medicine({ match, history, location }) {
     }
   };
 
+  // img URL이 storage에 있는지 체크
+  const checkIfImgInStorage = id => {
+    let imageObject = {}
+    let imgUrl
+    if (localStorage['drugImg']) {
+      imageObject = JSON.parse(localStorage['drugImg'])
+      imgUrl = imageObject[id]
+    }
+
+    return imgUrl ? [imageObject, imgUrl] : [imageObject, false]
+  }
+
   // id로 이미지 url 가져오기
   const getDrugImg = async id => {
-    try {
-      const { data } = await axios.get(`drugs/${id}/pics`);
-      data.pics.length ? setDrugimg(data.pics[0]) : setDrugimg('x');
-    } catch (error) {
-      console.log(error);
+    const [imageObject, imgUrl] = checkIfImgInStorage(id)
+    if (imgUrl) {
+      setDrugimg(imgUrl)
+    } else {
+      try {
+        const { data } = await axios.get(`drugs/${id}/pics`);
+        localStorage["drugImg"] =
+          data.pics.length ?
+            JSON.stringify({ ...imageObject, [id]: data.pics[0] }) :
+            JSON.stringify({ ...imageObject, [id]: 'x' })
+        data.pics.length ? setDrugimg(data.pics[0]) : setDrugimg('x');
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -463,7 +486,7 @@ function Medicine({ match, history, location }) {
       <>
         <Container preventScroll={addModal || deleteModal}>
           {showLogin && <LoginModal modalOff={() => setShowLogin(false)} />}
-          {drug && (
+          {drug ? (
             <>
               <SearchResult
                 drug={drug}
@@ -483,7 +506,7 @@ function Medicine({ match, history, location }) {
                 <>
                   <FlexDiv>
                     <ReviewContainer>
-                      <BasicText>사용후기</BasicText>
+                      <BasicText size='1.1rem'>사용후기</BasicText>
                       <RatingContainer>
                         <Rating
                           emptySymbol="fas fa-circle custom"
@@ -509,7 +532,7 @@ function Medicine({ match, history, location }) {
                 </>
               )}
             </>
-          )}
+          ) : <Spinner />}
 
 
         </Container>

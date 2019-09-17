@@ -7,7 +7,6 @@ import {
   Line,
   FlexDiv,
   BasicText,
-  BasicButton
 } from "../components/UI/SharedStyles";
 import { AuthContext } from "../contexts/AuthStore";
 import DrugReview from "../components/Medicine/Review/DrugReview";
@@ -16,8 +15,8 @@ import { ReactComponent as Arrow } from "../assets/images/arrow.svg";
 import styled from "styled-components";
 import LoginModal from "../components/UI/Modals/LoginModal";
 import NewReview from "../components/Medicine/Review/NewReview";
-import Modal from "../components/UI/Modals/Modal";
 import ConfirmModal from "../components/UI/Modals/ConfirmModal";
+import Spinner from "../components/UI/Spinner";
 
 const Background = styled.div`
   width: 100%;
@@ -39,9 +38,10 @@ const ReviewContainer = styled.div`
 `;
 
 const FilterContainer = styled.div`
-  margin: 1rem;
+  margin: 5rem 1rem 1rem 1rem;
   align-self: flex-start;
   position: relative;
+  text-align: left;
 `;
 
 const Filters = styled.div`
@@ -92,7 +92,25 @@ function AllReviews({ match }) {
   }, [authState]);
 
   const getReviews = async type => {
+    setReviews(null)
     try {
+      switch (type) {
+        case 'recent':
+          setCategory({ name: "최신순", url: 'recent' });
+          break;
+        case 'high_rating':
+          setCategory({ name: "평점순", url: 'high_rating' });
+          break;
+        case 'popular':
+          setCategory({ name: "좋아요순", url: 'popular' });
+          break;
+        case 'my_reviews':
+          setCategory({ name: "내 리뷰", url: 'my_reviews' })
+          break;
+        default:
+          break;
+      }
+
       let result = {}
       if (type === 'my_reviews') {
         result = await axios.get("/reviews/my_reviews", {
@@ -110,22 +128,6 @@ function AllReviews({ match }) {
       }
 
       setReviews(result.data.data);
-      switch (type) {
-        case 'recent':
-          setCategory({ name: "최신순", url: 'recent' });
-          break;
-        case 'high_rating':
-          setCategory({ name: "평점순", url: 'high_rating' });
-          break;
-        case 'popular':
-          setCategory({ name: "좋아요순", url: 'popular' });
-          break;
-        case 'my_reviews':
-          setCategory({ name: "내 리뷰", url: 'my_reviews' })
-          break;
-        default:
-          break;
-      }
     } catch (error) {
       console.log(error);
     }
@@ -260,7 +262,7 @@ function AllReviews({ match }) {
             </Filters>
           )}
         </FilterContainer>
-        {reviews &&
+        {reviews ?
           reviews.map(review => (
             <ReviewCard key={review.id}>
               <FlexDiv align="flex-start">
@@ -278,7 +280,7 @@ function AllReviews({ match }) {
                 />
               </ReviewContainer>
             </ReviewCard>
-          ))}
+          )) : <Spinner />}
       </Container>
       {showNewReview && <NewReview reviewSubmit={updateReview} review={updateTarget} modalOff={() => setShowNewReview(false)} />}
       {showConfirm &&

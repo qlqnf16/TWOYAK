@@ -13,11 +13,8 @@ export const Container = styled.div`
   width: 95%;
   max-width: 500px;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: center;
-  margin: 70px auto 120px auto;
+  text-align: center;
+  margin: 70px auto 300px auto;
   ${props => (props.preventScroll ? `
     position: fixed; 
     overflow-y: hidden; 
