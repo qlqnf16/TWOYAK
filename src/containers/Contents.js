@@ -44,7 +44,7 @@ function Content(props) {
   return (
     <ContentContainer>
       <ContentGrid>
-        <CloseImg src={close} onClick={() => props.history.goBack()} />
+        <CloseImg src={close} onClick={() => props.history.push("/")} />
         <ContentTitle>{thumbnail[props.match.params.id].title}</ContentTitle>
         <ContentParagraph>
           {ReactHtmlParser(thumbnail[props.match.params.id].paragraph)}

@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { BasicInput } from "../UI/SharedStyles";
-import Modal from "../UI/Modals/Modal";
-import DatePicker from "../UI/DatePicker";
-import medIcon from "../../assets/images/(white)med-icon.svg";
+import moment from "moment";
+import DatePicker from "react-mobile-datepicker";
 
 const BirthDateSelectionContainer = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   margin-top: 1.5rem;
 `;
@@ -29,12 +29,7 @@ const DateInput = styled(BasicInput)`
   margin-top: 0.6875rem;
 `;
 
-const StyleWrapper = styled.div`
-  & .picker-container .picker-column .picker-item {
-    text-align: center;
-    text-overflow: unset;
-  }
-`;
+const StyledDatePicker = styled(DatePicker)``;
 
 function BirthdayInfo({ value, getBirthDate, backgroundScroll }) {
   const [birthDateModalShow, setBirthDateModlaShow] = useState(false);
@@ -47,7 +42,26 @@ function BirthdayInfo({ value, getBirthDate, backgroundScroll }) {
   };
 
   const getDate = date => {
-    getBirthDate(date);
+    getBirthDate(moment(date).format("YYYY-MM-DD"));
+    toggleBirthDateModalHandler();
+  };
+
+  const dateConfig = {
+    year: {
+      format: "YYYY",
+      caption: "년",
+      step: 1
+    },
+    month: {
+      format: "MM",
+      caption: "월",
+      step: 1
+    },
+    date: {
+      format: "DD",
+      caption: "일",
+      step: 1
+    }
   };
 
   return (
@@ -60,22 +74,17 @@ function BirthdayInfo({ value, getBirthDate, backgroundScroll }) {
         onClick={() => toggleBirthDateModalHandler()}
         readOnly
       />
-      {birthDateModalShow ? (
-        <Modal
-          modalOff={() => toggleBirthDateModalHandler()}
-          img={medIcon}
-          title="생년월일"
-          content={
-            <StyleWrapper>
-              <DatePicker
-                selectedDate={value}
-                getDate={date => getDate(date)}
-                modalOff={() => toggleBirthDateModalHandler()}
-              />
-            </StyleWrapper>
-          }
-        />
-      ) : null}
+      <DatePicker
+        style={{ textAlign: "center" }}
+        dateConfig={dateConfig}
+        value={new Date(value)}
+        theme="ios"
+        isOpen={birthDateModalShow}
+        onSelect={date => getDate(date)}
+        onCancel={() => toggleBirthDateModalHandler()}
+        confirmText="선택"
+        cancelText="취소"
+      />
     </BirthDateSelectionContainer>
   );
 }

@@ -95,7 +95,7 @@ const routes = [
     component: FindPassword
   },
   {
-    path: "/recommend-all-supplements",
+    path: "/recommend-all-supplements/:type",
     name: "건강기능식품 성분 추천 페이지",
     component: RecommendSupplementProducts
   },

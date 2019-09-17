@@ -7,10 +7,8 @@ import closeIcon from "../../../assets/images/close.svg";
 
 const StyleWrapper = styled.div`
   width: 15.5rem;
-  margin-top: 2.8125rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin: auto;
+  padding-top: 2.8125rem;
 `;
 
 const Category = styled.div`

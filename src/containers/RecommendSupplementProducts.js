@@ -64,7 +64,7 @@ const Divider = styled(Line)`
 const PageNation = styled.div`
   display: flex;
   justify-content: space-evenly;
-  padding-bottom: 100px;
+  padding-bottom: 300px;
 `;
 
 const PageNumberClicked = styled.div`
@@ -184,16 +184,24 @@ function RecommendSupplementProducts(props) {
     recommendSupplementIngrsIds,
     setRecommendSupplementsIngrsIds
   ] = useState(
-    props.match.path === "/recommend-all-supplements"
-      ? vitaminIngrIds
+    props.match.path === "/recommend-all-supplements/:type"
+      ? props.match.params.type === "vitamins"
+        ? vitaminIngrIds
+        : props.match.params.type === "minerals"
+        ? mineralIngrIds
+        : nutrientIngrIds
       : props.match.params.ingrs_ids.split("&")
   );
   const [
     recommendSupplementIngrsNames,
     setRecommendSupplementsIngrsNames
   ] = useState(
-    props.match.path === "/recommend-all-supplements"
-      ? vitaminIngrNames
+    props.match.path === "/recommend-all-supplements/:type"
+      ? props.match.params.type === "vitamins"
+        ? vitaminIngrNames
+        : props.match.params.type === "minerals"
+        ? mineralIngrNames
+        : nutrientIngrNames
       : props.match.params.ingr_names.split("&")
   );
   const [shoppingSite, setShoppingSite] = useState("iherb");
@@ -201,10 +209,19 @@ function RecommendSupplementProducts(props) {
   const [selectedIngrIndex, setSelectedIngrIndex] = useState(0);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
   const [pagenationArray, setPagenationArray] = useState(null);
+  const [pagenationNumber, setPagenationNumber] = useState(null);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
-  const [type, setType] = useState("비타민");
+  const [type, setType] = useState(
+    props.match.path === "/recommend-all-supplements/:type"
+      ? props.match.params.type === "vitamins"
+        ? "비타민"
+        : props.match.params.type === "minerals"
+        ? "미네랄"
+        : "영양제"
+      : "비타민"
+  );
   const [showTypeFilter, setShowTypeFilter] = useState(false);
 
   useEffect(() => {
@@ -215,15 +232,20 @@ function RecommendSupplementProducts(props) {
     })
       .then(async response => {
         setRecommendedProducts(response.data.data);
-        let tempPagenation = [];
-        for (
-          let i = 1;
-          i < parseInt(Number(response.headers["total-count"]) / 12 + 1);
-          i++
-        ) {
-          await tempPagenation.push(i);
+        setPagenationNumber(response.headers["total-count"]);
+        if (pagenationNumber !== response.headers["total-count"]) {
+          let tempPagenation = [];
+          if (Number(response.headers["total-count"]) % 12 === 0) {
+            tempPagenation = new Array(
+              Number(response.headers["total-count"]) / 12
+            ).fill();
+          } else {
+            tempPagenation = new Array(
+              parseInt(Number(response.headers["total-count"]) / 12) + 1
+            ).fill();
+          }
+          setPagenationArray(tempPagenation);
         }
-        setPagenationArray(tempPagenation);
         setLoading(false);
       })
       .catch(error => alert(error.response.data.errors[0]));
@@ -272,7 +294,7 @@ function RecommendSupplementProducts(props) {
   };
 
   let RecommendIngrs = null;
-  if (props.match.path === "/recommend-all-supplements") {
+  if (props.match.path === "/recommend-all-supplements/:type") {
     RecommendIngrs = (
       <SelectIngrTypeContainer>
         <IngrTypeSelector onClick={() => setShowTypeFilter(!showTypeFilter)}>
@@ -282,6 +304,7 @@ function RecommendSupplementProducts(props) {
         <IngrTypeArea show={showTypeFilter}>
           <IngrType
             onClick={() => {
+              props.history.push("/recommend-all-supplements/vitamins");
               changeSupplementHandler("vitamin");
             }}
           >
@@ -289,6 +312,7 @@ function RecommendSupplementProducts(props) {
           </IngrType>
           <IngrType
             onClick={() => {
+              props.history.push("/recommend-all-supplements/minerals");
               changeSupplementHandler("mineral");
             }}
           >
@@ -296,6 +320,7 @@ function RecommendSupplementProducts(props) {
           </IngrType>
           <IngrType
             onClick={() => {
+              props.history.push("/recommend-all-supplements/nutrients");
               changeSupplementHandler("nutrient");
             }}
           >
@@ -342,7 +367,7 @@ function RecommendSupplementProducts(props) {
   return (
     <Background>
       <RecommendProductContainer>
-        {props.match.path === "/recommend-all-supplements" ? null : (
+        {props.match.path === "/recommend-all-supplements/:type" ? null : (
           <Title>추천 건강기능식품 성분</Title>
         )}
         {RecommendIngrs}
@@ -383,7 +408,11 @@ function RecommendSupplementProducts(props) {
           )}
           <BasicText
             size="0.5rem"
-            style={{ marginLeft: "0.5rem", color: "#474747" }}
+            style={{
+              fontSize: "0.4rem",
+              marginLeft: "0.5rem",
+              color: "#474747"
+            }}
           >
             가격 정보는 실제와 차이가 날 수 있습니다.
           </BasicText>
@@ -409,16 +438,17 @@ function RecommendSupplementProducts(props) {
           ))
         )}
         <PageNation>
-          {pagenationArray &&
-            pagenationArray.map((i, k) =>
-              i === page ? (
-                <PageNumberClicked key={k}>{i}</PageNumberClicked>
-              ) : (
-                <PageNumberUnclicked key={k} onClick={() => setPage(i)}>
-                  {i}
-                </PageNumberUnclicked>
+          {pagenationArray
+            ? pagenationArray.map((i, k) =>
+                k + 1 === page ? (
+                  <PageNumberClicked key={k}>{k + 1}</PageNumberClicked>
+                ) : (
+                  <PageNumberUnclicked key={k} onClick={() => setPage(k + 1)}>
+                    {k + 1}
+                  </PageNumberUnclicked>
+                )
               )
-            )}
+            : null}
         </PageNation>
       </RecommendProductContainer>
     </Background>
