@@ -107,36 +107,6 @@ const Icon = styled.img`
 `;
 
 function ProductCard(props) {
-  const coupangURLGenerate = async productURL => {
-    const REQUEST_METHOD = "POST";
-    const DOMAIN = "https://api-gateway.coupang.com";
-    const URL = "/v2/providers/affiliate_open_api/apis/openapi/v1/deeplink";
-
-    const SECRET_KEY = "13cc1492fb73323399fe6c449e6a79d18f494bb4";
-    const ACCESS_KEY = "74d1159c-8a3d-4ee0-920e-42e05ea672c9";
-
-    const REQUEST = { coupangUrls: productURL };
-    const authorization = HMACGenerator(
-      REQUEST_METHOD,
-      URL,
-      SECRET_KEY,
-      ACCESS_KEY
-    );
-    axios.defaults.baseURL = DOMAIN;
-
-    try {
-      const response = await axios({
-        method: REQUEST_METHOD,
-        url: URL,
-        headers: { Authorization: authorization },
-        params: REQUEST
-      });
-      console.log(response.data);
-    } catch (err) {
-      console.log(err.response.data);
-    }
-  };
-
   return (
     <Card
       onClick={() =>
@@ -146,7 +116,7 @@ function ProductCard(props) {
                 props.productURL,
               "_blank"
             )
-          : coupangURLGenerate(props.productURL)
+          : window.open(props.productURL, "_blank")
       }
     >
       <Header>
