@@ -15,12 +15,15 @@ import GoogleIcon from "../assets/images/google-signin.svg";
 import "@fortawesome/fontawesome-free/css/all.css";
 import Spinner from "../components/UI/Spinner";
 
-const SignupArea = styled(Container)`
+const SignupArea = styled.div`
   padding-top: 6rem;
   margin-left: 9.375px;
   margin-right: 9.375px;
   margin-top: 0;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const CustomButton = styled(BasicButton)`
@@ -90,7 +93,7 @@ const SocialSignupArea = styled.div`
 
 const SignupByWhichContainer = styled.div`
   display: flex;
-  width: 100%;
+  width: 400px;
   margin-top: 24px;
   margin-bottom: 24px;
 `;

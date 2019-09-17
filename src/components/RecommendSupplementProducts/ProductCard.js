@@ -1,5 +1,7 @@
 import React from "react";
+import axios from "axios";
 import styled from "styled-components";
+import HMACGenerator from "./HMACGenerator";
 
 import { StyledRating, RatingText } from "../UI/SharedStyles";
 import fullHeart from "../../assets/images/heart-fill.svg";
@@ -108,13 +110,13 @@ function ProductCard(props) {
   return (
     <Card
       onClick={() =>
-        window.open(
-          props.supplier === "iherb"
-            ? "https://prf.hn/click/camref:1101l4PEu/destination:" +
-                props.productURL
-            : props.productURL,
-          "_blank"
-        )
+        props.supplier === "iherb"
+          ? window.open(
+              "https://prf.hn/click/camref:1101l4PEu/destination:" +
+                props.productURL,
+              "_blank"
+            )
+          : window.open(props.productURL, "_blank")
       }
     >
       <Header>

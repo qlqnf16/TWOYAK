@@ -84,7 +84,7 @@ function RecommendedContents({ history }) {
         <Header>투약의 건강 이야기</Header>
       </HomeContent>
       <GoSupplementButton
-        onClick={() => history.push("/recommend-all-supplements")}
+        onClick={() => history.push("/recommend-all-supplements/vitamins")}
       >
         이런 영양제는 어떤가요?
       </GoSupplementButton>

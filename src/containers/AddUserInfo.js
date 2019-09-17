@@ -17,6 +17,7 @@ import medIcon from "../assets/images/(white)med-icon.svg";
 import Nickname from "../components/AddUserInfo/Nickname";
 
 const AddInfoArea = styled(Container)`
+  display: block;
   padding-top: 24px;
   padding-left: 1.4rem;
   padding-right: 1.4rem;
@@ -26,7 +27,6 @@ const SubmitButton = styled(BasicButton)`
   width: 6.8125rem;
   height: 3rem;
   text-align: center;
-  margin-right: 1rem;
 `;
 
 const SkipButton = styled(SubmitButton)`
@@ -37,7 +37,10 @@ const SkipButton = styled(SubmitButton)`
 const ButtonArea = styled.div`
   width: 14.8125rem;
   display: flex;
-  margin-top: 1.875rem;
+  margin: auto;
+  padding-bottom: 5rem;
+  padding-top: 1.875rem;
+  justify-content: space-between;
 `;
 
 const ModalContents = styled.div`
@@ -103,13 +106,13 @@ function AddSubUser(props) {
       }
     }
   }, [
-      props.match.path,
-      props.match.params,
-      state.subUserId,
-      state.token,
-      state.subUserIndex,
-      dispatch
-    ]);
+    props.match.path,
+    props.match.params,
+    state.subUserId,
+    state.token,
+    state.subUserIndex,
+    dispatch
+  ]);
 
   const getUserInfo = () => {
     axios({
@@ -233,7 +236,13 @@ function AddSubUser(props) {
         <SubmitButton onClick={() => toggleSkipAddInfoHandler()}>
           돌아가기
         </SubmitButton>
-        <SkipButton onClick={() => props.match.path === "/edit-info" ? props.history.push("/mypage") : props.history.push('/')}>
+        <SkipButton
+          onClick={() =>
+            props.match.path === "/edit-info"
+              ? props.history.push("/mypage")
+              : props.history.push("/")
+          }
+        >
           {props.match.path === "/edit-info" ? "닫기" : "건너뛰기"}
         </SkipButton>
       </div>
