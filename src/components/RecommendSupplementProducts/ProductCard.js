@@ -115,7 +115,7 @@ function ProductCard(props) {
     const SECRET_KEY = "13cc1492fb73323399fe6c449e6a79d18f494bb4";
     const ACCESS_KEY = "74d1159c-8a3d-4ee0-920e-42e05ea672c9";
 
-    const REQUEST = { coupangUrls: [productURL] };
+    const REQUEST = { coupangUrls: productURL };
     const authorization = HMACGenerator(
       REQUEST_METHOD,
       URL,

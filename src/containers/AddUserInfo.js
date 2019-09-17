@@ -17,6 +17,7 @@ import medIcon from "../assets/images/(white)med-icon.svg";
 import Nickname from "../components/AddUserInfo/Nickname";
 
 const AddInfoArea = styled(Container)`
+  display: block;
   padding-top: 24px;
   padding-left: 1.4rem;
   padding-right: 1.4rem;
@@ -36,8 +37,9 @@ const SkipButton = styled(SubmitButton)`
 const ButtonArea = styled.div`
   width: 14.8125rem;
   display: flex;
-  margin-top: 1.875rem;
+  margin: auto;
   padding-bottom: 5rem;
+  padding-top: 1.875rem;
   justify-content: space-between;
 `;
 

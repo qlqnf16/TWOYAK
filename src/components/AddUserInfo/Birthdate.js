@@ -29,11 +29,7 @@ const DateInput = styled(BasicInput)`
   margin-top: 0.6875rem;
 `;
 
-const StyledDatePicker = styled(DatePicker)`
-  * .datepicker .datepicker-header {
-    text-align: center;
-  }
-`;
+const StyledDatePicker = styled(DatePicker)``;
 
 function BirthdayInfo({ value, getBirthDate, backgroundScroll }) {
   const [birthDateModalShow, setBirthDateModlaShow] = useState(false);
@@ -78,7 +74,7 @@ function BirthdayInfo({ value, getBirthDate, backgroundScroll }) {
         onClick={() => toggleBirthDateModalHandler()}
         readOnly
       />
-      <StyledDatePicker
+      <DatePicker
         style={{ textAlign: "center" }}
         dateConfig={dateConfig}
         value={new Date(value)}
