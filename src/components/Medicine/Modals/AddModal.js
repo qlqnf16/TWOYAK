@@ -39,6 +39,7 @@ const TextArea = styled.textarea`
 const Button = styled(BasicButton)`
   margin-top: 2rem;
   margin-bottom: 1rem;
+  ${props => props.disable ? 'background-color: #d8d8d8' : null}
 `;
 
 const FakeInput = styled.div`
@@ -73,12 +74,20 @@ const StyledDateRange = styled(DateRange)`
   }
 `;
 
+const Warning = styled.span`
+  font-size: 0.8rem;
+  color: red;
+  margin-left: 1rem;
+  font-weight: 700;
+`
+
 const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
   const [disease, setDisease] = useState();
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [from, setFrom] = useState(moment());
   const [to, setTo] = useState(moment());
   const [memo, setMemo] = useState()
+  const [showWarning, setShowWarning] = useState(false);
   const { state: authState } = useContext(AuthContext);
   const { state: drugState, dispatch } = useContext(DrugContext);
 
@@ -107,10 +116,10 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
           name: value
         }
       }, {
-          headers: {
-            Authorization: `bearer ${authState.token}`
-          }
-        })
+        headers: {
+          Authorization: `bearer ${authState.token}`
+        }
+      })
       fetchDiseaseData()
       setDisease({ id: response.data.id, name: response.data.name })
     } catch (error) {
@@ -146,7 +155,10 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
         title="복용 목록에 추가"
         content={
           <Container>
-            <BasicText>왜 이 약을 드시나요?</BasicText>
+            <BasicText>
+              왜 이 약을 드시나요?
+              {showWarning ? <Warning>* 필수 필드입니다</Warning> : ''}
+            </BasicText>
             <AutosuggestStyleWrapper>
               <AutoSuggestion
                 search="disease"
@@ -187,14 +199,8 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
               <BasicText>메모</BasicText>
               <TextArea onChange={(e) => setMemo(e.target.value)} placeholder="ex) 하루에 언제 몇 알 씩 먹는지, 상세 복용 규칙 등을 기록해보세요" />
             </>
-
-            <Button
-              onClick={() => {
-                addDrug();
-              }}
-            >
-              완료
-          </Button>
+            {disease ? (<Button onClick={() => addDrug()}>완료</Button>) :
+              (<Button onClick={() => setShowWarning(true)} disable>완료</Button>)}
           </Container>
         }
         modalOff={() => {
