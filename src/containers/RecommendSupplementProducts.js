@@ -28,6 +28,7 @@ const Background = styled.div`
 const RecommendProductContainer = styled(Container)`
   display: block;
   padding-bottom: 0;
+  text-align: justify;
 `;
 
 const Title = styled.div`
@@ -443,7 +444,12 @@ function RecommendSupplementProducts(props) {
                 k + 1 === page ? (
                   <PageNumberClicked key={k}>{k + 1}</PageNumberClicked>
                 ) : (
-                  <PageNumberUnclicked key={k} onClick={() => setPage(k + 1)}>
+                  <PageNumberUnclicked
+                    key={k}
+                    onClick={() => {
+                      setPage(k + 1);
+                    }}
+                  >
                     {k + 1}
                   </PageNumberUnclicked>
                 )
