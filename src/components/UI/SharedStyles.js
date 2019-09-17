@@ -12,7 +12,7 @@ export const breakpoints = {
 export const Container = styled.div`
   width: 95%;
   max-width: 500px;
-  height: 100vh;
+  min-height: 100vh;
   text-align: center;
   margin: 70px auto 300px auto;
   ${props => (props.preventScroll ? `
