@@ -448,6 +448,7 @@ function RecommendSupplementProducts(props) {
                     key={k}
                     onClick={() => {
                       setPage(k + 1);
+                      d;
                     }}
                   >
                     {k + 1}
