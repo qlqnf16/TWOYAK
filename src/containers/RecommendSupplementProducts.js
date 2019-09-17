@@ -64,7 +64,7 @@ const Divider = styled(Line)`
 const PageNation = styled.div`
   display: flex;
   justify-content: space-evenly;
-  margin-bottom: 100px;
+  padding-bottom: 100px;
 `;
 
 const PageNumberClicked = styled.div`
@@ -137,12 +137,12 @@ const Filter = styled.div``;
 const move = keyframes`
   0% {top: 0}
   100% {top: 110px}
-`
+`;
 
 const IngrTypeArea = styled.div`
   width: 100%;
   position: fixed;
-  display: ${({ show }) => show ? 'block' : 'none'};
+  display: ${({ show }) => (show ? "block" : "none")};
   left: 0;
   z-index: 300;
   background-color: #ffffff;
@@ -286,21 +286,21 @@ function RecommendSupplementProducts(props) {
             }}
           >
             비타민
-            </IngrType>
+          </IngrType>
           <IngrType
             onClick={() => {
               changeSupplementHandler("mineral");
             }}
           >
             미네랄
-            </IngrType>
+          </IngrType>
           <IngrType
             onClick={() => {
               changeSupplementHandler("nutrient");
             }}
           >
             영양제
-            </IngrType>
+          </IngrType>
         </IngrTypeArea>
         {recommendSupplementIngrsNames.map((i, k) => (
           <IngrButton
@@ -391,33 +391,33 @@ function RecommendSupplementProducts(props) {
         {loading ? (
           <Spinner />
         ) : (
-            recommendedProducts.map((i, k) => (
-              <ProductCard
-                key={k}
-                supplier={shoppingSite}
-                name={i.attributes.name}
-                src={i.attributes.photo_url}
-                productURL={i.attributes.product_url}
-                rating={i.attributes.rating}
-                reviewCount={i.attributes.shoppingmall_reviews}
-                manufacturer={i.attributes.enterprise_name}
-                price={i.attributes.price}
-                ranking={
-                  JSON.parse(i.attributes.rankings).data[0].attributes.ranking
-                }
-              />
-            ))
-          )}
+          recommendedProducts.map((i, k) => (
+            <ProductCard
+              key={k}
+              supplier={shoppingSite}
+              name={i.attributes.name}
+              src={i.attributes.photo_url}
+              productURL={i.attributes.product_url}
+              rating={i.attributes.rating}
+              reviewCount={i.attributes.shoppingmall_reviews}
+              manufacturer={i.attributes.enterprise_name}
+              price={i.attributes.price}
+              ranking={
+                JSON.parse(i.attributes.rankings).data[0].attributes.ranking
+              }
+            />
+          ))
+        )}
         <PageNation>
           {pagenationArray &&
             pagenationArray.map((i, k) =>
               i === page ? (
                 <PageNumberClicked key={k}>{i}</PageNumberClicked>
               ) : (
-                  <PageNumberUnclicked key={k} onClick={() => setPage(i)}>
-                    {i}
-                  </PageNumberUnclicked>
-                )
+                <PageNumberUnclicked key={k} onClick={() => setPage(i)}>
+                  {i}
+                </PageNumberUnclicked>
+              )
             )}
         </PageNation>
       </RecommendProductContainer>
