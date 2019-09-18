@@ -156,11 +156,7 @@ function UserGeneralInfo({
     {
       label: "리뷰",
       value: drugReviewsCount,
-<<<<<<< HEAD
-      src: "/all-reviews"
-=======
       src: "/all-reviews/my"
->>>>>>> 9e48b1f6d5edfc1039e0c0668fd5c7bd0a95cf0f
     }
   ];
 

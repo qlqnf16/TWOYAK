@@ -282,14 +282,10 @@ function DiseasesAndFamilyMedHis({ medHistory, historyChange }) {
         <CloseImg
           src={close}
           onClick={() =>
-<<<<<<< HEAD
-            toggleDeleteDiseaseHandler(i.data.attributes.name, i.data.id)
-=======
             toggleDeleteDiseaseHandler(
               i.data.attributes.name,
               i.data.attributes.disease_id
             )
->>>>>>> 9e48b1f6d5edfc1039e0c0668fd5c7bd0a95cf0f
           }
         />
       </Contents>

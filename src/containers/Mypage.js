@@ -260,10 +260,7 @@ const DrugCount = styled.div`
 `;
 
 function Mypage(props) {
-<<<<<<< HEAD
-=======
   const [payload, setPayload] = useState([]);
->>>>>>> 9e48b1f6d5edfc1039e0c0668fd5c7bd0a95cf0f
   const [currentDrugsCount, setCurrentDrugsCount] = useState([]);
   const [drugReviewsCount, setDrugReviewsCount] = useState([]);
   const [myConversation] = useState([]);
@@ -296,13 +293,8 @@ function Mypage(props) {
       setCurrentDrugsCount(payload.included[id].meta.current_drugs_count);
       setDrugReviewsCount(payload.data.meta.drug_reviews_count);
       setFamilyMedHistories(payload.included[id].meta.family_med_histories);
-<<<<<<< HEAD
-      console.log(payload.included[id].meta.family_med_histories);
-      setWatchDrugs(payload.data.meta.watch_drugs);
-=======
       setWatchDrugs(payload.data.meta.watch_drugs);
       setPayload(payload.included);
->>>>>>> 9e48b1f6d5edfc1039e0c0668fd5c7bd0a95cf0f
     });
   };
 
@@ -346,35 +338,6 @@ function Mypage(props) {
 
   return (
     <MyPageContainer>
-<<<<<<< HEAD
-      <Topbar history={props.history} />
-      <UserGeneralInfo
-        currentDrugsCount={currentDrugsCount}
-        drugReviewsCount={drugReviewsCount}
-        myConversation={myConversation}
-        userChange={id => getUserInfo(id)}
-        history={props.history}
-      />
-      <Divider />
-      <Diseases
-        medHistory={familyMedHistoies}
-        historyChange={id => getUserInfo(id)}
-      />
-      <Divider />
-      <WatchDrugs watchDrugs={watchDrugs} watchChange={id => getUserInfo(id)} />
-      <ChangeUser
-        src={ChangeUserIcon}
-        alt="change-user"
-        onClick={() => toggleChangeUserModalHandler()}
-      />
-      <Footer routes={props} />
-      {changeUserModalShow ? (
-        <ChangeUserModal
-          modalOff={() => toggleChangeUserModalHandler()}
-          img
-          title="사용자 추가/변경"
-          content={modalContent}
-=======
       <Container>
         <Topbar history={props.history} />
         <UserGeneralInfo
@@ -397,7 +360,6 @@ function Mypage(props) {
         <Footer
           routes={props}
           changeUser={() => toggleChangeUserModalHandler()}
->>>>>>> 9e48b1f6d5edfc1039e0c0668fd5c7bd0a95cf0f
         />
         {changeUserModalShow ? (
           <ChangeUserModal
