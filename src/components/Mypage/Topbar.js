@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import { Redirect } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthStore";
 import styled from "styled-components";
 import { breakpoints } from "../UI/SharedStyles";
@@ -31,7 +30,7 @@ const ActionButton = styled.div`
 `;
 
 function Topbar(props) {
-  const { state: authState, dispatch } = useContext(AuthContext);
+  const { dispatch } = useContext(AuthContext);
 
   const goback = () => {
     props.history.goBack();
@@ -42,11 +41,12 @@ function Topbar(props) {
       <img src={arrowIcon} alt="arrow-icon" onClick={() => goback()} />
       <TopButtonLeftArea>
         <ActionButton
-          onClick={() =>
+          onClick={() => {
             dispatch({
               type: "SIGNOUT"
-            })
-          }
+            });
+            props.history.push("/login");
+          }}
         >
           로그아웃하기
         </ActionButton>
@@ -54,7 +54,6 @@ function Topbar(props) {
           내 정보 수정하기
         </ActionButton>
       </TopButtonLeftArea>
-      {!authState.token ? <Redirect to="/login" /> : null}
     </Bar>
   );
 }

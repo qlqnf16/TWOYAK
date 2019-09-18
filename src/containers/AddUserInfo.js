@@ -12,11 +12,12 @@ import Sex from "../components/AddUserInfo/Sex";
 import Health from "../components/AddUserInfo/Health";
 import Birthdate from "../components/AddUserInfo/Birthdate";
 
-import Modal from "../components/UI/Modal";
+import Modal from "../components/UI/Modals/Modal";
 import medIcon from "../assets/images/(white)med-icon.svg";
 import Nickname from "../components/AddUserInfo/Nickname";
 
 const AddInfoArea = styled(Container)`
+  display: block;
   padding-top: 24px;
   padding-left: 1.4rem;
   padding-right: 1.4rem;
@@ -36,7 +37,10 @@ const SkipButton = styled(SubmitButton)`
 const ButtonArea = styled.div`
   width: 14.8125rem;
   display: flex;
-  margin-top: 1.875rem;
+  margin: auto;
+  padding-bottom: 5rem;
+  padding-top: 1.875rem;
+  justify-content: space-between;
 `;
 
 const ModalContents = styled.div`
@@ -48,7 +52,6 @@ const ModalContents = styled.div`
 `;
 
 const ModalMessage = styled.div`
-  width: 12.75rem;
   font-size: 0.875rem;
   font-weight: 800;
   color: #474747;
@@ -65,6 +68,7 @@ function AddSubUser(props) {
   const [sex, setSex] = useState(null);
   const [familyMedHistory, setFamilyMedHistory] = useState([]);
   const [skipAddInfo, setSkipAddInfo] = useState(false);
+  const [backgroundScrollable, setBackgroundScrollable] = useState(true);
 
   const { state, dispatch } = useContext(AuthContext);
 
@@ -81,7 +85,7 @@ function AddSubUser(props) {
     }).then(response => {
       setDiseaseArray(response.data);
     });
-  }, [state.token]);
+  }, [state.token, state.subUserId]);
 
   useEffect(() => {
     if (props.match.path === "/add-info") {
@@ -106,7 +110,8 @@ function AddSubUser(props) {
     props.match.params,
     state.subUserId,
     state.token,
-    state.subUserIndex
+    state.subUserIndex,
+    dispatch
   ]);
 
   const getUserInfo = () => {
@@ -158,7 +163,9 @@ function AddSubUser(props) {
           localStorage.setItem("jwt_token", payload);
           props.history.push("/mypage");
         })
-        .catch(error => alert(error.data.errors));
+        .catch(error => {
+          alert(error.data.errors);
+        });
     } else if (
       props.match.path === "/add-info" ||
       props.match.path === "/edit-info"
@@ -188,7 +195,9 @@ function AddSubUser(props) {
           localStorage.setItem("jwt_token", payload);
           props.history.push("/mypage");
         })
-        .catch(error => alert(error.data.errors));
+        .catch(error => {
+          alert(error.response.data.errors);
+        });
     }
   };
 
@@ -227,7 +236,13 @@ function AddSubUser(props) {
         <SubmitButton onClick={() => toggleSkipAddInfoHandler()}>
           돌아가기
         </SubmitButton>
-        <SkipButton onClick={() => props.history.push("/")}>
+        <SkipButton
+          onClick={() =>
+            props.match.path === "/edit-info"
+              ? props.history.push("/mypage")
+              : props.history.push("/")
+          }
+        >
           {props.match.path === "/edit-info" ? "닫기" : "건너뛰기"}
         </SkipButton>
       </div>
@@ -245,7 +260,7 @@ function AddSubUser(props) {
   }
 
   return (
-    <AddInfoArea>
+    <AddInfoArea preventScroll={!backgroundScrollable}>
       <Header header={header} message={message} />
       <Nickname
         getNickname={name => changeNicknameHandler(name)}
@@ -258,6 +273,7 @@ function AddSubUser(props) {
       <Birthdate
         value={!birthDate ? "" : birthDate}
         getBirthDate={date => getBirthDateHandler(date)}
+        backgroundScroll={e => setBackgroundScrollable(e)}
       />
       <Health
         drink={drink}

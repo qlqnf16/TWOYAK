@@ -11,23 +11,16 @@ export const breakpoints = {
 
 export const Container = styled.div`
   width: 95%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 70px auto 120px auto;
-  ${props => (props.preventScroll ? `position: fixed; overflow-y: hidden` : "")}
-
-  @media (min-width: ${breakpoints.medium}) {
-    margin: 25vh auto;
-    width: 80%;
-  }
-  @media (min-width: ${breakpoints.large}) {
-    width: 70%;
-  }
-  @media (min-width: ${breakpoints.extraLarge}) {
-    width: 55%;
-  }
+  max-width: 500px;
+  min-height: 100vh;
+  text-align: center;
+  margin: 70px auto 300px auto;
+  ${props => (props.preventScroll ? `
+    position: fixed; 
+    overflow-y: hidden; 
+    left: 50%; 
+    transform: translate(-50%, 0);
+  ` : "")}
 `;
 
 export const FlexDiv = styled.div`
@@ -134,7 +127,7 @@ export const BulletText = styled.li`
     display: inline;
     margin-left: -5px;
     font-size: 0.8rem;
-    font-weight: 800;
+    font-weight: 700;
   }
 `;
 

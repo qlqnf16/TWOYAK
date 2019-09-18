@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import close from "../../assets/images/(white)close.svg";
-import medIcon from "../../assets/images/(white)med-icon.svg";
+import close from "../../../assets/images/(white)close.svg";
+import medIcon from "../../../assets/images/(white)med-icon.svg";
 
 const Backdrop = styled.div`
   width: 100%;
@@ -16,6 +16,7 @@ const Backdrop = styled.div`
 
 const Container = styled.div`
   width: 73%;
+  max-width: 350px;
   position: fixed;
   top: 6.12rem;
   left: 0;

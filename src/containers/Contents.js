@@ -33,22 +33,18 @@ const ContentTitle = styled.div`
   margin-top: 1.625rem;
 `;
 
-const ContentImg = styled.img`
-  width: 100%;
-  margin-top: 1.625rem;
-`;
-
 const ContentParagraph = styled.div`
-  margin: 2.125rem 0 15rem 0;
+  margin: 2.125rem 0 0 0;
   text-align: left;
   font-size: 0.9rem;
+  padding-bottom: 15rem;
 `;
 
 function Content(props) {
   return (
     <ContentContainer>
       <ContentGrid>
-        <CloseImg src={close} onClick={() => props.history.goBack()} />
+        <CloseImg src={close} onClick={() => props.history.push("/")} />
         <ContentTitle>{thumbnail[props.match.params.id].title}</ContentTitle>
         <ContentParagraph>
           {ReactHtmlParser(thumbnail[props.match.params.id].paragraph)}

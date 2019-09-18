@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect, useContext } from "react";
+import React, { useReducer, useEffect, useContext, useState } from "react";
 import { drugReducer } from "./reducers";
 import axios from "../apis";
 import { AuthContext } from "./AuthStore";
@@ -11,21 +11,26 @@ const DrugStore = props => {
     adverse_effects: null,
     diseases: null
   });
+  const [loading, setLoading] = useState(false)
   const { state: authState } = useContext(AuthContext);
 
   const fetchInitialData = async () => {
-    const payload = await Promise.all([
-      axios.get("autocomplete/drug"),
-      axios.get("autocomplete/adverse_effect")
-    ]);
+    const { data: payload } = await axios.get("autocomplete/drug")
     dispatch({ type: "SET_INIT_DATA", payload: payload });
   };
+
   useEffect(() => {
-    fetchInitialData();
-  }, [authState]);
+    if (localStorage.jwt_token) {
+      if (authState.token) {
+        fetchInitialData()
+      }
+    } else {
+      fetchInitialData();
+    }
+  }, [authState.token]);
 
   return (
-    <DrugContext.Provider value={{ state, dispatch }}>
+    <DrugContext.Provider value={{ state, dispatch, loading, setLoading }}>
       {props.children}
     </DrugContext.Provider>
   );

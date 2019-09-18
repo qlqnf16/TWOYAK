@@ -10,6 +10,11 @@ import AddUserInfo from "./containers/AddUserInfo";
 import Contents from "./containers/Contents";
 import Terms from "./containers/Terms";
 import FindPassword from "./containers/FindPassword";
+import RecommendSupplementIngrs from "./containers/RecommendSupplmentIngrs";
+import RecommendSupplementProducts from "./containers/RecommendSupplementProducts";
+import AboutUs from "./containers/AboutUs";
+import WebCamCapture from "./containers/WebCam";
+import ServiceTutorial from "./containers/ServiceTutorial";
 
 const routes = [
   {
@@ -65,7 +70,7 @@ const routes = [
     component: AddUserInfo
   },
   {
-    path: "/all-reviews",
+    path: "/all-reviews/:my?",
     name: "리뷰 모아보기",
     component: AllReviews
   },
@@ -88,6 +93,31 @@ const routes = [
     path: "/reset-password",
     name: "비밀번호 재설정",
     component: FindPassword
+  },
+  {
+    path: "/recommend-all-supplements/:type",
+    name: "건강기능식품 성분 추천 페이지",
+    component: RecommendSupplementProducts
+  },
+  {
+    path: "/recommend-supplement-products/:ingrs_ids/:ingr_names",
+    name: "건강기능식품 추천 페이지",
+    component: RecommendSupplementProducts
+  },
+  {
+    path: "/about-us",
+    name: "기업소개",
+    component: AboutUs
+  },
+  {
+    path: "/capture",
+    name: "처방전 사진",
+    component: WebCamCapture
+  },
+  {
+    path: "/service-tutorial",
+    name: "튜토리얼",
+    component: ServiceTutorial
   }
 ];
 

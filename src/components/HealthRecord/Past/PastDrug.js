@@ -28,6 +28,13 @@ const Text = styled(BasicText)`
   margin-left: 0.8rem;
 `;
 
+const DiseaseName = styled.div`
+  margin: 1.6rem 0 -0.5rem 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--twoyak-black);
+`
+
 const DateContainer = styled.div`
   width: 100%;
   display: flex;
@@ -57,6 +64,29 @@ const Bullet = styled(BulletText)`
 `;
 
 const PastDrug = ({ dateArray, monthCategory, modalOn }) => {
+  const diseases = Object.keys(monthCategory)
+  const drugs = diseases.map(disease => {
+    return (
+      <>
+        <DiseaseName>{disease}</DiseaseName>
+        {monthCategory[disease].map(drug => (
+          <Flex key={drug.name}>
+            <Bullet>
+              <p onClick={() => { modalOn(drug.id) }} >
+                {drug.name}
+              </p>
+            </Bullet>
+            <Text>
+              {drug.from ? drug.from.slice(5).split("-").join("/") : null}
+              {` ~ `}
+              {drug.to ? drug.to.slice(5).split("-").join("/") : null}
+            </Text>
+          </Flex>
+        ))}
+      </>
+    )
+  })
+
   return (
     <PastCard>
       {dateArray[0] !== "Invalid date" ? (
@@ -65,39 +95,12 @@ const PastDrug = ({ dateArray, monthCategory, modalOn }) => {
           <div>{parseInt(dateArray[1])}월</div>
         </DateContainer>
       ) : (
-        <DateContainer>기록하지 않음</DateContainer>
-      )}
+          <DateContainer>기록하지 않음</DateContainer>
+        )}
 
       <Line />
       <DrugsContainer>
-        {monthCategory.map(drug => (
-          <Flex key={drug.name}>
-            <Bullet>
-              <p
-                onClick={() => {
-                  modalOn(drug.id);
-                }}
-              >
-                {drug.name}
-              </p>
-            </Bullet>
-            <Text>
-              {drug.from
-                ? drug.from
-                    .slice(5)
-                    .split("-")
-                    .join("/")
-                : null}
-              {` ~ `}
-              {drug.to
-                ? drug.to
-                    .slice(5)
-                    .split("-")
-                    .join("/")
-                : null}
-            </Text>
-          </Flex>
-        ))}
+        {drugs}
       </DrugsContainer>
     </PastCard>
   );

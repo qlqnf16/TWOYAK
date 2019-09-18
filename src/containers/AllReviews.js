@@ -6,13 +6,17 @@ import {
   Card,
   Line,
   FlexDiv,
-  BasicText
+  BasicText,
 } from "../components/UI/SharedStyles";
 import { AuthContext } from "../contexts/AuthStore";
 import DrugReview from "../components/Medicine/Review/DrugReview";
-import medIcon from "../assets/images/med-icon.svg";
+import { ReactComponent as Med } from "../assets/images/med-icon.svg";
 import { ReactComponent as Arrow } from "../assets/images/arrow.svg";
 import styled from "styled-components";
+import LoginModal from "../components/UI/Modals/LoginModal";
+import NewReview from "../components/Medicine/Review/NewReview";
+import ConfirmModal from "../components/UI/Modals/ConfirmModal";
+import Spinner from "../components/UI/Spinner";
 
 const Background = styled.div`
   width: 100%;
@@ -25,6 +29,7 @@ const Background = styled.div`
 `;
 
 const ReviewCard = styled(Card)`
+  display: block;
   padding: 1.4rem 1rem;
 `;
 
@@ -33,9 +38,10 @@ const ReviewContainer = styled.div`
 `;
 
 const FilterContainer = styled.div`
-  margin: 1rem;
+  margin: 5rem 1rem 1rem 1rem;
   align-self: flex-start;
   position: relative;
+  text-align: left;
 `;
 
 const Filters = styled.div`
@@ -54,6 +60,11 @@ const ArrowIcon = styled(Arrow)`
   margin-left: 0.5rem;
 `;
 
+const MedIcon = styled(Med)`
+  margin-right: 6px;
+  margin-top: 5px;
+`
+
 const ReviewTitle = styled(Link)`
 font-size: 0.875rem;
   color: var(--twoyak-black);
@@ -61,107 +72,140 @@ font-size: 0.875rem;
   text-decoration: none;
 `
 
-function AllReviews() {
+
+
+function AllReviews({ match }) {
   const { state: authState } = useContext(AuthContext);
   const [reviews, setReviews] = useState();
-  const [recentReviews, setRecentReviews] = useState();
-  const [popularReviews, setPopularReviews] = useState();
-  const [highRatedReviews, setHighRatedReviews] = useState();
-  const [myReviews, setMyReviews] = useState();
-  const [category, setCategory] = useState("최신순");
+  const [category, setCategory] = useState({ name: "최신순", url: 'recent' });
   const [showFilter, setShowFilter] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [showNewReview, setShowNewReview] = useState(false);
+  const [updateTarget, setUpdateTarget] = useState()
 
   useEffect(() => {
-    getReviews();
-    if (authState.token) getMyReviews();
+    if (match.params.my) {
+      if (authState.token) getReviews('my_reviews')
+    }
+    else getReviews('recent');
   }, [authState]);
 
-  const getReviews = async () => {
+  const getReviews = async type => {
+    setReviews(null)
     try {
-      const { data: recent } = await axios.get("/reviews/recent");
-      setReviews(recent);
-      setRecentReviews(recent);
-
-      // // 좋아요 구현 후
-      // const [{ data: popular }, { data: highRating }] = await Promise.all([
-      //   axios.get("/reviews/popular"),
-      //   axios.get("/reviews/high_rating")
-      // ]);
-      // setPopularReviews(popular);
-      const { data } = await axios.get("/reviews/high_rating");
-      setHighRatedReviews(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getReview = async url => {
-    try {
-      const { data } = await axios.get(`/reviews/${url}`);
-      switch (url) {
-        case "recent":
-          setRecentReviews(data);
+      switch (type) {
+        case 'recent':
+          setCategory({ name: "최신순", url: 'recent' });
           break;
-        case "popular":
-          setPopularReviews(data);
+        case 'high_rating':
+          setCategory({ name: "평점순", url: 'high_rating' });
           break;
-        case "high_rating":
-          setHighRatedReviews(data);
+        case 'popular':
+          setCategory({ name: "좋아요순", url: 'popular' });
+          break;
+        case 'my_reviews':
+          setCategory({ name: "내 리뷰", url: 'my_reviews' })
           break;
         default:
           break;
       }
+
+      let result = {}
+      if (type === 'my_reviews') {
+        result = await axios.get("/reviews/my_reviews", {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        });
+      }
+      else {
+        result = await axios.get(`/reviews/${type}`, {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        });
+      }
+
+      setReviews(result.data.data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getMyReviews = async () => {
+
+  // 좋아요 토글
+  const toggleLike = async id => {
+    if (authState.token) {
+      try {
+        await axios({
+          method: "POST",
+          url: `/drug_reviews/${id}/like`,
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
+        });
+        getReviews(category.url)
+      } catch (err) {
+        console.log(err)
+      }
+    } else {
+      setShowLoginModal(true)
+    }
+  };
+
+  // 리뷰 수정/삭제
+  // review update
+  const updateReview = async (method, efficacy, adverse_effect, detail, reviewId, drugId) => {
+    const data = {
+      user_id: authState.userId,
+      drug_id: drugId,
+      efficacy: efficacy,
+      body: detail,
+      adverse_effect_ids: adverse_effect
+    }
     try {
-      const { data: my } = await axios.get("/reviews/my_reviews", {
-        headers: {
-          Authorization: `bearer ${authState.token}`
+      await axios.put(
+        `drugs/${drugId}/drug_reviews/${reviewId}`,
+        { drug_review: data },
+        {
+          headers: {
+            Authorization: `bearer ${authState.token}`
+          }
         }
-      });
-      setMyReviews(my);
+      );
+      setShowNewReview(false);
+      getReviews(category.url)
     } catch (error) {
       console.log(error);
     }
   };
-  // 좋아요 구현
-  // const toggleLike = async id => {
-  //   try {
-  //     await axios({
-  //       method: "POST",
-  //       url: `/drug_reviews/${id}/like`,
-  //       headers: {
-  //         Authorization: authState.token
-  //       }
-  //     });
-  //   } catch (err) {
-  //     console.log(err);
-  //   } finally {
-  //     switch (category) {
-  //       case "최신순":
-  //         getReview("recent");
-  //         setReviews(recentReviews);
-  //         break;
-  //       case "좋아요순":
-  //         getReview("popular");
-  //         break;
-  //       case "평점순":
-  //         getReview("high_rating");
-  //         break;
-  //       case "내 리뷰":
-  //         getMyReviews();
-  //         break;
-  //       default:
-  //         break;
-  //     }
-  //     setLoading(!loading);
-  //     console.log(loading);
-  //   }
-  // };
+
+  // review delete
+  const deleteReview = async (reviewId, drugId) => {
+    try {
+      await axios.delete(`drugs/${drugId}/drug_reviews/${reviewId}`, {
+        headers: {
+          Authorization: `bearer ${authState.token}`
+        }
+      });
+      setShowConfirm(false)
+      getReviews(category.url)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteButton = review => {
+    setShowConfirm(true);
+    setUpdateTarget(review)
+  }
+
+  // DrugReview.js 리뷰 수정하기 버튼
+  const updateButton = review => {
+    setShowNewReview(true);
+    setUpdateTarget(review);
+  };
 
   return (
     <>
@@ -173,7 +217,7 @@ function AllReviews() {
           }}
         >
           <BasicText size="0.75rem" color="var(--twoyak-blue)">
-            {category}
+            {category.name}
           </BasicText>
           <ArrowIcon />
           {showFilter && (
@@ -181,44 +225,35 @@ function AllReviews() {
               <BasicText
                 size="0.7rem"
                 bold
-                onClick={() => {
-                  setReviews(recentReviews);
-                  setCategory("최신순");
-                }}
+                onClick={() => getReviews('recent')}
               >
                 최신순
               </BasicText>
               <br />
-              {/* 좋아요 구현
               <BasicText
                 size="0.7rem"
                 bold
-                onClick={() => {
-                  setReviews(popularReviews);
-                  setCategory("좋아요순");
-                }}
+                onClick={() => getReviews('popular')}
               >
                 좋아요순
               </BasicText>
-              <br /> */}
+              <br />
               <BasicText
                 size="0.7rem"
                 bold
                 onClick={() => {
-                  setReviews(highRatedReviews);
-                  setCategory("평점순");
+                  getReviews('high_rating')
                 }}
               >
                 평점순
               </BasicText>
               <br />
-              {myReviews && (
+              {authState.token && (
                 <BasicText
                   size="0.7rem"
                   bold
                   onClick={() => {
-                    setReviews(myReviews);
-                    setCategory("내 리뷰");
+                    getReviews('my_reviews')
                   }}
                 >
                   내 리뷰
@@ -227,27 +262,31 @@ function AllReviews() {
             </Filters>
           )}
         </FilterContainer>
-        {reviews &&
+        {reviews ?
           reviews.map(review => (
             <ReviewCard key={review.id}>
               <FlexDiv align="flex-start">
-                <img
-                  src={medIcon}
-                  alt="med-icon"
-                  style={{ marginRight: "6px", marginTop: "5px" }}
-                />
-                <ReviewTitle to={`/medicine/${review.drug_id}`}>{review.drug.split("(")[0]}</ReviewTitle>
+                <MedIcon />
+                <ReviewTitle to={`/medicine/${review.meta.drug.id}`}>{review.meta.drug.name.split("(")[0]}</ReviewTitle>
               </FlexDiv>
               <Line />
               <ReviewContainer>
                 <DrugReview
                   review={review}
-                // toggleLike={toggleLike}
+                  toggleLike={toggleLike}
+                  deleteButton={deleteButton}
+                  deleteReview={deleteReview}
+                  updateButton={updateButton}
                 />
               </ReviewContainer>
             </ReviewCard>
-          ))}
+          )) : <Spinner />}
       </Container>
+      {showNewReview && <NewReview reviewSubmit={updateReview} review={updateTarget} modalOff={() => setShowNewReview(false)} />}
+      {showConfirm &&
+        <ConfirmModal modalOff={() => setShowConfirm(false)} handleClick={() => deleteReview(updateTarget.id, updateTarget.meta.drug.id)} />
+      }
+      {showLoginModal && <LoginModal modalOff={() => setShowLoginModal(false)} />}
     </>
   );
 }

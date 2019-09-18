@@ -4,7 +4,6 @@ import { Redirect } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthStore";
 import styled from "styled-components";
 
-import Terms from "./Terms";
 import {
   Container,
   BasicButton,
@@ -14,13 +13,17 @@ import FacebookIcon from "../assets/images/facebook.svg";
 import NaverIcon from "../assets/images/naver.svg";
 import GoogleIcon from "../assets/images/google-signin.svg";
 import "@fortawesome/fontawesome-free/css/all.css";
+import Spinner from "../components/UI/Spinner";
 
-const SignupArea = styled(Container)`
+const SignupArea = styled.div`
   padding-top: 6rem;
   margin-left: 9.375px;
   margin-right: 9.375px;
   margin-top: 0;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const CustomButton = styled(BasicButton)`
@@ -39,10 +42,6 @@ const GoLoginMark = styled.div`
   font-size: 0.75rem;
   opacity: 0.39;
   margin-bottom: 1.3125rem;
-`;
-
-const SignupError = styled.div`
-  color: red;
 `;
 
 const TermsContainer = styled.div`
@@ -94,7 +93,7 @@ const SocialSignupArea = styled.div`
 
 const SignupByWhichContainer = styled.div`
   display: flex;
-  width: 100%;
+  width: 400px;
   margin-top: 24px;
   margin-bottom: 24px;
 `;
@@ -112,6 +111,7 @@ function Signup(props) {
   const [userName, setUserName] = useState(null);
   const [byWhom, setByWhom] = useState(null);
   const [agreeAllTerms, setAgreeAllTerms] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { state, dispatch } = useContext(AuthContext);
 
   const goLoginPage = () => {
@@ -190,6 +190,7 @@ function Signup(props) {
         caffeine: null,
         sex: null
       };
+      setLoading(true);
       axios
         .post("/api/users", signupData)
         .then(response => {
@@ -199,12 +200,14 @@ function Signup(props) {
             token: payload
           });
           storeUserDataForAutoLogin("jwt_token", payload);
+          setLoading(false);
         })
         .catch(error => {
           dispatch({
             type: "SIGNUP_FAIL",
             error: error.response.data.errors
           });
+          setLoading(false);
           alert(error.response.data.errors);
         });
     } else {
@@ -270,9 +273,13 @@ function Signup(props) {
           />
         </form>
       ))}
-      <CustomButton onClick={() => signupActionHandler()}>
-        회원가입
-      </CustomButton>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <CustomButton onClick={() => signupActionHandler()}>
+          회원가입
+        </CustomButton>
+      )}
     </CustomForm>
   );
 

@@ -1,5 +1,5 @@
 import React, { useState, useReducer, useEffect, useContext } from "react";
-import Modal from "../../UI/Modal";
+import Modal from "../../UI/Modals/Modal";
 import AutoSuggestion from "../../Util/AutoSuggestion";
 import { ko } from "date-fns/esm/locale";
 import { AuthContext } from "../../../contexts/AuthStore";
@@ -39,6 +39,7 @@ const TextArea = styled.textarea`
 const Button = styled(BasicButton)`
   margin-top: 2rem;
   margin-bottom: 1rem;
+  ${props => props.disable ? 'background-color: #d8d8d8' : null}
 `;
 
 const FakeInput = styled.div`
@@ -73,12 +74,20 @@ const StyledDateRange = styled(DateRange)`
   }
 `;
 
+const Warning = styled.span`
+  font-size: 0.8rem;
+  color: red;
+  margin-left: 1rem;
+  font-weight: 700;
+`
+
 const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
-  const [disease, setDisease] = useState([]);
+  const [disease, setDisease] = useState();
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [from, setFrom] = useState(moment());
   const [to, setTo] = useState(moment());
   const [memo, setMemo] = useState()
+  const [showWarning, setShowWarning] = useState(false);
   const { state: authState } = useContext(AuthContext);
   const { state: drugState, dispatch } = useContext(DrugContext);
 
@@ -89,9 +98,10 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
 
   const fetchDiseaseData = async () => {
     const { data } = await axios.get("autocomplete/disease", {
-      headers: { Authorization: authState.token }
+      headers: { Authorization: `bearer ${authState.token}` },
+      params: { sub_user_id: authState.subUserId }
     });
-    const payload = data.standard_diseases;
+    const payload = data.my_diseases ? data.my_diseases.concat(data.standard_diseases) : data.standard_diseases;
     dispatch({ type: "GET_DISEASES", payload: payload });
   };
 
@@ -99,12 +109,32 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
     setDisease(value);
   };
 
+  const addDisease = async value => {
+    try {
+      const response = await axios.post(`/user/${authState.subUserId}/diseases`, {
+        disease: {
+          name: value
+        }
+      }, {
+        headers: {
+          Authorization: `bearer ${authState.token}`
+        }
+      })
+      fetchDiseaseData()
+      setDisease({ id: response.data.id, name: response.data.name })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const addDrug = () => {
-    const diseaseId = disease.id;
+    const diseaseName = disease.name ? disease.name : disease;
     const formattedFrom = from.format("YYYY-MM-DD");
     const formattedTo = to.format("YYYY-MM-DD");
     const memoToSend = memo
-    addCurrentDrug(drugId, { diseaseId, formattedFrom, formattedTo, memoToSend });
+    console.log(disease)
+    if (disease) addCurrentDrug(drugId, { diseaseName, formattedFrom, formattedTo, memoToSend });
+    else alert('질병추가해라')
   };
 
   const selectionRange = {
@@ -125,13 +155,17 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
         title="복용 목록에 추가"
         content={
           <Container>
-            <BasicText>왜 이 약을 드시나요?</BasicText>
+            <BasicText>
+              왜 이 약을 드시나요?
+              {showWarning ? <Warning>* 필수 필드입니다</Warning> : ''}
+            </BasicText>
             <AutosuggestStyleWrapper>
               <AutoSuggestion
                 search="disease"
                 placeholderProp={"질환명 입력"}
                 searchKey="name"
                 inputChange={diseasesInputChange}
+                inputAdd={addDisease}
               />
             </AutosuggestStyleWrapper>
             <>
@@ -165,14 +199,8 @@ const AddModal = ({ additionalModalToggle, addCurrentDrug, drugId }) => {
               <BasicText>메모</BasicText>
               <TextArea onChange={(e) => setMemo(e.target.value)} placeholder="ex) 하루에 언제 몇 알 씩 먹는지, 상세 복용 규칙 등을 기록해보세요" />
             </>
-
-            <Button
-              onClick={() => {
-                addDrug();
-              }}
-            >
-              완료
-          </Button>
+            {disease ? (<Button onClick={() => addDrug()}>완료</Button>) :
+              (<Button onClick={() => setShowWarning(true)} disable>완료</Button>)}
           </Container>
         }
         modalOff={() => {

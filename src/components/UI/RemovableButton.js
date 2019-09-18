@@ -17,12 +17,12 @@ const CloseIcon = styled.img`
   cursor: pointer;
 `;
 
-const RemovableButton = ({ effect, deleteEffect }) => {
+const RemovableButton = ({ effect, deleteAdverseEffect }) => {
   return (
     <Button>
       {effect.symptom_name}
       <CloseIcon
-        onClick={() => deleteEffect(effect.id)}
+        onClick={() => deleteAdverseEffect(effect.id)}
         src={close}
         alt="close"
       />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import styled from "styled-components";
 import { StyledRating, RatingText, BasicText } from "../../UI/SharedStyles";
@@ -6,6 +6,7 @@ import { ReactComponent as Edit } from "../../../assets/images/edit-review.svg";
 import { ReactComponent as Close } from "../../../assets/images/close.svg";
 import { ReactComponent as Like } from "../../../assets/images/like.svg";
 import "@fortawesome/fontawesome-free/css/all.css";
+import { AuthContext } from "../../../contexts/AuthStore";
 
 const Container = styled.div`
   width: 85%;
@@ -51,14 +52,22 @@ const CustomRatingText = styled(RatingText)`
 const Bold = styled.div`
   font-weight: bold;
   margin-bottom: 0.65rem;
+  text-align: left;
 `;
+
+const Text = styled.div`
+  text-align: left;
+`
 
 const EditIcon = styled(Edit)`
   margin-right: 10px;
   color: var(--twoyak-black);
 `;
 
-const DrugReview = React.memo(({ my, review, deleteReview, updateButton }) => {
+const DrugReview = React.memo(({ review, deleteReview, deleteButton, updateButton, toggleLike }) => {
+  const { state: authState } = useContext(AuthContext)
+  let my = authState.userId === review.meta.user.id ? true : false;
+
   return (
     <Container>
       <Flex>
@@ -66,42 +75,41 @@ const DrugReview = React.memo(({ my, review, deleteReview, updateButton }) => {
           <Rating
             emptySymbol="fas fa-circle  custom"
             fullSymbol="fas fa-circle  custom full"
-            initialRating={review.efficacy}
+            initialRating={review.attributes.efficacy}
             readonly
           />
-          <CustomRatingText>{review.efficacy.toFixed(1)}</CustomRatingText>
+          <CustomRatingText>{review.attributes.efficacy.toFixed(1)}</CustomRatingText>
           {!my && (
             <BasicText size="0.7rem" bold="normal">
-              {review.age} {review.sex === true ? "남" : "여"}
+              {review.meta.user.age} {review.meta.user.sex === true ? "남" : "여"}
             </BasicText>
           )}
+          {my && updateButton && (
+            <FlexStart>
+              <EditIcon onClick={() => updateButton(review)} />
+              <Close onClick={() => deleteButton(review)} />
+            </FlexStart>
+          )}
         </FlexStart>
-        {/* 좋아요 기능 구현
-          <MyFlex>
-            <BasicText bold size="0.7rem">
-              {review.drug_review_likes_count}
-            </BasicText>
-            <LikeIcon
-              liked={reviewLike ? 1 : 0}
-              onClick={() => {
-                toggleLike(review.id);
-              }}
-            /> 
-            </MyFlex> */}
-        {my && updateButton && (
-          <FlexStart>
-            <EditIcon onClick={() => updateButton(review)} />
-            <Close onClick={() => deleteReview(review.id)} />
-          </FlexStart>
-        )}
+        <FlexStart>
+          <BasicText bold size="0.7rem">
+            {review.attributes.drug_review_likes_count}
+          </BasicText>
+          <LikeIcon
+            liked={review.meta.user.liked ? 1 : 0}
+            onClick={() => {
+              toggleLike(review.id);
+            }}
+          />
+        </FlexStart>
       </Flex>
       <Bold>
         이상반응:{" "}
-        {review.adverse_effects && review.adverse_effects.length > 0
-          ? review.adverse_effects.map(effect => effect.symptom_name).join(", ")
+        {review.meta.adverse_effects && review.meta.adverse_effects.length > 0
+          ? review.meta.adverse_effects.map(effect => effect.symptom_name).join(", ")
           : "없음"}
       </Bold>
-      <div>{review.body}</div>
+      <Text>{review.attributes.body}</Text>
     </Container>
   );
 });
