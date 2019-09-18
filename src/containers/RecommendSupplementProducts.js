@@ -294,6 +294,11 @@ function RecommendSupplementProducts(props) {
     }
   };
 
+  const pagenationHandelr = page => {
+    document.getElementById("after-pagenation-location").scrollIntoView();
+    setPage(page);
+  };
+
   let RecommendIngrs = null;
   if (props.match.path === "/recommend-all-supplements/:type") {
     RecommendIngrs = (
@@ -372,7 +377,7 @@ function RecommendSupplementProducts(props) {
           <Title>추천 건강기능식품 성분</Title>
         )}
         {RecommendIngrs}
-        <EffectWrapper>
+        <EffectWrapper id="after-pagenation-location">
           <EffectDescription>
             {recommendSupplementIngrsNames[selectedIngrIndex]}의 효능
           </EffectDescription>
@@ -447,8 +452,7 @@ function RecommendSupplementProducts(props) {
                   <PageNumberUnclicked
                     key={k}
                     onClick={() => {
-                      setPage(k + 1);
-                      d;
+                      pagenationHandelr(k + 1);
                     }}
                   >
                     {k + 1}
