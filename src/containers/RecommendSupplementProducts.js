@@ -236,23 +236,26 @@ function RecommendSupplementProducts(props) {
         setPagenationNumber(response.headers["total-count"]);
         if (pagenationNumber !== response.headers["total-count"]) {
           let tempPagenation = [];
-          if (Number(response.headers["total-count"]) % 12 === 0) {
-            for (
-              let i = 1;
-              i < Number(response.headers["total-count"]) / 12 + 1;
-              i++
-            ) {
-              await tempPagenation.push(i);
-            }
-          } else {
-            for (
-              let i = 1;
-              i < parseInt(Number(response.headers["total-count"]) / 12) + 1;
-              i++
-            ) {
-              await tempPagenation.push(i);
+          function pagenation() {
+            if (Number(response.headers["total-count"]) % 12 === 0) {
+              for (
+                let i = 1;
+                i < Number(response.headers["total-count"]) / 12 + 1;
+                i++
+              ) {
+                tempPagenation.push(i);
+              }
+            } else {
+              for (
+                let i = 1;
+                i < parseInt(Number(response.headers["total-count"]) / 12) + 1;
+                i++
+              ) {
+                tempPagenation.push(i);
+              }
             }
           }
+          await pagenation();
           setPagenationArray(tempPagenation);
         }
         setLoading(false);
@@ -466,7 +469,7 @@ function RecommendSupplementProducts(props) {
                       pagenationHandelr(i);
                     }}
                   >
-                    {k + 1}
+                    {i}
                   </PageNumberUnclicked>
                 )
               )
