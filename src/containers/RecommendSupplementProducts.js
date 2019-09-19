@@ -65,7 +65,6 @@ const Divider = styled(Line)`
 const PageNation = styled.div`
   display: flex;
   justify-content: space-evenly;
-  padding-bottom: 300px;
 `;
 
 const PageNumberClicked = styled.div`
@@ -235,28 +234,15 @@ function RecommendSupplementProducts(props) {
         setRecommendedProducts(response.data.data);
         setPagenationNumber(response.headers["total-count"]);
         if (pagenationNumber !== response.headers["total-count"]) {
-          let tempPagenation = [];
+          let tempPagenation = null;
           function pagenation() {
-            if (Number(response.headers["total-count"]) % 12 === 0) {
-              for (
-                let i = 1;
-                i < Number(response.headers["total-count"]) / 12 + 1;
-                i++
-              ) {
-                tempPagenation.push(i);
-              }
-            } else {
-              for (
-                let i = 1;
-                i < parseInt(Number(response.headers["total-count"]) / 12) + 1;
-                i++
-              ) {
-                tempPagenation.push(i);
-              }
-            }
+            tempPagenation = new Array(
+              Math.ceil(response.headers["total-count"] / 12)
+            ).fill();
+            console.log(tempPagenation);
+            setPagenationArray(tempPagenation);
           }
           await pagenation();
-          setPagenationArray(tempPagenation);
         }
         setLoading(false);
       })
@@ -460,16 +446,16 @@ function RecommendSupplementProducts(props) {
         <PageNation>
           {pagenationArray
             ? pagenationArray.map((i, k) =>
-                i === page ? (
-                  <PageNumberClicked key={k}>{i}</PageNumberClicked>
+                k + 1 === page ? (
+                  <PageNumberClicked key={k}>{k + 1}</PageNumberClicked>
                 ) : (
                   <PageNumberUnclicked
                     key={k}
                     onClick={() => {
-                      pagenationHandelr(i);
+                      pagenationHandelr(k + 1);
                     }}
                   >
-                    {i}
+                    {k + 1}
                   </PageNumberUnclicked>
                 )
               )
