@@ -208,7 +208,7 @@ function RecommendSupplementProducts(props) {
   const [benefits, setBenefits] = useState([]);
   const [selectedIngrIndex, setSelectedIngrIndex] = useState(0);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
-  const [pagenationArray, setPagenationArray] = useState(null);
+  const [pagenationArray, setPagenationArray] = useState([]);
   const [pagenationNumber, setPagenationNumber] = useState(null);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
