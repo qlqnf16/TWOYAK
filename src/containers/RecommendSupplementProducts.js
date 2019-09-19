@@ -237,19 +237,27 @@ function RecommendSupplementProducts(props) {
         if (pagenationNumber !== response.headers["total-count"]) {
           let tempPagenation = [];
           if (Number(response.headers["total-count"]) % 12 === 0) {
-            tempPagenation = new Array(
-              Number(response.headers["total-count"]) / 12
-            ).fill();
+            for (
+              let i = 1;
+              i < Number(response.headers["total-count"]) / 12 + 1;
+              i++
+            ) {
+              await tempPagenation.push(i);
+            }
           } else {
-            tempPagenation = new Array(
-              parseInt(Number(response.headers["total-count"]) / 12) + 1
-            ).fill();
+            for (
+              let i = 1;
+              i < parseInt(Number(response.headers["total-count"]) / 12) + 1;
+              i++
+            ) {
+              await tempPagenation.push(i);
+            }
           }
           setPagenationArray(tempPagenation);
         }
         setLoading(false);
       })
-      .catch(error => alert(error.response.data.errors[0]));
+      .catch(error => alert(error));
     recommendSupplementIngrsIds.map(async i => {
       let benefitsArray = benefits;
       axios({
@@ -312,6 +320,7 @@ function RecommendSupplementProducts(props) {
             onClick={() => {
               props.history.push("/recommend-all-supplements/vitamins");
               changeSupplementHandler("vitamin");
+              setPage(1);
             }}
           >
             비타민
@@ -320,6 +329,7 @@ function RecommendSupplementProducts(props) {
             onClick={() => {
               props.history.push("/recommend-all-supplements/minerals");
               changeSupplementHandler("mineral");
+              setPage(1);
             }}
           >
             미네랄
@@ -328,6 +338,7 @@ function RecommendSupplementProducts(props) {
             onClick={() => {
               props.history.push("/recommend-all-supplements/nutrients");
               changeSupplementHandler("nutrient");
+              setPage(1);
             }}
           >
             영양제
@@ -446,13 +457,13 @@ function RecommendSupplementProducts(props) {
         <PageNation>
           {pagenationArray
             ? pagenationArray.map((i, k) =>
-                k + 1 === page ? (
-                  <PageNumberClicked key={k}>{k + 1}</PageNumberClicked>
+                i === page ? (
+                  <PageNumberClicked key={k}>{i}</PageNumberClicked>
                 ) : (
                   <PageNumberUnclicked
                     key={k}
                     onClick={() => {
-                      pagenationHandelr(k + 1);
+                      pagenationHandelr(i);
                     }}
                   >
                     {k + 1}
