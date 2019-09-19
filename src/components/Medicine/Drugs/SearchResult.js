@@ -156,8 +156,7 @@ const SearchResult = React.memo(
 
     const benefitInfo = getBenefitInto()
     const benefitText = benefitInfo.join(' ');
-    const benefitTextShortend = benefitText.slice(0, 190)
-
+    const benefitTextShortend = benefitText.slice(0, 148)
     const ingrKo = new Set(drug.ingr_kor_name);
 
     return (
