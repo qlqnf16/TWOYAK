@@ -7,6 +7,7 @@ import fullHeart from "../../../assets/images/heart-fill.svg";
 import DurInfo from "./DurInfo";
 import SupplementInfo from "./SupplementInfo";
 import Spinner from "../../UI/Spinner";
+import { flattenObject, getValues } from '../../Util/_mixin'
 
 const Container = styled.div`
   display: flex;
@@ -112,7 +113,7 @@ const Benefit = styled.div`
   white-space: ${props => (props.more ? "pre-wrap" : "nowrap")};
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: normal;
+  white-space: pre-wrap;
 `;
 
 const ShowMoreButton = styled.div`
@@ -144,65 +145,18 @@ const SearchResult = React.memo(
       )
       : null;
 
-    const pushValidItem = (array, item) => {
-      if (item !== undefined && item !== null && item.length > 0) {
-        array.push(item);
-      }
-    };
-
-    const findInfoDetail = drug => {
-      // 효능, 효과
+    const getBenefitInto = () => {
       const SECTION =
         drugDetail &&
         drugDetail.EE_DOC_DATA &&
         drugDetail.EE_DOC_DATA.DOC.SECTION;
 
-      const title = [];
-      const PARAGRAPH = [];
+      return getValues(flattenObject(SECTION))
+    }
 
-      if (SECTION !== null) {
-        if (!SECTION.length) {
-          if (!SECTION.ARTICLE.length) {
-            pushValidItem(title, SECTION.ARTICLE.title);
-            pushValidItem(PARAGRAPH, SECTION.ARTICLE.PARAGRAPH);
-          } else {
-            for (let i = 0; i < SECTION.ARTICLE.length; i++) {
-              pushValidItem(title, SECTION.ARTICLE[i].title);
-              pushValidItem(PARAGRAPH, SECTION.ARTICLE[i].PARAGRAPH);
-            }
-          }
-        } else {
-          for (let i = 0; i < SECTION.length; i++) {
-            if (!SECTION[i].ARTICLE || !SECTION[i].ARTICLE.length) {
-              if (SECTION[i].ARTICLE) {
-                pushValidItem(title, SECTION[i].ARTICLE.title);
-                pushValidItem(PARAGRAPH, SECTION[i].ARTICLE.PARAGRAPH);
-              }
-            } else {
-              for (let j = 0; j < SECTION[i].ARTICLE.length; j++) {
-                pushValidItem(title, SECTION[i].ARTICLE[j].title);
-                pushValidItem(PARAGRAPH, SECTION[i].ARTICLE[j].PARAGRAPH);
-              }
-            }
-          }
-        }
-      }
-
-      return {
-        benefitTitle: title,
-        benefitParagraph: PARAGRAPH
-      };
-    };
-
-    const benefitInfo = findInfoDetail(drug);
-    const benefitText = !benefitInfo.benefitParagraph.length
-      ? benefitInfo.benefitTitle.join(" ")
-      : benefitInfo.benefitParagraph.join(" ");
-    let benefitTextShortend = !benefitInfo.benefitParagraph.length
-      ? benefitInfo.benefitTitle[0]
-      : benefitInfo.benefitParagraph[0];
-    benefitTextShortend = benefitTextShortend === benefitText ? benefitTextShortend.slice(0, 110) : benefitTextShortend
-
+    const benefitInfo = getBenefitInto()
+    const benefitText = benefitInfo.join("\n");
+    const benefitTextShortend = benefitText.split("\n").slice(0, 3).join("\n")
     const ingrKo = new Set(drug.ingr_kor_name);
 
     return (
@@ -214,14 +168,9 @@ const SearchResult = React.memo(
           <ItemName>{drug.name.split("(")[0]}</ItemName>
           <IconContainer>
             {watching ? (
-              // 여기
               <Icon src={fullHeart} alt="full-heart" onClick={toggleWatching} />
             ) : (
-                <Icon
-                  src={emptyHeart}
-                  alt="empty-heart"
-                  onClick={auth ? toggleWatching : showLogin}
-                />
+                <Icon src={emptyHeart} alt="empty-heart" onClick={auth ? toggleWatching : showLogin} />
               )}
           </IconContainer>
           <ImgContainer>
