@@ -7,8 +7,6 @@ function PaginationComponent(props) {
     props.setPage(page);
   };
 
-  useEffect(() => console.log(props));
-
   return (
     <Pagination
       onChange={handlePageClick}
