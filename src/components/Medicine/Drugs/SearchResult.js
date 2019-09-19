@@ -113,7 +113,7 @@ const Benefit = styled.div`
   white-space: ${props => (props.more ? "pre-wrap" : "nowrap")};
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: normal;
+  white-space: pre-wrap;
 `;
 
 const ShowMoreButton = styled.div`
@@ -155,8 +155,8 @@ const SearchResult = React.memo(
     }
 
     const benefitInfo = getBenefitInto()
-    const benefitText = benefitInfo.join(' ');
-    const benefitTextShortend = benefitText.slice(0, 148)
+    const benefitText = benefitInfo.join("\n");
+    const benefitTextShortend = benefitText.split("\n").slice(0, 3).join("\n")
     const ingrKo = new Set(drug.ingr_kor_name);
 
     return (
