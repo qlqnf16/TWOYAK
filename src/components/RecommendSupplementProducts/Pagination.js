@@ -13,6 +13,7 @@ function PaginationComponent(props) {
       current={props.page}
       total={props.paginationNumber}
       pageSize={props.item}
+      simple
       style={{ display: "flex", justifyContent: "center" }}
     />
   );
