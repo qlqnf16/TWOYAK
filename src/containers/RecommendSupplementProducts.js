@@ -3,6 +3,7 @@ import axios from "../apis";
 import styled, { keyframes } from "styled-components";
 
 import ProductCard from "../components/RecommendSupplementProducts/ProductCard";
+import PaginationComponent from "../components/RecommendSupplementProducts/Pagination";
 import {
   Container,
   BasicButton,
@@ -208,7 +209,6 @@ function RecommendSupplementProducts(props) {
   const [benefits, setBenefits] = useState([]);
   const [selectedIngrIndex, setSelectedIngrIndex] = useState(0);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
-  const [pagenationArray, setPagenationArray] = useState([]);
   const [pagenationNumber, setPagenationNumber] = useState(null);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -232,17 +232,8 @@ function RecommendSupplementProducts(props) {
     })
       .then(async response => {
         setRecommendedProducts(response.data.data);
-        setPagenationNumber(response.headers["total-count"]);
-        if (pagenationNumber !== response.headers["total-count"]) {
-          let tempPagenation = null;
-          function pagenation() {
-            tempPagenation = new Array(
-              Math.ceil(response.headers["total-count"] / 12)
-            ).fill();
-            console.log(tempPagenation);
-            setPagenationArray(tempPagenation);
-          }
-          await pagenation();
+        if (pagenationNumber !== Number(response.headers["total-count"])) {
+          setPagenationNumber(Number(response.headers["total-count"]));
         }
         setLoading(false);
       })
@@ -443,24 +434,12 @@ function RecommendSupplementProducts(props) {
             />
           ))
         )}
-        <PageNation>
-          {pagenationArray
-            ? pagenationArray.map((i, k) =>
-                k + 1 === page ? (
-                  <PageNumberClicked key={k}>{k + 1}</PageNumberClicked>
-                ) : (
-                  <PageNumberUnclicked
-                    key={k}
-                    onClick={() => {
-                      pagenationHandelr(k + 1);
-                    }}
-                  >
-                    {k + 1}
-                  </PageNumberUnclicked>
-                )
-              )
-            : null}
-        </PageNation>
+        <PaginationComponent
+          page={page}
+          paginationNumber={pagenationNumber}
+          setPage={k => setPage(k)}
+          item={12}
+        />
       </RecommendProductContainer>
     </Background>
   );

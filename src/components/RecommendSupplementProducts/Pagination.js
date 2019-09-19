@@ -1,24 +1,21 @@
-import React from "react";
-import Pagination from "react-paginate";
+import React, { useEffect } from "react";
+import Pagination from "rc-pagination";
+import "rc-pagination/assets/index.css";
 
 function PaginationComponent(props) {
   const handlePageClick = page => {
-    console.log(page);
     props.setPage(page);
   };
 
+  useEffect(() => console.log(props));
+
   return (
     <Pagination
-      previousLabel={"이전"}
-      nextLabel={"다음"}
-      breakLabel={"..."}
-      pageCount={props.pageCount}
-      marginPagesDisplayed={2}
-      pageRangeDisplayed={5}
-      onPageChange={handlePageClick}
-      containerClassName={"pagination"}
-      subContainerClassName={"pages pagination"}
-      activeClassName={"active"}
+      onChange={handlePageClick}
+      current={props.page}
+      total={props.paginationNumber}
+      pageSize={props.item}
+      style={{ display: "flex", justifyContent: "center" }}
     />
   );
 }
