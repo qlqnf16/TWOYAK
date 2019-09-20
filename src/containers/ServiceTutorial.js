@@ -51,7 +51,8 @@ const TutorialGalleryComponent = styled(TutorialGallery)`
 function ServiceTutorial(props) {
   const images = [
     {
-      original: tutorial1
+      original: tutorial1,
+      sizes: "height = 100vh;"
     },
     {
       original: tutorial2
