@@ -32,8 +32,8 @@ const CloseButton = styled.div`
   align-items: center;
   font-size: 1.1rem;
   font-weight: bold;
-  background-color: #ecedef;
-  color: var(--twoyak-black);
+  background-color: transparent;
+  color: var(--twoyak-blue);
   position: fixed;
   top: 0;
   left: 0;
@@ -41,8 +41,14 @@ const CloseButton = styled.div`
   margin-left: 20px;
 `;
 
+const TutorialGalleryComponent = styled(TutorialGallery)`
+  & .image-gallery-slide img {
+    width: 100%;
+    height: 100vh;
+  }
+`;
+
 function ServiceTutorial(props) {
-  console.log(props);
   const images = [
     {
       original: tutorial1
@@ -75,7 +81,7 @@ function ServiceTutorial(props) {
   return (
     <TutorailContainer>
       <CloseButton onClick={() => props.history.push("/")}>SKIP</CloseButton>
-      <TutorialGallery
+      <TutorialGalleryComponent
         items={images}
         infinite={false}
         showThumbnails={false}
