@@ -77,10 +77,12 @@ function BirthdayInfo({ value, getBirthDate, backgroundScroll }) {
       <DatePicker
         style={{ textAlign: "center" }}
         dateConfig={dateConfig}
-        value={new Date(value)}
+        value={value === "" ? new Date("1988-06-01") : new Date(value)}
         theme="ios"
         isOpen={birthDateModalShow}
-        onSelect={date => getDate(date)}
+        onSelect={date => {
+          getDate(date);
+        }}
         onCancel={() => toggleBirthDateModalHandler()}
         confirmText="선택"
         cancelText="취소"
