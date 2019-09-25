@@ -3,7 +3,6 @@ import { AuthContext } from "./AuthStore";
 
 function WatchStore(props) {
   const { dispatch } = useContext(AuthContext);
-
   useEffect(() => {
     function AutoLogin() {
       if (localStorage.getItem("token")) {
@@ -19,10 +18,20 @@ function WatchStore(props) {
           token: localStorage.getItem("jwt_token")
         });
       }
+      if (
+        props.location.search !== "" &&
+        props.location.search.includes("?token")
+      ) {
+        dispatch({
+          type: "SIGNIN_SUCCESS",
+          token: props.location.search.split("=")[1]
+        });
+        window.location.replace(props.location.pathname);
+      }
     }
     localStorage.removeItem("tutorial-show");
     AutoLogin();
-  }, [dispatch]);
+  }, [props.location.search, dispatch]);
 
   return <div>{props.children}</div>;
 }

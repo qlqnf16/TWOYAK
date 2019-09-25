@@ -7,7 +7,11 @@ import ChangeUserIcon from "../../assets/images/change-user-icon.svg";
 import { BasicButton } from "../UI/SharedStyles";
 
 const ModalContents = styled.div`
-  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  max-height: 65vh;
+  overflow: scroll;
+  padding: 1rem 0;
+  text-align: center;
 `;
 
 const ModalMessage = styled.div`
@@ -94,17 +98,11 @@ const ChangeUser = ({ history, getUserInfo }) => {
 
   return (
     <>
-      {window.innerWidth >= 960 ? (
-        <ChangeUserTextButton onClick={() => toggleChangeUserModalHandler()}>
-          사용자 추가 및 변경
-        </ChangeUserTextButton>
-      ) : (
-        <ChangeUserIconButton
-          src={ChangeUserIcon}
-          alt="change-user"
-          onClick={() => toggleChangeUserModalHandler()}
-        />
-      )}
+      <ChangeUserIconButton
+        src={ChangeUserIcon}
+        alt="change-user"
+        onClick={() => toggleChangeUserModalHandler()}
+      />
       {changeUserModalShow ? (
         <Modal
           modalOff={() => toggleChangeUserModalHandler()}

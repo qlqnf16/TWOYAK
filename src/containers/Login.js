@@ -73,27 +73,6 @@ function Login(props) {
 
   const { state, dispatch } = useContext(AuthContext);
 
-  useEffect(() => {
-    dispatch({
-      type: "SET_AUTH_REDIRECT_PATH",
-      path: null
-    });
-    if (
-      props.location.search !== "" &&
-      props.location.search.includes("?token=")
-    ) {
-      dispatch({
-        type: "SIGNIN_SUCCESS",
-        token: props.location.search.split("=")[1]
-      });
-      dispatch({
-        type: "SET_AUTH_REDIRECT_PATH",
-        path: "/"
-      });
-      window.location.replace("/login");
-    }
-  }, [props.history, props.location.search, dispatch]);
-
   const signinBySocialAccount = supplier => {
     window.open(`http://api.twoyak.com/api/users/auth/${supplier}`, "_self");
   };

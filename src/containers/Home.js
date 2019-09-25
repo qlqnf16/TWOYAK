@@ -36,7 +36,6 @@ function Home(props) {
   const [tokenChange, setTokenChange] = useState(false);
   const [loading, setLoading] = useState(false);
   const { state: authState, dispatch } = useContext(AuthContext);
-  console.log(props);
   useEffect(() => {
     if (authState.subUserId) {
       setLoading(true);

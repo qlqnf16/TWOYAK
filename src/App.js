@@ -10,19 +10,21 @@ import Navbar from "./components/Navbars/Navbar";
 import Header from "./components/Navbars/Header";
 import favicon from "./assets/favicon.png";
 
-function App() {
+function App(props) {
   const switchRoutes = (
     <Switch>
-      {routes.map((prop, key) => {
-        return (
-          <Route
-            path={prop.path}
-            component={prop.component}
-            exact={prop.exact}
-            key={key}
-          />
-        );
-      })}
+      <WatchStore>
+        {routes.map((prop, key) => {
+          return (
+            <Route
+              path={prop.path}
+              component={prop.component}
+              exact={prop.exact}
+              key={key}
+            />
+          );
+        })}
+      </WatchStore>
     </Switch>
   );
 
@@ -48,11 +50,9 @@ function App() {
       </Helmet>
       <AuthStore>
         <DrugStore>
-          <WatchStore>
-            <Header />
-            <Navbar />
-            {switchRoutes}
-          </WatchStore>
+          <Header />
+          <Navbar />
+          {switchRoutes}
         </DrugStore>
       </AuthStore>
     </div>
