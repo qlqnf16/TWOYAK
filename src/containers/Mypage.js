@@ -179,6 +179,7 @@ import WatchDrugs from "../components/Mypage/WatchDrugs";
 import Footer from "../components/Mypage/Footer";
 import Modal from "../components/UI/Modals/Modal";
 import { BasicButton } from "../components/UI/SharedStyles";
+import Close from "../assets/images/close.svg";
 
 const MyPageContainer = styled.div`
   width: 100%;
@@ -229,6 +230,7 @@ const Indicator = styled.div`
   color: #474747;
   opacity: 0.7;
   margin-top: 4px;
+  display: flex;
 `;
 
 const ChangeFunction = styled.div`
@@ -251,13 +253,12 @@ const SubUser = styled.div`
 const SubUserName = styled.div``;
 
 const SubUserDrugCount = styled.div`
-  display: flex;
+  display: block;
 `;
 
 const DrugCount = styled.div`
   color: var(--twoyak-blue);
-  font-size: 0.875rem;
-  margin-left: 4px;
+  margin-left: 0.5rem;
 `;
 
 const Info = styled.div`
@@ -272,11 +273,15 @@ const AppendButton = styled(BasicButton)`
   bottom: 1rem;
 `;
 
+const DeleteButton = styled.img`
+  width: 1.5rem;
+  height: 1.5rem;
+`;
+
 function Mypage(props) {
   const [payload, setPayload] = useState([]);
-  const [currentDrugsCount, setCurrentDrugsCount] = useState([]);
-  const [drugReviewsCount, setDrugReviewsCount] = useState([]);
-  const [myConversation] = useState([]);
+  const [currentDrugsCount, setCurrentDrugsCount] = useState(0);
+  const [drugReviewsCount, setDrugReviewsCount] = useState(0);
   const [familyMedHistoies, setFamilyMedHistories] = useState([]);
   const [watchDrugs, setWatchDrugs] = useState([]);
   const [changeUserModalShow, setChangeUserModalShow] = useState(false);
@@ -310,8 +315,25 @@ function Mypage(props) {
     });
   };
 
+  console.log(payload);
   const toggleChangeUserModalHandler = () => {
     setChangeUserModalShow(!changeUserModalShow);
+  };
+
+  const confirmDeleteUserHandler = userId => {
+    axios({
+      method: "DELETE",
+      url: `/user/sub_users/${userId}`,
+      headers: {
+        Authorization: `Bearer ${authState.token}`
+      }
+    })
+      .then(() => {
+        getUserInfo(authState.subUserIndex);
+        alert("사용자 삭제를 완료하였습니다.");
+        setChangeUserModalShow(false);
+      })
+      .catch(error => alert(error.response));
   };
 
   const modalContent = (
@@ -323,20 +345,30 @@ function Mypage(props) {
         </Info>
         {authState.subUsers
           ? payload.map((i, k) =>
-              Number(i.id) !== authState.subUserId ? (
-                <ModalMessage
-                  key={k}
-                  onClick={() => {
-                    getUserInfo(k);
-                    toggleChangeUserModalHandler();
-                  }}
-                >
+              i.id !== authState.subUserId ? (
+                <ModalMessage key={k}>
                   <SubUser>
-                    <SubUserName>{i.attributes.user_name}</SubUserName>
-                    <SubUserDrugCount>
-                      <Indicator>복용 중인 약</Indicator>
-                      <DrugCount>{i.meta.current_drugs_count}</DrugCount>
-                    </SubUserDrugCount>
+                    <div
+                      onClick={() => {
+                        getUserInfo(k);
+                        toggleChangeUserModalHandler();
+                      }}
+                    >
+                      <SubUserName>{i.attributes.user_name}</SubUserName>
+                      <SubUserDrugCount>
+                        <Indicator>
+                          복용 중인 약:{" "}
+                          <DrugCount>{i.meta.current_drugs_count}</DrugCount>
+                        </Indicator>
+                      </SubUserDrugCount>
+                    </div>
+                    {i.id !== payload[0].id ? (
+                      <DeleteButton
+                        src={Close}
+                        alt="delete-sub-user-button"
+                        onClick={() => confirmDeleteUserHandler(Number(i.id))}
+                      />
+                    ) : null}
                   </SubUser>
                   <Divider />
                 </ModalMessage>
@@ -357,7 +389,6 @@ function Mypage(props) {
         <UserGeneralInfo
           currentDrugsCount={currentDrugsCount}
           drugReviewsCount={drugReviewsCount}
-          myConversation={myConversation}
           userChange={id => getUserInfo(id)}
           history={props.history}
         />

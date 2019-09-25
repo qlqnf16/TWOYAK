@@ -138,43 +138,19 @@ const ButtonContainer = styled(FlexDiv)`
   margin-top: 1.375rem;
 `;
 
-function UserGeneralInfo({
-  currentDrugsCount,
-  drugReviewsCount,
-  myConversation,
-  userChange,
-  history
-}) {
+function UserGeneralInfo({ currentDrugsCount, drugReviewsCount, history }) {
   const { state: authState } = useContext(AuthContext);
 
   const infoIndex = [
     {
       label: "복용 중인 약",
-      value: currentDrugsCount,
       src: "/health-record"
     },
     {
       label: "리뷰",
-      value: drugReviewsCount,
       src: "/all-reviews/my"
     }
   ];
-
-  let generalInfo = null;
-  if (currentDrugsCount && drugReviewsCount && myConversation) {
-    generalInfo = (
-      <GeneralInfo>
-        {infoIndex.map((i, k) => (
-          <EachInfo key={k}>
-            <Count onClick={() => (i.value > 0 ? history.push(i.src) : null)}>
-              {i.value}
-            </Count>
-            <InfoIndex>{i.label}</InfoIndex>
-          </EachInfo>
-        ))}
-      </GeneralInfo>
-    );
-  }
 
   return (
     <UserGeneralInfoContainer>
@@ -182,7 +158,18 @@ function UserGeneralInfo({
       <ButtonContainer>
         <Suggestions />
       </ButtonContainer>
-      {generalInfo}
+      <GeneralInfo>
+        {infoIndex.map((i, k) => (
+          <EachInfo key={k}>
+            <Count onClick={() => (i.value > 0 ? history.push(i.src) : null)}>
+              {i.src === "/health-record"
+                ? currentDrugsCount
+                : drugReviewsCount}
+            </Count>
+            <InfoIndex>{i.label}</InfoIndex>
+          </EachInfo>
+        ))}
+      </GeneralInfo>
     </UserGeneralInfoContainer>
   );
 }
