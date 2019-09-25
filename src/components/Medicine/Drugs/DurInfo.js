@@ -18,7 +18,6 @@ const Text = styled(BasicText)`
   font-size: 0.75rem;
   margin-right: 1rem;
   font-weight: normal;
-  opacity: 0.8;
   ${props => props.block ? 'display: block; margin-bottom: 0.3rem' : null}
 `
 
@@ -49,29 +48,19 @@ const DurInfo = ({ dur, interaction }) => {
           <Text bold>{dur.stop_usage[0].description}</Text>
         </>
       ) : ''}
+      {dur && (dur.dosage || dur.period) ? (
+        <SubTitle>
+          {dur.dosage && <Text>하루 {dur.dosage[0].description.split(" ")[4]} 이상 복용 금지</Text>}
+          {dur.period && <Text>{dur.period[0].description.split(" ")[0]}일 이상 복용 금지</Text>}
+        </SubTitle>
+      ) : ''}
       {dur && (dur.pregnancy || dur.elder || dur.age) ?
         <>
           <SubTitle>이런 분들은 드실 때 주의해야 해요!</SubTitle>
-          {Object.keys(dur).map(key => {
-            let content
-            switch (key) {
-              case 'pregnancy':
-                content = '임산부'
-                break;
-              case 'elder':
-                content = '65세 이상 고령자'
-                break;
-              case 'age':
-                content = dur[key][0].description
-                break;
-              default:
-                break;
-            }
-            return (<Text key={key}>{content}</Text>)
-          }
-          )}
-        </>
-        : ''}
+          {dur.pregnancy && <Text>임산부</Text>}
+          {dur.elder && <Text>65세 이상 고령자</Text>}
+          {dur.age && <Text>{dur.age[0].description}</Text>}
+        </> : ''}
     </>
   )
 }

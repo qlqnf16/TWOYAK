@@ -99,6 +99,7 @@ function Medicine({ match, history, location }) {
     if (match.params.id) {
       setParamId(match.params.id);
     }
+    window.scrollTo(0, 0)
   }, [match.params.id]);
 
   // params 가 변하면 약물 검색
