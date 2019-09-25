@@ -22,7 +22,7 @@ const Category = styled.div`
 `;
 
 const NicknameInput = styled(BasicInput)`
-  width: 16rem;
+  width: 12rem;
   height: 3rem;
   margin-top: 0.6875rem;
   text-align: center;

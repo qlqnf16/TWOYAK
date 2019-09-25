@@ -178,7 +178,7 @@ import Diseases from "../components/Mypage/Diseases";
 import WatchDrugs from "../components/Mypage/WatchDrugs";
 import Footer from "../components/Mypage/Footer";
 import Modal from "../components/UI/Modals/Modal";
-import AddDash from "../assets/images/add-dash.svg";
+import { BasicButton } from "../components/UI/SharedStyles";
 
 const MyPageContainer = styled.div`
   width: 100%;
@@ -207,7 +207,9 @@ const Divider = styled.div`
 `;
 
 const ModalContents = styled.div`
-  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  max-height: 65vh;
+  overflow: scroll;
 `;
 
 const ModalMessage = styled.div`
@@ -233,7 +235,6 @@ const ChangeFunction = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 1.875rem;
   padding-bottom: 1.875rem;
   overflow: auto;
   height: 500px;
@@ -257,6 +258,18 @@ const DrugCount = styled.div`
   color: var(--twoyak-blue);
   font-size: 0.875rem;
   margin-left: 4px;
+`;
+
+const Info = styled.div`
+  font-size: 0.75rem;
+  opacity: 0.6;
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
+`;
+
+const AppendButton = styled(BasicButton)`
+  position: absolute;
+  bottom: 1rem;
 `;
 
 function Mypage(props) {
@@ -304,6 +317,10 @@ function Mypage(props) {
   const modalContent = (
     <ModalContents>
       <ChangeFunction>
+        <Info>
+          두 명 이상의 복용 내역을 분리해 더 편하게 관리해보세요. (예: 부모님,
+          자녀 등)
+        </Info>
         {authState.subUsers
           ? payload.map((i, k) =>
               Number(i.id) !== authState.subUserId ? (
@@ -326,11 +343,9 @@ function Mypage(props) {
               ) : null
             )
           : null}
-        <AddIcon
-          src={AddDash}
-          alt="add-users"
-          onClick={() => props.history.push("/add-sub-user")}
-        />
+        <AppendButton onClick={() => props.history.push("/add-sub-user")}>
+          사용자 추가하기
+        </AppendButton>
       </ChangeFunction>
     </ModalContents>
   );

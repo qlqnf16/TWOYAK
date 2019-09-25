@@ -37,14 +37,15 @@ const Divider = styled.div`
   height: 1px;
   opacity: 0.26;
   border: solid 1px var(--twoyak-blue);
-  margin-bottom: 1.3125rem;
+  margin: auto auto 1.3125rem auto;
 `;
 
 const AuthFunctionArea = styled.div`
   width: 17rem;
   display: flex;
   justify-content: space-around;
-  margin-bottom: 2.5rem;
+  padding-bottom: 2.5rem;
+  margin: auto;
 `;
 
 const AuthFunctionKey = styled.div`
@@ -58,6 +59,7 @@ const SocialLoginArea = styled.div`
   width: 15rem;
   display: flex;
   justify-content: space-around;
+  margin: auto;
 `;
 
 const LoginErrorMessage = styled.div`

@@ -133,7 +133,7 @@ function ProductCard(props) {
             {props.rating && props.rating.toFixed(1)} / 5.0
           </RatingText>
           <ReviewCount>
-            ({props.reviewCount ? props.reviewCount : 0})
+            리뷰 수: {props.reviewCount ? props.reviewCount : 0}
           </ReviewCount>
         </RatingContainer>
       </Header>

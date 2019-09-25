@@ -8,8 +8,7 @@ import { Helmet } from "react-helmet";
 
 import Navbar from "./components/Navbars/Navbar";
 import Header from "./components/Navbars/Header";
-import Block from "./components/UI/Block";
-import Spinner from "./components/UI/Spinner";
+import favicon from "./assets/favicon.png";
 
 function App() {
   const switchRoutes = (
@@ -38,19 +37,21 @@ function App() {
           name="keywords"
           content="투약,의약품,의약품 안전,의약품 복용,아이약,우울증약,약,같이먹어도되는지,임산부약"
         />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="투약" />
+        <meta property="og:title" content="투약" />
+        <meta
+          property="og:decription"
+          content="의약품 복용 이력을 관리하고 의약품 안전 정보를 확인하세요 :)"
+        />
+        <meta property="og:image" content={favicon} />
       </Helmet>
       <AuthStore>
         <DrugStore>
           <WatchStore>
-            {/* {window.innerWidth >= 960 ? (
-              <Block />
-            ) : (
-                <> */}
             <Header />
             <Navbar />
             {switchRoutes}
-            {/* </>
-              )} */}
           </WatchStore>
         </DrugStore>
       </AuthStore>

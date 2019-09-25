@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "../apis";
 import styled, { keyframes } from "styled-components";
 
+import InfiniteScroll from "react-infinite-scroll-component";
 import ProductCard from "../components/RecommendSupplementProducts/ProductCard";
+import PaginationComponent from "../components/RecommendSupplementProducts/Pagination";
 import {
   Container,
   BasicButton,
@@ -12,13 +14,10 @@ import {
 import Spinner from "../components/UI/Spinner";
 import { ReactComponent as Arrow } from "../assets/images/arrow.svg";
 
-const Background = styled.div`
+const Background = styled(InfiniteScroll)`
   width: 100%;
   height: 100vh;
   background-color: #f0f9ff;
-  position: fixed;
-  top: 0;
-  left: 0;
   z-index: -1;
   overflow: auto;
   padding-bottom: 100px;
@@ -28,6 +27,8 @@ const Background = styled.div`
 const RecommendProductContainer = styled(Container)`
   display: block;
   padding-bottom: 0;
+  text-align: justify;
+  margin-bottom: 100px;
 `;
 
 const Title = styled.div`
@@ -64,7 +65,6 @@ const Divider = styled(Line)`
 const PageNation = styled.div`
   display: flex;
   justify-content: space-evenly;
-  padding-bottom: 300px;
 `;
 
 const PageNumberClicked = styled.div`
@@ -135,7 +135,7 @@ const IngrTypeSelector = styled.div`
 const Filter = styled.div``;
 
 const move = keyframes`
-  0% {top: 0}
+  0% {top: 70px}
   100% {top: 110px}
 `;
 
@@ -154,6 +154,14 @@ const IngrType = styled.div`
   margin-top: 5px;
   margin-bottom: 5px;
   text-align: center;
+`;
+
+const EndMessageDiv = styled.div`
+  text-align: center;
+  font-size: 1rem;
+  margin: 0;
+  padding: 0;
+  font-weight: 800;
 `;
 
 function RecommendSupplementProducts(props) {
@@ -208,10 +216,9 @@ function RecommendSupplementProducts(props) {
   const [benefits, setBenefits] = useState([]);
   const [selectedIngrIndex, setSelectedIngrIndex] = useState(0);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
-  const [pagenationArray, setPagenationArray] = useState(null);
   const [pagenationNumber, setPagenationNumber] = useState(null);
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const [showFilter, setShowFilter] = useState(false);
   const [type, setType] = useState(
     props.match.path === "/recommend-all-supplements/:type"
@@ -225,30 +232,15 @@ function RecommendSupplementProducts(props) {
   const [showTypeFilter, setShowTypeFilter] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
     axios({
       method: "GET",
-      url: `/supplements?page=${page}&supplement_ingr_id=${recommendSupplementIngrsIds[selectedIngrIndex]}&shopping_site=${shoppingSite}`
+      url: `/supplements?page=1&supplement_ingr_id=${recommendSupplementIngrsIds[selectedIngrIndex]}&shopping_site=${shoppingSite}`
     })
       .then(async response => {
         setRecommendedProducts(response.data.data);
-        setPagenationNumber(response.headers["total-count"]);
-        if (pagenationNumber !== response.headers["total-count"]) {
-          let tempPagenation = [];
-          if (Number(response.headers["total-count"]) % 12 === 0) {
-            tempPagenation = new Array(
-              Number(response.headers["total-count"]) / 12
-            ).fill();
-          } else {
-            tempPagenation = new Array(
-              parseInt(Number(response.headers["total-count"]) / 12) + 1
-            ).fill();
-          }
-          setPagenationArray(tempPagenation);
-        }
-        setLoading(false);
+        setPagenationNumber(Number(response.headers["total-count"]));
       })
-      .catch(error => alert(error.response.data.errors[0]));
+      .catch(error => alert(error));
     recommendSupplementIngrsIds.map(async i => {
       let benefitsArray = benefits;
       axios({
@@ -261,11 +253,28 @@ function RecommendSupplementProducts(props) {
         })
         .catch(error => alert(error.response.data.errors[0]));
     });
-  }, [page, recommendSupplementIngrsIds, selectedIngrIndex, shoppingSite]);
+  }, [recommendSupplementIngrsIds, selectedIngrIndex, shoppingSite]);
+
+  const fetchMoreData = () => {
+    if (recommendedProducts.length >= pagenationNumber) {
+      setHasMore(false);
+    }
+    setTimeout(() => {
+      axios({
+        method: "GET",
+        url: `/supplements?page=${page + 1}&supplement_ingr_id=${
+          recommendSupplementIngrsIds[selectedIngrIndex]
+        }&shopping_site=${shoppingSite}`
+      }).then(response => {
+        setRecommendedProducts(recommendedProducts.concat(response.data.data));
+        setPage(page + 1);
+      });
+    }, 1000);
+  };
 
   const changeSupplementHandler = type => {
     switch (type) {
-      case "vitamin":
+      case "vitamins":
         {
           setRecommendSupplementsIngrsIds(vitaminIngrIds);
           setRecommendSupplementsIngrsNames(vitaminIngrNames);
@@ -274,7 +283,7 @@ function RecommendSupplementProducts(props) {
           setSelectedIngrIndex(0);
         }
         break;
-      case "mineral":
+      case "minerals":
         {
           setRecommendSupplementsIngrsIds(mineralIngrIds);
           setRecommendSupplementsIngrsNames(mineralIngrNames);
@@ -283,7 +292,7 @@ function RecommendSupplementProducts(props) {
           setSelectedIngrIndex(0);
         }
         break;
-      case "nutrient": {
+      case "nutrients": {
         setRecommendSupplementsIngrsIds(nutrientIngrIds);
         setRecommendSupplementsIngrsNames(nutrientIngrNames);
         setType("영양제");
@@ -291,6 +300,8 @@ function RecommendSupplementProducts(props) {
         setSelectedIngrIndex(0);
       }
     }
+    document.getElementById("after-pagenation-location").scrollIntoView();
+    props.history.push(`/recommend-all-supplements/${type}`);
   };
 
   let RecommendIngrs = null;
@@ -304,24 +315,21 @@ function RecommendSupplementProducts(props) {
         <IngrTypeArea show={showTypeFilter}>
           <IngrType
             onClick={() => {
-              props.history.push("/recommend-all-supplements/vitamins");
-              changeSupplementHandler("vitamin");
+              changeSupplementHandler("vitamins");
             }}
           >
             비타민
           </IngrType>
           <IngrType
             onClick={() => {
-              props.history.push("/recommend-all-supplements/minerals");
-              changeSupplementHandler("mineral");
+              changeSupplementHandler("minerals");
             }}
           >
             미네랄
           </IngrType>
           <IngrType
             onClick={() => {
-              props.history.push("/recommend-all-supplements/nutrients");
-              changeSupplementHandler("nutrient");
+              changeSupplementHandler("nutrients");
             }}
           >
             영양제
@@ -365,7 +373,14 @@ function RecommendSupplementProducts(props) {
   }
 
   return (
-    <Background>
+    <Background
+      id="after-pagenation-location"
+      dataLength={recommendedProducts.length}
+      next={fetchMoreData}
+      hasMore={hasMore}
+      loader={<Spinner />}
+      endMessage={<EndMessageDiv>준비된 제품을 모두 보셨습니다.</EndMessageDiv>}
+    >
       <RecommendProductContainer>
         {props.match.path === "/recommend-all-supplements/:type" ? null : (
           <Title>추천 건강기능식품 성분</Title>
@@ -417,7 +432,25 @@ function RecommendSupplementProducts(props) {
             가격 정보는 실제와 차이가 날 수 있습니다.
           </BasicText>
         </FilterContainer>
-        {loading ? (
+
+        {recommendedProducts.map((i, k) => (
+          <ProductCard
+            key={k}
+            supplier={shoppingSite}
+            name={i.attributes.name}
+            src={i.attributes.photo_url}
+            productURL={i.attributes.product_url}
+            rating={i.attributes.rating}
+            reviewCount={i.attributes.shoppingmall_reviews}
+            manufacturer={i.attributes.enterprise_name}
+            price={i.attributes.price}
+            ranking={
+              JSON.parse(i.attributes.rankings).data[0].attributes.ranking
+            }
+          />
+        ))}
+
+        {/* {loading ? (
           <Spinner />
         ) : (
           recommendedProducts.map((i, k) => (
@@ -435,22 +468,16 @@ function RecommendSupplementProducts(props) {
                 JSON.parse(i.attributes.rankings).data[0].attributes.ranking
               }
             />
-          ))
-        )}
-        <PageNation>
-          {pagenationArray
-            ? pagenationArray.map((i, k) =>
-                k + 1 === page ? (
-                  <PageNumberClicked key={k}>{k + 1}</PageNumberClicked>
-                ) : (
-                  <PageNumberUnclicked key={k} onClick={() => setPage(k + 1)}>
-                    {k + 1}
-                  </PageNumberUnclicked>
-                )
-              )
-            : null}
-        </PageNation>
+          )) */}
+        {/* )} */}
+        {/* <PaginationComponent
+          page={page}
+          paginationNumber={pagenationNumber}
+          setPage={k => setPage(k)}
+          item={12}
+        /> */}
       </RecommendProductContainer>
+      {/* </InfiniteScroll> */}
     </Background>
   );
 }

@@ -45,7 +45,8 @@ function ServiceTutorial(props) {
   console.log(props);
   const images = [
     {
-      original: tutorial1
+      original: tutorial1,
+      sizes: "height = 100vh;"
     },
     {
       original: tutorial2

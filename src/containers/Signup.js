@@ -209,6 +209,7 @@ function Signup(props) {
           });
           setLoading(false);
           alert(error.response.data.errors);
+          console.log(error.response.data.errors);
         });
     } else {
       if (!email) {
@@ -229,14 +230,7 @@ function Signup(props) {
 
   const signupBySocialAccount = supplier => {
     if (agreeAllTerms) {
-      if (supplier === "naver") {
-        alert("네이버 로그인은 현재 준비중입니다");
-      } else {
-        window.open(
-          `http://api.twoyak.com/api/users/auth/${supplier}`,
-          "_self"
-        );
-      }
+      window.open(`http://api.twoyak.com/api/users/auth/${supplier}`, "_self");
     } else {
       alert("약관에 동의하셔야 회원가입이 가능합니다");
     }
