@@ -301,6 +301,7 @@ function Mypage(props) {
       }
     }).then(async response => {
       const payload = response.data;
+      console.log(payload);
       dispatch({
         type: "CHANGE_SUB_USER",
         subUserId: payload.included[id].id,
