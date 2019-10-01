@@ -39,7 +39,7 @@ const Title = styled.div`
 `;
 
 const IngrButton = styled(BasicButton)`
-  margin: 0.8125rem 0 0 0;
+  margin: 0.8125rem 0.5rem 0 0;
   text-align: center;
   overflow: hidden;
   white-space: nowrap;
@@ -51,7 +51,7 @@ const EffectWrapper = styled.div`
 `;
 
 const EffectDescription = styled.div`
-  font-size: 0.625rem;
+  font-size: 0.7rem;
   opacity: 0.6;
   color: #474747;
 `;
@@ -60,6 +60,7 @@ const Divider = styled(Line)`
   width: 100%;
   margin-top: 1.375rem;
   margin-bottom: 1.375rem;
+  opacity: 0.5;
 `;
 
 const PageNation = styled.div`
@@ -196,8 +197,8 @@ function RecommendSupplementProducts(props) {
       ? props.match.params.type === "vitamins"
         ? vitaminIngrIds
         : props.match.params.type === "minerals"
-        ? mineralIngrIds
-        : nutrientIngrIds
+          ? mineralIngrIds
+          : nutrientIngrIds
       : props.match.params.ingrs_ids.split("&")
   );
   const [
@@ -208,8 +209,8 @@ function RecommendSupplementProducts(props) {
       ? props.match.params.type === "vitamins"
         ? vitaminIngrNames
         : props.match.params.type === "minerals"
-        ? mineralIngrNames
-        : nutrientIngrNames
+          ? mineralIngrNames
+          : nutrientIngrNames
       : props.match.params.ingr_names.split("&")
   );
   const [shoppingSite, setShoppingSite] = useState("iherb");
@@ -225,11 +226,15 @@ function RecommendSupplementProducts(props) {
       ? props.match.params.type === "vitamins"
         ? "비타민"
         : props.match.params.type === "minerals"
-        ? "미네랄"
-        : "영양제"
+          ? "미네랄"
+          : "영양제"
       : "비타민"
   );
   const [showTypeFilter, setShowTypeFilter] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   useEffect(() => {
     axios({
@@ -264,7 +269,7 @@ function RecommendSupplementProducts(props) {
         method: "GET",
         url: `/supplements?page=${page + 1}&supplement_ingr_id=${
           recommendSupplementIngrsIds[selectedIngrIndex]
-        }&shopping_site=${shoppingSite}`
+          }&shopping_site=${shoppingSite}`
       }).then(response => {
         setRecommendedProducts(recommendedProducts.concat(response.data.data));
         setPage(page + 1);
