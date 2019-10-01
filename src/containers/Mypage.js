@@ -179,6 +179,7 @@ import WatchDrugs from "../components/Mypage/WatchDrugs";
 import Footer from "../components/Mypage/Footer";
 import Modal from "../components/UI/Modals/Modal";
 import { BasicButton } from "../components/UI/SharedStyles";
+import DeleteIcon from "../assets/images/trash-can-outline.svg";
 
 const MyPageContainer = styled.div`
   width: 100%;
@@ -201,7 +202,7 @@ const Container = styled.div`
 const Divider = styled.div`
   width: 100%;
   height: 1px;
-  opacity: 0.1;
+  opacity: 0.2;
   background-color: var(--twoyak-blue);
   margin-top: 1.3125rem;
 `;
@@ -220,15 +221,12 @@ const ModalMessage = styled.div`
   margin-bottom: 38px;
 `;
 
-const AddIcon = styled.img`
-  width: 3.125rem;
-`;
-
 const Indicator = styled.div`
   font-size: 0.6875rem;
   color: #474747;
   opacity: 0.7;
   margin-top: 4px;
+  display: flex;
 `;
 
 const ChangeFunction = styled.div`
@@ -251,13 +249,12 @@ const SubUser = styled.div`
 const SubUserName = styled.div``;
 
 const SubUserDrugCount = styled.div`
-  display: flex;
+  display: block;
 `;
 
 const DrugCount = styled.div`
   color: var(--twoyak-blue);
-  font-size: 0.875rem;
-  margin-left: 4px;
+  margin-left: 0.5rem;
 `;
 
 const Info = styled.div`
@@ -272,14 +269,54 @@ const AppendButton = styled(BasicButton)`
   bottom: 1rem;
 `;
 
+const DeleteButton = styled.img`
+  width: 2.5rem;
+  height: 2.5rem;
+`;
+
+const AskDeleteSubUserContainer = styled.div`
+  padding-top: 0.5rem;
+  margin: auto;
+  width: 100%;
+  text-align: center;
+`;
+
+const AskDeleteSubUser = styled.div`
+  color: red;
+  font-size: 0.7rem;
+  font-weight: 400;
+`;
+
+const Summary = styled.div`
+  width: 100%;
+`;
+
+const ConfirmDeleteButtonArea = styled.div`
+  display: flex;
+  justify-content: center;
+  padding-top: 0.3rem;
+`;
+
+const ConfirmDeleteButton = styled(BasicButton)`
+  padding-right: 1rem;
+  padding-left: 1rem;
+`;
+
+const CancelDeleteButton = styled(ConfirmDeleteButton)`
+  color: var(--twoyak-blue);
+  background-color: white;
+  border: var(--twoyak-blue) 1px solid;
+`;
+
 function Mypage(props) {
   const [payload, setPayload] = useState([]);
-  const [currentDrugsCount, setCurrentDrugsCount] = useState([]);
-  const [drugReviewsCount, setDrugReviewsCount] = useState([]);
-  const [myConversation] = useState([]);
+  const [currentDrugsCount, setCurrentDrugsCount] = useState(0);
+  const [drugReviewsCount, setDrugReviewsCount] = useState(0);
   const [familyMedHistoies, setFamilyMedHistories] = useState([]);
   const [watchDrugs, setWatchDrugs] = useState([]);
   const [changeUserModalShow, setChangeUserModalShow] = useState(false);
+  const [confirmDeleteUser, setConfirmDeleteUser] = useState(false);
+  const [deleteUserIndex, setDeleteUserIndex] = useState(null);
 
   const { state: authState, dispatch } = useContext(AuthContext);
 
@@ -312,6 +349,28 @@ function Mypage(props) {
 
   const toggleChangeUserModalHandler = () => {
     setChangeUserModalShow(!changeUserModalShow);
+    setDeleteUserIndex(null);
+  };
+
+  const askDeleteUserHandler = k => {
+    setDeleteUserIndex(k);
+    setConfirmDeleteUser(true);
+  };
+
+  const confirmDeleteUserHandler = userId => {
+    axios({
+      method: "DELETE",
+      url: `/user/sub_users/${userId}`,
+      headers: {
+        Authorization: `Bearer ${authState.token}`
+      }
+    })
+      .then(() => {
+        getUserInfo(authState.subUserIndex);
+        alert("사용자 삭제를 완료하였습니다.");
+        setChangeUserModalShow(false);
+      })
+      .catch(error => alert(error.response));
   };
 
   const modalContent = (
@@ -323,21 +382,50 @@ function Mypage(props) {
         </Info>
         {authState.subUsers
           ? payload.map((i, k) =>
-              Number(i.id) !== authState.subUserId ? (
-                <ModalMessage
-                  key={k}
-                  onClick={() => {
-                    getUserInfo(k);
-                    toggleChangeUserModalHandler();
-                  }}
-                >
+              i.id !== authState.subUserId ? (
+                <ModalMessage key={k}>
                   <SubUser>
-                    <SubUserName>{i.attributes.user_name}</SubUserName>
-                    <SubUserDrugCount>
-                      <Indicator>복용 중인 약</Indicator>
-                      <DrugCount>{i.meta.current_drugs_count}</DrugCount>
-                    </SubUserDrugCount>
+                    <Summary
+                      onClick={() => {
+                        getUserInfo(k);
+                        toggleChangeUserModalHandler();
+                      }}
+                    >
+                      <SubUserName>{i.attributes.user_name}</SubUserName>
+                      <SubUserDrugCount>
+                        <Indicator>
+                          복용 중인 약:{" "}
+                          <DrugCount>{i.meta.current_drugs_count}</DrugCount>
+                        </Indicator>
+                      </SubUserDrugCount>
+                    </Summary>
+                    {i.id !== payload[0].id ? (
+                      <DeleteButton
+                        src={DeleteIcon}
+                        alt="delete-sub-user-button"
+                        onClick={() => askDeleteUserHandler(k)}
+                      />
+                    ) : null}
                   </SubUser>
+                  {confirmDeleteUser && deleteUserIndex === k ? (
+                    <AskDeleteSubUserContainer>
+                      <AskDeleteSubUser>
+                        {i.attributes.user_name}을/를 정말로 삭제하시겠습니까?
+                      </AskDeleteSubUser>
+                      <ConfirmDeleteButtonArea>
+                        <ConfirmDeleteButton
+                          onClick={() => confirmDeleteUserHandler(Number(i.id))}
+                        >
+                          확인
+                        </ConfirmDeleteButton>
+                        <CancelDeleteButton
+                          onClick={() => askDeleteUserHandler()}
+                        >
+                          취소
+                        </CancelDeleteButton>
+                      </ConfirmDeleteButtonArea>
+                    </AskDeleteSubUserContainer>
+                  ) : null}
                   <Divider />
                 </ModalMessage>
               ) : null
@@ -357,7 +445,6 @@ function Mypage(props) {
         <UserGeneralInfo
           currentDrugsCount={currentDrugsCount}
           drugReviewsCount={drugReviewsCount}
-          myConversation={myConversation}
           userChange={id => getUserInfo(id)}
           history={props.history}
         />

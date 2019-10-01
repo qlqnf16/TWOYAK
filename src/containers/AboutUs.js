@@ -5,7 +5,9 @@ import aboutUsImg from "../assets/images/about-us.png";
 
 const Container = styled.div`
   text-align: center;
-`
+  display: flex;
+  justify-content: center;
+`;
 
 const AboutUsImg = styled.img`
   margin-top: 4.375rem;

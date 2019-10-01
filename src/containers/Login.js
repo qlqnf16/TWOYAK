@@ -67,32 +67,17 @@ const LoginErrorMessage = styled.div`
   margin-bottom: 1.3125rem;
 `;
 
+const Instruction = styled.div`
+  font-size: 11px;
+  padding-bottom: 10px;
+  opacity: 0.7;
+`;
+
 function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const { state, dispatch } = useContext(AuthContext);
-
-  useEffect(() => {
-    dispatch({
-      type: "SET_AUTH_REDIRECT_PATH",
-      path: null
-    });
-    if (
-      props.location.search !== "" &&
-      props.location.search.includes("?token=")
-    ) {
-      dispatch({
-        type: "SIGNIN_SUCCESS",
-        token: props.location.search.split("=")[1]
-      });
-      dispatch({
-        type: "SET_AUTH_REDIRECT_PATH",
-        path: "/"
-      });
-      window.location.replace("/login");
-    }
-  }, [props.history, props.location.search, dispatch]);
 
   const signinBySocialAccount = supplier => {
     window.open(`http://api.twoyak.com/api/users/auth/${supplier}`, "_self");
@@ -148,6 +133,9 @@ function Login(props) {
   return (
     <Container>
       <LoginArea>
+        <Instruction>
+          모바일 앱의 아이디로 현재 웹사이트에 접속할 수 있습니다.
+        </Instruction>
         <Form
           onSubmit={event => {
             event.preventDefault();

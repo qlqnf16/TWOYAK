@@ -36,7 +36,6 @@ function Home(props) {
   const [tokenChange, setTokenChange] = useState(false);
   const [loading, setLoading] = useState(false);
   const { state: authState, dispatch } = useContext(AuthContext);
-  console.log(props);
   useEffect(() => {
     if (authState.subUserId) {
       setLoading(true);
@@ -71,12 +70,6 @@ function Home(props) {
   }, [authState.subUserId, authState.token, dispatch]);
   return (
     <HomeContainer>
-      {/* <HMACGenerator
-        method="POST"
-        url={
-          "https://www.coupang.com/vp/products/394035?itemId=1016006&vendorItemId=3156519262&sourceType=CATEGORY&categoryId=310533&isAddedCart="
-        }
-      /> */}
       <Warning />
       {authState.token ? (
         <CurrentDrugs
