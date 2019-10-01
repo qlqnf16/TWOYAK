@@ -135,26 +135,23 @@ const IngrTypeSelector = styled.div`
 
 const Filter = styled.div``;
 
-const move = keyframes`
-  0% {top: 70px}
-  100% {top: 110px}
-`;
-
 const IngrTypeArea = styled.div`
   width: 100%;
   position: fixed;
-  display: ${({ show }) => (show ? "block" : "none")};
   left: 0;
-  z-index: 300;
+  z-index: 90;
   background-color: #ffffff;
-  animation: ${move} 0.5s linear;
+  transform: ${({ show }) => show ? 'translateY(0)' : 'translateY(-100%)'};
+  transition: transform 0.5s ease-in-out;
 `;
+
 
 const IngrType = styled.div`
   width: 100%;
   margin-top: 5px;
   margin-bottom: 5px;
   text-align: center;
+  cursor: pointer;
 `;
 
 const EndMessageDiv = styled.div`
