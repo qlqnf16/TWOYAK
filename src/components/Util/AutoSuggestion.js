@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { breakpoints, BasicText } from "../UI/SharedStyles";
 import { ReactComponent as Erase } from "../../assets/images/erase.svg";
 import { ReactComponent as Add } from "../../assets/images/plus-in-search.svg";
+import axios from '../../apis'
 
 const Container = styled.div`
   display: flex;
@@ -50,19 +51,16 @@ const AutoSuggestion = ({
   currentDrugs,
   inputChange,
   inputAdd,
-  submit
+  submit,
 }) => {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
   const { state } = useContext(DrugContext);
-  const { drugs, adverse_effects, diseases } = state;
+  const { adverse_effects, diseases } = state;
 
-  let suggestList;
+  let suggestList = [];
   switch (search) {
-    case "drug":
-      suggestList = drugs;
-      break;
     case "adverse_effect":
       suggestList = adverse_effects;
       break;
@@ -116,7 +114,7 @@ const AutoSuggestion = ({
           )}
         </ItemContainer>
         {search === "drug" &&
-          (currentDrugs && currentDrugs.includes(suggestion.id) ? (
+          (currentDrugs && currentDrugs.includes(suggestion.current_drug_id) ? (
             <BasicText size="0.7rem" opacity="0.7">
               복용중
             </BasicText>
@@ -124,7 +122,7 @@ const AutoSuggestion = ({
               <Add
                 onClick={e => {
                   e.stopPropagation();
-                  addCurrentDrug("add", suggestion.id);
+                  addCurrentDrug("add", suggestion.current_drug_id);
                 }}
               />
             ))}
@@ -143,14 +141,11 @@ const AutoSuggestion = ({
       suggestion.id ?
         inputChange(suggestion.name) : inputAdd(suggestion.name)
     }
-    if (search === "drug") submit(suggestion.id);
+    if (search === "drug") submit(suggestion.current_drug_id);
   };
 
   const onChange = (event, { newValue }) => {
     setValue(newValue);
-    if (search === "drug") {
-      inputChange(newValue);
-    }
     if (search === 'disease') {
       inputChange(newValue)
     }
@@ -165,8 +160,18 @@ const AutoSuggestion = ({
     }
   }
 
-  const onSuggestionsFetchRequested = ({ value }) => {
-    setSuggestions(getSuggestions(value));
+  const onSuggestionsFetchRequested = async ({ value }) => {
+    if (search === 'drug') {
+      clearTimeout(null)
+      setTimeout(async () => {
+        let { data } = await axios.get('/searchSingle', { params: { search_term: value } })
+        suggestList = await data.item_name
+        await setSuggestions(getSuggestions(value));
+      }, 300)
+
+    } else {
+      setSuggestions(getSuggestions(value))
+    }
   };
 
   const onSuggestionsClearRequested = () => {
@@ -191,7 +196,6 @@ const AutoSuggestion = ({
           renderSuggestion={renderSuggestion}
           inputProps={inputProps}
           onSuggestionSelected={onSuggestionSelected}
-        // highlightFirstSuggestion={search === 'drug' ? false : true}
         />
       </StyleWrapper>
       {value && (

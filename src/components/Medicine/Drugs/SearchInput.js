@@ -108,7 +108,6 @@ const SearchInput = ({
           searchKey="name"
           currentDrugs={currentDrugs}
           addCurrentDrug={addCurrentDrug}
-          inputChange={inputChange}
           submit={searchById}
         />
       </StyleWrapper>
