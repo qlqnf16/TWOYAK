@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from '../../../apis'
 import styled from "styled-components";
 import AutoSuggestion from "../../Util/AutoSuggestion";
 import { breakpoints, BasicButton, FlexForm } from "../../UI/SharedStyles";
@@ -108,7 +109,6 @@ const SearchInput = ({
           searchKey="name"
           currentDrugs={currentDrugs}
           addCurrentDrug={addCurrentDrug}
-          inputChange={inputChange}
           submit={searchById}
         />
       </StyleWrapper>

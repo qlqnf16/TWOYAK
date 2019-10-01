@@ -18,7 +18,7 @@ import { AuthContext } from "../../../contexts/AuthStore";
 import { DrugContext } from "../../../contexts/DrugStore";
 
 const Container = styled.div`
-  max-height: 75vh;
+  max-height: 60vh;
   overflow: scroll;
 `;
 
@@ -112,10 +112,10 @@ const NewReview = React.memo(({ reviewSubmit, review, modalOff }) => {
           symptom_name: value
         }
       }, {
-          headers: {
-            Authorization: `bearer ${authState.token}`
-          }
-        })
+        headers: {
+          Authorization: `bearer ${authState.token}`
+        }
+      })
       adverseEffectInputChange(data)
     } catch (error) {
       console.log(error)

@@ -225,7 +225,6 @@ function Medicine({ match, history, location }) {
 
       const searchName = regexr(data.drug_searched)
       const tempDurInfo = {}
-      console.log(data.dur_info)
       for (let key of Object.keys(data.dur_info)) {
         data.dur_info[key].forEach(com => {
           const names = com.name
