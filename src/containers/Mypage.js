@@ -410,7 +410,7 @@ function Mypage(props) {
                   {confirmDeleteUser && deleteUserIndex === k ? (
                     <AskDeleteSubUserContainer>
                       <AskDeleteSubUser>
-                        {i.attributes.user_name}을 정말로 삭제하시겠습니까?
+                        {i.attributes.user_name}을/를 정말로 삭제하시겠습니까?
                       </AskDeleteSubUser>
                       <ConfirmDeleteButtonArea>
                         <ConfirmDeleteButton

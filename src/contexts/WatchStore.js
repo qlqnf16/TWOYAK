@@ -11,8 +11,7 @@ function WatchStore(props) {
         localStorage.removeItem("email");
         localStorage.removeItem("user_name");
         localStorage.removeItem("id");
-      }
-      if (localStorage.getItem("jwt_token")) {
+      } else if (localStorage.getItem("jwt_token")) {
         dispatch({
           type: "SIGNIN_SUCCESS",
           token: localStorage.getItem("jwt_token")
@@ -20,13 +19,12 @@ function WatchStore(props) {
       }
       if (
         props.location.search !== "" &&
-        props.location.search.includes("?token")
+        props.location.search.includes("?token=")
       ) {
         dispatch({
           type: "SIGNIN_SUCCESS",
           token: props.location.search.split("=")[1]
         });
-        window.location.replace(props.location.pathname);
       }
     }
     localStorage.removeItem("tutorial-show");

@@ -67,6 +67,12 @@ const LoginErrorMessage = styled.div`
   margin-bottom: 1.3125rem;
 `;
 
+const Instruction = styled.div`
+  font-size: 11px;
+  padding-bottom: 10px;
+  opacity: 0.7;
+`;
+
 function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -127,6 +133,9 @@ function Login(props) {
   return (
     <Container>
       <LoginArea>
+        <Instruction>
+          모바일 앱의 아이디로 현재 웹사이트에 접속할 수 있습니다.
+        </Instruction>
         <Form
           onSubmit={event => {
             event.preventDefault();
