@@ -147,8 +147,8 @@ const AutoSuggestion = ({
 
   const onChange = (event, { newValue }) => {
     setValue(newValue);
-    if (search === "disease") {
-      inputChange(newValue);
+    if (search === 'disease' || search === 'drug') {
+      inputChange(newValue)
     }
   };
 
