@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthStore";
 import search from "../../assets/images/(white)search-icon.svg";
 import user from "../../assets/images/(white)user-icon.svg";
-import { breakpoints } from '../UI/SharedStyles'
+import { breakpoints } from "../UI/SharedStyles";
 
 import styled from "styled-components";
 
@@ -22,12 +22,12 @@ const HeaderBackground = styled.div`
 const HeaderContainer = styled.div`
   width: 700px;
   @media (max-width: ${breakpoints.medium}) {
-    width: 100%
+    width: 100%;
   }
   display: flex;
   justify-content: space-between;
-  align-items: center;  
-`
+  align-items: center;
+`;
 
 const StyledNavLink = styled(NavLink)`
   color: white;
@@ -36,7 +36,7 @@ const StyledNavLink = styled(NavLink)`
   text-decoration: none;
 `;
 
-const Header = () => {
+const Header = props => {
   const { state: authState } = useContext(AuthContext);
   return (
     <HeaderBackground>

@@ -21,16 +21,6 @@ const HomeContainer = styled.div`
   color: var(--twoyak-black);
 `;
 
-const Camera = styled.div`
-  position: fixed;
-  bottom: 4rem;
-  left: 1.4375rem;
-  z-index: 300;
-  padding: 10px;
-  border-radius: 50%;
-  background-color: var(--twoyak-blue);
-`;
-
 function Home(props) {
   const [currentDrugs, setCurrentDrugs] = useState(null);
   const [tokenChange, setTokenChange] = useState(false);
