@@ -17,15 +17,6 @@ function WatchStore(props) {
           token: localStorage.getItem("jwt_token")
         });
       }
-      if (
-        props.location.search !== "" &&
-        props.location.search.includes("?token=")
-      ) {
-        dispatch({
-          type: "SIGNIN_SUCCESS",
-          token: props.location.search.split("=")[1]
-        });
-      }
     }
     localStorage.removeItem("tutorial-show");
     AutoLogin();

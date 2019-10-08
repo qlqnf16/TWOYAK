@@ -79,6 +79,18 @@ function Login(props) {
 
   const { state, dispatch } = useContext(AuthContext);
 
+  useEffect(() => {
+    if (
+      props.location.search !== "" &&
+      props.location.search.includes("?token=")
+    ) {
+      dispatch({
+        type: "SIGNIN_SUCCESS",
+        token: props.location.search.split("=")[1]
+      });
+    }
+  }, [props.location.search, dispatch]);
+
   const signinBySocialAccount = supplier => {
     window.open(`http://api.twoyak.com/api/users/auth/${supplier}`, "_self");
   };

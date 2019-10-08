@@ -8,7 +8,7 @@ import styled from "styled-components";
 import { breakpoints, BasicText } from "../UI/SharedStyles";
 import { ReactComponent as Erase } from "../../assets/images/erase.svg";
 import { ReactComponent as Add } from "../../assets/images/plus-in-search.svg";
-import axios from '../../apis'
+import axios from "../../apis";
 
 const Container = styled.div`
   display: flex;
@@ -41,7 +41,7 @@ const ItemContainer = styled.div`
 const AddSmall = styled(Add)`
   width: 15px;
   height: 15px;
-`
+`;
 
 const AutoSuggestion = ({
   search,
@@ -51,7 +51,7 @@ const AutoSuggestion = ({
   currentDrugs,
   inputChange,
   inputAdd,
-  submit,
+  submit
 }) => {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -77,20 +77,23 @@ const AutoSuggestion = ({
     const suggestionList = suggestList.filter(suggestion => {
       const keep =
         count < 20 &&
-        suggestion[searchKey].replace(/\s/g, '').includes(inputValue);
+        suggestion[searchKey].replace(/\s/g, "").includes(inputValue);
       if (keep) {
         count += 1;
       }
 
       return keep;
-    })
-    const basicInput = search === 'adverse_effect' ? [{ symptom_name: value }] : [{ name: value }]
+    });
+    const basicInput =
+      search === "adverse_effect"
+        ? [{ symptom_name: value }]
+        : [{ name: value }];
 
     return inputLength === 0
       ? []
-      : search === 'drug' || suggestionList.length === 1 ?
-        suggestionList :
-        basicInput.concat(suggestionList);
+      : search === "drug" || suggestionList.length === 1
+      ? suggestionList
+      : basicInput.concat(suggestionList);
   };
 
   const getSuggestionValue = suggestion => {
@@ -109,8 +112,8 @@ const AutoSuggestion = ({
                 {part.text}
               </b>
             ) : (
-                <span key={index}>{part.text}</span>
-              )
+              <span key={index}>{part.text}</span>
+            )
           )}
         </ItemContainer>
         {search === "drug" &&
@@ -119,14 +122,14 @@ const AutoSuggestion = ({
               복용중
             </BasicText>
           ) : (
-              <Add
-                onClick={e => {
-                  e.stopPropagation();
-                  addCurrentDrug("add", suggestion.current_drug_id);
-                }}
-              />
-            ))}
-        {search === 'adverse_effect' && <AddSmall />}
+            <Add
+              onClick={e => {
+                e.stopPropagation();
+                addCurrentDrug("add", suggestion.current_drug_id);
+              }}
+            />
+          ))}
+        {search === "adverse_effect" && <AddSmall />}
       </RecommendContainer>
     );
   };
@@ -135,11 +138,9 @@ const AutoSuggestion = ({
 
   const onSuggestionSelected = (event, { suggestion }) => {
     suggestionSelected = true;
-    if (search === "adverse_effect")
-      inputChange(suggestion);
+    if (search === "adverse_effect") inputChange(suggestion);
     if (search === "disease") {
-      suggestion.id ?
-        inputChange(suggestion.name) : inputAdd(suggestion.name)
+      suggestion.id ? inputChange(suggestion.name) : inputAdd(suggestion.name);
     }
     if (search === "drug") submit(suggestion.current_drug_id);
   };
@@ -151,26 +152,27 @@ const AutoSuggestion = ({
     }
   };
 
-  const onKeyDown = (event) => {
-    if (search !== 'drug') {
+  const onKeyDown = event => {
+    if (search !== "drug") {
       if (event.keyCode === 13 && !suggestionSelected) {
-        inputAdd(value)
+        inputAdd(value);
       }
       suggestionSelected = false;
     }
-  }
+  };
 
   const onSuggestionsFetchRequested = async ({ value }) => {
-    if (search === 'drug') {
-      clearTimeout(null)
+    if (search === "drug") {
+      clearTimeout(null);
       setTimeout(async () => {
-        let { data } = await axios.get('/searchSingle', { params: { search_term: value } })
-        suggestList = await data.item_name
+        let { data } = await axios.get("/searchSingle", {
+          params: { search_term: value }
+        });
+        suggestList = await data.item_name;
         await setSuggestions(getSuggestions(value));
-      }, 300)
-
+      }, 300);
     } else {
-      setSuggestions(getSuggestions(value))
+      setSuggestions(getSuggestions(value));
     }
   };
 

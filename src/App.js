@@ -10,7 +10,7 @@ import Navbar from "./components/Navbars/Navbar";
 import Header from "./components/Navbars/Header";
 import favicon from "./assets/favicon.png";
 
-function App(props) {
+function App() {
   const switchRoutes = (
     <Switch>
       <WatchStore>

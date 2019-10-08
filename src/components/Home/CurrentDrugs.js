@@ -20,6 +20,15 @@ const Header = styled.div`
   font-size: 1.125rem;
   font-weight: 800;
   margin-left: 0.5rem;
+  display: flex;
+`;
+
+const UserName = styled.div`
+  max-width: 100px;
+  width: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const PressCard = styled(EmptyCard)`
@@ -65,11 +74,6 @@ const HomeDivider = styled(Divider)`
   margin-top: 1rem;
 `;
 
-const HomeContent = styled.div`
-  margin-top: 2.125rem;
-  display: flex;
-`;
-
 const MoreInfo = styled.div`
   font-size: 0.75rem;
   text-align: right;
@@ -85,7 +89,9 @@ function CurrentDrugs({ currentDrugs, history, medIcon, userName, loading }) {
       <HeaderContainer>
         <div style={{ display: "flex" }}>
           <img src={medIcon} alt="med-icon" />
-          <Header>{userName}님이 복용중인 약</Header>
+          <Header>
+            <UserName>{userName}</UserName>님이 복용중인 약
+          </Header>
         </div>
       </HeaderContainer>
       {loading ? (
