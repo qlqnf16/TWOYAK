@@ -121,7 +121,6 @@ export const RatingText = styled(BasicText)`
 
 export const BulletText = styled.li`
   color: var(--twoyak-blue);
-  margin-left: 1.68rem;
   & p {
     color: var(--twoyak-black);
     display: inline;

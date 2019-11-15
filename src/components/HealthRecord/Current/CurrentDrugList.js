@@ -21,7 +21,7 @@ const ContentContainer = styled.div`
 `;
 
 const Item = styled.div`
-  /* width: 100%; */
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -29,8 +29,11 @@ const Item = styled.div`
   font-size: 0.875rem;
   font-weight: 800;
   line-height: 1.5rem;
-  margin-left: 1rem;
 `;
+
+const Text = styled(BasicText)`
+  margin: 0 0.5rem;
+`
 
 const CurrentDrugList = ({
   currentDrugs,
@@ -41,7 +44,6 @@ const CurrentDrugList = ({
   subUserInfo
 }) => {
   const [show, setShow] = useState(false);
-  const [showDur, setShowDur] = useState(false);
 
   const toggleModal = () => {
     setShow(!show);
@@ -59,42 +61,67 @@ const CurrentDrugList = ({
           modalOff={toggleModal}
           content={
             <ContentContainer>
-              {!subUserInfo.family_med_history ? (
-                ""
-              ) : (
-                  <>
-                    {" "}
-                    <Item>가족력</Item>
-                    {subUserInfo.family_med_history.map(disease => (
-                      <BasicText>{disease.name}</BasicText>
-                    ))}
-                    <Line />
-                  </>
-                )}
 
-              {(subUserInfo.smoke ||
-                subUserInfo.caffeine ||
-                subUserInfo.drink) && (
+              {(subUserInfo.meta.family_med_histories || subUserInfo.attributes.smoke ||
+                subUserInfo.attributes.caffeine ||
+                subUserInfo.attributes.drink) && (
                   <>
-                    {" "}
-                    {subUserInfo.smoke && (
+
+                    {subUserInfo.meta.family_med_histories && (<>
+                      <BulletText><p>가족력: {subUserInfo.meta.family_med_histories.map(disease => (
+                        disease.data.attributes.name
+                      )).join(", ")} </p></BulletText>
+
+                      {/* <Item>가족력</Item>
+                      {subUserInfo.meta.family_med_histories.map(disease => (
+                        <Text>{disease.data.attributes.name}</Text>
+                      ))} */}
+
+                    </>)}
+
+                    {subUserInfo.attributes.smoke && (
                       <BulletText>
                         <p>흡연자입니다</p>
                       </BulletText>
                     )}
-                    {subUserInfo.drink && (
+                    {subUserInfo.attributes.drink && (
                       <BulletText>
                         <p>음주를 많이 해요</p>
                       </BulletText>
                     )}
-                    {subUserInfo.caffeine && (
+                    {subUserInfo.attributes.caffeine && (
+                      <BulletText>
+                        <p>카페인 섭취를 많이 해요</p>
+                      </BulletText>
+                    )}
+
+                    <Line />
+                  </>
+                )}
+
+              {/* {(subUserInfo.attributes.smoke ||
+                subUserInfo.attributes.caffeine ||
+                subUserInfo.attributes.drink) && (
+                  <>
+                    {" "}
+                    {subUserInfo.attributes.smoke && (
+                      <BulletText>
+                        <p>흡연자입니다</p>
+                      </BulletText>
+                    )}
+                    {subUserInfo.attributes.drink && (
+                      <BulletText>
+                        <p>음주를 많이 해요</p>
+                      </BulletText>
+                    )}
+                    {subUserInfo.attributes.caffeine && (
                       <BulletText>
                         <p>카페인 섭취를 많이 해요</p>
                       </BulletText>
                     )}
                     <Line />
                   </>
-                )}
+                )} */}
 
               {currentDrugs.map(drug => <CurrentModalDrug drug={drug} />)}
             </ContentContainer>

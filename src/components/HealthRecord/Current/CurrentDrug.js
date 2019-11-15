@@ -28,6 +28,10 @@ const CloseIcon = styled(Close)`
   opacity: 0.5;
 `;
 
+const Bullet = styled(BulletText)`
+  margin-left: 1.168rem;
+`
+
 const Title = styled(Link)`
   text-decoration: none;
   font-weight: 800;
@@ -257,9 +261,9 @@ const CurrentDrug = ({
         {
           drug.attributes.disease && (
             <>
-              <BulletText>
+              <Bullet>
                 <p>복용이유</p>
-              </BulletText>
+              </Bullet>
               <Content>{drug.attributes.disease.attributes.name}</Content>
             </>
           )
@@ -269,9 +273,9 @@ const CurrentDrug = ({
             ""
           ) : (
             <>
-              <BulletText>
+              <Bullet>
                 <p>안전정보</p>
-              </BulletText>
+              </Bullet>
               <Content>
                 {message.map((m, key) => (
                   <div key={key}>{m}</div>
@@ -283,9 +287,9 @@ const CurrentDrug = ({
         {
           drug.attributes.memo && (
             <>
-              <BulletText>
+              <Bullet>
                 <p>메모</p>
-              </BulletText>
+              </Bullet>
               <Content>{drug.attributes.memo}</Content>
             </>
           )
@@ -293,9 +297,9 @@ const CurrentDrug = ({
         {
           review ? (
             <>
-              <BulletText>
+              <Bullet>
                 <p>내 리뷰</p>
-              </BulletText>
+              </Bullet>
               <DrugReview
                 review={review}
                 deleteButton={deleteButton}

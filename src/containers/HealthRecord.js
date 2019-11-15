@@ -120,7 +120,7 @@ function HealthRecord({ history }) {
           }
         }
       );
-      setSubUserInfo(data);
+      setSubUserInfo(data.data);
     } catch (err) {
       console.log(err);
     }
