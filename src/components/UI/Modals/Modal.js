@@ -53,19 +53,19 @@ const HeaderIcon = styled.img`
 `;
 
 const Content = styled.div`
-  width: 86%;
+  width: ${props => props.wide ? '100%' : '86%'};
   margin: 0 auto;
 `;
 
 const Modal = ({ title, content, modalOff, wide }) => (
   <>
-    <Container wide={wide ? 1 : 0}>
+    <Container>
       <Header>
         <CloseIcon src={close} alt="close" onClick={modalOff} />
         <HeaderIcon src={medIcon} alt="med-icon" />
         {title}
       </Header>
-      <Content>{content}</Content>
+      <Content wide={wide}>{content}</Content>
     </Container>
     <Backdrop onClick={modalOff} />
   </>

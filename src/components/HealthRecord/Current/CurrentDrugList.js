@@ -11,9 +11,17 @@ import medIcon from "../../../assets/images/(white)med-icon.svg";
 import Modal from "../../UI/Modals/Modal";
 import styled from "styled-components";
 import InteractionNotice from "./InteractionNotice";
+import CurrentModalDrug from "./CurrentModalDrug";
+
+const ContentContainer = styled.div`
+  max-height: 65vh;
+  overflow: scroll;
+  padding: 1rem 0;
+  text-align: center;
+`;
 
 const Item = styled.div`
-  width: 100%;
+  /* width: 100%; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,18 +29,7 @@ const Item = styled.div`
   font-size: 0.875rem;
   font-weight: 800;
   line-height: 1.5rem;
-`;
-
-const Duration = styled(Item)`
-  opacity: 0.6;
-  font-size: 0.75rem;
-`;
-
-const ContentContainer = styled.div`
-  max-height: 65vh;
-  overflow: scroll;
-  padding: 1rem 0;
-  text-align: center;
+  margin-left: 1rem;
 `;
 
 const CurrentDrugList = ({
@@ -44,6 +41,7 @@ const CurrentDrugList = ({
   subUserInfo
 }) => {
   const [show, setShow] = useState(false);
+  const [showDur, setShowDur] = useState(false);
 
   const toggleModal = () => {
     setShow(!show);
@@ -54,6 +52,7 @@ const CurrentDrugList = ({
       <WhiteButton onClick={toggleModal}>약 이름 모아보기</WhiteButton>
       {show && (
         <Modal
+          wide
           img={medIcon}
           imgalt="med-icon"
           title="복용 중인 약 목록"
@@ -97,18 +96,7 @@ const CurrentDrugList = ({
                   </>
                 )}
 
-              {currentDrugs.map(drug => {
-                return (
-                  <div key={drug.id}>
-                    <Item>{drug.attributes.drug.data.attributes.name.split("(")[0]}</Item>
-                    <Duration>
-                      {drug.attributes.from}
-                      {drug.attributes.to && ` ~ ${drug.attributes.to}`}
-                    </Duration>
-                    <Line />
-                  </div>
-                );
-              })}
+              {currentDrugs.map(drug => <CurrentModalDrug drug={drug} />)}
             </ContentContainer>
           }
         />
