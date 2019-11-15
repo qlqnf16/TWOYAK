@@ -241,7 +241,7 @@ const SearchResult = React.memo(
             }
           >
             {drug.currently_taking
-              ? "복용목록에서 제거하기"
+              ? "복용 종료・제거하기"
               : "복용목록에 추가하기"}
           </AddButton>
         )}

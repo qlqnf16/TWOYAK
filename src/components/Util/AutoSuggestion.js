@@ -157,9 +157,10 @@ const AutoSuggestion = ({
     if (search !== "drug") {
       if (event.keyCode === 13 && !suggestionSelected) {
         inputAdd(value);
-        setValue("")
       }
       suggestionSelected = false;
+    } else {
+      if (event.keyCode === 13) setValue("")
     }
   };
 
