@@ -36,6 +36,7 @@ const ItemContainer = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  /* background-color: white; */
 `;
 
 const AddSmall = styled(Add)`
@@ -92,8 +93,8 @@ const AutoSuggestion = ({
     return inputLength === 0
       ? []
       : search === "drug" || suggestionList.length === 1
-      ? suggestionList
-      : basicInput.concat(suggestionList);
+        ? suggestionList
+        : basicInput.concat(suggestionList);
   };
 
   const getSuggestionValue = suggestion => {
@@ -112,8 +113,8 @@ const AutoSuggestion = ({
                 {part.text}
               </b>
             ) : (
-              <span key={index}>{part.text}</span>
-            )
+                <span key={index}>{part.text}</span>
+              )
           )}
         </ItemContainer>
         {search === "drug" &&
@@ -122,13 +123,13 @@ const AutoSuggestion = ({
               복용중
             </BasicText>
           ) : (
-            <Add
-              onClick={e => {
-                e.stopPropagation();
-                addCurrentDrug("add", suggestion.current_drug_id);
-              }}
-            />
-          ))}
+              <Add
+                onClick={e => {
+                  e.stopPropagation();
+                  addCurrentDrug("add", suggestion.current_drug_id);
+                }}
+              />
+            ))}
         {search === "adverse_effect" && <AddSmall />}
       </RecommendContainer>
     );
@@ -156,6 +157,7 @@ const AutoSuggestion = ({
     if (search !== "drug") {
       if (event.keyCode === 13 && !suggestionSelected) {
         inputAdd(value);
+        setValue("")
       }
       suggestionSelected = false;
     }

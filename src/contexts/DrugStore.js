@@ -14,20 +14,20 @@ const DrugStore = props => {
   const [loading, setLoading] = useState(false)
   const { state: authState } = useContext(AuthContext);
 
-  const fetchInitialData = async () => {
-    const { data: payload } = await axios.get("autocomplete/drug")
-    dispatch({ type: "SET_INIT_DATA", payload: payload });
-  };
+  // const fetchInitialData = async () => {
+  //   const { data: payload } = await axios.get("autocomplete/drug")
+  //   dispatch({ type: "SET_INIT_DATA", payload: payload });
+  // };
 
-  useEffect(() => {
-    if (localStorage.jwt_token) {
-      if (authState.token) {
-        fetchInitialData()
-      }
-    } else {
-      fetchInitialData();
-    }
-  }, [authState.token]);
+  // useEffect(() => {
+  //   if (localStorage.jwt_token) {
+  //     if (authState.token) {
+  //       fetchInitialData()
+  //     }
+  //   } else {
+  //     fetchInitialData();
+  //   }
+  // }, [authState.token]);
 
   return (
     <DrugContext.Provider value={{ state, dispatch, loading, setLoading }}>

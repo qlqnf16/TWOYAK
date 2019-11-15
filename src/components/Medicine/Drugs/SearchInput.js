@@ -21,6 +21,7 @@ const StyleWrapper = styled.div`
   flex-grow: 1;
   flex-shrink: 1;
   position: relative;
+  z-index: 100;
 
   @media (max-width: ${breakpoints}) {
     width: 100%;
@@ -98,8 +99,13 @@ const SearchInput = ({
   goBack,
   errorMessage
 }) => {
+  const onSubmitSearch = (e) => {
+    searchTerms(e)
+    // inputChange("")
+    // document.getElementById("search_form").reset()
+  }
   const myInput = (
-    <Form onSubmit={searchTerms}>
+    <Form id="search_form" onSubmit={onSubmitSearch}>
       <Arrow onClick={goBack} />
       <StyleWrapper>
         <AutoSuggestion

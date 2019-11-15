@@ -160,7 +160,7 @@ function HealthRecord({ history }) {
   const drugToPast = async id => {
     try {
       await axios.delete(
-        `user/${authState.subUsers[0].id}/current_drugs/${id}/to_past`,
+        `user/${authState.subUserId}/current_drugs/${id}/to_past`,
         {
           headers: {
             Authorization: `bearer ${authState.token}`

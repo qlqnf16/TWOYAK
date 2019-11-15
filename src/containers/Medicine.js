@@ -560,35 +560,33 @@ function Medicine({ match, history, location }) {
       <SearchBackground>
         <SearchContainer>
 
-
-          {drugs && (
-            <>
-              <SearchInput
-                goBack={goBack}
+          <>
+            <SearchInput
+              goBack={goBack}
+              term={term}
+              searchTerms={searchByTerms}
+              inputChange={searchTermChange}
+              searchById={moveById}
+              currentDrugs={currentDrugs}
+              addCurrentDrug={additionalModalToggle}
+              errorMessage={errorMessage}
+            />{" "}
+            {drugList && (
+              <ItemList
+                drug_list={drugList}
                 term={term}
-                searchTerms={searchByTerms}
-                inputChange={searchTermChange}
-                searchById={moveById}
-                currentDrugs={currentDrugs}
                 addCurrentDrug={additionalModalToggle}
-                errorMessage={errorMessage}
-              />{" "}
-              {drugList && (
-                <ItemList
-                  drug_list={drugList}
-                  term={term}
-                  addCurrentDrug={additionalModalToggle}
-                  currentDrugs={currentDrugs}
-                />
-              )}
-              {addModal && (
-                <AddModal
-                  additionalModalToggle={additionalModalToggle}
-                  addCurrentDrug={addCurrentDrug}
-                />
-              )}
-            </>
-          )}
+                currentDrugs={currentDrugs}
+              />
+            )}
+            {addModal && (
+              <AddModal
+                additionalModalToggle={additionalModalToggle}
+                addCurrentDrug={addCurrentDrug}
+              />
+            )}
+          </>
+
         </SearchContainer>
       </SearchBackground>
     );
