@@ -134,19 +134,17 @@ function AddSubUser(props) {
           drink: drink,
           smoke: smoke,
           caffeine: caffeine,
-          sex: sex
+          sex: sex,
         }
-      })
-        .then(response => {
-          const payload = response.data.auth_token;
-          dispatch({
-            type: "SIGNUP_SUCCESS",
-            token: payload
-          });
-          localStorage.setItem("jwt_token", payload);
-          props.history.push("/mypage");
-        })
-        .catch(error => alert(error.data.errors));
+      }).then(response => {
+        const payload = response.data.auth_token;
+        dispatch({
+          type: "SIGNUP_SUCCESS",
+          token: payload
+        });
+        localStorage.setItem("jwt_token", payload);
+        props.history.push("/mypage");
+      }).catch(error => alert(error.data.errors));
     } else if (
       props.match.path === "/add-info" ||
       props.match.path === "/edit-info"
